@@ -44,7 +44,7 @@
         .btn { background: var(--bg-subtle); color: var(--text-main); border: 1px solid var(--border-color); padding: 8px 14px; border-radius: 20px; font-weight: 600; cursor: pointer; font-size: 0.88rem; display: inline-flex; align-items: center; gap: 6px; text-decoration: none; }
         .btn:hover { opacity: 0.9; }
         .btn-primary { background: var(--accent-blue); color: white; border: none; }
-        .btn-orange { background: var(--accent-orange); color: white; border: none; font-size: 1.05rem; padding: 12px 20px; width: 100%; justify-content: center; border-radius: 10px; }
+        .btn-orange { background: var(--accent-orange); color: white; border: none; font-size: 1.05rem; padding: 12px 20px; width: 100%; justify-content: center; border-radius: 10px; cursor: pointer; }
 
         .container { max-width: 1000px; margin: 20px auto; padding: 0 16px; }
 
@@ -226,12 +226,14 @@
                 const { data, error } = await db.from('auctions').select('*').order('id', { ascending: true });
                 if (error) {
                     console.error("Error cargando subastas:", error);
+                    document.getElementById('catalogGrid').innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: red;">Error al conectar con la base de datos. Revisa la consola.</div>';
                     return;
                 }
                 subastasLocales = data || [];
                 renderizarCatalogo();
             } catch (err) {
                 console.error("Error de conexión:", err);
+                document.getElementById('catalogGrid').innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: red;">Error de conexión.</div>';
             }
         }
 
@@ -318,6 +320,21 @@
                 if (!currentUser) return;
             }
 
+            // 🛑 SEGURIDAD: Comprobar el precio más reciente directo en la base de datos
+            const { data: latestAuction } = await db.from('auctions')
+                .select('current_price')
+                .eq('id', productoSeleccionado.id)
+                .single();
+
+            if (latestAuction && monto <= latestAuction.current_price) {
+                alert(`¡Alguien se ha adelantado! El precio actual ya es de ${latestAuction.current_price} €.`);
+                productoSeleccionado.current_price = latestAuction.current_price;
+                actualizarVistaDetalleDatoVivo();
+                await cargarHistorialPujas(productoSeleccionado.id);
+                return;
+            }
+
+            // Si la cantidad es superior, registramos la puja
             const { error: errorBid } = await db.from('bids').insert([{
                 auction_id: productoSeleccionado.id,
                 user_name: currentUser,
