@@ -101,8 +101,8 @@
         <div class="nav-actions">
             <button class="btn" onclick="toggleDarkMode()">🌙 Noche</button>
             <button class="btn" onclick="verVitrina()">🏆 Mi Vitrina</button>
-            <span class="btn">💳 +500 €</span>
-            <span class="btn">🐐 GOAT</span>
+            <button class="btn" onclick="alert('¡Saldo de prueba actualizado!')">💳 +500 €</button>
+            <button class="btn" onclick="alert('👑 Sección GOAT activada')">🐐 GOAT</button>
             <button class="btn btn-primary" id="btnAuth" onclick="login()"></button>
         </div>
     </header>
@@ -246,8 +246,9 @@
                 return;
             }
 
+            // 🔑 Se añaden comillas simples '${prod.id}' para soportar IDs de tipo texto o UUID
             grid.innerHTML = subastasLocales.map(prod => `
-                <div class="card" onclick="verDetalle(${prod.id})">
+                <div class="card" onclick="verDetalle('${prod.id}')">
                     <div class="card-img">${prod.image_url || '🧱'}</div>
                     <div class="card-category">${prod.category || 'Categoría'}</div>
                     <div class="card-title">${prod.title}</div>
@@ -257,7 +258,7 @@
         }
 
         async function verDetalle(id) {
-            productoSeleccionado = subastasLocales.find(p => p.id == id);
+            productoSeleccionado = subastasLocales.find(p => String(p.id) === String(id));
             if (!productoSeleccionado) return;
 
             document.getElementById('detailImg').innerText = productoSeleccionado.image_url || '🧱';
