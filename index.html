@@ -131,7 +131,7 @@
             <div id="formLogin" class="auth-form">
                 <h2>Iniciar Sesión</h2>
                 <p>Identifícate para pujar y gestionar tus trofeos.</p>
-                <input type="text" id="loginUsername" placeholder="Nombre de usuario (ej: @Daniel)">
+                <input type="email" id="loginEmail" placeholder="Tu correo electrónico">
                 <input type="password" id="loginPassword" placeholder="Contraseña">
                 <button onclick="iniciarSesion()">Acceder</button>
                 <div class="auth-toggle">¿No tienes cuenta? <span onclick="toggleAuthForm('register')">Regístrate gratis</span></div>
@@ -140,7 +140,8 @@
             <div id="formRegister" class="auth-form" style="display: none;">
                 <h2>Crear Perfil</h2>
                 <p>¡Únete ahora y recibe 1.000 € ficticios para pujar!</p>
-                <input type="text" id="regUsername" placeholder="Tu nombre o alias (ej: @Daniel)">
+                <input type="email" id="regEmail" placeholder="Tu correo electrónico">
+                <input type="text" id="regUsername" placeholder="Tu nombre o alias (ej: Daniel)">
                 <input type="password" id="regPassword" placeholder="Crea tu contraseña">
                 <button onclick="registrarUsuario()" style="background: var(--accent-green);">Crear Cuenta y Recibir 1.000 €</button>
                 <div class="auth-toggle">¿Ya tienes cuenta? <span onclick="toggleAuthForm('login')">Iniciar sesión</span></div>
@@ -272,14 +273,27 @@
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx0aHp6Z3Bid2ZpeWxnYWlwZ2l4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODUxNjcyMTksImV4cCI6MjEwMDc0MzIxOX0.zAJJEiQpor0xQY5fTDlLzJxd62ffps3XNnpeS06iTXg';
         const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-
         let currentUser = null;
         let productoSeleccionado = null;
         let subastasLocales = [];
         let timerInterval = null;
 
         window.onload = async () => {
-            checkAuthSilent();
+            // 1. Comprobar si ya había una sesión abierta (Supabase la recuerda solo)
+            const { data: { session } } = await db.auth.getSession();
+            if (session) await cargarPerfil(session.user.id);
+            actualizarInterfazUsuario();
+
+            // 2. Reaccionar a futuros logins/logouts (por si se abre en otra pestaña, etc.)
+            db.auth.onAuthStateChange(async (_event, session2) => {
+                if (session2) {
+                    await cargarPerfil(session2.user.id);
+                } else {
+                    currentUser = null;
+                }
+                actualizarInterfazUsuario();
+            });
+
             await cargarSubastas();
             
             // TIEMPO REAL: Escuchar cambios en la tabla 'auctions' y 'bids' automáticamente
@@ -299,27 +313,41 @@
               .subscribe();
         };
 
+        // Trae el perfil (saldo, GOAT, admin) desde la tabla 'profiles' de Supabase
+        async function cargarPerfil(userId) {
+            const { data, error } = await db.from('profiles').select('*').eq('id', userId).single();
+            if (error || !data) {
+                currentUser = null;
+                return;
+            }
+            currentUser = {
+                id: data.id,
+                username: data.username,
+                saldo: data.saldo,
+                esGoat: data.es_goat,
+                isAdmin: data.is_admin
+            };
+        }
+
         async function cargarSubastas() {
             let { data: auctions } = await db.from('auctions').select('*');
             subastasLocales = auctions || [];
             
-            // Verificar cierres automáticos
+            // Verificar cierres automáticos (ahora vía función segura del servidor)
+            let huboAlgunCierre = false;
             for (let prod of subastasLocales) {
                 if (prod.status !== 'closed' && new Date(prod.ends_at).getTime() <= Date.now()) {
-                    await cerrarSubastaAutomaticamente(prod);
+                    await db.rpc('check_and_close_auction', { p_auction_id: prod.id });
+                    huboAlgunCierre = true;
                 }
             }
+
+            if (huboAlgunCierre) {
+                let { data: auctions2 } = await db.from('auctions').select('*');
+                subastasLocales = auctions2 || [];
+            }
+
             renderizarCatalogo();
-        }
-
-        async function cerrarSubastaAutomaticamente(prod) {
-            // Buscar última puja para determinar ganador
-            let { data: bids } = await db.from('bids').select('*').eq('auction_id', prod.id).order('amount', { ascending: false }).limit(1);
-            let ganador = (bids && bids.length > 0) ? bids[0].user_name : 'Nadie';
-
-            await db.from('auctions').update({ status: 'closed', winner: ganador }).eq('id', prod.id);
-            prod.status = 'closed';
-            prod.winner = ganador;
         }
 
         function renderizarCatalogo() {
@@ -441,13 +469,11 @@
             });
         }
 
+        // La puja ahora se ejecuta ENTERA dentro de la base de datos (función 'place_bid'):
+        // comprueba saldo, descuenta, actualiza el precio y guarda la puja, todo de forma segura.
         async function ejecutarPuja(nuevaPujaTotal) {
             if (!currentUser) return abrirModalAuth('register');
             if (productoSeleccionado.status === 'closed') return alert("Esta subasta ya ha finalizado.");
-
-            const diferencia = nuevaPujaTotal - productoSeleccionado.current_price;
-            if (!currentUser.esGoat && currentUser.saldo < diferencia) return alert("⚠️ Sin saldo suficiente.");
-            if (!currentUser.esGoat) currentUser.saldo -= diferencia;
 
             let comentarioTexto = null;
             if (currentUser.esGoat) {
@@ -456,16 +482,19 @@
                 if (commentInput) commentInput.value = '';
             }
 
-            await db.from('auctions').update({ current_price: nuevaPujaTotal }).eq('id', productoSeleccionado.id);
-            await db.from('bids').insert([{ 
-                auction_id: productoSeleccionado.id, 
-                amount: nuevaPujaTotal, 
-                user_name: currentUser.username,
-                comment: comentarioTexto 
-            }]);
+            const { error } = await db.rpc('place_bid', {
+                p_auction_id: productoSeleccionado.id,
+                p_amount: nuevaPujaTotal,
+                p_comment: comentarioTexto
+            });
 
+            if (error) {
+                return alert("⚠️ " + error.message);
+            }
+
+            // Refrescamos el saldo real desde la base de datos (evita descuadres)
+            await cargarPerfil(currentUser.id);
             productoSeleccionado.current_price = nuevaPujaTotal;
-            guardarDatosUsuario();
             actualizarInterfazUsuario();
         }
 
@@ -483,6 +512,8 @@
             input.value = '';
         }
 
+        // Crear subasta ahora pasa por la función segura 'create_auction',
+        // que comprueba en el servidor que de verdad eres admin.
         async function crearNuevaSubasta() {
             const title = document.getElementById('adminTitle').value.trim();
             const description = document.getElementById('adminDesc').value.trim();
@@ -491,76 +522,21 @@
 
             if (!title || isNaN(price)) return alert("Rellena los campos obligatorios.");
 
-            await db.from('auctions').insert([{
-                title, description, starting_price: price, current_price: price, image_url,
-                ends_at: new Date(Date.now() + 86400000).toISOString(), status: 'active'
-            }]);
+            const { error } = await db.rpc('create_auction', {
+                p_title: title,
+                p_description: description,
+                p_price: price,
+                p_image: image_url,
+                p_hours: 24
+            });
+
+            if (error) {
+                return alert("Error: " + error.message);
+            }
 
             cerrarModalAdmin();
             await cargarSubastas();
             alert("¡Subasta creada con éxito!");
-        }
-
-        function checkAuthSilent() {
-            const activeUserKey = localStorage.getItem('abrozon_active_user');
-            if (activeUserKey) {
-                const userData = JSON.parse(localStorage.getItem('user_' + activeUserKey));
-                if (userData) currentUser = userData;
-            }
-            actualizarInterfazUsuario();
-        }
-
-        function abrirModalAuth(mode = 'register') {
-            toggleAuthForm(mode);
-            document.getElementById('authModal').style.display = 'flex';
-        }
-        function cerrarModalAuth() { document.getElementById('authModal').style.display = 'none'; }
-        function abrirModalAdmin() { document.getElementById('adminModal').style.display = 'flex'; }
-        function cerrarModalAdmin() { document.getElementById('adminModal').style.display = 'none'; }
-
-        function toggleAuthForm(mode) {
-            document.getElementById('formLogin').style.display = mode === 'login' ? 'block' : 'none';
-            document.getElementById('formRegister').style.display = mode === 'register' ? 'block' : 'none';
-        }
-
-        function registrarUsuario() {
-            let userIn = document.getElementById('regUsername').value.trim();
-            const passIn = document.getElementById('regPassword').value.trim();
-            if (!userIn || !passIn) return alert("Completa los campos");
-            if (!userIn.startsWith('@')) userIn = '@' + userIn;
-
-            const nuevoUsuario = { username: userIn, password: passIn, saldo: 1000, esGoat: false };
-            localStorage.setItem('user_' + userIn, JSON.stringify(nuevoUsuario));
-            localStorage.setItem('abrozon_active_user', userIn);
-            currentUser = nuevoUsuario;
-
-            cerrarModalAuth();
-            actualizarInterfazUsuario();
-        }
-
-        function iniciarSesion() {
-            let userIn = document.getElementById('loginUsername').value.trim();
-            const passIn = document.getElementById('loginPassword').value.trim();
-            if (!userIn.startsWith('@')) userIn = '@' + userIn;
-
-            const userData = JSON.parse(localStorage.getItem('user_' + userIn));
-            if (!userData || userData.password !== passIn) return alert("Datos incorrectos");
-
-            currentUser = userData;
-            localStorage.setItem('abrozon_active_user', userIn);
-            cerrarModalAuth();
-            actualizarInterfazUsuario();
-        }
-
-        function cerrarSesion() {
-            localStorage.removeItem('abrozon_active_user');
-            currentUser = null;
-            actualizarInterfazUsuario();
-            mostrarCatalogo();
-        }
-
-        function guardarDatosUsuario() {
-            if (currentUser) localStorage.setItem('user_' + currentUser.username, JSON.stringify(currentUser));
         }
 
         function actualizarInterfazUsuario() {
@@ -575,8 +551,8 @@
                 boxBalance.style.display = 'block';
                 btnLogin.style.display = 'none';
                 btnLogout.style.display = 'block';
-                btnAdmin.style.display = 'block'; // Muestra el botón Admin para cualquier usuario conectado
-                document.getElementById('userBalance').innerText = currentUser.saldo.toLocaleString('es-ES') + ' €';
+                btnAdmin.style.display = currentUser.isAdmin ? 'block' : 'none';
+                document.getElementById('userBalance').innerText = Number(currentUser.saldo).toLocaleString('es-ES') + ' €';
                 document.getElementById('profileUserName').innerText = `👑 ${currentUser.username}`;
                 
                 if (currentUser.esGoat) {
@@ -596,18 +572,22 @@
             }
         }
 
-        function verAnuncio() {
+        // Ver anuncio: llama a la función segura que suma 500€ en el servidor
+        async function verAnuncio() {
             if (!currentUser) return abrirModalAuth('register');
-            currentUser.saldo += 500;
-            guardarDatosUsuario();
+            const { data, error } = await db.rpc('add_ad_reward');
+            if (error) return alert("Error: " + error.message);
+            currentUser.saldo = data;
             actualizarInterfazUsuario();
             alert("¡+500 € añadidos!");
         }
 
-        function activarGoat() {
+        // Modo GOAT: llama a la función segura que activa/desactiva el estado en el servidor
+        async function activarGoat() {
             if (!currentUser) return abrirModalAuth('register');
-            currentUser.esGoat = !currentUser.esGoat;
-            guardarDatosUsuario();
+            const { data, error } = await db.rpc('toggle_goat');
+            if (error) return alert("Error: " + error.message);
+            currentUser.esGoat = data;
             actualizarInterfazUsuario();
         }
 
@@ -654,6 +634,70 @@
             }
 
             document.getElementById('viewVitrina').classList.add('active');
+        }
+
+        function abrirModalAuth(mode = 'register') {
+            toggleAuthForm(mode);
+            document.getElementById('authModal').style.display = 'flex';
+        }
+        function cerrarModalAuth() { document.getElementById('authModal').style.display = 'none'; }
+        function abrirModalAdmin() { document.getElementById('adminModal').style.display = 'flex'; }
+        function cerrarModalAdmin() { document.getElementById('adminModal').style.display = 'none'; }
+
+        function toggleAuthForm(mode) {
+            document.getElementById('formLogin').style.display = mode === 'login' ? 'block' : 'none';
+            document.getElementById('formRegister').style.display = mode === 'register' ? 'block' : 'none';
+        }
+
+        // Registro real con email a través de Supabase Auth.
+        // El perfil (saldo 1.000€, alias, etc.) se crea solo mediante un trigger en la base de datos.
+        async function registrarUsuario() {
+            const email = document.getElementById('regEmail').value.trim();
+            let alias = document.getElementById('regUsername').value.trim();
+            const pass = document.getElementById('regPassword').value.trim();
+
+            if (!email || !alias || !pass) return alert("Completa todos los campos");
+            if (!alias.startsWith('@')) alias = '@' + alias;
+
+            const { data, error } = await db.auth.signUp({
+                email: email,
+                password: pass,
+                options: { data: { username: alias } }
+            });
+
+            if (error) return alert("Error al registrarte: " + error.message);
+
+            if (!data.session) {
+                // Esto pasa si en Supabase está activada la confirmación por email.
+                alert("¡Cuenta creada! Revisa tu correo para confirmarla antes de iniciar sesión.");
+                cerrarModalAuth();
+                return;
+            }
+
+            await cargarPerfil(data.user.id);
+            cerrarModalAuth();
+            actualizarInterfazUsuario();
+            alert("¡Bienvenido! Has recibido 1.000 € para empezar a pujar.");
+        }
+
+        async function iniciarSesion() {
+            const email = document.getElementById('loginEmail').value.trim();
+            const pass = document.getElementById('loginPassword').value.trim();
+            if (!email || !pass) return alert("Completa los campos");
+
+            const { data, error } = await db.auth.signInWithPassword({ email: email, password: pass });
+            if (error) return alert("Datos incorrectos: " + error.message);
+
+            await cargarPerfil(data.user.id);
+            cerrarModalAuth();
+            actualizarInterfazUsuario();
+        }
+
+        async function cerrarSesion() {
+            await db.auth.signOut();
+            currentUser = null;
+            actualizarInterfazUsuario();
+            mostrarCatalogo();
         }
     </script>
 </body>
