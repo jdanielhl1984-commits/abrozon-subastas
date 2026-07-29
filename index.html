@@ -135,6 +135,7 @@
                 <input type="email" id="loginEmail" placeholder="Tu correo electrónico">
                 <input type="password" id="loginPassword" placeholder="Contraseña">
                 <button onclick="iniciarSesion()">Acceder</button>
+                <div class="auth-toggle"><span onclick="solicitarRecuperacion()">¿Olvidaste tu contraseña?</span></div>
                 <div class="auth-toggle">¿No tienes cuenta? <span onclick="toggleAuthForm('register')">Regístrate gratis</span></div>
             </div>
 
@@ -146,6 +147,18 @@
                 <input type="password" id="regPassword" placeholder="Crea tu contraseña">
                 <button onclick="registrarUsuario()" style="background: var(--accent-green);">Crear Cuenta y Recibir 1.000 €</button>
                 <div class="auth-toggle">¿Ya tienes cuenta? <span onclick="toggleAuthForm('login')">Iniciar sesión</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL NUEVA CONTRASEÑA (tras pulsar el enlace del email de recuperación) -->
+    <div id="recoveryModal" class="auth-modal-overlay" style="display: none;">
+        <div class="auth-card">
+            <h2>Crear nueva contraseña</h2>
+            <p>Escribe tu nueva contraseña para tu cuenta.</p>
+            <div class="auth-form">
+                <input type="password" id="newPasswordInput" placeholder="Nueva contraseña (mínimo 6 caracteres)">
+                <button onclick="guardarNuevaPassword()">Guardar contraseña</button>
             </div>
         </div>
     </div>
@@ -287,6 +300,10 @@
 
             // 2. Reaccionar a futuros logins/logouts (por si se abre en otra pestaña, etc.)
             db.auth.onAuthStateChange(async (_event, session2) => {
+                if (_event === 'PASSWORD_RECOVERY') {
+                    document.getElementById('recoveryModal').style.display = 'flex';
+                    return;
+                }
                 if (session2) {
                     await cargarPerfil(session2.user.id);
                 } else {
@@ -683,6 +700,11 @@
             if (!email || !alias || !pass) return alert("Completa todos los campos");
             if (!alias.startsWith('@')) alias = '@' + alias;
 
+            // Comprobamos que el alias no esté ya cogido por otro usuario
+            const { data: libre, error: errorDisponible } = await db.rpc('username_disponible', { p_username: alias });
+            if (errorDisponible) return alert("Error comprobando el alias: " + errorDisponible.message);
+            if (!libre) return alert("Ese nombre ya está en uso por otro usuario. Prueba con otro alias.");
+
             const { data, error } = await db.auth.signUp({
                 email: email,
                 password: pass,
@@ -715,6 +737,31 @@
             await cargarPerfil(data.user.id);
             cerrarModalAuth();
             actualizarInterfazUsuario();
+        }
+
+        // Envía el correo con el enlace para crear una nueva contraseña
+        async function solicitarRecuperacion() {
+            const email = prompt("Escribe tu correo electrónico para recibir el enlace de recuperación:");
+            if (!email) return;
+
+            const { error } = await db.auth.resetPasswordForEmail(email, {
+                redirectTo: window.location.href.split('#')[0]
+            });
+
+            if (error) return alert("Error: " + error.message);
+            alert("Te hemos enviado un correo con un enlace para crear una nueva contraseña. Revisa tu bandeja de entrada (y la carpeta de spam).");
+        }
+
+        // Se llama cuando el usuario, tras pulsar el enlace del email, escribe su nueva contraseña
+        async function guardarNuevaPassword() {
+            const nueva = document.getElementById('newPasswordInput').value.trim();
+            if (!nueva || nueva.length < 6) return alert("La contraseña debe tener al menos 6 caracteres.");
+
+            const { error } = await db.auth.updateUser({ password: nueva });
+            if (error) return alert("Error: " + error.message);
+
+            document.getElementById('recoveryModal').style.display = 'none';
+            alert("¡Contraseña actualizada! Ya puedes usarla para entrar la próxima vez.");
         }
 
         async function cerrarSesion() {
