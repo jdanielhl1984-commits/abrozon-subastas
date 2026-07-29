@@ -603,6 +603,7 @@
             const btnLogout = document.getElementById('btnLogoutHeader');
             const btnGoat = document.getElementById('btnGoat');
             const btnAdmin = document.getElementById('btnAdminHeader');
+            const btnAd = document.getElementById('btnAd');
             const goatCommentContainer = document.getElementById('goatCommentContainer');
 
             if (currentUser) {
@@ -616,9 +617,11 @@
                 if (currentUser.esGoat) {
                     btnGoat.classList.add('active');
                     if (goatCommentContainer) goatCommentContainer.style.display = 'block';
+                    if (btnAd) btnAd.innerText = '⚡ Recarga GOAT (+1.000 €)';
                 } else {
                     btnGoat.classList.remove('active');
                     if (goatCommentContainer) goatCommentContainer.style.display = 'none';
+                    if (btnAd) btnAd.innerText = '🎬 +500 € (anuncio)';
                 }
             } else {
                 boxBalance.style.display = 'none';
@@ -627,26 +630,34 @@
                 btnAdmin.style.display = 'none';
                 btnGoat.classList.remove('active');
                 if (goatCommentContainer) goatCommentContainer.style.display = 'none';
+                if (btnAd) btnAd.innerText = '🎬 +500 € (anuncio)';
             }
         }
 
-        // Ver anuncio: llama a la función segura que suma 500€ en el servidor
+        // Ver anuncio / recarga: llama a la función segura del servidor
+        // (usuario normal: +500€ con tope diario · GOAT: +1.000€ instantáneo sin tope)
         async function verAnuncio() {
             if (!currentUser) return abrirModalAuth('register');
+            const saldoAntes = currentUser.saldo;
             const { data, error } = await db.rpc('add_ad_reward');
-            if (error) return alert("Error: " + error.message);
+            if (error) return alert("⚠️ " + error.message);
             currentUser.saldo = data;
             actualizarInterfazUsuario();
-            alert("¡+500 € añadidos!");
+            const ganado = data - saldoAntes;
+            alert(`¡+${ganado.toLocaleString('es-ES')} € añadidos!`);
         }
 
-        // Modo GOAT: llama a la función segura que activa/desactiva el estado en el servidor
+        // Modo GOAT: llama a la función segura que activa/desactiva el estado en el servidor.
+        // Todas las pujas siguen gastando saldo igual para todos; el GOAT solo recibe
+        // un regalo de bienvenida y mejores recargas, nunca pujas gratis.
         async function activarGoat() {
             if (!currentUser) return abrirModalAuth('register');
             const { data, error } = await db.rpc('toggle_goat');
             if (error) return alert("Error: " + error.message);
             currentUser.esGoat = data;
+            await cargarPerfil(currentUser.id);
             actualizarInterfazUsuario();
+            if (data) alert("🐐 ¡Modo GOAT activado! Has recibido 5.000 € de regalo de bienvenida.");
         }
 
         function toggleTema() {
