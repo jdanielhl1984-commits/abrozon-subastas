@@ -300,7 +300,49 @@
             <div class="vitrina-grid" id="vitrinaGrid"></div>
         </div>
 
+        <!-- LEGAL -->
+        <div id="viewLegal" class="view">
+            <button class="btn-back" onclick="mostrarCatalogo()">← Volver al Catálogo</button>
+
+            <div class="product-card-detail" style="margin-bottom: 20px;">
+                <h2 style="color: var(--accent-blue); margin-bottom: 10px;">Aviso Legal</h2>
+                <p style="color: var(--text-muted); line-height: 1.7; font-size: 0.9rem;">
+                    <strong>Titular del sitio:</strong> [Daniel Hernandez]<br>
+                    <strong>Contacto:</strong> [cuineslliri@gmail.com]<br><br>
+                    aBROzon.subastas es una plataforma de <strong>entretenimiento y parodia</strong>. Todos los productos, subastas y cantidades mostradas son ficticios y no tienen valor monetario real ni son canjeables por dinero de curso legal.<br><br>
+                    Cualquier referencia a personas públicas, creadores de contenido o marcas es una parodia con fines humorísticos, sin relación ni respaldo por parte de dichas personas o entidades.<br><br>
+                    El titular no se hace responsable del uso indebido que los usuarios puedan hacer de la plataforma, ni de la veracidad de los comentarios publicados por terceros.
+                </p>
+            </div>
+
+            <div class="product-card-detail" style="margin-bottom: 20px;">
+                <h2 style="color: var(--accent-blue); margin-bottom: 10px;">Política de Privacidad</h2>
+                <p style="color: var(--text-muted); line-height: 1.7; font-size: 0.9rem;">
+                    <strong>Responsable del tratamiento:</strong> [Daniel Hernandez] — [cuineslliri@gmail.com]<br><br>
+                    <strong>Datos que recogemos:</strong> tu correo electrónico, el alias que elijas, tu saldo ficticio y tu historial de pujas.<br>
+                    <strong>Para qué los usamos:</strong> gestionar tu cuenta, mostrar el historial de subastas y prevenir el abuso del sistema.<br>
+                    <strong>Base legal:</strong> tu consentimiento al registrarte.<br>
+                    <strong>Conservación:</strong> mientras tu cuenta permanezca activa. Puedes solicitar su eliminación en cualquier momento.<br>
+                    <strong>Terceros:</strong> los datos se almacenan en Supabase (proveedor de base de datos). Si en el futuro se activan anuncios o pagos, se ampliará esta política para incluir a Google AdSense y/o Stripe.<br>
+                    <strong>Tus derechos:</strong> acceso, rectificación y supresión de tus datos, escribiendo a [cuineslliri@gmail.com].<br>
+                    <strong>Menores de edad:</strong> esta plataforma no está dirigida a menores de 14 años.
+                </p>
+            </div>
+
+            <div class="product-card-detail">
+                <h2 style="color: var(--accent-blue); margin-bottom: 10px;">Política de Cookies</h2>
+                <p style="color: var(--text-muted); line-height: 1.7; font-size: 0.9rem;">
+                    Esta web utiliza únicamente cookies técnicas necesarias para mantener tu sesión iniciada (gestionadas por Supabase Auth). No utilizamos cookies de publicidad ni de seguimiento en este momento. Si esto cambia en el futuro, se actualizará esta política y se mostrará un aviso de consentimiento.
+                </p>
+            </div>
+        </div>
+
     </div>
+
+    <footer style="text-align: center; padding: 25px 20px; color: var(--text-muted); font-size: 0.8rem; border-top: 1px solid var(--border-color);">
+        <span onclick="mostrarLegal()" style="cursor:pointer; text-decoration: underline;">Aviso Legal, Privacidad y Cookies</span>
+        &nbsp;·&nbsp; aBROzon.subastas es una web de parodia sin ánimo de lucro real ni relación con Amazon ni con los creadores mencionados.
+    </footer>
 
     <script>
         const SUPABASE_URL = 'https://lthzzgpbwfiylgaipgix.supabase.co';
@@ -739,6 +781,11 @@
             }
 
             document.getElementById('viewVitrina').classList.add('active');
+        }
+
+        function mostrarLegal() {
+            ocultarTodasVistas();
+            document.getElementById('viewLegal').classList.add('active');
         }
 
         function abrirModalAuth(mode = 'register') {
