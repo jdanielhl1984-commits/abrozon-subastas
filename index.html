@@ -51,6 +51,11 @@
         .balance-amount { color: var(--accent-green); }
         
         .btn-header { background: var(--bg-subtle); color: var(--text-main); border: 1px solid var(--border-color); padding: 8px 12px; border-radius: 20px; font-weight: bold; cursor: pointer; font-size: 0.85rem; }
+        .user-menu-wrapper { position: relative; }
+        .user-dropdown { position: absolute; top: 115%; right: 0; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 10px; box-shadow: 0 8px 20px rgba(0,0,0,0.15); min-width: 200px; z-index: 500; overflow: hidden; display: none; }
+        .dropdown-item { padding: 11px 14px; font-size: 0.85rem; color: var(--text-main); cursor: pointer; border-bottom: 1px solid var(--border-color); }
+        .dropdown-item:last-child { border-bottom: none; }
+        .dropdown-item:hover { background: var(--bg-subtle); }
         .btn-admin { background: #8b5cf6; color: white; border: none; padding: 8px 12px; border-radius: 20px; font-weight: bold; cursor: pointer; font-size: 0.85rem; display: none; }
         .btn-goat { background: linear-gradient(135deg, #eab308, #ca8a04); color: #0f172a; border: none; padding: 8px 14px; border-radius: 20px; font-weight: 900; cursor: pointer; font-size: 0.85rem; opacity: 0.5; }
         .btn-goat.active { opacity: 1; box-shadow: 0 0 10px #eab308; }
@@ -210,18 +215,26 @@
             <button>🔍</button>
         </div>
         <div class="header-right">
-            <button class="btn-admin" id="btnAdminHeader" onclick="abrirModalAdmin()">🛠️ Admin</button>
-            <button class="btn-header" id="btnTheme" onclick="toggleTema()">🌙 Noche</button>
-            <button class="btn-header" onclick="mostrarVitrina()">🏆 Mi Vitrina</button>
             <button class="btn-header" id="btnAd" onclick="verAnuncio()">🎬 +500 €</button>
             <button class="btn-goat" id="btnGoat" onclick="activarGoat()">🐐 GOAT</button>
-            
+
             <div class="user-balance" id="boxBalance" style="display: none;">
                 Saldo: <span class="balance-amount" id="userBalance">0 €</span>
             </div>
-            
+
             <button class="btn-login" id="btnLoginHeader" onclick="abrirModalAuth('login')">🔑 Entrar</button>
-            <button class="btn-logout" id="btnLogoutHeader" onclick="cerrarSesion()" style="display: none;">🚪 Salir</button>
+
+            <div class="user-menu-wrapper" id="userMenuWrapper" style="display: none;">
+                <button class="btn-header" onclick="toggleUserMenu()">👤 Menú ▾</button>
+                <div class="user-dropdown" id="userDropdown">
+                    <div class="dropdown-item" onclick="cerrarUserMenu(); mostrarPerfil();">👤 Mi Perfil</div>
+                    <div class="dropdown-item" onclick="cerrarUserMenu(); mostrarVitrina();">🏆 Mi Vitrina</div>
+                    <div class="dropdown-item" id="dropdownTheme" onclick="toggleTema();">🌙 Modo Noche</div>
+                    <div class="dropdown-item" id="dropdownAdmin" onclick="cerrarUserMenu(); abrirModalAdmin();" style="display:none;">🛠️ Panel Admin</div>
+                    <div class="dropdown-item" onclick="cerrarUserMenu(); mostrarLegal();">📄 Legal y Privacidad</div>
+                    <div class="dropdown-item" onclick="cerrarUserMenu(); cerrarSesion();" style="color:#ef4444;">🚪 Salir</div>
+                </div>
+            </div>
         </div>
     </header>
 
@@ -300,6 +313,40 @@
             <div class="vitrina-grid" id="vitrinaGrid"></div>
         </div>
 
+        <!-- PERFIL -->
+        <div id="viewPerfil" class="view">
+            <button class="btn-back" onclick="mostrarCatalogo()">← Volver al Catálogo</button>
+
+            <div class="profile-header">
+                <div class="user-info">
+                    <h2 id="perfilNombre">👤 Usuario</h2>
+                    <span class="user-badge" id="perfilEmail">correo@ejemplo.com</span>
+                </div>
+            </div>
+
+            <div class="product-card-detail" style="margin-bottom: 20px;">
+                <h2 style="font-size:1.1rem; margin-bottom: 12px;">✏️ Cambiar alias</h2>
+                <div class="auth-form">
+                    <input type="text" id="perfilNuevoAlias" placeholder="Nuevo alias (ej: @Daniel)">
+                    <button onclick="guardarNuevoAlias()">Guardar alias</button>
+                </div>
+            </div>
+
+            <div class="product-card-detail" style="margin-bottom: 20px;">
+                <h2 style="font-size:1.1rem; margin-bottom: 12px;">🔒 Cambiar contraseña</h2>
+                <div class="auth-form">
+                    <input type="password" id="perfilNuevaPassword" placeholder="Nueva contraseña (mín. 6 caracteres)">
+                    <button onclick="guardarNuevaPasswordPerfil()">Guardar contraseña</button>
+                </div>
+            </div>
+
+            <div class="product-card-detail">
+                <h2 style="font-size:1.1rem; margin-bottom: 12px; color:#ef4444;">⚠️ Zona de baja</h2>
+                <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 12px;">Si quieres eliminar tu cuenta y tus datos, contáctanos y lo gestionamos manualmente.</p>
+                <button onclick="solicitarBajaCuenta()" style="background:#ef4444; color:white; border:none; padding:10px; border-radius:8px; font-weight:bold; cursor:pointer; width:100%;">Solicitar baja de cuenta</button>
+            </div>
+        </div>
+
         <!-- LEGAL -->
         <div id="viewLegal" class="view">
             <button class="btn-back" onclick="mostrarCatalogo()">← Volver al Catálogo</button>
@@ -307,8 +354,8 @@
             <div class="product-card-detail" style="margin-bottom: 20px;">
                 <h2 style="color: var(--accent-blue); margin-bottom: 10px;">Aviso Legal</h2>
                 <p style="color: var(--text-muted); line-height: 1.7; font-size: 0.9rem;">
-                    <strong>Titular del sitio:</strong> [Daniel Hernandez]<br>
-                    <strong>Contacto:</strong> [abrozonsubastas@gmail.com]<br><br>
+                    <strong>Titular del sitio:</strong> [TU NOMBRE COMPLETO]<br>
+                    <strong>Contacto:</strong> [TU EMAIL DE CONTACTO]<br><br>
                     aBROzon.subastas es una plataforma de <strong>entretenimiento y parodia</strong>. Todos los productos, subastas y cantidades mostradas son ficticios y no tienen valor monetario real ni son canjeables por dinero de curso legal.<br><br>
                     Cualquier referencia a personas públicas, creadores de contenido o marcas es una parodia con fines humorísticos, sin relación ni respaldo por parte de dichas personas o entidades.<br><br>
                     El titular no se hace responsable del uso indebido que los usuarios puedan hacer de la plataforma, ni de la veracidad de los comentarios publicados por terceros.
@@ -318,13 +365,13 @@
             <div class="product-card-detail" style="margin-bottom: 20px;">
                 <h2 style="color: var(--accent-blue); margin-bottom: 10px;">Política de Privacidad</h2>
                 <p style="color: var(--text-muted); line-height: 1.7; font-size: 0.9rem;">
-                    <strong>Responsable del tratamiento:</strong> [Daniel Hernandez] — [abrozonsubastas@gmail.com]<br><br>
+                    <strong>Responsable del tratamiento:</strong> [TU NOMBRE COMPLETO] — [TU EMAIL DE CONTACTO]<br><br>
                     <strong>Datos que recogemos:</strong> tu correo electrónico, el alias que elijas, tu saldo ficticio y tu historial de pujas.<br>
                     <strong>Para qué los usamos:</strong> gestionar tu cuenta, mostrar el historial de subastas y prevenir el abuso del sistema.<br>
                     <strong>Base legal:</strong> tu consentimiento al registrarte.<br>
                     <strong>Conservación:</strong> mientras tu cuenta permanezca activa. Puedes solicitar su eliminación en cualquier momento.<br>
                     <strong>Terceros:</strong> los datos se almacenan en Supabase (proveedor de base de datos). Si en el futuro se activan anuncios o pagos, se ampliará esta política para incluir a Google AdSense y/o Stripe.<br>
-                    <strong>Tus derechos:</strong> acceso, rectificación y supresión de tus datos, escribiendo a [abrozonsubastas@gmail.com].<br>
+                    <strong>Tus derechos:</strong> acceso, rectificación y supresión de tus datos, escribiendo a [TU EMAIL DE CONTACTO].<br>
                     <strong>Menores de edad:</strong> esta plataforma no está dirigida a menores de 14 años.
                 </p>
             </div>
@@ -678,17 +725,17 @@
         function actualizarInterfazUsuario() {
             const boxBalance = document.getElementById('boxBalance');
             const btnLogin = document.getElementById('btnLoginHeader');
-            const btnLogout = document.getElementById('btnLogoutHeader');
+            const userMenuWrapper = document.getElementById('userMenuWrapper');
             const btnGoat = document.getElementById('btnGoat');
-            const btnAdmin = document.getElementById('btnAdminHeader');
+            const dropdownAdmin = document.getElementById('dropdownAdmin');
             const btnAd = document.getElementById('btnAd');
             const goatCommentContainer = document.getElementById('goatCommentContainer');
 
             if (currentUser) {
                 boxBalance.style.display = 'block';
                 btnLogin.style.display = 'none';
-                btnLogout.style.display = 'block';
-                btnAdmin.style.display = currentUser.isAdmin ? 'block' : 'none';
+                userMenuWrapper.style.display = 'block';
+                dropdownAdmin.style.display = currentUser.isAdmin ? 'block' : 'none';
                 document.getElementById('userBalance').innerText = Number(currentUser.saldo).toLocaleString('es-ES') + ' €';
                 document.getElementById('profileUserName').innerText = `👑 ${currentUser.username}`;
                 
@@ -701,15 +748,85 @@
                     if (goatCommentContainer) goatCommentContainer.style.display = 'none';
                     if (btnAd) btnAd.innerText = '🎬 +500 € (anuncio)';
                 }
+
+                actualizarFormularioPerfil();
             } else {
                 boxBalance.style.display = 'none';
                 btnLogin.style.display = 'block';
-                btnLogout.style.display = 'none';
-                btnAdmin.style.display = 'none';
+                userMenuWrapper.style.display = 'none';
+                dropdownAdmin.style.display = 'none';
                 btnGoat.classList.remove('active');
                 if (goatCommentContainer) goatCommentContainer.style.display = 'none';
                 if (btnAd) btnAd.innerText = '🎬 +500 € (anuncio)';
             }
+        }
+
+        // ---- Menú desplegable de usuario ----
+        function toggleUserMenu() {
+            const dd = document.getElementById('userDropdown');
+            dd.style.display = dd.style.display === 'block' ? 'none' : 'block';
+        }
+        function cerrarUserMenu() {
+            document.getElementById('userDropdown').style.display = 'none';
+        }
+        // Cierra el menú si se hace clic fuera de él
+        document.addEventListener('click', (e) => {
+            const wrapper = document.getElementById('userMenuWrapper');
+            if (wrapper && wrapper.style.display !== 'none' && !wrapper.contains(e.target)) {
+                cerrarUserMenu();
+            }
+        });
+
+        // ---- Página de Perfil ----
+        function mostrarPerfil() {
+            if (!currentUser) return abrirModalAuth('register');
+            ocultarTodasVistas();
+            actualizarFormularioPerfil();
+            document.getElementById('viewPerfil').classList.add('active');
+        }
+
+        async function actualizarFormularioPerfil() {
+            if (!currentUser) return;
+            const nombreEl = document.getElementById('perfilNombre');
+            const emailEl = document.getElementById('perfilEmail');
+            if (nombreEl) nombreEl.innerText = `👤 ${currentUser.username}`;
+            if (emailEl) {
+                const { data: { user } } = await db.auth.getUser();
+                emailEl.innerText = user ? user.email : '';
+            }
+        }
+
+        async function guardarNuevoAlias() {
+            let nuevo = document.getElementById('perfilNuevoAlias').value.trim();
+            if (!nuevo) return alert("Escribe un alias.");
+            if (!nuevo.startsWith('@')) nuevo = '@' + nuevo;
+
+            if (nuevo === currentUser.username) return alert("Ya tienes ese alias.");
+
+            const { data: libre, error: errorDisponible } = await db.rpc('username_disponible', { p_username: nuevo });
+            if (errorDisponible) return alert("Error: " + errorDisponible.message);
+            if (!libre) return alert("Ese alias ya está en uso por otra persona.");
+
+            const { error } = await db.rpc('actualizar_mi_alias', { p_nuevo_alias: nuevo });
+            if (error) return alert("Error: " + error.message);
+
+            currentUser.username = nuevo;
+            actualizarInterfazUsuario();
+            document.getElementById('perfilNuevoAlias').value = '';
+            alert("¡Alias actualizado!");
+        }
+
+        async function guardarNuevaPasswordPerfil() {
+            const nueva = document.getElementById('perfilNuevaPassword').value.trim();
+            if (!nueva || nueva.length < 6) return alert("La contraseña debe tener al menos 6 caracteres.");
+            const { error } = await db.auth.updateUser({ password: nueva });
+            if (error) return alert("Error: " + error.message);
+            document.getElementById('perfilNuevaPassword').value = '';
+            alert("¡Contraseña actualizada!");
+        }
+
+        function solicitarBajaCuenta() {
+            alert("Para eliminar tu cuenta, escribe a nuestro email de contacto (lo encuentras en el pie de página, en 'Legal y Privacidad') indicando tu alias. La procesaremos en un plazo breve.");
         }
 
         // Ver anuncio / recarga: llama a la función segura del servidor
@@ -740,7 +857,9 @@
 
         function toggleTema() {
             document.body.classList.toggle('dark-mode');
-            document.getElementById('btnTheme').innerText = document.body.classList.contains('dark-mode') ? "☀️ Día" : "🌙 Noche";
+            const el = document.getElementById('dropdownTheme');
+            if (el) el.innerText = document.body.classList.contains('dark-mode') ? "☀️ Modo Día" : "🌙 Modo Noche";
+            cerrarUserMenu();
         }
 
         function ocultarTodasVistas() {
