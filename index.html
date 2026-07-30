@@ -119,6 +119,9 @@
         .auth-toggle { text-align: center; font-size: 0.8rem; color: var(--text-muted); margin-top: 15px; }
         .auth-toggle span { color: var(--accent-blue); font-weight: bold; cursor: pointer; text-decoration: underline; }
         .btn-close-modal { position: absolute; top: 12px; right: 15px; background: transparent; border: none; font-size: 1.2rem; color: var(--text-muted); cursor: pointer; }
+
+        .toast-abrozon { position: fixed; bottom: 20px; right: 20px; background: var(--bg-card); border: 1px solid var(--accent-blue); color: var(--text-main); padding: 14px 18px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.25); font-size: 0.9rem; font-weight: bold; z-index: 1000; max-width: 300px; animation: toastIn 0.3s ease; }
+        @keyframes toastIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
@@ -374,13 +377,28 @@
                 profileChannel = db.channel('profile-changes-' + userId)
                     .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'profiles', filter: `id=eq.${userId}` }, (payload) => {
                         if (!currentUser) return;
+                        const saldoAnterior = currentUser.saldo;
                         currentUser.saldo = payload.new.saldo;
                         currentUser.esGoat = payload.new.es_goat;
                         currentUser.isAdmin = payload.new.is_admin;
                         actualizarInterfazUsuario();
+
+                        const diferencia = payload.new.saldo - saldoAnterior;
+                        if (diferencia > 0) {
+                            mostrarToast(`💰 ¡Te han superado una puja! Se te han devuelto ${diferencia.toLocaleString('es-ES')} €.`);
+                        }
                     })
                     .subscribe();
             }
+        }
+
+        // Aviso flotante no intrusivo (no bloquea la pantalla como alert())
+        function mostrarToast(mensaje) {
+            const toast = document.createElement('div');
+            toast.className = 'toast-abrozon';
+            toast.innerText = mensaje;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 4500);
         }
 
         async function cargarSubastas() {
