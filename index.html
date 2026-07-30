@@ -308,6 +308,8 @@
         let productoSeleccionado = null;
         let subastasLocales = [];
         let timerInterval = null;
+        let profileChannel = null;
+        let profileChannelUserId = null;
 
         window.onload = async () => {
             // 1. Comprobar si ya había una sesión abierta (Supabase la recuerda solo)
@@ -350,6 +352,8 @@
         };
 
         // Trae el perfil (saldo, GOAT, admin) desde la tabla 'profiles' de Supabase
+        // y se queda "escuchando" cambios en tiempo real sobre esa misma fila
+        // (por ejemplo, cuando otro usuario te supera una puja y te llega el reembolso).
         async function cargarPerfil(userId) {
             const { data, error } = await db.from('profiles').select('*').eq('id', userId).single();
             if (error || !data) {
@@ -363,6 +367,20 @@
                 esGoat: data.es_goat,
                 isAdmin: data.is_admin
             };
+
+            if (profileChannelUserId !== userId) {
+                if (profileChannel) await db.removeChannel(profileChannel);
+                profileChannelUserId = userId;
+                profileChannel = db.channel('profile-changes-' + userId)
+                    .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'profiles', filter: `id=eq.${userId}` }, (payload) => {
+                        if (!currentUser) return;
+                        currentUser.saldo = payload.new.saldo;
+                        currentUser.esGoat = payload.new.es_goat;
+                        currentUser.isAdmin = payload.new.is_admin;
+                        actualizarInterfazUsuario();
+                    })
+                    .subscribe();
+            }
         }
 
         async function cargarSubastas() {
@@ -865,6 +883,7 @@
 
         async function cerrarSesion() {
             await db.auth.signOut();
+            if (profileChannel) { await db.removeChannel(profileChannel); profileChannel = null; profileChannelUserId = null; }
             currentUser = null;
             actualizarInterfazUsuario();
             mostrarCatalogo();
