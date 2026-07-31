@@ -354,8 +354,8 @@
             <div class="product-card-detail" style="margin-bottom: 20px;">
                 <h2 style="color: var(--accent-blue); margin-bottom: 10px;">Aviso Legal</h2>
                 <p style="color: var(--text-muted); line-height: 1.7; font-size: 0.9rem;">
-                    <strong>Titular del sitio:</strong> [Daniel Hernandez]<br>
-                    <strong>Contacto:</strong> [abrozonsubastas@gmail.com]<br><br>
+                    <strong>Titular del sitio:</strong> Daniel Hernandez<br>
+                    <strong>Contacto:</strong> abrozonsubastas@gmail.com<br><br>
                     aBROzon.subastas es una plataforma de <strong>entretenimiento y parodia</strong>. Todos los productos, subastas y cantidades mostradas son ficticios y no tienen valor monetario real ni son canjeables por dinero de curso legal.<br><br>
                     Cualquier referencia a personas públicas, creadores de contenido o marcas es una parodia con fines humorísticos, sin relación ni respaldo por parte de dichas personas o entidades.<br><br>
                     El titular no se hace responsable del uso indebido que los usuarios puedan hacer de la plataforma, ni de la veracidad de los comentarios publicados por terceros.
@@ -365,13 +365,13 @@
             <div class="product-card-detail" style="margin-bottom: 20px;">
                 <h2 style="color: var(--accent-blue); margin-bottom: 10px;">Política de Privacidad</h2>
                 <p style="color: var(--text-muted); line-height: 1.7; font-size: 0.9rem;">
-                    <strong>Responsable del tratamiento:</strong> [Daniel Hernandez] — [abrozonsubastas@gmail.com]<br><br>
+                    <strong>Responsable del tratamiento:</strong> Daniel Hernandez — abrozonsubastas@gmail.com<br><br>
                     <strong>Datos que recogemos:</strong> tu correo electrónico, el alias que elijas, tu saldo ficticio y tu historial de pujas.<br>
                     <strong>Para qué los usamos:</strong> gestionar tu cuenta, mostrar el historial de subastas y prevenir el abuso del sistema.<br>
                     <strong>Base legal:</strong> tu consentimiento al registrarte.<br>
                     <strong>Conservación:</strong> mientras tu cuenta permanezca activa. Puedes solicitar su eliminación en cualquier momento.<br>
                     <strong>Terceros:</strong> los datos se almacenan en Supabase (proveedor de base de datos). Si en el futuro se activan anuncios o pagos, se ampliará esta política para incluir a Google AdSense y/o Stripe.<br>
-                    <strong>Tus derechos:</strong> acceso, rectificación y supresión de tus datos, escribiendo a [abrozonsubastas@gmail.com].<br>
+                    <strong>Tus derechos:</strong> acceso, rectificación y supresión de tus datos, escribiendo a abrozonsubastas@gmail.com.<br>
                     <strong>Menores de edad:</strong> esta plataforma no está dirigida a menores de 14 años.
                 </p>
             </div>
@@ -402,6 +402,14 @@
         let timerInterval = null;
         let profileChannel = null;
         let profileChannelUserId = null;
+        let saldoCambioPropio = false;
+
+        // Marca que el cambio de saldo que va a llegar por tiempo real es cosa
+        // nuestra (puja, recarga, GOAT), para no avisarnos a nosotros mismos.
+        function marcarCambioPropio() {
+            saldoCambioPropio = true;
+            setTimeout(() => { saldoCambioPropio = false; }, 2000);
+        }
 
         window.onload = async () => {
             // 1. Comprobar si ya había una sesión abierta (Supabase la recuerda solo)
@@ -471,6 +479,8 @@
                         currentUser.esGoat = payload.new.es_goat;
                         currentUser.isAdmin = payload.new.is_admin;
                         actualizarInterfazUsuario();
+
+                        if (saldoCambioPropio) return; // ha sido una acción nuestra, no avisamos
 
                         const diferencia = payload.new.saldo - saldoAnterior;
                         if (diferencia > 0) {
@@ -665,6 +675,7 @@
                 if (commentInput) commentInput.value = '';
             }
 
+            marcarCambioPropio();
             const { error } = await db.rpc('place_bid', {
                 p_auction_id: productoSeleccionado.id,
                 p_amount: nuevaPujaTotal,
@@ -834,6 +845,7 @@
         async function verAnuncio() {
             if (!currentUser) return abrirModalAuth('register');
             const saldoAntes = currentUser.saldo;
+            marcarCambioPropio();
             const { data, error } = await db.rpc('add_ad_reward');
             if (error) return alert("⚠️ " + error.message);
             currentUser.saldo = data;
@@ -847,6 +859,7 @@
         // un regalo de bienvenida y mejores recargas, nunca pujas gratis.
         async function activarGoat() {
             if (!currentUser) return abrirModalAuth('register');
+            marcarCambioPropio();
             const { data, error } = await db.rpc('toggle_goat');
             if (error) return alert("Error: " + error.message);
             currentUser.esGoat = data;
