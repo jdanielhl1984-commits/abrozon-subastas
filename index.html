@@ -184,6 +184,11 @@
                     <textarea id="adminDesc" placeholder="Descripción detallada..." rows="3" style="resize:none;"></textarea>
                     <input type="number" id="adminPrice" placeholder="Precio de salida (€)">
                     <input type="text" id="adminImage" placeholder="Emoji (🍕) o enlace a una imagen (https://...)">
+                    <select id="adminCategoria" style="width: 100%; padding: 12px; margin-bottom: 12px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-subtle); color: var(--text-main);">
+                        <option value="General">General</option>
+                        <option value="Fútbol">⚽ Fútbol</option>
+                        <option value="Streamers">🎥 Streamers</option>
+                    </select>
                     <select id="adminDuracion" style="width: 100%; padding: 12px; margin-bottom: 12px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-subtle); color: var(--text-main);">
                         <option value="1">1 hora</option>
                         <option value="6">6 horas</option>
@@ -246,7 +251,9 @@
     </header>
 
     <div class="categories-nav">
-        <span class="nav-tab active" onclick="mostrarCatalogo()">Esta Semana</span>
+        <span class="nav-tab active" id="tabTodas" onclick="filtrarCategoria('Todas')">Todas</span>
+        <span class="nav-tab" id="tabFutbol" onclick="filtrarCategoria('Fútbol')">⚽ Fútbol</span>
+        <span class="nav-tab" id="tabStreamers" onclick="filtrarCategoria('Streamers')">🎥 Streamers</span>
         <span class="nav-tab" onclick="mostrarVitrina()">🏆 Mi Vitrina</span>
     </div>
 
@@ -536,16 +543,33 @@
             return `<span>${valor || '📦'}</span>`;
         }
 
+        let categoriaActiva = 'Todas';
+
+        function filtrarCategoria(cat) {
+            categoriaActiva = cat;
+            document.querySelectorAll('.categories-nav .nav-tab').forEach(t => t.classList.remove('active'));
+            const mapa = { 'Todas': 'tabTodas', 'Fútbol': 'tabFutbol', 'Streamers': 'tabStreamers' };
+            const el = document.getElementById(mapa[cat]);
+            if (el) el.classList.add('active');
+            ocultarTodasVistas();
+            document.getElementById('viewCatalog').classList.add('active');
+            renderizarCatalogo();
+        }
+
         function renderizarCatalogo() {
             const grid = document.getElementById('catalogGrid');
             grid.innerHTML = '';
 
-            if (subastasLocales.length === 0) {
-                grid.innerHTML = '<div>No hay subastas disponibles.</div>';
+            const lista = categoriaActiva === 'Todas'
+                ? subastasLocales
+                : subastasLocales.filter(p => p.category === categoriaActiva);
+
+            if (lista.length === 0) {
+                grid.innerHTML = '<div>No hay subastas en esta categoría todavía.</div>';
                 return;
             }
 
-            subastasLocales.forEach(prod => {
+            lista.forEach(prod => {
                 const card = document.createElement('div');
                 card.className = 'auction-card';
                 card.onclick = () => abrirDetalle(prod.id);
@@ -558,7 +582,7 @@
                         ${esCerrada ? '<div class="badge-closed">FINALIZADA</div>' : `<div class="card-timer" id="cardTimer-${prod.id}">⏳ ...</div>`}
                     </div>
                     <div class="card-content">
-                        <div class="card-category">${esCerrada ? 'LOTE ADJUDICADO' : 'LOTE EN VIVO'}</div>
+                        <div class="card-category">${prod.category || 'General'}${esCerrada ? ' · Adjudicado' : ''}</div>
                         <div class="card-title">${prod.title}</div>
                         <div class="card-footer">
                             <div><div class="bid-label-sm">${esCerrada ? 'Precio Final' : 'Puja Actual'}</div><div class="bid-amount-sm">${Number(prod.current_price).toLocaleString('es-ES')} €</div></div>
@@ -604,6 +628,7 @@
         function actualizarVistaDetalleDatoVivo() {
             if (!productoSeleccionado) return;
             document.getElementById('detailImage').innerHTML = renderizarImagenProducto(productoSeleccionado.image_url);
+            document.getElementById('detailCategory').innerText = productoSeleccionado.category || 'General';
             document.getElementById('detailTitle').innerText = productoSeleccionado.title;
             document.getElementById('detailDescription').innerText = productoSeleccionado.description;
             document.getElementById('detailBid').innerText = Number(productoSeleccionado.current_price).toLocaleString('es-ES') + ' €';
@@ -729,6 +754,7 @@
             const price = parseInt(document.getElementById('adminPrice').value);
             const image_url = document.getElementById('adminImage').value.trim() || '📦';
             const horas = parseInt(document.getElementById('adminDuracion').value);
+            const categoria = document.getElementById('adminCategoria').value;
 
             if (!title || isNaN(price)) return alert("Rellena los campos obligatorios.");
 
@@ -737,7 +763,8 @@
                 p_description: description,
                 p_price: price,
                 p_image: image_url,
-                p_hours: horas
+                p_hours: horas,
+                p_category: categoria
             });
 
             if (error) {
@@ -1000,7 +1027,7 @@
                 const row = document.createElement('div');
                 row.style.cssText = 'display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px dashed var(--border-color); font-size:0.85rem;';
                 row.innerHTML = `
-                    <span>${prod.image_url || '📦'} ${prod.title} ${prod.status === 'closed' ? '(cerrada)' : ''}</span>
+                    <span>[${prod.category || 'General'}] ${prod.title} ${prod.status === 'closed' ? '(cerrada)' : ''}</span>
                     <button onclick="adminEliminarSubasta('${prod.id}')" style="background:#ef4444; color:white; border:none; padding:5px 10px; border-radius:6px; font-weight:bold; cursor:pointer; font-size:0.75rem;">Eliminar</button>
                 `;
                 box.appendChild(row);
