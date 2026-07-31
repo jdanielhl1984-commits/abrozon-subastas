@@ -79,7 +79,7 @@
         .auction-card { background: var(--bg-card); border-radius: 14px; border: 1px solid var(--border-color); overflow: hidden; cursor: pointer; box-shadow: var(--shadow-card); position: relative; }
         .auction-card:hover { transform: translateY(-3px); border-color: var(--accent-blue); }
         
-        .card-image { width: 100%; height: 180px; background-color: var(--bg-subtle); display: flex; align-items: center; justify-content: center; font-size: 4.5rem; position: relative; border-bottom: 1px solid var(--border-color); }
+        .card-image { width: 100%; height: 180px; background-color: var(--bg-subtle); display: flex; align-items: center; justify-content: center; font-size: 4.5rem; position: relative; border-bottom: 1px solid var(--border-color); overflow: hidden; }
         .badge-closed { position: absolute; top: 10px; left: 10px; background: #ef4444; color: white; font-size: 0.65rem; font-weight: bold; padding: 3px 8px; border-radius: 6px; text-transform: uppercase; }
         .card-timer { position: absolute; top: 10px; right: 10px; background: rgba(239, 68, 68, 0.15); color: #ef4444; font-size: 0.7rem; font-weight: bold; padding: 3px 8px; border-radius: 6px; font-family: monospace; }
         
@@ -97,7 +97,7 @@
         .btn-back { background: var(--bg-subtle); color: var(--text-main); border: 1px solid var(--border-color); padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: bold; margin-bottom: 20px; }
         .detail-layout { display: grid; grid-template-columns: 1fr 360px; gap: 25px; align-items: start; }
         .product-card-detail { background: var(--bg-card); border-radius: 16px; padding: 25px; border: 1px solid var(--border-color); box-shadow: var(--shadow-card); }
-        .main-image-detail { width: 100%; height: 280px; background-color: var(--bg-subtle); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 6rem; margin-bottom: 20px; border: 1px solid var(--border-color); }
+        .main-image-detail { width: 100%; height: 280px; background-color: var(--bg-subtle); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 6rem; margin-bottom: 20px; border: 1px solid var(--border-color); overflow: hidden; }
         .auction-panel-detail { background: var(--bg-card); border-radius: 16px; padding: 25px; border: 1px solid var(--border-color); height: fit-content; box-shadow: var(--shadow-card); }
         
         .time-box { background: rgba(249, 115, 22, 0.1); border: 1px solid #f97316; color: #f97316; padding: 8px 12px; border-radius: 8px; font-weight: bold; text-align: center; margin-bottom: 15px; font-size: 0.9rem; }
@@ -183,7 +183,14 @@
                     <input type="text" id="adminTitle" placeholder="Título del Lote">
                     <textarea id="adminDesc" placeholder="Descripción detallada..." rows="3" style="resize:none;"></textarea>
                     <input type="number" id="adminPrice" placeholder="Precio de salida (€)">
-                    <input type="text" id="adminImage" placeholder="Emoji o icono (ej: 🍕)">
+                    <input type="text" id="adminImage" placeholder="Emoji (🍕) o enlace a una imagen (https://...)">
+                    <select id="adminDuracion" style="width: 100%; padding: 12px; margin-bottom: 12px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-subtle); color: var(--text-main);">
+                        <option value="1">1 hora</option>
+                        <option value="6">6 horas</option>
+                        <option value="24" selected>24 horas (1 día)</option>
+                        <option value="72">3 días</option>
+                        <option value="168">7 días</option>
+                    </select>
                     <button onclick="crearNuevaSubasta()" style="background: #8b5cf6;">Publicar Subasta en Vivo</button>
                 </div>
             </div>
@@ -521,6 +528,14 @@
             renderizarCatalogo();
         }
 
+        // Muestra una foto real si el campo es un enlace (http...), o el emoji tal cual si no lo es
+        function renderizarImagenProducto(valor) {
+            if (valor && (valor.startsWith('http://') || valor.startsWith('https://'))) {
+                return `<img src="${valor}" alt="Foto del lote" style="width:100%; height:100%; object-fit:cover;">`;
+            }
+            return `<span>${valor || '📦'}</span>`;
+        }
+
         function renderizarCatalogo() {
             const grid = document.getElementById('catalogGrid');
             grid.innerHTML = '';
@@ -539,7 +554,7 @@
 
                 card.innerHTML = `
                     <div class="card-image">
-                        <span>${prod.image_url || '📦'}</span>
+                        ${renderizarImagenProducto(prod.image_url)}
                         ${esCerrada ? '<div class="badge-closed">FINALIZADA</div>' : `<div class="card-timer" id="cardTimer-${prod.id}">⏳ ...</div>`}
                     </div>
                     <div class="card-content">
@@ -588,7 +603,7 @@
 
         function actualizarVistaDetalleDatoVivo() {
             if (!productoSeleccionado) return;
-            document.getElementById('detailImage').innerText = productoSeleccionado.image_url || '📦';
+            document.getElementById('detailImage').innerHTML = renderizarImagenProducto(productoSeleccionado.image_url);
             document.getElementById('detailTitle').innerText = productoSeleccionado.title;
             document.getElementById('detailDescription').innerText = productoSeleccionado.description;
             document.getElementById('detailBid').innerText = Number(productoSeleccionado.current_price).toLocaleString('es-ES') + ' €';
@@ -713,6 +728,7 @@
             const description = document.getElementById('adminDesc').value.trim();
             const price = parseInt(document.getElementById('adminPrice').value);
             const image_url = document.getElementById('adminImage').value.trim() || '📦';
+            const horas = parseInt(document.getElementById('adminDuracion').value);
 
             if (!title || isNaN(price)) return alert("Rellena los campos obligatorios.");
 
@@ -721,7 +737,7 @@
                 p_description: description,
                 p_price: price,
                 p_image: image_url,
-                p_hours: 24
+                p_hours: horas
             });
 
             if (error) {
