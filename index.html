@@ -4,6 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>aBROzon.subastas | Subastas de Arte & Coleccionismo</title>
+    <meta name="description" content="Subastas paródicas de objetos absurdos y virales sobre streamers y fútbol. Todo ficticio, todo por diversión.">
+
+    <!-- Meta-etiquetas para que el enlace se vea bien al compartirlo en WhatsApp/Twitter/Instagram -->
+    <meta property="og:title" content="aBROzon.subastas — Subastas Paródicas">
+    <meta property="og:description" content="Puja por objetos absurdos y virales (100% de broma) y consigue tu certificado para presumir con tus amigos.">
+    <meta property="og:image" content="[URL DE UNA IMAGEN PARA COMPARTIR]">
+    <meta property="og:url" content="https://jdanielhl1984-commits.github.io/abrozon-subastas/">
+    <meta property="og:type" content="website">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="aBROzon.subastas — Subastas Paródicas">
+    <meta name="twitter:description" content="Puja por objetos absurdos y virales (100% de broma) y consigue tu certificado para presumir con tus amigos.">
+    <meta name="twitter:image" content="[URL DE UNA IMAGEN PARA COMPARTIR]">
+
     <!-- Carga del cliente de Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
@@ -183,7 +197,10 @@
                     <input type="text" id="adminTitle" placeholder="Título del Lote">
                     <textarea id="adminDesc" placeholder="Descripción detallada..." rows="3" style="resize:none;"></textarea>
                     <input type="number" id="adminPrice" placeholder="Precio de salida (€)">
-                    <input type="text" id="adminImage" placeholder="Emoji (🍕) o enlace a una imagen (https://...)">
+                    <input type="text" id="adminImage" placeholder="Emoji (🍕) — opcional si subes una foto abajo">
+                    <label style="font-size:0.8rem; color: var(--text-muted); display:block; margin-bottom:6px;">O sube una foto real (JPG/PNG):</label>
+                    <input type="file" id="adminImageFile" accept="image/*" onchange="subirFotoAdmin(event)" style="width: 100%; padding: 10px; margin-bottom: 8px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-subtle); color: var(--text-main);">
+                    <div id="adminImagePreview" style="margin-bottom: 12px; font-size: 0.8rem; color: var(--text-muted);"></div>
                     <select id="adminCategoria" style="width: 100%; padding: 12px; margin-bottom: 12px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-subtle); color: var(--text-main);">
                         <option value="General">General</option>
                         <option value="Fútbol">⚽ Fútbol</option>
@@ -535,12 +552,36 @@
             renderizarCatalogo();
         }
 
-        // Muestra una foto real si el campo es un enlace (http...), o el emoji tal cual si no lo es
+        // Muestra una foto real si el campo es un enlace (http...), o el emoji tal cual si no lo es.
+        // Si el enlace no carga por lo que sea, cae a un icono de reserva en vez de romperse.
         function renderizarImagenProducto(valor) {
-            if (valor && (valor.startsWith('http://') || valor.startsWith('https://'))) {
-                return `<img src="${valor}" alt="Foto del lote" style="width:100%; height:100%; object-fit:cover;">`;
+            const v = (valor || '').trim();
+            if (/^https?:\/\//i.test(v)) {
+                return `<img src="${v}" alt="Foto del lote" style="width:100%; height:100%; object-fit:cover;" onerror="this.parentElement.innerHTML='<span>🖼️</span>';">`;
             }
-            return `<span>${valor || '📦'}</span>`;
+            return `<span>${v || '📦'}</span>`;
+        }
+
+        // Sube la foto elegida al almacén "lotes" de Supabase y guarda el enlace público
+        // resultante en el campo de texto, listo para usarlo al crear la subasta.
+        async function subirFotoAdmin(evento) {
+            const file = evento.target.files[0];
+            if (!file) return;
+
+            const preview = document.getElementById('adminImagePreview');
+            preview.innerText = '⏳ Subiendo foto...';
+
+            const nombreArchivo = `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g, '_')}`;
+            const { error } = await db.storage.from('lotes').upload(nombreArchivo, file);
+
+            if (error) {
+                preview.innerText = '';
+                return alert("Error al subir la foto: " + error.message);
+            }
+
+            const { data } = db.storage.from('lotes').getPublicUrl(nombreArchivo);
+            document.getElementById('adminImage').value = data.publicUrl;
+            preview.innerHTML = `✅ Foto subida: <img src="${data.publicUrl}" style="max-width:100%; max-height:110px; border-radius:8px; display:block; margin-top:6px;">`;
         }
 
         let categoriaActiva = 'Todas';
@@ -748,13 +789,15 @@
 
         // Crear subasta ahora pasa por la función segura 'create_auction',
         // que comprueba en el servidor que de verdad eres admin.
+        // Si se ha subido una foto, el campo adminImage ya contiene su enlace real
+        // (lo rellena subirFotoAdmin() en cuanto se elige el archivo).
         async function crearNuevaSubasta() {
             const title = document.getElementById('adminTitle').value.trim();
             const description = document.getElementById('adminDesc').value.trim();
             const price = parseInt(document.getElementById('adminPrice').value);
-            const image_url = document.getElementById('adminImage').value.trim() || '📦';
             const horas = parseInt(document.getElementById('adminDuracion').value);
             const categoria = document.getElementById('adminCategoria').value;
+            const image_url = document.getElementById('adminImage').value.trim() || '📦';
 
             if (!title || isNaN(price)) return alert("Rellena los campos obligatorios.");
 
@@ -772,6 +815,9 @@
             }
 
             cerrarModalAdmin();
+            document.getElementById('adminImage').value = '';
+            document.getElementById('adminImageFile').value = '';
+            document.getElementById('adminImagePreview').innerHTML = '';
             await cargarSubastas();
             alert("¡Subasta creada con éxito!");
         }
