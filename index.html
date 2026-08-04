@@ -54,11 +54,11 @@
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; transition: background-color 0.2s, color 0.2s, border-color 0.2s; }
-        body { background-color: var(--bg-body); color: var(--text-main); min-height: 100vh; }
+        body { background-color: var(--bg-body); color: var(--text-main); min-height: 100vh; overflow-x: hidden; }
         
         .disclaimer { background-color: var(--bg-subtle); color: var(--text-muted); text-align: center; padding: 8px; font-size: 0.8rem; border-bottom: 1px solid var(--border-color); }
         
-        header { background-color: var(--bg-header); padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); gap: 15px; }
+        header { background-color: var(--bg-header); padding: 12px 5%; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); gap: 12px; flex-wrap: wrap; position: sticky; top: 0; z-index: 200; }
         .logo { font-size: 1.8rem; font-weight: 900; color: var(--accent-blue); letter-spacing: -1px; cursor: pointer; }
         .logo span { color: #f97316; }
 
@@ -147,6 +147,21 @@
 
         .toast-abrozon { position: fixed; bottom: 20px; right: 20px; background: var(--bg-card); border: 1px solid var(--accent-blue); color: var(--text-main); padding: 14px 18px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.25); font-size: 0.9rem; font-weight: bold; z-index: 1000; max-width: 300px; animation: toastIn 0.3s ease; }
         @keyframes toastIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* ---- Ajustes para pantallas de móvil ---- */
+        @media (max-width: 680px) {
+            .search-bar { display: none; } /* aún no hace nada, la escondemos hasta implementarla */
+            header { padding: 10px 4%; gap: 8px; }
+            .logo { font-size: 1.4rem; }
+            .header-right { gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+            .btn-header, .btn-goat, .btn-login, .user-balance { font-size: 0.72rem; padding: 6px 9px; }
+            .user-dropdown { right: 0; left: auto; max-width: 88vw; }
+            .categories-nav { padding: 8px 4%; gap: 10px; }
+            .nav-tab { font-size: 0.78rem; padding: 5px 9px; }
+            .container { padding: 0 12px; }
+            .detail-layout { grid-template-columns: 1fr; }
+            .toast-abrozon { left: 12px; right: 12px; max-width: none; bottom: 12px; }
+        }
     </style>
 </head>
 <body>
