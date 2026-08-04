@@ -266,7 +266,15 @@
         </div>
         <div class="header-right">
             <button class="btn-header" id="btnAd" onclick="verAnuncio()">🎬 +500 €</button>
-            <button class="btn-goat" id="btnGoat" onclick="activarGoat()">🐐 GOAT</button>
+
+            <div class="user-menu-wrapper" id="goatMenuWrapper" style="display: none;">
+                <button class="btn-goat" id="btnGoat" onclick="toggleGoatMenu()">🐐 GOAT ▾</button>
+                <div class="user-dropdown" id="goatDropdown">
+                    <div class="dropdown-item" id="goatItemActivar" onclick="cerrarGoatMenu(); activarGoat();">🐐 Activar Modo GOAT</div>
+                    <div class="dropdown-item" id="goatItemRecargar" onclick="cerrarGoatMenu(); verAnuncio();" style="display:none;">⚡ Recargar (+1.000 €)</div>
+                    <div class="dropdown-item" id="goatItemDesactivar" onclick="cerrarGoatMenu(); activarGoat();" style="display:none; color:#ef4444;">Desactivar GOAT</div>
+                </div>
+            </div>
 
             <div class="user-balance" id="boxBalance" style="display: none;">
                 Saldo: <span class="balance-amount" id="userBalance">0 €</span>
@@ -886,15 +894,20 @@
             const boxBalance = document.getElementById('boxBalance');
             const btnLogin = document.getElementById('btnLoginHeader');
             const userMenuWrapper = document.getElementById('userMenuWrapper');
+            const goatMenuWrapper = document.getElementById('goatMenuWrapper');
             const btnGoat = document.getElementById('btnGoat');
             const dropdownAdmin = document.getElementById('dropdownAdmin');
             const btnAd = document.getElementById('btnAd');
             const goatCommentContainer = document.getElementById('goatCommentContainer');
+            const goatItemActivar = document.getElementById('goatItemActivar');
+            const goatItemRecargar = document.getElementById('goatItemRecargar');
+            const goatItemDesactivar = document.getElementById('goatItemDesactivar');
 
             if (currentUser) {
                 boxBalance.style.display = 'block';
                 btnLogin.style.display = 'none';
                 userMenuWrapper.style.display = 'block';
+                goatMenuWrapper.style.display = 'block';
                 dropdownAdmin.style.display = currentUser.isAdmin ? 'block' : 'none';
                 document.getElementById('userBalance').innerText = Number(currentUser.saldo).toLocaleString('es-ES') + ' €';
                 document.getElementById('profileUserName').innerText = `👑 ${currentUser.username}`;
@@ -902,11 +915,17 @@
                 if (currentUser.esGoat) {
                     btnGoat.classList.add('active');
                     if (goatCommentContainer) goatCommentContainer.style.display = 'block';
-                    if (btnAd) btnAd.innerText = '⚡ Recarga GOAT (+1.000 €)';
+                    if (btnAd) btnAd.style.display = 'none'; // ya recarga desde el menú GOAT
+                    goatItemActivar.style.display = 'none';
+                    goatItemRecargar.style.display = 'block';
+                    goatItemDesactivar.style.display = 'block';
                 } else {
                     btnGoat.classList.remove('active');
                     if (goatCommentContainer) goatCommentContainer.style.display = 'none';
-                    if (btnAd) btnAd.innerText = '🎬 +500 € (anuncio)';
+                    if (btnAd) { btnAd.style.display = 'block'; btnAd.innerText = '🎬 +500 € (anuncio)'; }
+                    goatItemActivar.style.display = 'block';
+                    goatItemRecargar.style.display = 'none';
+                    goatItemDesactivar.style.display = 'none';
                 }
 
                 actualizarFormularioPerfil();
@@ -914,10 +933,11 @@
                 boxBalance.style.display = 'none';
                 btnLogin.style.display = 'block';
                 userMenuWrapper.style.display = 'none';
+                goatMenuWrapper.style.display = 'none';
                 dropdownAdmin.style.display = 'none';
                 btnGoat.classList.remove('active');
                 if (goatCommentContainer) goatCommentContainer.style.display = 'none';
-                if (btnAd) btnAd.innerText = '🎬 +500 € (anuncio)';
+                if (btnAd) { btnAd.style.display = 'block'; btnAd.innerText = '🎬 +500 € (anuncio)'; }
             }
         }
 
@@ -929,11 +949,25 @@
         function cerrarUserMenu() {
             document.getElementById('userDropdown').style.display = 'none';
         }
-        // Cierra el menú si se hace clic fuera de él
+
+        // ---- Menú desplegable de GOAT (mismo patrón, para ir añadiendo más ventajas aquí) ----
+        function toggleGoatMenu() {
+            const dd = document.getElementById('goatDropdown');
+            dd.style.display = dd.style.display === 'block' ? 'none' : 'block';
+        }
+        function cerrarGoatMenu() {
+            document.getElementById('goatDropdown').style.display = 'none';
+        }
+
+        // Cierra los menús si se hace clic fuera de ellos
         document.addEventListener('click', (e) => {
             const wrapper = document.getElementById('userMenuWrapper');
             if (wrapper && wrapper.style.display !== 'none' && !wrapper.contains(e.target)) {
                 cerrarUserMenu();
+            }
+            const goatWrapper = document.getElementById('goatMenuWrapper');
+            if (goatWrapper && goatWrapper.style.display !== 'none' && !goatWrapper.contains(e.target)) {
+                cerrarGoatMenu();
             }
         });
 
