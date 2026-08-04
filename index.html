@@ -204,8 +204,8 @@
                     <textarea id="adminDesc" placeholder="Descripción detallada..." rows="3" style="resize:none;"></textarea>
                     <input type="number" id="adminPrice" placeholder="Precio de salida (€)">
                     <input type="text" id="adminImage" placeholder="Emoji (🍕) — opcional si subes una foto abajo">
-                    <label style="font-size:0.8rem; color: var(--text-muted); display:block; margin-bottom:6px;">O sube una foto real (JPG/PNG):</label>
-                    <input type="file" id="adminImageFile" accept="image/*" onchange="subirFotoAdmin(event)" style="width: 100%; padding: 10px; margin-bottom: 8px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-subtle); color: var(--text-main);">
+                    <label style="font-size:0.8rem; color: var(--text-muted); display:block; margin-bottom:6px;">O sube una o varias fotos reales (la primera será la principal):</label>
+                    <input type="file" id="adminImageFile" accept="image/*" multiple onchange="subirFotoAdmin(event)" style="width: 100%; padding: 10px; margin-bottom: 8px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-subtle); color: var(--text-main);">
                     <div id="adminImagePreview" style="margin-bottom: 12px; font-size: 0.8rem; color: var(--text-muted);"></div>
                     <select id="adminCategoria" style="width: 100%; padding: 12px; margin-bottom: 12px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-subtle); color: var(--text-main);">
                         <option value="General">General</option>
@@ -304,6 +304,7 @@
             <div class="detail-layout">
                 <div class="product-card-detail">
                     <div class="main-image-detail" id="detailImage">📦</div>
+                    <div id="detailGallery" style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom: 15px;"></div>
                     <span class="card-category" id="detailCategory">Categoría</span>
                     <h1 id="detailTitle" style="margin: 8px 0; font-size: 1.4rem;">Título del Lote</h1>
                     <p id="detailDescription" style="color: var(--text-muted); line-height: 1.6;">Descripción...</p>
@@ -570,31 +571,42 @@
         function renderizarImagenProducto(valor) {
             const v = (valor || '').trim();
             if (/^https?:\/\//i.test(v)) {
-                return `<img src="${v}" alt="Foto del lote" style="width:100%; height:100%; object-fit:cover;" onerror="this.parentElement.innerHTML='<span>🖼️</span>';">`;
+                return `<img src="${v}" alt="Foto del lote" style="display:block; width:100%; height:100%; min-width:0; min-height:0; max-width:100%; max-height:100%; object-fit:cover;" onerror="this.parentElement.innerHTML='<span>🖼️</span>';">`;
             }
             return `<span>${v || '📦'}</span>`;
         }
 
-        // Sube la foto elegida al almacén "lotes" de Supabase y guarda el enlace público
-        // resultante en el campo de texto, listo para usarlo al crear la subasta.
+        let fotosAdicionalesAdmin = [];
+
+        // Sube todas las fotos elegidas al almacén "lotes" de Supabase.
+        // La primera se usa como foto principal (campo adminImage) y el resto
+        // se guardan aparte para formar la galería del producto.
         async function subirFotoAdmin(evento) {
-            const file = evento.target.files[0];
-            if (!file) return;
+            const files = Array.from(evento.target.files || []);
+            if (files.length === 0) return;
 
             const preview = document.getElementById('adminImagePreview');
-            preview.innerText = '⏳ Subiendo foto...';
+            preview.innerText = `⏳ Subiendo ${files.length} foto(s)...`;
 
-            const nombreArchivo = `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g, '_')}`;
-            const { error } = await db.storage.from('lotes').upload(nombreArchivo, file);
+            const urls = [];
+            for (const file of files) {
+                const nombreArchivo = `${Date.now()}-${Math.random().toString(36).slice(2)}-${file.name.replace(/[^a-zA-Z0-9._-]/g, '_')}`;
+                const { error } = await db.storage.from('lotes').upload(nombreArchivo, file);
 
-            if (error) {
-                preview.innerText = '';
-                return alert("Error al subir la foto: " + error.message);
+                if (error) {
+                    preview.innerText = '';
+                    return alert("Error al subir una foto: " + error.message);
+                }
+
+                const { data } = db.storage.from('lotes').getPublicUrl(nombreArchivo);
+                urls.push(data.publicUrl);
             }
 
-            const { data } = db.storage.from('lotes').getPublicUrl(nombreArchivo);
-            document.getElementById('adminImage').value = data.publicUrl;
-            preview.innerHTML = `✅ Foto subida: <img src="${data.publicUrl}" style="max-width:100%; max-height:110px; border-radius:8px; display:block; margin-top:6px;">`;
+            document.getElementById('adminImage').value = urls[0];
+            fotosAdicionalesAdmin = urls.slice(1);
+
+            preview.innerHTML = `✅ ${urls.length} foto(s) subida(s):<br>` +
+                urls.map(u => `<img src="${u}" style="width:70px; height:70px; object-fit:cover; border-radius:6px; margin:4px 4px 0 0;">`).join('');
         }
 
         let categoriaActiva = 'Todas';
@@ -687,6 +699,19 @@
             document.getElementById('detailDescription').innerText = productoSeleccionado.description;
             document.getElementById('detailBid').innerText = Number(productoSeleccionado.current_price).toLocaleString('es-ES') + ' €';
 
+            // Galería: foto principal + fotos adicionales, si las hay
+            const galeria = document.getElementById('detailGallery');
+            const todasFotos = [productoSeleccionado.image_url, ...(productoSeleccionado.images || [])]
+                .filter(u => u && /^https?:\/\//i.test(u));
+
+            if (todasFotos.length > 1) {
+                galeria.innerHTML = todasFotos.map(u =>
+                    `<img src="${u}" onclick="cambiarFotoPrincipal(this.src)" style="width:60px; height:60px; object-fit:cover; border-radius:8px; cursor:pointer; border:2px solid var(--border-color);">`
+                ).join('');
+            } else {
+                galeria.innerHTML = '';
+            }
+
             const controles = document.getElementById('biddingControlsContainer');
             if (productoSeleccionado.status === 'closed') {
                 controles.style.display = 'none';
@@ -694,6 +719,11 @@
             } else {
                 controles.style.display = 'block';
             }
+        }
+
+        // Cambia la foto grande al hacer clic en una miniatura de la galería
+        function cambiarFotoPrincipal(url) {
+            document.getElementById('detailImage').innerHTML = renderizarImagenProducto(url);
         }
 
         function iniciarTemporizador(fechaFin) {
@@ -820,7 +850,8 @@
                 p_price: price,
                 p_image: image_url,
                 p_hours: horas,
-                p_category: categoria
+                p_category: categoria,
+                p_images: fotosAdicionalesAdmin
             });
 
             if (error) {
@@ -831,6 +862,7 @@
             document.getElementById('adminImage').value = '';
             document.getElementById('adminImageFile').value = '';
             document.getElementById('adminImagePreview').innerHTML = '';
+            fotosAdicionalesAdmin = [];
             await cargarSubastas();
             alert("¡Subasta creada con éxito!");
         }
