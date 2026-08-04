@@ -18,6 +18,12 @@
     <meta name="twitter:description" content="Puja por objetos absurdos y virales (100% de broma) y consigue tu certificado para presumir con tus amigos.">
     <meta name="twitter:image" content="[URL DE UNA IMAGEN PARA COMPARTIR]">
 
+    <!-- PWA: permite instalar la web como app en el móvil -->
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="icon-192.png">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <meta name="theme-color" content="#f97316">
+
     <!-- Carga del cliente de Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
@@ -258,6 +264,7 @@
                 <div class="user-dropdown" id="userDropdown">
                     <div class="dropdown-item" onclick="cerrarUserMenu(); mostrarPerfil();">👤 Mi Perfil</div>
                     <div class="dropdown-item" onclick="cerrarUserMenu(); mostrarVitrina();">🏆 Mi Vitrina</div>
+                    <div class="dropdown-item" onclick="cerrarUserMenu(); reclamarBonusDiario();">🎁 Bono diario (+100 €)</div>
                     <div class="dropdown-item" id="dropdownTheme" onclick="toggleTema();">🌙 Modo Noche</div>
                     <div class="dropdown-item" id="dropdownAdmin" onclick="cerrarUserMenu(); abrirModalAdmin();" style="display:none;">🛠️ Panel Admin</div>
                     <div class="dropdown-item" onclick="cerrarUserMenu(); mostrarLegal();">📄 Legal y Privacidad</div>
@@ -443,6 +450,12 @@
         }
 
         window.onload = async () => {
+            // Registro del Service Worker (necesario para poder "instalar" la web como app)
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('service-worker.js').catch(() => {});
+            }
+
+
             // 1. Comprobar si ya había una sesión abierta (Supabase la recuerda solo)
             const { data: { session } } = await db.auth.getSession();
             if (session) await cargarPerfil(session.user.id);
@@ -931,6 +944,17 @@
 
         // Ver anuncio / recarga: llama a la función segura del servidor
         // (usuario normal: +500€ con tope diario · GOAT: +1.000€ instantáneo sin tope)
+        // Bono diario: +100€ reclamables una vez cada 24h
+        async function reclamarBonusDiario() {
+            if (!currentUser) return abrirModalAuth('register');
+            marcarCambioPropio();
+            const { data, error } = await db.rpc('reclamar_bonus_diario');
+            if (error) return alert("⚠️ " + error.message);
+            currentUser.saldo = data;
+            actualizarInterfazUsuario();
+            alert("🎁 ¡+100 € de bono diario reclamados! Vuelve mañana a por más.");
+        }
+
         async function verAnuncio() {
             if (!currentUser) return abrirModalAuth('register');
             const saldoAntes = currentUser.saldo;
@@ -990,12 +1014,17 @@
                 ganados.forEach(item => {
                     const card = document.createElement('div');
                     card.className = 'certificate-card';
+                    const fecha = item.ends_at ? new Date(item.ends_at).toLocaleDateString('es-ES') : '';
                     card.innerHTML = `
-                        <div style="font-size: 3rem; margin-bottom: 10px;">${item.image_url}</div>
+                        <div style="width:100%; height:120px; display:flex; align-items:center; justify-content:center; font-size:3rem; margin-bottom:10px; border-radius:10px; overflow:hidden; background: var(--bg-subtle);">${renderizarImagenProducto(item.image_url)}</div>
                         <h3>${item.title}</h3>
                         <p style="font-size: 0.8rem; color:var(--text-muted); margin-bottom: 10px;">${item.description}</p>
                         <div style="font-size: 0.85rem; font-weight: bold; color: var(--accent-green);">Adjudicado por: ${Number(item.current_price).toLocaleString('es-ES')} €</div>
-                        <div style="margin-top: 10px; font-size: 0.7rem; background: rgba(234, 179, 8, 0.1); padding: 4px; border-radius: 4px; color: #eab308; font-weight: bold;">📜 CERTIFICADO OFICIAL ABROZON</div>
+                        <div style="margin-top: 10px; font-size: 0.7rem; background: rgba(234, 179, 8, 0.1); padding: 6px; border-radius: 4px; color: #eab308; font-weight: bold; line-height:1.5;">
+                            📜 CERTIFICADO OFICIAL ABROZON<br>
+                            Nº ${item.certificado_codigo || 'PENDIENTE'}<br>
+                            Fecha de adjudicación: ${fecha}
+                        </div>
                     `;
                     grid.appendChild(card);
                 });
