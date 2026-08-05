@@ -311,7 +311,7 @@
         <span class="nav-tab active" id="tabTodas" onclick="filtrarCategoria('Todas')">Todas</span>
         <span class="nav-tab" id="tabFutbol" onclick="filtrarCategoria('Fútbol')">⚽ Fútbol</span>
         <span class="nav-tab" id="tabStreamers" onclick="filtrarCategoria('Streamers')">🎥 Streamers</span>
-        <span class="nav-tab" onclick="mostrarVitrina()">🏆 Mi Vitrina</span>
+        <span class="nav-tab" id="tabFinalizadas" onclick="mostrarFinalizadas()">📜 Finalizadas</span> <span class="nav-tab" onclick="mostrarVitrina()">🏆 Mi Vitrina</span>
     </div>
 
     <div class="container">
@@ -646,17 +646,29 @@
         let categoriaActiva = 'Todas';
         let terminoBusqueda = '';
 
-        function filtrarCategoria(cat) {
-            categoriaActiva = cat;
-            document.querySelectorAll('.categories-nav .nav-tab').forEach(t => t.classList.remove('active'));
-            const mapa = { 'Todas': 'tabTodas', 'Fútbol': 'tabFutbol', 'Streamers': 'tabStreamers' };
-            const el = document.getElementById(mapa[cat]);
-            if (el) el.classList.add('active');
-            ocultarTodasVistas();
-            document.getElementById('viewCatalog').classList.add('active');
-            renderizarCatalogo();
-        }
+        let mostrandoFinalizadas = false;
 
+function filtrarCategoria(cat) {
+    mostrandoFinalizadas = false;
+    categoriaActiva = cat;
+    document.querySelectorAll('.categories-nav .nav-tab').forEach(t => t.classList.remove('active'));
+    const mapa = { 'Todas': 'tabTodas', 'Fútbol': 'tabFutbol', 'Streamers': 'tabStreamers' };
+    const el = document.getElementById(mapa[cat]);
+    if (el) el.classList.add('active');
+    ocultarTodasVistas();
+    document.getElementById('viewCatalog').classList.add('active');
+    renderizarCatalogo();
+}
+function mostrarFinalizadas() {
+    mostrandoFinalizadas = true;
+    document.querySelectorAll('.categories-nav .nav-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('tabFinalizadas').classList.add('active');
+    ocultarTodasVistas();
+    document.getElementById('viewCatalog').classList.add('active');
+    renderizarCatalogo();
+    document.getElementById('searchInput').value = '';
+terminoBusqueda = '';
+}
         // Filtra el catálogo por título o descripción, en directo mientras se escribe
         function buscarEnCatalogo(texto) {
             terminoBusqueda = (texto || '').trim().toLowerCase();
@@ -669,16 +681,19 @@
             const grid = document.getElementById('catalogGrid');
             grid.innerHTML = '';
 
-            let lista = categoriaActiva === 'Todas'
-                ? subastasLocales
-                : subastasLocales.filter(p => p.category === categoriaActiva);
+            let lista = subastasLocales;
 
-            if (terminoBusqueda) {
-                lista = lista.filter(p =>
-                    (p.title || '').toLowerCase().includes(terminoBusqueda) ||
-                    (p.description || '').toLowerCase().includes(terminoBusqueda)
-                );
-            }
+// Si estamos en modo "Finalizadas", solo mostramos las cerradas
+if (mostrandoFinalizadas) {
+    lista = lista.filter(p => p.status === 'closed');
+} else {
+    // En la vista normal, solo subastas activas (no cerradas)
+    lista = lista.filter(p => p.status !== 'closed');
+    // Y aplicamos el filtro de categoría si no es 'Todas'
+    if (categoriaActiva !== 'Todas') {
+        lista = lista.filter(p => p.category === categoriaActiva);
+    }
+}
 
             if (lista.length === 0) {
                 grid.innerHTML = '<div>No hay subastas que coincidan con la búsqueda.</div>';
