@@ -73,6 +73,7 @@
         .btn-header { background: var(--bg-subtle); color: var(--text-main); border: 1px solid var(--border-color); padding: 8px 12px; border-radius: 20px; font-weight: bold; cursor: pointer; font-size: 0.85rem; }
         .user-menu-wrapper { position: relative; }
         .user-dropdown { position: absolute; top: 115%; right: 0; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 10px; box-shadow: 0 8px 20px rgba(0,0,0,0.15); min-width: 200px; z-index: 500; overflow: hidden; display: none; }
+        #goatDropdown { right: auto; left: 0; }
         .dropdown-item { padding: 11px 14px; font-size: 0.85rem; color: var(--text-main); cursor: pointer; border-bottom: 1px solid var(--border-color); }
         .dropdown-item:last-child { border-bottom: none; }
         .dropdown-item:hover { background: var(--bg-subtle); }
@@ -155,7 +156,7 @@
             .logo { font-size: 1.4rem; }
             .header-right { gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
             .btn-header, .btn-goat, .btn-login, .user-balance { font-size: 0.72rem; padding: 6px 9px; }
-            .user-dropdown { right: 0; left: auto; max-width: 88vw; }
+            .user-dropdown { position: fixed; top: 58px; left: 12px; right: 12px; width: auto; max-width: none; }
             .categories-nav { padding: 8px 4%; gap: 10px; }
             .nav-tab { font-size: 0.78rem; padding: 5px 9px; }
             .container { padding: 0 12px; }
@@ -465,6 +466,7 @@
         let profileChannel = null;
         let profileChannelUserId = null;
         let saldoCambioPropio = false;
+        let accionEnCurso = false; // evita clics repetidos mientras se procesa una puja/recarga
 
         // Marca que el cambio de saldo que va a llegar por tiempo real es cosa
         // nuestra (puja, recarga, GOAT), para no avisarnos a nosotros mismos.
@@ -729,7 +731,7 @@
 
             if (todasFotos.length > 1) {
                 galeria.innerHTML = todasFotos.map(u =>
-                    `<img src="${u}" onclick="cambiarFotoPrincipal(this.src)" style="width:60px; height:60px; object-fit:cover; border-radius:8px; cursor:pointer; border:2px solid var(--border-color);">`
+                    `<img src="${u}" onclick="cambiarFotoPrincipal(this.src)" onerror="this.style.display='none';" style="width:60px; height:60px; object-fit:cover; border-radius:8px; cursor:pointer; border:2px solid var(--border-color);">`
                 ).join('');
             } else {
                 galeria.innerHTML = '';
@@ -814,29 +816,35 @@
         async function ejecutarPuja(nuevaPujaTotal) {
             if (!currentUser) return abrirModalAuth('register');
             if (productoSeleccionado.status === 'closed') return alert("Esta subasta ya ha finalizado.");
+            if (accionEnCurso) return;
+            accionEnCurso = true;
 
-            let comentarioTexto = null;
-            if (currentUser.esGoat) {
-                const commentInput = document.getElementById('goatCommentInput');
-                comentarioTexto = commentInput ? commentInput.value.trim() : '';
-                if (commentInput) commentInput.value = '';
+            try {
+                let comentarioTexto = null;
+                if (currentUser.esGoat) {
+                    const commentInput = document.getElementById('goatCommentInput');
+                    comentarioTexto = commentInput ? commentInput.value.trim() : '';
+                    if (commentInput) commentInput.value = '';
+                }
+
+                marcarCambioPropio();
+                const { error } = await db.rpc('place_bid', {
+                    p_auction_id: productoSeleccionado.id,
+                    p_amount: nuevaPujaTotal,
+                    p_comment: comentarioTexto
+                });
+
+                if (error) {
+                    return alert("⚠️ " + error.message);
+                }
+
+                // Refrescamos el saldo real desde la base de datos (evita descuadres)
+                await cargarPerfil(currentUser.id);
+                productoSeleccionado.current_price = nuevaPujaTotal;
+                actualizarInterfazUsuario();
+            } finally {
+                accionEnCurso = false;
             }
-
-            marcarCambioPropio();
-            const { error } = await db.rpc('place_bid', {
-                p_auction_id: productoSeleccionado.id,
-                p_amount: nuevaPujaTotal,
-                p_comment: comentarioTexto
-            });
-
-            if (error) {
-                return alert("⚠️ " + error.message);
-            }
-
-            // Refrescamos el saldo real desde la base de datos (evita descuadres)
-            await cargarPerfil(currentUser.id);
-            productoSeleccionado.current_price = nuevaPujaTotal;
-            actualizarInterfazUsuario();
         }
 
         function hacerPujaMínima() {
@@ -1028,24 +1036,36 @@
         // Bono diario: +100€ reclamables una vez cada 24h
         async function reclamarBonusDiario() {
             if (!currentUser) return abrirModalAuth('register');
-            marcarCambioPropio();
-            const { data, error } = await db.rpc('reclamar_bonus_diario');
-            if (error) return alert("⚠️ " + error.message);
-            currentUser.saldo = data;
-            actualizarInterfazUsuario();
-            alert("🎁 ¡+100 € de bono diario reclamados! Vuelve mañana a por más.");
+            if (accionEnCurso) return;
+            accionEnCurso = true;
+            try {
+                marcarCambioPropio();
+                const { data, error } = await db.rpc('reclamar_bonus_diario');
+                if (error) return alert("⚠️ " + error.message);
+                currentUser.saldo = data;
+                actualizarInterfazUsuario();
+                alert("🎁 ¡+100 € de bono diario reclamados! Vuelve mañana a por más.");
+            } finally {
+                accionEnCurso = false;
+            }
         }
 
         async function verAnuncio() {
             if (!currentUser) return abrirModalAuth('register');
-            const saldoAntes = currentUser.saldo;
-            marcarCambioPropio();
-            const { data, error } = await db.rpc('add_ad_reward');
-            if (error) return alert("⚠️ " + error.message);
-            currentUser.saldo = data;
-            actualizarInterfazUsuario();
-            const ganado = data - saldoAntes;
-            alert(`¡+${ganado.toLocaleString('es-ES')} € añadidos!`);
+            if (accionEnCurso) return;
+            accionEnCurso = true;
+            try {
+                const saldoAntes = currentUser.saldo;
+                marcarCambioPropio();
+                const { data, error } = await db.rpc('add_ad_reward');
+                if (error) return alert("⚠️ " + error.message);
+                currentUser.saldo = data;
+                actualizarInterfazUsuario();
+                const ganado = data - saldoAntes;
+                alert(`¡+${ganado.toLocaleString('es-ES')} € añadidos!`);
+            } finally {
+                accionEnCurso = false;
+            }
         }
 
         // Modo GOAT: llama a la función segura que activa/desactiva el estado en el servidor.
@@ -1053,13 +1073,19 @@
         // un regalo de bienvenida y mejores recargas, nunca pujas gratis.
         async function activarGoat() {
             if (!currentUser) return abrirModalAuth('register');
-            marcarCambioPropio();
-            const { data, error } = await db.rpc('toggle_goat');
-            if (error) return alert("Error: " + error.message);
-            currentUser.esGoat = data;
-            await cargarPerfil(currentUser.id);
-            actualizarInterfazUsuario();
-            if (data) alert("🐐 ¡Modo GOAT activado! Has recibido 5.000 € de regalo de bienvenida.");
+            if (accionEnCurso) return;
+            accionEnCurso = true;
+            try {
+                marcarCambioPropio();
+                const { data, error } = await db.rpc('toggle_goat');
+                if (error) return alert("Error: " + error.message);
+                currentUser.esGoat = data;
+                await cargarPerfil(currentUser.id);
+                actualizarInterfazUsuario();
+                if (data) alert("🐐 ¡Modo GOAT activado! Has recibido 5.000 € de regalo de bienvenida.");
+            } finally {
+                accionEnCurso = false;
+            }
         }
 
         function toggleTema() {
