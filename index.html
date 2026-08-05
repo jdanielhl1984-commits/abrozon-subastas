@@ -3,6 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-7QH32JJ62Z"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-7QH32JJ62Z');
+    </script>
     <title>aBROzon.subastas | Subastas de Arte & Coleccionismo</title>
     <meta name="description" content="Subastas paródicas de objetos absurdos y virales sobre streamers y fútbol. Todo ficticio, todo por diversión.">
 
@@ -151,7 +160,7 @@
 
         /* ---- Ajustes para pantallas de móvil ---- */
         @media (max-width: 680px) {
-            .search-bar { display: none; } /* aún no hace nada, la escondemos hasta implementarla */
+            .search-bar { order: 3; flex-basis: 100%; max-width: none; margin-top: 6px; }
             header { padding: 10px 4%; gap: 8px; }
             .logo { font-size: 1.4rem; }
             .header-right { gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
@@ -262,8 +271,8 @@
     <header>
         <div class="logo" onclick="mostrarCatalogo()">aBROzon<span>.subastas</span></div>
         <div class="search-bar">
-            <input type="text" placeholder="Buscar subasta...">
-            <button>🔍</button>
+            <input type="text" id="searchInput" placeholder="Buscar subasta..." oninput="buscarEnCatalogo(this.value)">
+            <button onclick="buscarEnCatalogo(document.getElementById('searchInput').value)">🔍</button>
         </div>
         <div class="header-right">
             <button class="btn-header" id="btnAd" onclick="verAnuncio()">🎬 +500 €</button>
@@ -635,6 +644,7 @@
         }
 
         let categoriaActiva = 'Todas';
+        let terminoBusqueda = '';
 
         function filtrarCategoria(cat) {
             categoriaActiva = cat;
@@ -647,16 +657,31 @@
             renderizarCatalogo();
         }
 
+        // Filtra el catálogo por título o descripción, en directo mientras se escribe
+        function buscarEnCatalogo(texto) {
+            terminoBusqueda = (texto || '').trim().toLowerCase();
+            ocultarTodasVistas();
+            document.getElementById('viewCatalog').classList.add('active');
+            renderizarCatalogo();
+        }
+
         function renderizarCatalogo() {
             const grid = document.getElementById('catalogGrid');
             grid.innerHTML = '';
 
-            const lista = categoriaActiva === 'Todas'
+            let lista = categoriaActiva === 'Todas'
                 ? subastasLocales
                 : subastasLocales.filter(p => p.category === categoriaActiva);
 
+            if (terminoBusqueda) {
+                lista = lista.filter(p =>
+                    (p.title || '').toLowerCase().includes(terminoBusqueda) ||
+                    (p.description || '').toLowerCase().includes(terminoBusqueda)
+                );
+            }
+
             if (lista.length === 0) {
-                grid.innerHTML = '<div>No hay subastas en esta categoría todavía.</div>';
+                grid.innerHTML = '<div>No hay subastas que coincidan con la búsqueda.</div>';
                 return;
             }
 
