@@ -694,7 +694,13 @@ if (mostrandoFinalizadas) {
         lista = lista.filter(p => p.category === categoriaActiva);
     }
 }
-
+         // Aplicar búsqueda por texto si hay algo escrito
+         if (terminoBusqueda) {
+             lista = lista.filter(p =>
+                 (p.title || '').toLowerCase().includes(terminoBusqueda) ||
+                 (p.description || '').toLowerCase().includes(terminoBusqueda)
+             );
+         }
             if (lista.length === 0) {
                 grid.innerHTML = '<div>No hay subastas que coincidan con la búsqueda.</div>';
                 return;
