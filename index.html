@@ -3,8 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-7QH32JJ62Z"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -13,57 +11,26 @@
       gtag('config', 'G-7QH32JJ62Z');
     </script>
     <title>aBROzon.subastas | Subastas de Arte & Coleccionismo</title>
-    <meta name="description" content="Subastas paródicas de objetos absurdos y virales sobre streamers y fútbol. Todo ficticio, todo por diversión.">
-
-    <!-- Meta-etiquetas para compartir -->
+    <meta name="description" content="Subastas paródicas de objetos absurdos y virales sobre streamers y fútbol.">
     <meta property="og:title" content="aBROzon.subastas — Subastas Paródicas">
-    <meta property="og:description" content="Puja por objetos absurdos y virales (100% de broma) y consigue tu certificado para presumir con tus amigos.">
+    <meta property="og:description" content="Puja por objetos absurdos y virales (100% de broma)">
     <meta property="og:image" content="[URL DE UNA IMAGEN PARA COMPARTIR]">
     <meta property="og:url" content="https://jdanielhl1984-commits.github.io/abrozon-subastas/">
     <meta property="og:type" content="website">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="aBROzon.subastas — Subastas Paródicas">
-    <meta name="twitter:description" content="Puja por objetos absurdos y virales (100% de broma) y consigue tu certificado para presumir con tus amigos.">
-    <meta name="twitter:image" content="[URL DE UNA IMAGEN PARA COMPARTIR]">
-
-    <!-- PWA -->
     <link rel="manifest" href="manifest.json">
     <link rel="icon" href="icon-192.png">
     <link rel="apple-touch-icon" href="icon-192.png">
     <meta name="theme-color" content="#f97316">
-
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        :root {
-            --bg-body: #f8fafc;
-            --bg-card: #ffffff;
-            --bg-header: #ffffff;
-            --bg-subtle: #f1f5f9;
-            --text-main: #0f172a;
-            --text-muted: #64748b;
-            --border-color: #e2e8f0;
-            --accent-blue: #0284c7;
-            --accent-green: #16a34a;
-            --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
-        }
-        body.dark-mode {
-            --bg-body: #0f172a;
-            --bg-card: #1e293b;
-            --bg-header: #0f172a;
-            --bg-subtle: #1e293b;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --border-color: #334155;
-            --accent-blue: #38bdf8;
-            --accent-green: #4ade80;
-            --shadow-card: none;
-        }
+        :root { --bg-body: #f8fafc; --bg-card: #ffffff; --bg-header: #ffffff; --bg-subtle: #f1f5f9; --text-main: #0f172a; --text-muted: #64748b; --border-color: #e2e8f0; --accent-blue: #0284c7; --accent-green: #16a34a; --shadow-card: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -2px rgba(0,0,0,0.05); }
+        body.dark-mode { --bg-body: #0f172a; --bg-card: #1e293b; --bg-header: #0f172a; --bg-subtle: #1e293b; --text-main: #f8fafc; --text-muted: #94a3b8; --border-color: #334155; --accent-blue: #38bdf8; --accent-green: #4ade80; --shadow-card: none; }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; transition: background-color 0.2s, color 0.2s, border-color 0.2s; }
         body { background-color: var(--bg-body); color: var(--text-main); min-height: 100vh; overflow-x: hidden; }
         .disclaimer { background-color: var(--bg-subtle); color: var(--text-muted); text-align: center; padding: 8px; font-size: 0.8rem; border-bottom: 1px solid var(--border-color); }
         header { background-color: var(--bg-header); padding: 12px 5%; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); gap: 12px; flex-wrap: wrap; position: sticky; top: 0; z-index: 200; }
-        .logo { font-size: 1.8rem; font-weight: 900; color: var(--accent-blue); letter-spacing: -1px; cursor: pointer; }
-        .logo span { color: #f97316; }
+        .logo { font-size: 1.8rem; font-weight: 900; color: var(--accent-blue); letter-spacing: -1px; cursor: pointer; } .logo span { color: #f97316; }
         .search-bar { flex: 1; max-width: 400px; display: flex; background: var(--bg-subtle); border-radius: 20px; border: 1px solid var(--border-color); overflow: hidden; }
         .search-bar input { width: 100%; background: transparent; border: none; padding: 10px 15px; color: var(--text-main); outline: none; font-size: 0.9rem; }
         .search-bar button { background: var(--accent-blue); color: white; border: none; padding: 0 18px; font-weight: bold; cursor: pointer; }
@@ -75,13 +42,10 @@
         .user-dropdown { position: absolute; top: 115%; right: 0; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 10px; box-shadow: 0 8px 20px rgba(0,0,0,0.15); min-width: 200px; z-index: 500; overflow: hidden; display: none; }
         #goatDropdown { right: auto; left: 0; }
         .dropdown-item { padding: 11px 14px; font-size: 0.85rem; color: var(--text-main); cursor: pointer; border-bottom: 1px solid var(--border-color); }
-        .dropdown-item:last-child { border-bottom: none; }
-        .dropdown-item:hover { background: var(--bg-subtle); }
-        .btn-admin { background: #8b5cf6; color: white; border: none; padding: 8px 12px; border-radius: 20px; font-weight: bold; cursor: pointer; font-size: 0.85rem; display: none; }
+        .dropdown-item:last-child { border-bottom: none; } .dropdown-item:hover { background: var(--bg-subtle); }
         .btn-goat { background: linear-gradient(135deg, #eab308, #ca8a04); color: #0f172a; border: none; padding: 8px 14px; border-radius: 20px; font-weight: 900; cursor: pointer; font-size: 0.85rem; opacity: 0.5; }
         .btn-goat.active { opacity: 1; box-shadow: 0 0 10px #eab308; }
         .btn-login { background: var(--accent-blue); color: white; border: none; padding: 8px 16px; border-radius: 20px; font-weight: bold; cursor: pointer; font-size: 0.85rem; }
-        .btn-logout { background: #ef4444; color: white; border: none; padding: 8px 12px; border-radius: 20px; font-weight: bold; cursor: pointer; font-size: 0.85rem; }
         .categories-nav { background-color: var(--bg-header); padding: 10px 5%; display: flex; gap: 15px; border-bottom: 1px solid var(--border-color); overflow-x: auto; }
         .nav-tab { color: var(--text-muted); text-decoration: none; font-size: 0.85rem; font-weight: 600; padding: 6px 12px; border-radius: 12px; cursor: pointer; white-space: nowrap; }
         .nav-tab:hover, .nav-tab.active { color: var(--text-main); background-color: var(--bg-subtle); }
@@ -96,31 +60,29 @@
         .auction-card:hover { transform: translateY(-3px); border-color: var(--accent-blue); }
         .card-image { width: 100%; height: 180px; background-color: var(--bg-subtle); display: flex; align-items: center; justify-content: center; font-size: 4.5rem; position: relative; border-bottom: 1px solid var(--border-color); overflow: hidden; }
         .badge-closed { position: absolute; top: 10px; left: 10px; background: #ef4444; color: white; font-size: 0.65rem; font-weight: bold; padding: 3px 8px; border-radius: 6px; text-transform: uppercase; }
-        .card-timer { position: absolute; top: 10px; right: 10px; background: rgba(239, 68, 68, 0.15); color: #ef4444; font-size: 0.7rem; font-weight: bold; padding: 3px 8px; border-radius: 6px; font-family: monospace; }
+        .card-timer { position: absolute; top: 10px; right: 10px; background: rgba(239,68,68,0.15); color: #ef4444; font-size: 0.7rem; font-weight: bold; padding: 3px 8px; border-radius: 6px; font-family: monospace; }
         .card-content { padding: 14px; }
         .card-category { font-size: 0.7rem; color: var(--accent-blue); text-transform: uppercase; font-weight: bold; margin-bottom: 4px; }
         .card-title { font-size: 0.9rem; font-weight: bold; color: var(--text-main); margin-bottom: 12px; line-height: 1.3; height: 38px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
         .card-footer { display: flex; justify-content: space-between; align-items: flex-end; border-top: 1px dashed var(--border-color); padding-top: 10px; }
         .bid-label-sm { font-size: 0.7rem; color: var(--text-muted); }
         .bid-amount-sm { font-size: 1.1rem; font-weight: 900; color: var(--accent-green); }
-        .view { display: none; }
-        .view.active { display: block; }
+        .view { display: none; } .view.active { display: block; }
         .btn-back { background: var(--bg-subtle); color: var(--text-main); border: 1px solid var(--border-color); padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: bold; margin-bottom: 20px; }
         .detail-layout { display: grid; grid-template-columns: 1fr 360px; gap: 25px; align-items: start; }
         .product-card-detail { background: var(--bg-card); border-radius: 16px; padding: 25px; border: 1px solid var(--border-color); box-shadow: var(--shadow-card); }
         .main-image-detail { width: 100%; height: 280px; background-color: var(--bg-subtle); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 6rem; margin-bottom: 20px; border: 1px solid var(--border-color); overflow: hidden; }
         .auction-panel-detail { background: var(--bg-card); border-radius: 16px; padding: 25px; border: 1px solid var(--border-color); height: fit-content; box-shadow: var(--shadow-card); }
-        .time-box { background: rgba(249, 115, 22, 0.1); border: 1px solid #f97316; color: #f97316; padding: 8px 12px; border-radius: 8px; font-weight: bold; text-align: center; margin-bottom: 15px; font-size: 0.9rem; }
+        .time-box { background: rgba(249,115,22,0.1); border: 1px solid #f97316; color: #f97316; padding: 8px 12px; border-radius: 8px; font-weight: bold; text-align: center; margin-bottom: 15px; font-size: 0.9rem; }
         .btn-bid { width: 100%; background-color: #f97316; color: white; border: none; padding: 12px; font-size: 1rem; font-weight: bold; border-radius: 10px; cursor: pointer; }
-        .btn-bid:hover { background-color: #ea580c; }
         .history-item { font-size: 0.85rem; padding: 10px 0; border-bottom: 1px dashed var(--border-color); line-height: 1.3; }
         .profile-header { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 20px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; box-shadow: var(--shadow-card); }
         .user-info h2 { font-size: 1.3rem; color: var(--text-main); }
-        .user-badge { display: inline-block; background: rgba(56, 189, 248, 0.15); color: var(--accent-blue); padding: 3px 10px; border-radius: 10px; font-size: 0.75rem; font-weight: bold; margin-top: 4px; }
+        .user-badge { display: inline-block; background: rgba(56,189,248,0.15); color: var(--accent-blue); padding: 3px 10px; border-radius: 10px; font-size: 0.75rem; font-weight: bold; margin-top: 4px; }
         .vitrina-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
         .certificate-card { background: var(--bg-card); border: 2px solid #eab308; border-radius: 16px; padding: 20px; box-shadow: var(--shadow-card); text-align: center; position: relative; }
         .certificate-card h3 { color: var(--accent-blue); font-size: 1.1rem; margin-bottom: 6px; }
-        .auth-modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; z-index: 999; }
+        .auth-modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15,23,42,0.8); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; z-index: 999; }
         .auth-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 30px; width: 100%; max-width: 380px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); position: relative; }
         .auth-card h2 { font-size: 1.4rem; color: var(--text-main); margin-bottom: 8px; text-align: center; }
         .auth-card p { font-size: 0.85rem; color: var(--text-muted); text-align: center; margin-bottom: 20px; }
@@ -131,862 +93,643 @@
         .btn-close-modal { position: absolute; top: 12px; right: 15px; background: transparent; border: none; font-size: 1.2rem; color: var(--text-muted); cursor: pointer; }
         .toast-abrozon { position: fixed; bottom: 20px; right: 20px; background: var(--bg-card); border: 1px solid var(--accent-blue); color: var(--text-main); padding: 14px 18px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.25); font-size: 0.9rem; font-weight: bold; z-index: 1000; max-width: 300px; animation: toastIn 0.3s ease; }
         @keyframes toastIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        /* Estilos para misiones */
+        .mission-card { background: var(--bg-card); border-radius: 12px; padding: 16px; border: 1px solid var(--border-color); margin-bottom: 12px; }
+        .mission-title { font-weight: bold; margin-bottom: 4px; }
+        .mission-desc { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px; }
+        .progress-bar { width: 100%; height: 8px; background: var(--bg-subtle); border-radius: 4px; overflow: hidden; }
+        .progress-fill { height: 100%; background: var(--accent-green); border-radius: 4px; }
+        .mission-completed { color: var(--accent-green); font-weight: bold; }
         @media (max-width: 680px) {
             .search-bar { order: 3; flex-basis: 100%; max-width: none; margin-top: 6px; }
-            header { padding: 10px 4%; gap: 8px; }
-            .logo { font-size: 1.4rem; }
+            header { padding: 10px 4%; gap: 8px; } .logo { font-size: 1.4rem; }
             .header-right { gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
             .btn-header, .btn-goat, .btn-login, .user-balance { font-size: 0.72rem; padding: 6px 9px; }
             .user-dropdown { position: fixed; top: 58px; left: 12px; right: 12px; width: auto; max-width: none; }
-            .categories-nav { padding: 8px 4%; gap: 10px; }
-            .nav-tab { font-size: 0.78rem; padding: 5px 9px; }
-            .container { padding: 0 12px; }
-            .detail-layout { grid-template-columns: 1fr; }
+            .categories-nav { padding: 8px 4%; gap: 10px; } .nav-tab { font-size: 0.78rem; padding: 5px 9px; }
+            .container { padding: 0 12px; } .detail-layout { grid-template-columns: 1fr; }
             .toast-abrozon { left: 12px; right: 12px; max-width: none; bottom: 12px; }
         }
     </style>
 </head>
 <body>
-    <!-- MODAL AUTENTICACIÓN -->
-    <div id="authModal" class="auth-modal-overlay" style="display: none;">
-        <div class="auth-card">
-            <button class="btn-close-modal" onclick="cerrarModalAuth()">✕</button>
-            <div class="logo" style="text-align: center; margin-bottom: 15px;">aBROzon<span>.subastas</span></div>
-            <div id="formLogin" class="auth-form">
-                <h2>Iniciar Sesión</h2>
-                <p>Identifícate para pujar y gestionar tus trofeos.</p>
-                <input type="email" id="loginEmail" placeholder="Tu correo electrónico">
-                <input type="password" id="loginPassword" placeholder="Contraseña">
-                <button onclick="iniciarSesion()">Acceder</button>
-                <div class="auth-toggle"><span onclick="solicitarRecuperacion()">¿Olvidaste tu contraseña?</span></div>
-                <div class="auth-toggle">¿No tienes cuenta? <span onclick="toggleAuthForm('register')">Regístrate gratis</span></div>
-            </div>
-            <div id="formRegister" class="auth-form" style="display: none;">
-                <h2>Crear Perfil</h2>
-                <p>¡Únete ahora y recibe 1.000 € ficticios para pujar!</p>
-                <input type="email" id="regEmail" placeholder="Tu correo electrónico">
-                <input type="text" id="regUsername" placeholder="Tu nombre o alias (ej: Daniel)">
-                <input type="password" id="regPassword" placeholder="Crea tu contraseña">
-                <button onclick="registrarUsuario()" style="background: var(--accent-green);">Crear Cuenta y Recibir 1.000 €</button>
-                <div class="auth-toggle">¿Ya tienes cuenta? <span onclick="toggleAuthForm('login')">Iniciar sesión</span></div>
-            </div>
+<div id="authModal" class="auth-modal-overlay" style="display:none;">
+    <div class="auth-card">
+        <button class="btn-close-modal" onclick="cerrarModalAuth()">✕</button>
+        <div class="logo" style="text-align:center;margin-bottom:15px;">aBROzon<span>.subastas</span></div>
+        <div id="formLogin" class="auth-form">
+            <h2>Iniciar Sesión</h2>
+            <p>Identifícate para pujar.</p>
+            <input type="email" id="loginEmail" placeholder="Tu correo electrónico">
+            <input type="password" id="loginPassword" placeholder="Contraseña">
+            <button onclick="iniciarSesion()">Acceder</button>
+            <div class="auth-toggle"><span onclick="solicitarRecuperacion()">¿Olvidaste tu contraseña?</span></div>
+            <div class="auth-toggle">¿No tienes cuenta? <span onclick="toggleAuthForm('register')">Regístrate gratis</span></div>
+        </div>
+        <div id="formRegister" class="auth-form" style="display:none;">
+            <h2>Crear Perfil</h2>
+            <p>¡Únete y recibe 1.000 € ficticios!</p>
+            <input type="email" id="regEmail" placeholder="Tu correo electrónico">
+            <input type="text" id="regUsername" placeholder="Tu alias (ej: Daniel)">
+            <input type="password" id="regPassword" placeholder="Crea tu contraseña">
+            <button onclick="registrarUsuario()" style="background:var(--accent-green);">Crear Cuenta y Recibir 1.000 €</button>
+            <div class="auth-toggle">¿Ya tienes cuenta? <span onclick="toggleAuthForm('login')">Iniciar sesión</span></div>
         </div>
     </div>
-    <!-- MODAL RECUPERACIÓN -->
-    <div id="recoveryModal" class="auth-modal-overlay" style="display: none;">
-        <div class="auth-card">
-            <h2>Crear nueva contraseña</h2>
-            <p>Escribe tu nueva contraseña para tu cuenta.</p>
+</div>
+<div id="recoveryModal" class="auth-modal-overlay" style="display:none;">
+    <div class="auth-card"><h2>Crear nueva contraseña</h2><p>Escribe tu nueva contraseña.</p>
+        <div class="auth-form"><input type="password" id="newPasswordInput" placeholder="Nueva contraseña"><button onclick="guardarNuevaPassword()">Guardar</button></div>
+    </div>
+</div>
+<div id="adminModal" class="auth-modal-overlay" style="display:none;">
+    <div class="auth-card" style="max-width:550px;max-height:85vh;overflow-y:auto;">
+        <button class="btn-close-modal" onclick="cerrarModalAdmin()">✕</button>
+        <h2>🛠️ Panel de Administración</h2>
+        <div style="border-top:1px solid var(--border-color);margin:15px 0;padding-top:15px;">
+            <h3 style="font-size:1rem;margin-bottom:10px;">➕ Crear nueva subasta</h3>
             <div class="auth-form">
-                <input type="password" id="newPasswordInput" placeholder="Nueva contraseña (mínimo 6 caracteres)">
-                <button onclick="guardarNuevaPassword()">Guardar contraseña</button>
+                <input type="text" id="adminTitle" placeholder="Título"><textarea id="adminDesc" placeholder="Descripción..." rows="3" style="resize:none;"></textarea>
+                <input type="number" id="adminPrice" placeholder="Precio de salida (€)">
+                <input type="text" id="adminImage" placeholder="Emoji (🍕) — opcional si subes foto">
+                <label style="font-size:0.8rem;color:var(--text-muted);">O sube fotos:</label>
+                <input type="file" id="adminImageFile" accept="image/*" multiple onchange="subirFotoAdmin(event)" style="width:100%;padding:10px;margin-bottom:8px;border-radius:8px;border:1px solid var(--border-color);background:var(--bg-subtle);color:var(--text-main);">
+                <div id="adminImagePreview" style="margin-bottom:12px;font-size:0.8rem;color:var(--text-muted);"></div>
+                <select id="adminCategoria" style="width:100%;padding:12px;margin-bottom:12px;border-radius:8px;border:1px solid var(--border-color);background:var(--bg-subtle);color:var(--text-main);">
+                    <option value="General">General</option><option value="Fútbol">⚽ Fútbol</option><option value="Streamers">🎥 Streamers</option>
+                </select>
+                <select id="adminDuracion" style="width:100%;padding:12px;margin-bottom:12px;border-radius:8px;border:1px solid var(--border-color);background:var(--bg-subtle);color:var(--text-main);">
+                    <option value="1">1 hora</option><option value="6">6 horas</option><option value="24" selected>24 horas (1 día)</option><option value="72">3 días</option><option value="168">7 días</option>
+                </select>
+                <button onclick="crearNuevaSubasta()" style="background:#8b5cf6;">Publicar Subasta</button>
+            </div>
+        </div>
+        <div style="border-top:1px solid var(--border-color);margin:15px 0;padding-top:15px;">
+            <h3 style="font-size:1rem;margin-bottom:10px;">👤 Gestionar usuario</h3>
+            <div style="display:flex;gap:8px;margin-bottom:10px;">
+                <input type="text" id="adminBuscarAlias" placeholder="Alias" style="flex:1;padding:10px;border-radius:8px;border:1px solid var(--border-color);background:var(--bg-subtle);color:var(--text-main);">
+                <button onclick="adminBuscarUsuario()" style="background:var(--accent-blue);color:white;border:none;padding:10px 14px;border-radius:8px;font-weight:bold;cursor:pointer;">Buscar</button>
+            </div>
+            <div id="adminUserResult"></div>
+        </div>
+        <div style="border-top:1px solid var(--border-color);margin:15px 0;padding-top:15px;">
+            <h3 style="font-size:1rem;margin-bottom:10px;">📋 Subastas existentes</h3>
+            <div id="adminAuctionList" style="max-height:220px;overflow-y:auto;"></div>
+        </div>
+    </div>
+</div>
+<div class="disclaimer">⚠️ Sincronización en Tiempo Real & Cierre Automático Activos</div>
+<header>
+    <div class="logo" onclick="mostrarCatalogo()">aBROzon<span>.subastas</span></div>
+    <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="Buscar subasta..." oninput="buscarEnCatalogo(this.value)">
+        <button onclick="buscarEnCatalogo(document.getElementById('searchInput').value)">🔍</button>
+    </div>
+    <div class="header-right">
+        <button class="btn-header" id="btnAd" onclick="verAnuncio()">🎬 +500 €</button>
+        <div class="user-menu-wrapper" id="goatMenuWrapper" style="display:none;">
+            <button class="btn-goat" id="btnGoat" onclick="toggleGoatMenu()">🐐 GOAT ▾</button>
+            <div class="user-dropdown" id="goatDropdown">
+                <div class="dropdown-item" id="goatItemActivar" onclick="cerrarGoatMenu(); activarGoat();">🐐 Activar Modo GOAT</div>
+                <div class="dropdown-item" id="goatItemRecargar" onclick="cerrarGoatMenu(); verAnuncio();" style="display:none;">⚡ Recargar (+1.000 €)</div>
+                <div class="dropdown-item" id="goatItemDesactivar" onclick="cerrarGoatMenu(); activarGoat();" style="display:none;color:#ef4444;">Desactivar GOAT</div>
+            </div>
+        </div>
+        <div class="user-balance" id="boxBalance" style="display:none;">Saldo: <span class="balance-amount" id="userBalance">0 €</span></div>
+        <button class="btn-login" id="btnLoginHeader" onclick="abrirModalAuth('login')">🔑 Entrar</button>
+        <div class="user-menu-wrapper" id="userMenuWrapper" style="display:none;">
+            <button class="btn-header" onclick="toggleUserMenu()">👤 Menú ▾</button>
+            <div class="user-dropdown" id="userDropdown">
+                <div class="dropdown-item" onclick="cerrarUserMenu(); mostrarPerfil();">👤 Mi Perfil</div>
+                <div class="dropdown-item" onclick="cerrarUserMenu(); mostrarVitrina();">🏆 Mi Vitrina</div>
+                <div class="dropdown-item" onclick="cerrarUserMenu(); mostrarMisiones();">🎯 Misiones</div>
+                <div class="dropdown-item" id="dropdownTheme" onclick="toggleTema();">🌙 Modo Noche</div>
+                <div class="dropdown-item" id="dropdownAdmin" onclick="cerrarUserMenu(); abrirModalAdmin();" style="display:none;">🛠️ Panel Admin</div>
+                <div class="dropdown-item" onclick="cerrarUserMenu(); mostrarLegal();">📄 Legal y Privacidad</div>
+                <div class="dropdown-item" onclick="cerrarUserMenu(); cerrarSesion();" style="color:#ef4444;">🚪 Salir</div>
             </div>
         </div>
     </div>
-    <!-- MODAL ADMIN -->
-    <div id="adminModal" class="auth-modal-overlay" style="display: none;">
-        <div class="auth-card" style="max-width: 550px; max-height: 85vh; overflow-y: auto;">
-            <button class="btn-close-modal" onclick="cerrarModalAdmin()">✕</button>
-            <h2>🛠️ Panel de Administración</h2>
-            <div style="border-top: 1px solid var(--border-color); margin: 15px 0; padding-top: 15px;">
-                <h3 style="font-size:1rem; margin-bottom:10px;">➕ Crear nueva subasta</h3>
-                <div class="auth-form">
-                    <input type="text" id="adminTitle" placeholder="Título del Lote">
-                    <textarea id="adminDesc" placeholder="Descripción detallada..." rows="3" style="resize:none;"></textarea>
-                    <input type="number" id="adminPrice" placeholder="Precio de salida (€)">
-                    <input type="text" id="adminImage" placeholder="Emoji (🍕) — opcional si subes una foto abajo">
-                    <label style="font-size:0.8rem; color: var(--text-muted); display:block; margin-bottom:6px;">O sube una o varias fotos reales (la primera será la principal):</label>
-                    <input type="file" id="adminImageFile" accept="image/*" multiple onchange="subirFotoAdmin(event)" style="width: 100%; padding: 10px; margin-bottom: 8px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-subtle); color: var(--text-main);">
-                    <div id="adminImagePreview" style="margin-bottom: 12px; font-size: 0.8rem; color: var(--text-muted);"></div>
-                    <select id="adminCategoria" style="width: 100%; padding: 12px; margin-bottom: 12px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-subtle); color: var(--text-main);">
-                        <option value="General">General</option>
-                        <option value="Fútbol">⚽ Fútbol</option>
-                        <option value="Streamers">🎥 Streamers</option>
-                    </select>
-                    <select id="adminDuracion" style="width: 100%; padding: 12px; margin-bottom: 12px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-subtle); color: var(--text-main);">
-                        <option value="1">1 hora</option>
-                        <option value="6">6 horas</option>
-                        <option value="24" selected>24 horas (1 día)</option>
-                        <option value="72">3 días</option>
-                        <option value="168">7 días</option>
-                    </select>
-                    <button onclick="crearNuevaSubasta()" style="background: #8b5cf6;">Publicar Subasta en Vivo</button>
-                </div>
-            </div>
-            <div style="border-top: 1px solid var(--border-color); margin: 15px 0; padding-top: 15px;">
-                <h3 style="font-size:1rem; margin-bottom:10px;">👤 Gestionar usuario</h3>
-                <div style="display:flex; gap:8px; margin-bottom: 10px;">
-                    <input type="text" id="adminBuscarAlias" placeholder="Alias (ej: @Pepins)" style="flex:1; padding:10px; border-radius:8px; border:1px solid var(--border-color); background: var(--bg-subtle); color: var(--text-main);">
-                    <button onclick="adminBuscarUsuario()" style="background: var(--accent-blue); color:white; border:none; padding:10px 14px; border-radius:8px; font-weight:bold; cursor:pointer;">Buscar</button>
-                </div>
-                <div id="adminUserResult"></div>
-            </div>
-            <div style="border-top: 1px solid var(--border-color); margin: 15px 0; padding-top: 15px;">
-                <h3 style="font-size:1rem; margin-bottom:10px;">📋 Subastas existentes</h3>
-                <div id="adminAuctionList" style="max-height: 220px; overflow-y:auto;"></div>
-            </div>
-        </div>
+</header>
+<div class="categories-nav">
+    <span class="nav-tab active" id="tabTodas" onclick="filtrarCategoria('Todas')">Todas</span>
+    <span class="nav-tab" id="tabFutbol" onclick="filtrarCategoria('Fútbol')">⚽ Fútbol</span>
+    <span class="nav-tab" id="tabStreamers" onclick="filtrarCategoria('Streamers')">🎥 Streamers</span>
+    <span class="nav-tab" id="tabFinalizadas" onclick="mostrarFinalizadas()">📜 Finalizadas</span>
+    <span class="nav-tab" onclick="mostrarVitrina()">🏆 Mi Vitrina</span>
+</div>
+<div class="container">
+    <div id="viewCatalog" class="view active">
+        <div class="hero-banner"><div class="hero-text"><span class="badge-trend">Plataforma Dinámica</span><h2>Especial Creadores & Polémicas de Internet</h2><p>Pujas sincronizadas en directo.</p></div></div>
+        <div class="grid-title">🔥 Subastas Activas</div>
+        <div class="auction-grid" id="catalogGrid">Cargando subastas...</div>
     </div>
-    <div class="disclaimer">⚠️ Sincronización en Tiempo Real & Cierre Automático Activos</div>
-    <header>
-        <div class="logo" onclick="mostrarCatalogo()">aBROzon<span>.subastas</span></div>
-        <div class="search-bar">
-            <input type="text" id="searchInput" placeholder="Buscar subasta..." oninput="buscarEnCatalogo(this.value)">
-            <button onclick="buscarEnCatalogo(document.getElementById('searchInput').value)">🔍</button>
-        </div>
-        <div class="header-right">
-            <button class="btn-header" id="btnAd" onclick="verAnuncio()">🎬 +500 €</button>
-            <div class="user-menu-wrapper" id="goatMenuWrapper" style="display: none;">
-                <button class="btn-goat" id="btnGoat" onclick="toggleGoatMenu()">🐐 GOAT ▾</button>
-                <div class="user-dropdown" id="goatDropdown">
-                    <div class="dropdown-item" id="goatItemActivar" onclick="cerrarGoatMenu(); activarGoat();">🐐 Activar Modo GOAT</div>
-                    <div class="dropdown-item" id="goatItemRecargar" onclick="cerrarGoatMenu(); verAnuncio();" style="display:none;">⚡ Recargar (+1.000 €)</div>
-                    <div class="dropdown-item" id="goatItemDesactivar" onclick="cerrarGoatMenu(); activarGoat();" style="display:none; color:#ef4444;">Desactivar GOAT</div>
-                </div>
-            </div>
-            <div class="user-balance" id="boxBalance" style="display: none;">Saldo: <span class="balance-amount" id="userBalance">0 €</span></div>
-            <button class="btn-login" id="btnLoginHeader" onclick="abrirModalAuth('login')">🔑 Entrar</button>
-            <div class="user-menu-wrapper" id="userMenuWrapper" style="display: none;">
-                <button class="btn-header" onclick="toggleUserMenu()">👤 Menú ▾</button>
-                <div class="user-dropdown" id="userDropdown">
-                    <div class="dropdown-item" onclick="cerrarUserMenu(); mostrarPerfil();">👤 Mi Perfil</div>
-                    <div class="dropdown-item" onclick="cerrarUserMenu(); mostrarVitrina();">🏆 Mi Vitrina</div>
-                    <div class="dropdown-item" onclick="cerrarUserMenu(); reclamarBonusDiario();">🎁 Bono diario (+100 €)</div>
-                    <div class="dropdown-item" id="dropdownTheme" onclick="toggleTema();">🌙 Modo Noche</div>
-                    <div class="dropdown-item" id="dropdownAdmin" onclick="cerrarUserMenu(); abrirModalAdmin();" style="display:none;">🛠️ Panel Admin</div>
-                    <div class="dropdown-item" onclick="cerrarUserMenu(); mostrarLegal();">📄 Legal y Privacidad</div>
-                    <div class="dropdown-item" onclick="cerrarUserMenu(); cerrarSesion();" style="color:#ef4444;">🚪 Salir</div>
-                </div>
-            </div>
-        </div>
-    </header>
-    <div class="categories-nav">
-        <span class="nav-tab active" id="tabTodas" onclick="filtrarCategoria('Todas')">Todas</span>
-        <span class="nav-tab" id="tabFutbol" onclick="filtrarCategoria('Fútbol')">⚽ Fútbol</span>
-        <span class="nav-tab" id="tabStreamers" onclick="filtrarCategoria('Streamers')">🎥 Streamers</span>
-        <span class="nav-tab" id="tabFinalizadas" onclick="mostrarFinalizadas()">📜 Finalizadas</span>
-        <span class="nav-tab" onclick="mostrarVitrina()">🏆 Mi Vitrina</span>
-    </div>
-    <div class="container">
-        <div id="viewCatalog" class="view active">
-            <div class="hero-banner">
-                <div class="hero-text">
-                    <span class="badge-trend">Plataforma Dinámica</span>
-                    <h2>Especial Creadores & Polémicas de Internet</h2>
-                    <p>Pujas sincronizadas en directo. Los lotes finalizados se guardan en tu vitrina.</p>
-                </div>
-            </div>
-            <div class="grid-title">🔥 Subastas Activas</div>
-            <div class="auction-grid" id="catalogGrid">Cargando subastas...</div>
-        </div>
-        <div id="viewDetail" class="view">
-            <button class="btn-back" onclick="mostrarCatalogo()">← Volver al Catálogo</button>
-            <div class="detail-layout">
-                <div class="product-card-detail">
-                    <div class="main-image-detail" id="detailImage">📦</div>
-                    <div id="detailGallery" style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom: 15px;"></div>
-                    <span class="card-category" id="detailCategory">Categoría</span>
-                    <h1 id="detailTitle" style="margin: 8px 0; font-size: 1.4rem;">Título del Lote</h1>
-                    <p id="detailDescription" style="color: var(--text-muted); line-height: 1.6;">Descripción...</p>
-                </div>
-                <div class="auction-panel-detail">
-                    <div class="time-box" id="detailTime">⏳ Cierra en: Calculando...</div>
-                    <div style="margin-bottom: 15px;">
-                        <div style="font-size: 0.8rem; color: var(--text-muted);">Última puja registrada</div>
-                        <div style="font-size: 2.1rem; font-weight: 900; color: var(--text-main);" id="detailBid">0 €</div>
-                    </div>
-                    <div id="biddingControlsContainer">
-                        <div id="goatCommentContainer" style="display: none; margin-bottom: 12px;">
-                            <input type="text" id="goatCommentInput" placeholder="💬 Mensaje épico de pago/GOAT..." style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #eab308; background: var(--bg-subtle); color: var(--text-main); font-weight: bold; outline: none; font-size: 0.85rem;">
-                        </div>
-                        <button class="btn-bid" id="btnMinBid" onclick="hacerPujaMínima()">¡PUJAR MÍNIMO (+50 €)!</button>
-                        <div style="display: flex; gap: 8px; margin-top: 10px;">
-                            <input type="number" id="customBidInput" placeholder="Cantidad exacta €" style="flex: 1; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-subtle); color: var(--text-main); font-weight: bold; outline: none;">
-                            <button id="btnCustomBid" onclick="hacerPujaPersonalizada()" style="background: var(--accent-blue); color: white; border: none; padding: 10px 14px; border-radius: 8px; font-weight: bold; cursor: pointer;">Pujar</button>
-                        </div>
-                    </div>
-                    <div style="margin-top: 20px; border-top: 1px solid var(--border-color); padding-top: 15px;">
-                        <h3 style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 10px;">Historial de Pujas en Directo</h3>
-                        <div id="historyList" style="max-height: 220px; overflow-y: auto;"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div id="viewVitrina" class="view">
-            <div class="profile-header">
-                <div class="user-info">
-                    <h2 id="profileUserName">👑 Usuario</h2>
-                    <span class="user-badge" id="profileBadge">Coleccionista</span>
-                </div>
-            </div>
-            <div class="grid-title">📜 Mis Certificados de Autenticidad Adjudicados</div>
-            <div class="vitrina-grid" id="vitrinaGrid"></div>
-        </div>
-        <div id="viewPerfil" class="view">
-            <button class="btn-back" onclick="mostrarCatalogo()">← Volver al Catálogo</button>
-            <div class="profile-header">
-                <div class="user-info">
-                    <h2 id="perfilNombre">👤 Usuario</h2>
-                    <span class="user-badge" id="perfilEmail">correo@ejemplo.com</span>
-                </div>
-            </div>
-            <div class="product-card-detail" style="margin-bottom: 20px;">
-                <h2 style="font-size:1.1rem; margin-bottom: 12px;">✏️ Cambiar alias</h2>
-                <div class="auth-form">
-                    <input type="text" id="perfilNuevoAlias" placeholder="Nuevo alias (ej: @Daniel)">
-                    <button onclick="guardarNuevoAlias()">Guardar alias</button>
-                </div>
-            </div>
-            <div class="product-card-detail" style="margin-bottom: 20px;">
-                <h2 style="font-size:1.1rem; margin-bottom: 12px;">🔒 Cambiar contraseña</h2>
-                <div class="auth-form">
-                    <input type="password" id="perfilNuevaPassword" placeholder="Nueva contraseña (mín. 6 caracteres)">
-                    <button onclick="guardarNuevaPasswordPerfil()">Guardar contraseña</button>
-                </div>
-            </div>
+    <div id="viewDetail" class="view">
+        <button class="btn-back" onclick="mostrarCatalogo()">← Volver al Catálogo</button>
+        <div class="detail-layout">
             <div class="product-card-detail">
-                <h2 style="font-size:1.1rem; margin-bottom: 12px; color:#ef4444;">⚠️ Zona de baja</h2>
-                <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 12px;">Si quieres eliminar tu cuenta y tus datos, contáctanos y lo gestionamos manualmente.</p>
-                <button onclick="solicitarBajaCuenta()" style="background:#ef4444; color:white; border:none; padding:10px; border-radius:8px; font-weight:bold; cursor:pointer; width:100%;">Solicitar baja de cuenta</button>
+                <div class="main-image-detail" id="detailImage">📦</div>
+                <div id="detailGallery" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:15px;"></div>
+                <span class="card-category" id="detailCategory">Categoría</span>
+                <h1 id="detailTitle" style="margin:8px 0;font-size:1.4rem;">Título</h1>
+                <p id="detailDescription" style="color:var(--text-muted);line-height:1.6;">Descripción...</p>
             </div>
-        </div>
-        <div id="viewLegal" class="view">
-            <button class="btn-back" onclick="mostrarCatalogo()">← Volver al Catálogo</button>
-            <div class="product-card-detail" style="margin-bottom: 20px;">
-                <h2 style="color: var(--accent-blue); margin-bottom: 10px;">Aviso Legal</h2>
-                <p style="color: var(--text-muted); line-height: 1.7; font-size: 0.9rem;">
-                    <strong>Titular del sitio:</strong> Daniel Hernandez<br>
-                    <strong>Contacto:</strong> abrozonsubastas@gmail.com<br><br>
-                    aBROzon.subastas es una plataforma de <strong>entretenimiento y parodia</strong>. Todos los productos, subastas y cantidades mostradas son ficticios y no tienen valor monetario real ni son canjeables por dinero de curso legal.<br><br>
-                    Cualquier referencia a personas públicas, creadores de contenido o marcas es una parodia con fines humorísticos, sin relación ni respaldo por parte de dichas personas o entidades.<br><br>
-                    El titular no se hace responsable del uso indebido que los usuarios puedan hacer de la plataforma, ni de la veracidad de los comentarios publicados por terceros.
-                </p>
-            </div>
-            <div class="product-card-detail" style="margin-bottom: 20px;">
-                <h2 style="color: var(--accent-blue); margin-bottom: 10px;">Política de Privacidad</h2>
-                <p style="color: var(--text-muted); line-height: 1.7; font-size: 0.9rem;">
-                    <strong>Responsable del tratamiento:</strong> Daniel Hernandez — abrozonsubastas@gmail.com<br><br>
-                    <strong>Datos que recogemos:</strong> tu correo electrónico, el alias que elijas, tu saldo ficticio y tu historial de pujas.<br>
-                    <strong>Para qué los usamos:</strong> gestionar tu cuenta, mostrar el historial de subastas y prevenir el abuso del sistema.<br>
-                    <strong>Base legal:</strong> tu consentimiento al registrarte.<br>
-                    <strong>Conservación:</strong> mientras tu cuenta permanezca activa. Puedes solicitar su eliminación en cualquier momento.<br>
-                    <strong>Terceros:</strong> los datos se almacenan en Supabase (proveedor de base de datos). Si en el futuro se activan anuncios o pagos, se ampliará esta política para incluir a Google AdSense y/o Stripe.<br>
-                    <strong>Tus derechos:</strong> acceso, rectificación y supresión de tus datos, escribiendo a abrozonsubastas@gmail.com.<br>
-                    <strong>Menores de edad:</strong> esta plataforma no está dirigida a menores de 14 años.
-                </p>
-            </div>
-            <div class="product-card-detail">
-                <h2 style="color: var(--accent-blue); margin-bottom: 10px;">Política de Cookies</h2>
-                <p style="color: var(--text-muted); line-height: 1.7; font-size: 0.9rem;">
-                    Esta web utiliza únicamente cookies técnicas necesarias para mantener tu sesión iniciada (gestionadas por Supabase Auth). No utilizamos cookies de publicidad ni de seguimiento en este momento. Si esto cambia en el futuro, se actualizará esta política y se mostrará un aviso de consentimiento.
-                </p>
+            <div class="auction-panel-detail">
+                <div class="time-box" id="detailTime">⏳ Cierra en: Calculando...</div>
+                <div style="margin-bottom:15px;"><div style="font-size:0.8rem;color:var(--text-muted);">Última puja</div><div style="font-size:2.1rem;font-weight:900;" id="detailBid">0 €</div></div>
+                <div id="biddingControlsContainer">
+                    <div id="goatCommentContainer" style="display:none;margin-bottom:12px;"><input type="text" id="goatCommentInput" placeholder="💬 Mensaje épico GOAT..." style="width:100%;padding:10px;border-radius:8px;border:1px solid #eab308;background:var(--bg-subtle);color:var(--text-main);font-weight:bold;outline:none;font-size:0.85rem;"></div>
+                    <button class="btn-bid" id="btnMinBid" onclick="hacerPujaMínima()">¡PUJAR MÍNIMO (+50 €)!</button>
+                    <div style="display:flex;gap:8px;margin-top:10px;">
+                        <input type="number" id="customBidInput" placeholder="Cantidad exacta €" style="flex:1;padding:10px;border-radius:8px;border:1px solid var(--border-color);background:var(--bg-subtle);color:var(--text-main);font-weight:bold;outline:none;">
+                        <button id="btnCustomBid" onclick="hacerPujaPersonalizada()" style="background:var(--accent-blue);color:white;border:none;padding:10px 14px;border-radius:8px;font-weight:bold;cursor:pointer;">Pujar</button>
+                    </div>
+                </div>
+                <div style="margin-top:20px;border-top:1px solid var(--border-color);padding-top:15px;">
+                    <h3 style="font-size:0.8rem;color:var(--text-muted);margin-bottom:10px;">Historial de Pujas</h3>
+                    <div id="historyList" style="max-height:220px;overflow-y:auto;"></div>
+                </div>
             </div>
         </div>
     </div>
-    <footer style="text-align: center; padding: 25px 20px; color: var(--text-muted); font-size: 0.8rem; border-top: 1px solid var(--border-color);">
-        <span onclick="mostrarLegal()" style="cursor:pointer; text-decoration: underline;">Aviso Legal, Privacidad y Cookies</span>
-        &nbsp;·&nbsp; aBROzon.subastas es una web de parodia sin ánimo de lucro real ni relación con Amazon ni con los creadores mencionados.
-    </footer>
-    <script>
-        const SUPABASE_URL = 'https://lthzzgpbwfiylgaipgix.supabase.co';
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx0aHp6Z3Bid2ZpeWxnYWlwZ2l4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODUxNjcyMTksImV4cCI6MjEwMDc0MzIxOX0.zAJJEiQpor0xQY5fTDlLzJxd62ffps3XNnpeS06iTXg';
-        const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    <div id="viewVitrina" class="view">
+        <div class="profile-header"><div class="user-info"><h2 id="profileUserName">👑 Usuario</h2><span class="user-badge" id="profileBadge">Coleccionista</span></div></div>
+        <div class="grid-title">📜 Mis Certificados</div>
+        <div class="vitrina-grid" id="vitrinaGrid"></div>
+    </div>
+    <div id="viewPerfil" class="view">
+        <button class="btn-back" onclick="mostrarCatalogo()">← Volver al Catálogo</button>
+        <div class="profile-header"><div class="user-info"><h2 id="perfilNombre">👤 Usuario</h2><span class="user-badge" id="perfilEmail">correo@ejemplo.com</span></div></div>
+        <div class="product-card-detail" style="margin-bottom:20px;"><h2 style="font-size:1.1rem;">✏️ Cambiar alias</h2><div class="auth-form"><input type="text" id="perfilNuevoAlias" placeholder="Nuevo alias"><button onclick="guardarNuevoAlias()">Guardar</button></div></div>
+        <div class="product-card-detail" style="margin-bottom:20px;"><h2 style="font-size:1.1rem;">🔒 Cambiar contraseña</h2><div class="auth-form"><input type="password" id="perfilNuevaPassword" placeholder="Nueva contraseña"><button onclick="guardarNuevaPasswordPerfil()">Guardar</button></div></div>
+        <div class="product-card-detail"><h2 style="font-size:1.1rem;color:#ef4444;">⚠️ Zona de baja</h2><p style="color:var(--text-muted);">Contacta para eliminar tu cuenta.</p><button onclick="solicitarBajaCuenta()" style="background:#ef4444;color:white;border:none;padding:10px;border-radius:8px;font-weight:bold;cursor:pointer;width:100%;">Solicitar baja</button></div>
+    </div>
+    <!-- NUEVA VISTA DE MISIONES -->
+    <div id="viewMisiones" class="view">
+        <button class="btn-back" onclick="mostrarCatalogo()">← Volver al Catálogo</button>
+        <h2 style="margin-bottom:20px;">🎯 Misiones</h2>
+        <div id="misionesContainer"></div>
+    </div>
+    <div id="viewLegal" class="view">
+        <button class="btn-back" onclick="mostrarCatalogo()">← Volver al Catálogo</button>
+        <div class="product-card-detail" style="margin-bottom:20px;"><h2 style="color:var(--accent-blue);">Aviso Legal</h2><p style="color:var(--text-muted);line-height:1.7;font-size:0.9rem;"><strong>Titular:</strong> Daniel Hernandez<br><strong>Contacto:</strong> abrozonsubastas@gmail.com<br><br>aBROzon.subastas es una plataforma de entretenimiento y parodia. Todos los productos y cantidades son ficticios.</p></div>
+        <div class="product-card-detail" style="margin-bottom:20px;"><h2 style="color:var(--accent-blue);">Política de Privacidad</h2><p style="color:var(--text-muted);line-height:1.7;font-size:0.9rem;"><strong>Responsable:</strong> Daniel Hernandez — abrozonsubastas@gmail.com<br>Recogemos email, alias, saldo ficticio e historial de pujas. Derechos de acceso, rectificación y supresión.</p></div>
+        <div class="product-card-detail"><h2 style="color:var(--accent-blue);">Política de Cookies</h2><p style="color:var(--text-muted);line-height:1.7;font-size:0.9rem;">Solo cookies técnicas necesarias para la sesión.</p></div>
+    </div>
+</div>
+<footer style="text-align:center;padding:25px 20px;color:var(--text-muted);font-size:0.8rem;border-top:1px solid var(--border-color);"><span onclick="mostrarLegal()" style="cursor:pointer;text-decoration:underline;">Aviso Legal, Privacidad y Cookies</span> · aBROzon.subastas es una web de parodia</footer>
 
-        let currentUser = null;
-        let productoSeleccionado = null;
-        let subastasLocales = [];
-        let timerInterval = null;
-        let profileChannel = null;
-        let profileChannelUserId = null;
-        let saldoCambioPropio = false;
-        let accionEnCurso = false;
-        let mostrandoFinalizadas = false;
-        let categoriaActiva = 'Todas';
-        let terminoBusqueda = '';
-        let fotosAdicionalesAdmin = [];
+<script>
+const SUPABASE_URL = 'https://lthzzgpbwfiylgaipgix.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx0aHp6Z3Bid2ZpeWxnYWlwZ2l4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODUxNjcyMTksImV4cCI6MjEwMDc0MzIxOX0.zAJJEiQpor0xQY5fTDlLzJxd62ffps3XNnpeS06iTXg';
+const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        function marcarCambioPropio() {
-            saldoCambioPropio = true;
-            setTimeout(() => { saldoCambioPropio = false; }, 2000);
-        }
+let currentUser = null, productoSeleccionado = null, subastasLocales = [], timerInterval = null,
+    profileChannel = null, profileChannelUserId = null, saldoCambioPropio = false, accionEnCurso = false,
+    mostrandoFinalizadas = false, categoriaActiva = 'Todas', terminoBusqueda = '', fotosAdicionalesAdmin = [];
 
-        window.onload = async () => {
-            if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.register('service-worker.js').catch(() => {});
-            }
-            const { data: { session } } = await db.auth.getSession();
-            if (session) await cargarPerfil(session.user.id);
-            actualizarInterfazUsuario();
-            db.auth.onAuthStateChange(async (_event, session2) => {
-                if (_event === 'PASSWORD_RECOVERY') {
-                    document.getElementById('recoveryModal').style.display = 'flex';
-                    return;
-                }
-                if (session2) {
-                    await cargarPerfil(session2.user.id);
-                } else {
-                    currentUser = null;
-                }
+function marcarCambioPropio() { saldoCambioPropio = true; setTimeout(() => saldoCambioPropio = false, 2000); }
+
+window.onload = async () => {
+    if ('serviceWorker' in navigator) navigator.serviceWorker.register('service-worker.js').catch(() => {});
+    const { data: { session } } = await db.auth.getSession();
+    if (session) await cargarPerfil(session.user.id);
+    actualizarInterfazUsuario();
+    db.auth.onAuthStateChange(async (_event, session2) => {
+        if (_event === 'PASSWORD_RECOVERY') { document.getElementById('recoveryModal').style.display = 'flex'; return; }
+        if (session2) await cargarPerfil(session2.user.id); else currentUser = null;
+        actualizarInterfazUsuario();
+    });
+    await cargarSubastas();
+    setInterval(actualizarTemporizadoresCatalogo, 1000);
+    db.channel('public-db-changes')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'auctions' }, async (payload) => {
+          await cargarSubastas();
+          if (productoSeleccionado && payload.new && payload.new.id === productoSeleccionado.id) {
+              productoSeleccionado = payload.new; actualizarVistaDetalleDatoVivo();
+          }
+      })
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'bids' }, async (payload) => {
+          if (productoSeleccionado && payload.new.auction_id === productoSeleccionado.id) await cargarHistorialPujas(productoSeleccionado.id);
+      })
+      .subscribe();
+};
+
+async function cargarPerfil(userId) {
+    const { data, error } = await db.from('profiles').select('*').eq('id', userId).single();
+    if (error || !data) { currentUser = null; return; }
+    currentUser = { id: data.id, username: data.username, saldo: data.saldo, esGoat: data.es_goat, isAdmin: data.is_admin };
+    if (profileChannelUserId !== userId) {
+        if (profileChannel) await db.removeChannel(profileChannel);
+        profileChannelUserId = userId;
+        profileChannel = db.channel('profile-' + userId)
+            .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'profiles', filter: `id=eq.${userId}` }, (payload) => {
+                if (!currentUser) return;
+                const saldoAnt = currentUser.saldo;
+                currentUser.saldo = payload.new.saldo; currentUser.esGoat = payload.new.es_goat; currentUser.isAdmin = payload.new.is_admin;
                 actualizarInterfazUsuario();
-            });
-            await cargarSubastas();
-            setInterval(actualizarTemporizadoresCatalogo, 1000);
-            db.channel('public-db-changes')
-              .on('postgres_changes', { event: '*', schema: 'public', table: 'auctions' }, async (payload) => {
-                  await cargarSubastas();
-                  if (productoSeleccionado && payload.new && payload.new.id === productoSeleccionado.id) {
-                      productoSeleccionado = payload.new;
-                      actualizarVistaDetalleDatoVivo();
-                  }
-              })
-              .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'bids' }, async (payload) => {
-                  if (productoSeleccionado && payload.new.auction_id === productoSeleccionado.id) {
-                      await cargarHistorialPujas(productoSeleccionado.id);
-                  }
-              })
-              .subscribe();
-        };
+                if (saldoCambioPropio) return;
+                if (payload.new.saldo > saldoAnt) mostrarToast(`💰 Te han superado una puja. +${(payload.new.saldo-saldoAnt).toLocaleString('es-ES')} € devueltos.`);
+            }).subscribe();
+    }
+}
 
-        async function cargarPerfil(userId) {
-            const { data, error } = await db.from('profiles').select('*').eq('id', userId).single();
-            if (error || !data) { currentUser = null; return; }
-            currentUser = { id: data.id, username: data.username, saldo: data.saldo, esGoat: data.es_goat, isAdmin: data.is_admin };
-            if (profileChannelUserId !== userId) {
-                if (profileChannel) await db.removeChannel(profileChannel);
-                profileChannelUserId = userId;
-                profileChannel = db.channel('profile-changes-' + userId)
-                    .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'profiles', filter: `id=eq.${userId}` }, (payload) => {
-                        if (!currentUser) return;
-                        const saldoAnterior = currentUser.saldo;
-                        currentUser.saldo = payload.new.saldo;
-                        currentUser.esGoat = payload.new.es_goat;
-                        currentUser.isAdmin = payload.new.is_admin;
-                        actualizarInterfazUsuario();
-                        if (saldoCambioPropio) return;
-                        const diferencia = payload.new.saldo - saldoAnterior;
-                        if (diferencia > 0) mostrarToast(`💰 ¡Te han superado una puja! Se te han devuelto ${diferencia.toLocaleString('es-ES')} €.`);
-                    })
-                    .subscribe();
+function mostrarToast(msg) { const t = document.createElement('div'); t.className = 'toast-abrozon'; t.innerText = msg; document.body.appendChild(t); setTimeout(() => t.remove(), 4500); }
+
+async function cargarSubastas() {
+    let { data: auctions } = await db.from('auctions').select('*'); subastasLocales = auctions || [];
+    let cierres = false;
+    for (let p of subastasLocales) if (p.status !== 'closed' && new Date(p.ends_at) <= Date.now()) { await db.rpc('check_and_close_auction',{p_auction_id:p.id}); cierres = true; }
+    if (cierres) { let { data: a2 } = await db.from('auctions').select('*'); subastasLocales = a2 || []; }
+    renderizarCatalogo();
+}
+
+function renderizarImagenProducto(v) { v=(v||'').trim(); if(/^https?:\/\//i.test(v)) return `<img src="${v}" style="display:block;width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML='<span>🖼️</span>';">`; return `<span>${v||'📦'}</span>`; }
+
+async function subirFotoAdmin(e) {
+    const files = Array.from(e.target.files||[]); if(!files.length) return;
+    const preview = document.getElementById('adminImagePreview'); preview.innerText = `⏳ Subiendo ${files.length} foto(s)...`;
+    const urls = [];
+    for (const f of files) {
+        const name = `${Date.now()}-${Math.random().toString(36).slice(2)}-${f.name.replace(/[^a-zA-Z0-9._-]/g,'_')}`;
+        const { error } = await db.storage.from('lotes').upload(name, f);
+        if (error) { preview.innerText = ''; return alert("Error: "+error.message); }
+        const { data } = db.storage.from('lotes').getPublicUrl(name); urls.push(data.publicUrl);
+    }
+    document.getElementById('adminImage').value = urls[0]; fotosAdicionalesAdmin = urls.slice(1);
+    preview.innerHTML = `✅ ${urls.length} foto(s) subida(s):<br>` + urls.map(u => `<img src="${u}" style="width:70px;height:70px;object-fit:cover;border-radius:6px;margin:4px;">`).join('');
+}
+
+function filtrarCategoria(cat) {
+    mostrandoFinalizadas = false; categoriaActiva = cat;
+    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+    const mapa = {'Todas':'tabTodas','Fútbol':'tabFutbol','Streamers':'tabStreamers'};
+    const el = document.getElementById(mapa[cat]); if (el) el.classList.add('active');
+    ocultarTodasVistas(); document.getElementById('viewCatalog').classList.add('active'); renderizarCatalogo();
+}
+function mostrarFinalizadas() {
+    mostrandoFinalizadas = true;
+    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('tabFinalizadas').classList.add('active');
+    ocultarTodasVistas(); document.getElementById('viewCatalog').classList.add('active');
+    document.getElementById('searchInput').value = ''; terminoBusqueda = ''; renderizarCatalogo();
+}
+function buscarEnCatalogo(texto) { terminoBusqueda = (texto||'').trim().toLowerCase(); ocultarTodasVistas(); document.getElementById('viewCatalog').classList.add('active'); renderizarCatalogo(); }
+
+function renderizarCatalogo() {
+    const grid = document.getElementById('catalogGrid'); grid.innerHTML = '';
+    let lista = subastasLocales;
+    if (mostrandoFinalizadas) lista = lista.filter(p => p.status === 'closed');
+    else { lista = lista.filter(p => p.status !== 'closed'); if (categoriaActiva !== 'Todas') lista = lista.filter(p => p.category === categoriaActiva); }
+    if (terminoBusqueda) lista = lista.filter(p => (p.title||'').toLowerCase().includes(terminoBusqueda) || (p.description||'').toLowerCase().includes(terminoBusqueda));
+    if (!lista.length) { grid.innerHTML = '<div>No hay subastas.</div>'; return; }
+    lista.forEach(p => {
+        const card = document.createElement('div'); card.className = 'auction-card'; card.onclick = () => abrirDetalle(p.id);
+        const cerrada = p.status === 'closed';
+        card.innerHTML = `<div class="card-image">${renderizarImagenProducto(p.image_url)}${cerrada ? '<div class="badge-closed">FINALIZADA</div>' : `<div class="card-timer" id="cardTimer-${p.id}">⏳ ...</div>`}</div><div class="card-content"><div class="card-category">${p.category||'General'}${cerrada?' · Adjudicado':''}</div><div class="card-title">${p.title}</div><div class="card-footer"><div><div class="bid-label-sm">${cerrada?'Precio Final':'Puja Actual'}</div><div class="bid-amount-sm">${Number(p.current_price).toLocaleString('es-ES')} €</div></div></div></div>`;
+        grid.appendChild(card);
+    });
+    actualizarTemporizadoresCatalogo();
+}
+
+function actualizarTemporizadoresCatalogo() {
+    subastasLocales.forEach(p => {
+        if (p.status === 'closed') return;
+        const el = document.getElementById('cardTimer-'+p.id); if (!el) return;
+        const diff = new Date(p.ends_at)-Date.now();
+        if (diff <= 0) { el.innerText = '⏳ Cerrando...'; return; }
+        const d = Math.floor(diff/86400000), h = Math.floor((diff%86400000)/3600000), m = Math.floor((diff%3600000)/60000), s = Math.floor((diff%60000)/1000);
+        el.innerText = d>0 ? `⏳ ${d}d ${h}h` : `⏳ ${h}h ${m}m ${s}s`;
+    });
+}
+
+async function abrirDetalle(id) {
+    productoSeleccionado = subastasLocales.find(p => p.id === id);
+    actualizarVistaDetalleDatoVivo(); iniciarTemporizador(productoSeleccionado.ends_at); await cargarHistorialPujas(id);
+    ocultarTodasVistas(); document.getElementById('viewDetail').classList.add('active');
+}
+
+function actualizarVistaDetalleDatoVivo() {
+    if (!productoSeleccionado) return;
+    document.getElementById('detailImage').innerHTML = renderizarImagenProducto(productoSeleccionado.image_url);
+    document.getElementById('detailCategory').innerText = productoSeleccionado.category||'General';
+    document.getElementById('detailTitle').innerText = productoSeleccionado.title;
+    document.getElementById('detailDescription').innerText = productoSeleccionado.description;
+    document.getElementById('detailBid').innerText = Number(productoSeleccionado.current_price).toLocaleString('es-ES') + ' €';
+    const gal = document.getElementById('detailGallery');
+    const fotos = [productoSeleccionado.image_url, ...(productoSeleccionado.images||[])].filter(u => u && /^https?:\/\//i.test(u));
+    gal.innerHTML = fotos.length>1 ? fotos.map(u => `<img src="${u}" onclick="cambiarFotoPrincipal(this.src)" style="width:60px;height:60px;object-fit:cover;border-radius:8px;cursor:pointer;border:2px solid var(--border-color);">`).join('') : '';
+    document.getElementById('biddingControlsContainer').style.display = productoSeleccionado.status === 'closed' ? 'none' : 'block';
+    if (productoSeleccionado.status === 'closed') document.getElementById('detailTime').innerText = `🏆 Finalizada. Ganador: ${productoSeleccionado.winner||'Nadie'}`;
+}
+
+function cambiarFotoPrincipal(url) { document.getElementById('detailImage').innerHTML = renderizarImagenProducto(url); }
+
+function iniciarTemporizador(fin) {
+    if (timerInterval) clearInterval(timerInterval);
+    const target = new Date(fin||Date.now()+86400000).getTime(), box = document.getElementById('detailTime');
+    function actualizar() {
+        if (productoSeleccionado && productoSeleccionado.status === 'closed') return;
+        const diff = target - Date.now();
+        if (diff <= 0) { box.innerText = "⏳ Subasta Finalizada"; clearInterval(timerInterval); cargarSubastas(); return; }
+        const d = Math.floor(diff/86400000), h = Math.floor((diff%86400000)/3600000), m = Math.floor((diff%3600000)/60000), s = Math.floor((diff%60000)/1000);
+        box.innerText = d>0 ? `⏳ Cierra en: ${d}d ${h}h ${m}m` : `⏳ Cierra en: ${h}h ${m}m ${s}s`;
+    }
+    actualizar(); timerInterval = setInterval(actualizar, 1000);
+}
+
+async function cargarHistorialPujas(id) {
+    const history = document.getElementById('historyList');
+    const { data: bids } = await db.from('bids').select('*').eq('auction_id', id).order('created_at', { ascending: false });
+    history.innerHTML = bids && bids.length ? '' : '<div style="font-size:0.8rem;color:var(--text-muted);">Sin pujas aún.</div>';
+    if (bids) bids.forEach(b => {
+        const div = document.createElement('div'); div.className = 'history-item';
+        div.innerHTML = `<div style="display:flex;justify-content:space-between;"><div><span style="color:var(--accent-blue);font-weight:bold;">${b.user_name||'Anónimo'}</span>${b.comment?`<div style="font-size:0.75rem;color:#eab308;">"${b.comment}"</div>`:''}</div><span style="font-weight:bold;">${Number(b.amount).toLocaleString('es-ES')} €</span></div>`;
+        history.appendChild(div);
+    });
+}
+
+async function ejecutarPuja(total) {
+    if (!currentUser) return abrirModalAuth('register');
+    if (productoSeleccionado.status === 'closed') return alert("Finalizada.");
+    if (accionEnCurso) return;
+    accionEnCurso = true;
+    try {
+        let comment = null;
+        if (currentUser.esGoat) { const ci = document.getElementById('goatCommentInput'); comment = ci ? ci.value.trim() : ''; if (ci) ci.value = ''; }
+        marcarCambioPropio();
+        const { error } = await db.rpc('place_bid', { p_auction_id: productoSeleccionado.id, p_amount: total, p_comment: comment });
+        if (error) return alert("⚠️ " + error.message);
+        await cargarPerfil(currentUser.id);
+        productoSeleccionado.current_price = total;
+        actualizarInterfazUsuario();
+        if (productoSeleccionado.category && productoSeleccionado.category !== 'General') {
+            const { data: c } = await db.rpc('increment_category_bid');
+            if (c === 1) {
+                marcarCambioPropio(); const { data: ns } = await db.rpc('add_mission_reward', { p_amount: 250 });
+                if (ns) { currentUser.saldo = ns; actualizarInterfazUsuario(); mostrarToast("🧭 ¡Explorador! +250 €."); }
             }
         }
+    } finally { accionEnCurso = false; }
+}
 
-        function mostrarToast(mensaje) {
-            const toast = document.createElement('div');
-            toast.className = 'toast-abrozon';
-            toast.innerText = mensaje;
-            document.body.appendChild(toast);
-            setTimeout(() => toast.remove(), 4500);
-        }
+async function hacerPujaMínima() {
+    if (!productoSeleccionado || !currentUser) return;
+    if (productoSeleccionado.status === 'closed') return alert("Finalizada.");
+    await ejecutarPuja(Number(productoSeleccionado.current_price) + 50);
+    const { data: cuenta } = await db.rpc('increment_min_bid');
+    if (cuenta === 3) { marcarCambioPropio(); const { data: ns } = await db.rpc('add_mission_reward', { p_amount: 150 }); if (ns) { currentUser.saldo = ns; actualizarInterfazUsuario(); mostrarToast("🎯 ¡Gatillo Fácil! +150 €."); } }
+    else if (cuenta === 1) mostrarToast("🔫 Primera puja mínima. ¡A por las 3!");
+    else if (cuenta === 2) mostrarToast("🔫🔫 Segunda puja mínima. ¡Una más!");
+}
 
-        async function cargarSubastas() {
-            let { data: auctions } = await db.from('auctions').select('*');
-            subastasLocales = auctions || [];
-            let huboAlgunCierre = false;
-            for (let prod of subastasLocales) {
-                if (prod.status !== 'closed' && new Date(prod.ends_at).getTime() <= Date.now()) {
-                    await db.rpc('check_and_close_auction', { p_auction_id: prod.id });
-                    huboAlgunCierre = true;
-                }
-            }
-            if (huboAlgunCierre) {
-                let { data: auctions2 } = await db.from('auctions').select('*');
-                subastasLocales = auctions2 || [];
-            }
-            renderizarCatalogo();
-        }
+function hacerPujaPersonalizada() {
+    if (!productoSeleccionado || !currentUser) return;
+    const input = document.getElementById('customBidInput'), valor = parseInt(input.value);
+    if (isNaN(valor) || valor <= productoSeleccionado.current_price) return alert("Puja inválida.");
+    ejecutarPuja(valor).then(async () => {
+        const { data: cuenta } = await db.rpc('increment_custom_bid');
+        if (cuenta === 1) { marcarCambioPropio(); const { data: ns } = await db.rpc('add_mission_reward', { p_amount: 200 }); if (ns) { currentUser.saldo = ns; actualizarInterfazUsuario(); mostrarToast("💼 ¡El Inversor! +200 €."); } }
+    });
+    input.value = '';
+}
 
-        function renderizarImagenProducto(valor) {
-            const v = (valor || '').trim();
-            if (/^https?:\/\//i.test(v)) return `<img src="${v}" alt="Foto" style="display:block; width:100%; height:100%; object-fit:cover;" onerror="this.parentElement.innerHTML='<span>🖼️</span>';">`;
-            return `<span>${v || '📦'}</span>`;
-        }
+async function verAnuncio() {
+    if (!currentUser) return abrirModalAuth('register');
+    if (accionEnCurso) return;
+    accionEnCurso = true;
+    try {
+        const antes = currentUser.saldo; marcarCambioPropio();
+        const { data, error } = await db.rpc('add_ad_reward');
+        if (error) return alert("⚠️ "+error.message);
+        currentUser.saldo = data; actualizarInterfazUsuario();
+        alert(`¡+${(data-antes).toLocaleString('es-ES')} € añadidos!`);
+        const { data: ca } = await db.rpc('increment_ad_mission');
+        if (ca === 2) { marcarCambioPropio(); const { data: ns } = await db.rpc('add_mission_reward', { p_amount: 300 }); if (ns) { currentUser.saldo = ns; actualizarInterfazUsuario(); mostrarToast("📺 ¡Patrocinador! +300 €."); } }
+        else if (ca === 1) mostrarToast("📺 Primer anuncio del día. ¡Uno más!");
+    } finally { accionEnCurso = false; }
+}
 
-        async function subirFotoAdmin(evento) {
-            const files = Array.from(evento.target.files || []);
-            if (files.length === 0) return;
-            const preview = document.getElementById('adminImagePreview');
-            preview.innerText = `⏳ Subiendo ${files.length} foto(s)...`;
-            const urls = [];
-            for (const file of files) {
-                const nombreArchivo = `${Date.now()}-${Math.random().toString(36).slice(2)}-${file.name.replace(/[^a-zA-Z0-9._-]/g, '_')}`;
-                const { error } = await db.storage.from('lotes').upload(nombreArchivo, file);
-                if (error) { preview.innerText = ''; return alert("Error al subir: " + error.message); }
-                const { data } = db.storage.from('lotes').getPublicUrl(nombreArchivo);
-                urls.push(data.publicUrl);
-            }
-            document.getElementById('adminImage').value = urls[0];
-            fotosAdicionalesAdmin = urls.slice(1);
-            preview.innerHTML = `✅ ${urls.length} foto(s) subida(s):<br>` + urls.map(u => `<img src="${u}" style="width:70px; height:70px; object-fit:cover; border-radius:6px; margin:4px;">`).join('');
-        }
+async function activarGoat() {
+    if (!currentUser) return; if (accionEnCurso) return; accionEnCurso = true;
+    try { marcarCambioPropio(); const { data, error } = await db.rpc('toggle_goat'); if (error) return alert(error.message); currentUser.esGoat = data; await cargarPerfil(currentUser.id); actualizarInterfazUsuario(); if (data) alert("🐐 Modo GOAT activado. +5.000 €."); } finally { accionEnCurso = false; }
+}
 
-        function filtrarCategoria(cat) {
-            mostrandoFinalizadas = false;
-            categoriaActiva = cat;
-            document.querySelectorAll('.categories-nav .nav-tab').forEach(t => t.classList.remove('active'));
-            const mapa = { 'Todas': 'tabTodas', 'Fútbol': 'tabFutbol', 'Streamers': 'tabStreamers' };
-            const el = document.getElementById(mapa[cat]);
-            if (el) el.classList.add('active');
-            ocultarTodasVistas();
-            document.getElementById('viewCatalog').classList.add('active');
-            renderizarCatalogo();
-        }
+async function reclamarBonusDiario() {
+    if (!currentUser) return; if (accionEnCurso) return; accionEnCurso = true;
+    try { marcarCambioPropio(); const { data, error } = await db.rpc('reclamar_bonus_diario'); if (error) return alert("⚠️ "+error.message); currentUser.saldo = data; actualizarInterfazUsuario(); alert("🎁 +100 € de bono diario."); } finally { accionEnCurso = false; }
+}
 
-        function mostrarFinalizadas() {
-            mostrandoFinalizadas = true;
-            document.querySelectorAll('.categories-nav .nav-tab').forEach(t => t.classList.remove('active'));
-            document.getElementById('tabFinalizadas').classList.add('active');
-            ocultarTodasVistas();
-            document.getElementById('viewCatalog').classList.add('active');
-            document.getElementById('searchInput').value = '';
-            terminoBusqueda = '';
-            renderizarCatalogo();
+function actualizarInterfazUsuario() {
+    if (currentUser) {
+        document.getElementById('boxBalance').style.display = 'block';
+        document.getElementById('btnLoginHeader').style.display = 'none';
+        document.getElementById('userMenuWrapper').style.display = 'block';
+        document.getElementById('goatMenuWrapper').style.display = 'block';
+        document.getElementById('dropdownAdmin').style.display = currentUser.isAdmin ? 'block' : 'none';
+        document.getElementById('userBalance').innerText = Number(currentUser.saldo).toLocaleString('es-ES') + ' €';
+        document.getElementById('profileUserName').innerText = `👑 ${currentUser.username}`;
+        if (currentUser.esGoat) {
+            document.getElementById('btnGoat').classList.add('active');
+            document.getElementById('goatCommentContainer').style.display = 'block';
+            document.getElementById('btnAd').style.display = 'none';
+            document.getElementById('goatItemActivar').style.display = 'none';
+            document.getElementById('goatItemRecargar').style.display = 'block';
+            document.getElementById('goatItemDesactivar').style.display = 'block';
+        } else {
+            document.getElementById('btnGoat').classList.remove('active');
+            document.getElementById('goatCommentContainer').style.display = 'none';
+            document.getElementById('btnAd').style.display = 'block'; document.getElementById('btnAd').innerText = '🎬 +500 € (anuncio)';
+            document.getElementById('goatItemActivar').style.display = 'block';
+            document.getElementById('goatItemRecargar').style.display = 'none';
+            document.getElementById('goatItemDesactivar').style.display = 'none';
         }
+        actualizarFormularioPerfil();
+    } else {
+        document.getElementById('boxBalance').style.display = 'none';
+        document.getElementById('btnLoginHeader').style.display = 'block';
+        document.getElementById('userMenuWrapper').style.display = 'none';
+        document.getElementById('goatMenuWrapper').style.display = 'none';
+    }
+}
 
-        function buscarEnCatalogo(texto) {
-            terminoBusqueda = (texto || '').trim().toLowerCase();
-            ocultarTodasVistas();
-            document.getElementById('viewCatalog').classList.add('active');
-            renderizarCatalogo();
-        }
+function toggleUserMenu() { const d = document.getElementById('userDropdown'); d.style.display = d.style.display === 'block' ? 'none' : 'block'; }
+function cerrarUserMenu() { document.getElementById('userDropdown').style.display = 'none'; }
+function toggleGoatMenu() { const d = document.getElementById('goatDropdown'); d.style.display = d.style.display === 'block' ? 'none' : 'block'; }
+function cerrarGoatMenu() { document.getElementById('goatDropdown').style.display = 'none'; }
+document.addEventListener('click', (e) => {
+    const w = document.getElementById('userMenuWrapper'); if (w && w.style.display !== 'none' && !w.contains(e.target)) cerrarUserMenu();
+    const g = document.getElementById('goatMenuWrapper'); if (g && g.style.display !== 'none' && !g.contains(e.target)) cerrarGoatMenu();
+});
 
-        function renderizarCatalogo() {
-            const grid = document.getElementById('catalogGrid');
-            grid.innerHTML = '';
-            let lista = subastasLocales;
-            if (mostrandoFinalizadas) {
-                lista = lista.filter(p => p.status === 'closed');
-            } else {
-                lista = lista.filter(p => p.status !== 'closed');
-                if (categoriaActiva !== 'Todas') lista = lista.filter(p => p.category === categoriaActiva);
-            }
-            if (terminoBusqueda) {
-                lista = lista.filter(p => (p.title||'').toLowerCase().includes(terminoBusqueda) || (p.description||'').toLowerCase().includes(terminoBusqueda));
-            }
-            if (lista.length === 0) { grid.innerHTML = '<div>No hay subastas que coincidan.</div>'; return; }
-            lista.forEach(prod => {
-                const card = document.createElement('div');
-                card.className = 'auction-card';
-                card.onclick = () => abrirDetalle(prod.id);
-                const esCerrada = prod.status === 'closed';
-                card.innerHTML = `
-                    <div class="card-image">
-                        ${renderizarImagenProducto(prod.image_url)}
-                        ${esCerrada ? '<div class="badge-closed">FINALIZADA</div>' : `<div class="card-timer" id="cardTimer-${prod.id}">⏳ ...</div>`}
-                    </div>
-                    <div class="card-content">
-                        <div class="card-category">${prod.category || 'General'}${esCerrada ? ' · Adjudicado' : ''}</div>
-                        <div class="card-title">${prod.title}</div>
-                        <div class="card-footer">
-                            <div><div class="bid-label-sm">${esCerrada ? 'Precio Final' : 'Puja Actual'}</div><div class="bid-amount-sm">${Number(prod.current_price).toLocaleString('es-ES')} €</div></div>
-                        </div>
-                    </div>
-                `;
-                grid.appendChild(card);
-            });
-            actualizarTemporizadoresCatalogo();
-        }
+function mostrarPerfil() { if(!currentUser) return abrirModalAuth('register'); ocultarTodasVistas(); actualizarFormularioPerfil(); document.getElementById('viewPerfil').classList.add('active'); }
+async function actualizarFormularioPerfil() {
+    if (!currentUser) return;
+    document.getElementById('perfilNombre').innerText = `👤 ${currentUser.username}`;
+    const { data: { user } } = await db.auth.getUser(); document.getElementById('perfilEmail').innerText = user ? user.email : '';
+}
+async function guardarNuevoAlias() {
+    let nuevo = document.getElementById('perfilNuevoAlias').value.trim(); if (!nuevo) return alert("Escribe un alias."); if (!nuevo.startsWith('@')) nuevo = '@'+nuevo;
+    if (nuevo === currentUser.username) return alert("Ya tienes ese alias.");
+    const { data: libre } = await db.rpc('username_disponible',{p_username:nuevo}); if (!libre) return alert("Alias en uso.");
+    const { error } = await db.rpc('actualizar_mi_alias',{p_nuevo_alias:nuevo}); if (error) return alert(error.message);
+    currentUser.username = nuevo; actualizarInterfazUsuario(); document.getElementById('perfilNuevoAlias').value = ''; alert("Alias actualizado.");
+}
+async function guardarNuevaPasswordPerfil() {
+    const p = document.getElementById('perfilNuevaPassword').value.trim(); if (p.length < 6) return alert("Mínimo 6 caracteres.");
+    const { error } = await db.auth.updateUser({ password: p }); if (error) return alert(error.message);
+    document.getElementById('perfilNuevaPassword').value = ''; alert("Contraseña actualizada.");
+}
+function solicitarBajaCuenta() { alert("Escribe a abrozonsubastas@gmail.com para eliminar tu cuenta."); }
 
-        function actualizarTemporizadoresCatalogo() {
-            subastasLocales.forEach(prod => {
-                if (prod.status === 'closed') return;
-                const el = document.getElementById('cardTimer-' + prod.id);
-                if (!el) return;
-                const diff = new Date(prod.ends_at).getTime() - Date.now();
-                if (diff <= 0) { el.innerText = '⏳ Cerrando...'; return; }
-                const dias = Math.floor(diff / (1000 * 60 * 60 * 24));
-                const horas = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutos = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-                const segundos = Math.floor((diff % (1000 * 60)) / 1000);
-                if (dias > 0) el.innerText = `⏳ ${dias}d ${horas}h`;
-                else el.innerText = `⏳ ${horas}h ${minutos}m ${segundos}s`;
-            });
-        }
+function mostrarVitrina() {
+    if (!currentUser) return abrirModalAuth('register'); ocultarTodasVistas();
+    const grid = document.getElementById('vitrinaGrid'); grid.innerHTML = '';
+    const ganados = subastasLocales.filter(p => p.status === 'closed' && p.winner === currentUser.username);
+    if (!ganados.length) { grid.innerHTML = '<div style="color:var(--text-muted);">Aún no has ganado ninguna subasta.</div>'; }
+    else ganados.forEach(item => {
+        const card = document.createElement('div'); card.className = 'certificate-card';
+        card.innerHTML = `<div style="width:100%;height:120px;display:flex;align-items:center;justify-content:center;font-size:3rem;background:var(--bg-subtle);">${renderizarImagenProducto(item.image_url)}</div><h3>${item.title}</h3><p style="font-size:0.8rem;color:var(--text-muted);">${item.description}</p><div style="color:var(--accent-green);font-weight:bold;">${Number(item.current_price).toLocaleString('es-ES')} €</div><div style="margin-top:10px;font-size:0.7rem;background:rgba(234,179,8,0.1);padding:6px;border-radius:4px;color:#eab308;font-weight:bold;">📜 CERTIFICADO OFICIAL ABROZON<br>Nº ${item.certificado_codigo||'PENDIENTE'}<br>${new Date(item.ends_at).toLocaleDateString('es-ES')}</div>`;
+        grid.appendChild(card);
+    });
+    document.getElementById('viewVitrina').classList.add('active');
+}
 
-        async function abrirDetalle(id) {
-            productoSeleccionado = subastasLocales.find(p => p.id === id);
-            actualizarVistaDetalleDatoVivo();
-            iniciarTemporizador(productoSeleccionado.ends_at);
-            await cargarHistorialPujas(id);
-            ocultarTodasVistas();
-            document.getElementById('viewDetail').classList.add('active');
-        }
+// NUEVA FUNCIÓN PARA MOSTRAR MISIONES
+async function mostrarMisiones() {
+    if (!currentUser) return abrirModalAuth('register');
+    ocultarTodasVistas();
+    document.getElementById('viewMisiones').classList.add('active');
+    await cargarMisiones();
+}
 
-        function actualizarVistaDetalleDatoVivo() {
-            if (!productoSeleccionado) return;
-            document.getElementById('detailImage').innerHTML = renderizarImagenProducto(productoSeleccionado.image_url);
-            document.getElementById('detailCategory').innerText = productoSeleccionado.category || 'General';
-            document.getElementById('detailTitle').innerText = productoSeleccionado.title;
-            document.getElementById('detailDescription').innerText = productoSeleccionado.description;
-            document.getElementById('detailBid').innerText = Number(productoSeleccionado.current_price).toLocaleString('es-ES') + ' €';
-            const galeria = document.getElementById('detailGallery');
-            const todasFotos = [productoSeleccionado.image_url, ...(productoSeleccionado.images || [])].filter(u => u && /^https?:\/\//i.test(u));
-            if (todasFotos.length > 1) {
-                galeria.innerHTML = todasFotos.map(u => `<img src="${u}" onclick="cambiarFotoPrincipal(this.src)" onerror="this.style.display='none';" style="width:60px;height:60px;object-fit:cover;border-radius:8px;cursor:pointer;border:2px solid var(--border-color);">`).join('');
-            } else galeria.innerHTML = '';
-            const controles = document.getElementById('biddingControlsContainer');
-            if (productoSeleccionado.status === 'closed') {
-                controles.style.display = 'none';
-                document.getElementById('detailTime').innerText = `🏆 Subasta Finalizada. Ganador: ${productoSeleccionado.winner || 'Nadie'}`;
-            } else controles.style.display = 'block';
-        }
+async function cargarMisiones() {
+    const container = document.getElementById('misionesContainer');
+    container.innerHTML = 'Cargando...';
+    const { data, error } = await db.rpc('get_daily_missions');
+    if (error) { container.innerHTML = `<p>Error al cargar misiones: ${error.message}</p>`; return; }
+    // data es un objeto: { bonus, min_bids, custom_bid, ad_views, category_bid }
+    const m = data;
+    let html = '';
 
-        function cambiarFotoPrincipal(url) { document.getElementById('detailImage').innerHTML = renderizarImagenProducto(url); }
+    // Bono diario
+    html += `<div class="mission-card"><div class="mission-title">🎁 Bono Diario</div><div class="mission-desc">Reclama 100 € cada día.</div>`;
+    if (m.bonus) html += `<button onclick="reclamarBonusDiarioDesdeMisiones()" style="background:var(--accent-blue);color:white;border:none;padding:6px 12px;border-radius:6px;cursor:pointer;">Reclamar +100 €</button>`;
+    else html += `<span class="mission-completed">✅ Reclamado hoy</span>`;
+    html += `</div>`;
 
-        function iniciarTemporizador(fechaFin) {
-            if (timerInterval) clearInterval(timerInterval);
-            const target = new Date(fechaFin || Date.now() + 86400000).getTime();
-            const timeBox = document.getElementById('detailTime');
-            function actualizar() {
-                if (productoSeleccionado && productoSeleccionado.status === 'closed') return;
-                const now = Date.now();
-                const diff = target - now;
-                if (diff <= 0) { timeBox.innerText = "⏳ Subasta Finalizada"; clearInterval(timerInterval); cargarSubastas(); return; }
-                const dias = Math.floor(diff / (1000 * 60 * 60 * 24));
-                const horas = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutos = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-                const segundos = Math.floor((diff % (1000 * 60)) / 1000);
-                if (dias > 0) timeBox.innerText = `⏳ Cierra en: ${dias}d ${horas}h ${minutos}m`;
-                else timeBox.innerText = `⏳ Cierra en: ${horas}h ${minutos}m ${segundos}s`;
-            }
-            actualizar();
-            timerInterval = setInterval(actualizar, 1000);
-        }
+    // Gatillo Fácil
+    html += `<div class="mission-card"><div class="mission-title">🔫 Gatillo Fácil</div><div class="mission-desc">Haz 3 pujas mínimas. Progreso: ${m.min_bids}/3</div>`;
+    html += `<div class="progress-bar"><div class="progress-fill" style="width:${Math.min(m.min_bids/3*100,100)}%"></div></div>`;
+    if (m.min_bids >= 3) html += `<div class="mission-completed">✅ Completado</div>`;
+    html += `</div>`;
 
-        async function cargarHistorialPujas(auctionId) {
-            const history = document.getElementById('historyList');
-            const { data: bids } = await db.from('bids').select('*').eq('auction_id', auctionId).order('created_at', { ascending: false });
-            history.innerHTML = '';
-            if (!bids || bids.length === 0) { history.innerHTML = '<div style="font-size:0.8rem;color:var(--text-muted);">Sin pujas aún.</div>'; return; }
-            bids.forEach(b => {
-                const newItem = document.createElement('div');
-                newItem.className = 'history-item';
-                newItem.innerHTML = `<div style="display:flex;justify-content:space-between;"><div><span style="color:var(--accent-blue);font-weight:bold;">${b.user_name||'Anónimo'}</span>${b.comment ? `<div style="font-size:0.75rem;color:#eab308;font-style:italic;">"${b.comment}"</div>`:''}</div><span style="font-weight:bold;">${Number(b.amount).toLocaleString('es-ES')} €</span></div>`;
-                history.appendChild(newItem);
-            });
-        }
+    // El Inversor
+    html += `<div class="mission-card"><div class="mission-title">💼 El Inversor</div><div class="mission-desc">Haz 1 puja personalizada. ${m.custom_bid>=1?'✅ Completado':'Pendiente'}</div>`;
+    if (m.custom_bid >= 1) html += `<div class="mission-completed">✅ Completado</div>`;
+    html += `</div>`;
 
-        async function ejecutarPuja(nuevaPujaTotal) {
-            if (!currentUser) return abrirModalAuth('register');
-            if (productoSeleccionado.status === 'closed') return alert("Finalizada.");
-            if (accionEnCurso) return;
-            accionEnCurso = true;
-            try {
-                let comentarioTexto = null;
-                if (currentUser.esGoat) {
-                    const ci = document.getElementById('goatCommentInput');
-                    comentarioTexto = ci ? ci.value.trim() : '';
-                    if (ci) ci.value = '';
-                }
-                marcarCambioPropio();
-                const { error } = await db.rpc('place_bid', { p_auction_id: productoSeleccionado.id, p_amount: nuevaPujaTotal, p_comment: comentarioTexto });
-                if (error) return alert("⚠️ " + error.message);
-                await cargarPerfil(currentUser.id);
-                productoSeleccionado.current_price = nuevaPujaTotal;
-                actualizarInterfazUsuario();
+    // Patrocinador
+    html += `<div class="mission-card"><div class="mission-title">📺 Patrocinador</div><div class="mission-desc">Ve 2 anuncios. Progreso: ${m.ad_views}/2</div>`;
+    html += `<div class="progress-bar"><div class="progress-fill" style="width:${Math.min(m.ad_views/2*100,100)}%"></div></div>`;
+    if (m.ad_views >= 2) html += `<div class="mission-completed">✅ Completado</div>`;
+    html += `</div>`;
 
-                // Misión "Explorador": pujar en categoría que no sea General
-                if (productoSeleccionado.category && productoSeleccionado.category !== 'General') {
-                    const { data: cuentaCat } = await db.rpc('increment_category_bid');
-                    if (cuentaCat === 1) {
-                        marcarCambioPropio();
-                        const { data: nuevoSaldo } = await db.rpc('add_mission_reward', { p_amount: 250 });
-                        if (nuevoSaldo) {
-                            currentUser.saldo = nuevoSaldo;
-                            actualizarInterfazUsuario();
-                            mostrarToast("🧭 ¡Misión completada: Explorador! +250 € por pujar en categoría especial.");
-                        }
-                    }
-                }
-            } finally { accionEnCurso = false; }
-        }
+    // Explorador
+    html += `<div class="mission-card"><div class="mission-title">🧭 Explorador</div><div class="mission-desc">Puja en una categoría especial. ${m.category_bid>=1?'✅ Completado':'Pendiente'}</div>`;
+    if (m.category_bid >= 1) html += `<div class="mission-completed">✅ Completado</div>`;
+    html += `</div>`;
 
-        async function hacerPujaMínima() {
-            if (!productoSeleccionado || !currentUser) return;
-            if (productoSeleccionado.status === 'closed') return alert("Finalizada.");
-            await ejecutarPuja(Number(productoSeleccionado.current_price) + 50);
-            const { data: cuenta } = await db.rpc('increment_min_bid');
-            if (!cuenta) return;
-            if (cuenta === 3) {
-                marcarCambioPropio();
-                const { data: nuevoSaldo } = await db.rpc('add_mission_reward', { p_amount: 150 });
-                if (nuevoSaldo) { currentUser.saldo = nuevoSaldo; actualizarInterfazUsuario(); mostrarToast("🎯 ¡Misión completada: Gatillo Fácil! +150 €."); }
-            } else if (cuenta === 1) mostrarToast("🔫 Primera puja mínima del día. ¡A por las 3!");
-            else if (cuenta === 2) mostrarToast("🔫🔫 Segunda puja mínima. ¡Una más!");
-        }
+    container.innerHTML = html;
+}
 
-        function hacerPujaPersonalizada() {
-            if (!productoSeleccionado || !currentUser) return;
-            const input = document.getElementById('customBidInput');
-            const valor = parseInt(input.value);
-            if (isNaN(valor) || valor <= productoSeleccionado.current_price) return alert("Puja inválida.");
-            ejecutarPuja(valor).then(async () => {
-                const { data: cuenta } = await db.rpc('increment_custom_bid');
-                if (cuenta === 1) {
-                    marcarCambioPropio();
-                    const { data: nuevoSaldo } = await db.rpc('add_mission_reward', { p_amount: 200 });
-                    if (nuevoSaldo) { currentUser.saldo = nuevoSaldo; actualizarInterfazUsuario(); mostrarToast("💼 ¡Misión completada: El Inversor! +200 € por puja personalizada."); }
-                }
-            });
-            input.value = '';
-        }
+async function reclamarBonusDiarioDesdeMisiones() {
+    await reclamarBonusDiario();
+    cargarMisiones(); // refrescar vista
+}
 
-        async function verAnuncio() {
-            if (!currentUser) return abrirModalAuth('register');
-            if (accionEnCurso) return;
-            accionEnCurso = true;
-            try {
-                const saldoAntes = currentUser.saldo;
-                marcarCambioPropio();
-                const { data, error } = await db.rpc('add_ad_reward');
-                if (error) return alert("⚠️ " + error.message);
-                currentUser.saldo = data;
-                actualizarInterfazUsuario();
-                const ganado = data - saldoAntes;
-                alert(`¡+${ganado.toLocaleString('es-ES')} € añadidos!`);
+function mostrarLegal() { ocultarTodasVistas(); document.getElementById('viewLegal').classList.add('active'); }
+function ocultarTodasVistas() { document.querySelectorAll('.view').forEach(v => v.classList.remove('active')); }
+function mostrarCatalogo() { ocultarTodasVistas(); cargarSubastas(); document.getElementById('viewCatalog').classList.add('active'); }
 
-                const { data: cuentaAnuncios } = await db.rpc('increment_ad_mission');
-                if (cuentaAnuncios === 2) {
-                    marcarCambioPropio();
-                    const { data: nuevoSaldo } = await db.rpc('add_mission_reward', { p_amount: 300 });
-                    if (nuevoSaldo) { currentUser.saldo = nuevoSaldo; actualizarInterfazUsuario(); mostrarToast("📺 ¡Misión completada: Patrocinador! +300 € extra."); }
-                } else if (cuentaAnuncios === 1) mostrarToast("📺 Primer anuncio del día. ¡Uno más para la misión!");
-            } finally { accionEnCurso = false; }
-        }
+function abrirModalAuth(mode = 'register') { toggleAuthForm(mode); document.getElementById('authModal').style.display = 'flex'; }
+function cerrarModalAuth() { document.getElementById('authModal').style.display = 'none'; }
+function abrirModalAdmin() { document.getElementById('adminModal').style.display = 'flex'; renderizarListaAdminSubastas(); }
+function cerrarModalAdmin() { document.getElementById('adminModal').style.display = 'none'; }
 
-        async function activarGoat() {
-            if (!currentUser) return;
-            if (accionEnCurso) return;
-            accionEnCurso = true;
-            try {
-                marcarCambioPropio();
-                const { data, error } = await db.rpc('toggle_goat');
-                if (error) return alert("Error: " + error.message);
-                currentUser.esGoat = data;
-                await cargarPerfil(currentUser.id);
-                actualizarInterfazUsuario();
-                if (data) alert("🐐 Modo GOAT activado. +5.000 € de regalo.");
-            } finally { accionEnCurso = false; }
-        }
+async function adminBuscarUsuario() {
+    const alias = (document.getElementById('adminBuscarAlias').value.trim()||'').startsWith('@') ? document.getElementById('adminBuscarAlias').value.trim() : '@'+document.getElementById('adminBuscarAlias').value.trim();
+    const { data, error } = await db.rpc('admin_buscar_usuario',{p_alias:alias});
+    const box = document.getElementById('adminUserResult');
+    if (error || !data || !data.length) { box.innerHTML = '<p>No encontrado.</p>'; return; }
+    const u = data[0];
+    box.innerHTML = `<div style="background:var(--bg-subtle);padding:12px;border-radius:10px;font-size:0.85rem;"><div><strong>${u.username}</strong> ${u.is_admin?'🛠️':''} ${u.es_goat?'🐐':''} ${u.is_banned?'🚫':''}</div><div>Saldo: ${Number(u.saldo).toLocaleString('es-ES')} €</div><div style="display:flex;gap:6px;margin:8px 0;"><input type="number" id="adminNuevoSaldo" placeholder="Nuevo saldo" style="flex:1;padding:8px;border-radius:6px;border:1px solid var(--border-color);"><button onclick="adminActualizarSaldo('${u.username}')" style="background:var(--accent-green);color:white;border:none;padding:8px 12px;border-radius:6px;font-weight:bold;">Fijar</button></div><button onclick="adminToggleBan('${u.username}')" style="width:100%;background:${u.is_banned?'#16a34a':'#ef4444'};color:white;border:none;padding:8px;border-radius:6px;font-weight:bold;">${u.is_banned?'Quitar baneo':'Banear'}</button></div>`;
+}
+async function adminActualizarSaldo(alias) {
+    const valor = parseInt(document.getElementById('adminNuevoSaldo').value); if (isNaN(valor)) return alert("Número inválido.");
+    await db.rpc('admin_set_saldo',{p_alias:alias,p_nuevo_saldo:valor}); alert("Saldo actualizado."); adminBuscarUsuario();
+}
+async function adminToggleBan(alias) { await db.rpc('admin_toggle_ban',{p_alias:alias}); adminBuscarUsuario(); }
+function renderizarListaAdminSubastas() {
+    const box = document.getElementById('adminAuctionList'); box.innerHTML = '';
+    subastasLocales.forEach(p => {
+        const row = document.createElement('div'); row.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px dashed var(--border-color);';
+        row.innerHTML = `<span>[${p.category||'General'}] ${p.title} ${p.status==='closed'?'(cerrada)':''}</span><button onclick="adminEliminarSubasta('${p.id}')" style="background:#ef4444;color:white;border:none;padding:5px 10px;border-radius:6px;font-weight:bold;">Eliminar</button>`;
+        box.appendChild(row);
+    });
+}
+async function adminEliminarSubasta(id) { if (!confirm("¿Seguro?")) return; await db.rpc('admin_delete_auction',{p_auction_id:id}); await cargarSubastas(); renderizarListaAdminSubastas(); }
 
-        async function reclamarBonusDiario() {
-            if (!currentUser) return;
-            if (accionEnCurso) return;
-            accionEnCurso = true;
-            try {
-                marcarCambioPropio();
-                const { data, error } = await db.rpc('reclamar_bonus_diario');
-                if (error) return alert("⚠️ " + error.message);
-                currentUser.saldo = data;
-                actualizarInterfazUsuario();
-                alert("🎁 +100 € de bono diario.");
-            } finally { accionEnCurso = false; }
-        }
+function toggleAuthForm(mode) {
+    document.getElementById('formLogin').style.display = mode==='login'?'block':'none';
+    document.getElementById('formRegister').style.display = mode==='register'?'block':'none';
+}
 
-        function actualizarInterfazUsuario() {
-            const boxBalance = document.getElementById('boxBalance');
-            const btnLogin = document.getElementById('btnLoginHeader');
-            const userMenuWrapper = document.getElementById('userMenuWrapper');
-            const goatMenuWrapper = document.getElementById('goatMenuWrapper');
-            const btnGoat = document.getElementById('btnGoat');
-            const dropdownAdmin = document.getElementById('dropdownAdmin');
-            const btnAd = document.getElementById('btnAd');
-            const goatCommentContainer = document.getElementById('goatCommentContainer');
-            const goatItemActivar = document.getElementById('goatItemActivar');
-            const goatItemRecargar = document.getElementById('goatItemRecargar');
-            const goatItemDesactivar = document.getElementById('goatItemDesactivar');
+async function registrarUsuario() {
+    const email = document.getElementById('regEmail').value.trim(), alias = document.getElementById('regUsername').value.trim().startsWith('@')? document.getElementById('regUsername').value.trim() : '@'+document.getElementById('regUsername').value.trim(), pass = document.getElementById('regPassword').value.trim();
+    if (!email||!alias||!pass) return alert("Completa todos los campos.");
+    const { data: libre } = await db.rpc('username_disponible',{p_username:alias}); if (!libre) return alert("Alias en uso.");
+    const { data, error } = await db.auth.signUp({ email, password: pass, options: { data: { username: alias } } });
+    if (error) return alert(error.message);
+    if (!data.session) { alert("Revisa tu correo para confirmar."); cerrarModalAuth(); return; }
+    await cargarPerfil(data.user.id); cerrarModalAuth(); actualizarInterfazUsuario(); alert("¡Bienvenido! 1.000 € de regalo.");
+}
+async function iniciarSesion() {
+    const email = document.getElementById('loginEmail').value.trim(), pass = document.getElementById('loginPassword').value.trim();
+    if (!email||!pass) return alert("Completa los campos.");
+    const { data, error } = await db.auth.signInWithPassword({ email, password: pass });
+    if (error) return alert("Error: "+error.message);
+    await cargarPerfil(data.user.id); cerrarModalAuth(); actualizarInterfazUsuario();
+}
+async function solicitarRecuperacion() {
+    const email = prompt("Email para recuperación:"); if (!email) return;
+    const { error } = await db.auth.resetPasswordForEmail(email, { redirectTo: window.location.href.split('#')[0] });
+    if (error) return alert(error.message); alert("Correo enviado.");
+}
+async function guardarNuevaPassword() {
+    const p = document.getElementById('newPasswordInput').value.trim(); if (p.length < 6) return alert("Mínimo 6 caracteres.");
+    const { error } = await db.auth.updateUser({ password: p }); if (error) return alert(error.message);
+    document.getElementById('recoveryModal').style.display = 'none'; alert("Contraseña actualizada.");
+}
+async function cerrarSesion() {
+    await db.auth.signOut(); if (profileChannel) { await db.removeChannel(profileChannel); profileChannel = null; profileChannelUserId = null; }
+    currentUser = null; actualizarInterfazUsuario(); mostrarCatalogo();
+}
 
-            if (currentUser) {
-                boxBalance.style.display = 'block';
-                btnLogin.style.display = 'none';
-                userMenuWrapper.style.display = 'block';
-                goatMenuWrapper.style.display = 'block';
-                dropdownAdmin.style.display = currentUser.isAdmin ? 'block' : 'none';
-                document.getElementById('userBalance').innerText = Number(currentUser.saldo).toLocaleString('es-ES') + ' €';
-                document.getElementById('profileUserName').innerText = `👑 ${currentUser.username}`;
-                if (currentUser.esGoat) {
-                    btnGoat.classList.add('active');
-                    if (goatCommentContainer) goatCommentContainer.style.display = 'block';
-                    if (btnAd) btnAd.style.display = 'none';
-                    goatItemActivar.style.display = 'none';
-                    goatItemRecargar.style.display = 'block';
-                    goatItemDesactivar.style.display = 'block';
-                } else {
-                    btnGoat.classList.remove('active');
-                    if (goatCommentContainer) goatCommentContainer.style.display = 'none';
-                    if (btnAd) { btnAd.style.display = 'block'; btnAd.innerText = '🎬 +500 € (anuncio)'; }
-                    goatItemActivar.style.display = 'block';
-                    goatItemRecargar.style.display = 'none';
-                    goatItemDesactivar.style.display = 'none';
-                }
-                actualizarFormularioPerfil();
-            } else {
-                boxBalance.style.display = 'none';
-                btnLogin.style.display = 'block';
-                userMenuWrapper.style.display = 'none';
-                goatMenuWrapper.style.display = 'none';
-                dropdownAdmin.style.display = 'none';
-                btnGoat.classList.remove('active');
-                if (goatCommentContainer) goatCommentContainer.style.display = 'none';
-                if (btnAd) { btnAd.style.display = 'block'; btnAd.innerText = '🎬 +500 € (anuncio)'; }
-            }
-        }
+async function crearNuevaSubasta() {
+    const title = document.getElementById('adminTitle').value.trim(), desc = document.getElementById('adminDesc').value.trim(), price = parseInt(document.getElementById('adminPrice').value), horas = parseInt(document.getElementById('adminDuracion').value), categoria = document.getElementById('adminCategoria').value, img = document.getElementById('adminImage').value.trim()||'📦';
+    if (!title||isNaN(price)) return alert("Rellena los campos obligatorios.");
+    const { error } = await db.rpc('create_auction',{p_title:title,p_description:desc,p_price:price,p_image:img,p_hours:horas,p_category:categoria,p_images:fotosAdicionalesAdmin});
+    if (error) return alert(error.message);
+    cerrarModalAdmin(); document.getElementById('adminImage').value=''; document.getElementById('adminImageFile').value=''; document.getElementById('adminImagePreview').innerHTML=''; fotosAdicionalesAdmin=[];
+    await cargarSubastas(); alert("¡Subasta creada!");
+}
 
-        function toggleUserMenu() { const dd = document.getElementById('userDropdown'); dd.style.display = dd.style.display === 'block' ? 'none' : 'block'; }
-        function cerrarUserMenu() { document.getElementById('userDropdown').style.display = 'none'; }
-        function toggleGoatMenu() { const dd = document.getElementById('goatDropdown'); dd.style.display = dd.style.display === 'block' ? 'none' : 'block'; }
-        function cerrarGoatMenu() { document.getElementById('goatDropdown').style.display = 'none'; }
-        document.addEventListener('click', (e) => {
-            const wrapper = document.getElementById('userMenuWrapper');
-            if (wrapper && wrapper.style.display !== 'none' && !wrapper.contains(e.target)) cerrarUserMenu();
-            const goatWrapper = document.getElementById('goatMenuWrapper');
-            if (goatWrapper && goatWrapper.style.display !== 'none' && !goatWrapper.contains(e.target)) cerrarGoatMenu();
-        });
-
-        function mostrarPerfil() { if (!currentUser) return abrirModalAuth('register'); ocultarTodasVistas(); actualizarFormularioPerfil(); document.getElementById('viewPerfil').classList.add('active'); }
-        async function actualizarFormularioPerfil() {
-            if (!currentUser) return;
-            const nombreEl = document.getElementById('perfilNombre'); if (nombreEl) nombreEl.innerText = `👤 ${currentUser.username}`;
-            const emailEl = document.getElementById('perfilEmail'); if (emailEl) { const { data: { user } } = await db.auth.getUser(); emailEl.innerText = user ? user.email : ''; }
-        }
-        async function guardarNuevoAlias() {
-            let nuevo = document.getElementById('perfilNuevoAlias').value.trim();
-            if (!nuevo) return alert("Escribe un alias."); if (!nuevo.startsWith('@')) nuevo = '@' + nuevo;
-            if (nuevo === currentUser.username) return alert("Ya tienes ese alias.");
-            const { data: libre, error } = await db.rpc('username_disponible', { p_username: nuevo });
-            if (error) return alert("Error: " + error.message); if (!libre) return alert("Alias en uso.");
-            const { error: err } = await db.rpc('actualizar_mi_alias', { p_nuevo_alias: nuevo });
-            if (err) return alert("Error: " + err.message);
-            currentUser.username = nuevo; actualizarInterfazUsuario(); document.getElementById('perfilNuevoAlias').value = ''; alert("¡Alias actualizado!");
-        }
-        async function guardarNuevaPasswordPerfil() {
-            const nueva = document.getElementById('perfilNuevaPassword').value.trim();
-            if (!nueva || nueva.length < 6) return alert("Mínimo 6 caracteres.");
-            const { error } = await db.auth.updateUser({ password: nueva });
-            if (error) return alert("Error: " + error.message);
-            document.getElementById('perfilNuevaPassword').value = ''; alert("¡Contraseña actualizada!");
-        }
-        function solicitarBajaCuenta() { alert("Escribe a nuestro email de contacto para eliminar tu cuenta."); }
-
-        function mostrarVitrina() {
-            if (!currentUser) return abrirModalAuth('register');
-            ocultarTodasVistas();
-            const grid = document.getElementById('vitrinaGrid'); grid.innerHTML = '';
-            const ganados = subastasLocales.filter(p => p.status === 'closed' && p.winner === currentUser.username);
-            if (ganados.length === 0) { grid.innerHTML = '<div style="color:var(--text-muted);">Aún no has ganado ninguna subasta.</div>'; }
-            else ganados.forEach(item => {
-                const card = document.createElement('div'); card.className = 'certificate-card';
-                const fecha = item.ends_at ? new Date(item.ends_at).toLocaleDateString('es-ES') : '';
-                card.innerHTML = `<div style="width:100%;height:120px;display:flex;align-items:center;justify-content:center;font-size:3rem;margin-bottom:10px;border-radius:10px;overflow:hidden;background:var(--bg-subtle);">${renderizarImagenProducto(item.image_url)}</div><h3>${item.title}</h3><p style="font-size:0.8rem;color:var(--text-muted);margin-bottom:10px;">${item.description}</p><div style="font-size:0.85rem;font-weight:bold;color:var(--accent-green);">Adjudicado: ${Number(item.current_price).toLocaleString('es-ES')} €</div><div style="margin-top:10px;font-size:0.7rem;background:rgba(234,179,8,0.1);padding:6px;border-radius:4px;color:#eab308;font-weight:bold;">📜 CERTIFICADO OFICIAL ABROZON<br>Nº ${item.certificado_codigo || 'PENDIENTE'}<br>Fecha: ${fecha}</div>`;
-                grid.appendChild(card);
-            });
-            document.getElementById('viewVitrina').classList.add('active');
-        }
-
-        function mostrarLegal() { ocultarTodasVistas(); document.getElementById('viewLegal').classList.add('active'); }
-        function ocultarTodasVistas() { document.querySelectorAll('.view').forEach(v => v.classList.remove('active')); }
-        function mostrarCatalogo() { ocultarTodasVistas(); cargarSubastas(); document.getElementById('viewCatalog').classList.add('active'); }
-
-        function abrirModalAuth(mode = 'register') { toggleAuthForm(mode); document.getElementById('authModal').style.display = 'flex'; }
-        function cerrarModalAuth() { document.getElementById('authModal').style.display = 'none'; }
-        function abrirModalAdmin() { document.getElementById('adminModal').style.display = 'flex'; renderizarListaAdminSubastas(); }
-        function cerrarModalAdmin() { document.getElementById('adminModal').style.display = 'none'; }
-
-        async function adminBuscarUsuario() {
-            const alias = document.getElementById('adminBuscarAlias').value.trim(); if (!alias) return;
-            const aliasFinal = alias.startsWith('@') ? alias : '@' + alias;
-            const { data, error } = await db.rpc('admin_buscar_usuario', { p_alias: aliasFinal });
-            if (error) return alert("Error: " + error.message);
-            const box = document.getElementById('adminUserResult');
-            if (!data || data.length === 0) { box.innerHTML = '<p style="color:var(--text-muted);">No encontrado.</p>'; return; }
-            const u = data[0];
-            box.innerHTML = `<div style="background:var(--bg-subtle);border-radius:10px;padding:12px;font-size:0.85rem;"><div><strong>${u.username}</strong> ${u.is_admin?'🛠️':''} ${u.es_goat?'🐐':''} ${u.is_banned?'🚫':''}</div><div style="margin:8px 0;">Saldo: <strong>${Number(u.saldo).toLocaleString('es-ES')} €</strong></div><div style="display:flex;gap:6px;margin-bottom:8px;"><input type="number" id="adminNuevoSaldo" placeholder="Nuevo saldo" style="flex:1;padding:8px;border-radius:6px;border:1px solid var(--border-color);background:var(--bg-card);color:var(--text-main);"><button onclick="adminActualizarSaldo('${u.username}')" style="background:var(--accent-green);color:white;border:none;padding:8px 12px;border-radius:6px;font-weight:bold;cursor:pointer;">Fijar</button></div><button onclick="adminToggleBan('${u.username}')" style="width:100%;background:${u.is_banned?'#16a34a':'#ef4444'};color:white;border:none;padding:8px;border-radius:6px;font-weight:bold;cursor:pointer;">${u.is_banned?'Quitar baneo':'Banear'}</button></div>`;
-        }
-        async function adminActualizarSaldo(alias) {
-            const valor = parseInt(document.getElementById('adminNuevoSaldo').value); if (isNaN(valor)) return alert("Número no válido.");
-            const { error } = await db.rpc('admin_set_saldo', { p_alias: alias, p_nuevo_saldo: valor });
-            if (error) return alert("Error: " + error.message);
-            alert("Saldo actualizado."); adminBuscarUsuario();
-        }
-        async function adminToggleBan(alias) { await db.rpc('admin_toggle_ban', { p_alias: alias }); adminBuscarUsuario(); }
-        function renderizarListaAdminSubastas() {
-            const box = document.getElementById('adminAuctionList'); if (!box) return; box.innerHTML = '';
-            subastasLocales.forEach(prod => {
-                const row = document.createElement('div'); row.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px dashed var(--border-color);font-size:0.85rem;';
-                row.innerHTML = `<span>[${prod.category||'General'}] ${prod.title} ${prod.status==='closed'?'(cerrada)':''}</span><button onclick="adminEliminarSubasta('${prod.id}')" style="background:#ef4444;color:white;border:none;padding:5px 10px;border-radius:6px;font-weight:bold;cursor:pointer;font-size:0.75rem;">Eliminar</button>`;
-                box.appendChild(row);
-            });
-        }
-        async function adminEliminarSubasta(id) {
-            if (!confirm("¿Seguro?")) return;
-            const { error } = await db.rpc('admin_delete_auction', { p_auction_id: id });
-            if (error) return alert("Error: " + error.message);
-            await cargarSubastas(); renderizarListaAdminSubastas();
-        }
-
-        function toggleAuthForm(mode) {
-            document.getElementById('formLogin').style.display = mode === 'login' ? 'block' : 'none';
-            document.getElementById('formRegister').style.display = mode === 'register' ? 'block' : 'none';
-        }
-
-        async function registrarUsuario() {
-            const email = document.getElementById('regEmail').value.trim();
-            let alias = document.getElementById('regUsername').value.trim();
-            const pass = document.getElementById('regPassword').value.trim();
-            if (!email || !alias || !pass) return alert("Completa todos los campos.");
-            if (!alias.startsWith('@')) alias = '@' + alias;
-            const { data: libre, error } = await db.rpc('username_disponible', { p_username: alias });
-            if (error) return alert("Error: " + error.message); if (!libre) return alert("Alias en uso.");
-            const { data, error: err } = await db.auth.signUp({ email, password: pass, options: { data: { username: alias } } });
-            if (err) return alert("Error: " + err.message);
-            if (!data.session) { alert("Revisa tu correo para confirmar."); cerrarModalAuth(); return; }
-            await cargarPerfil(data.user.id); cerrarModalAuth(); actualizarInterfazUsuario(); alert("¡Bienvenido! 1.000 € de regalo.");
-        }
-        async function iniciarSesion() {
-            const email = document.getElementById('loginEmail').value.trim();
-            const pass = document.getElementById('loginPassword').value.trim();
-            if (!email || !pass) return alert("Completa los campos.");
-            const { data, error } = await db.auth.signInWithPassword({ email, password: pass });
-            if (error) return alert("Error: " + error.message);
-            await cargarPerfil(data.user.id); cerrarModalAuth(); actualizarInterfazUsuario();
-        }
-        async function solicitarRecuperacion() {
-            const email = prompt("Email para recuperación:"); if (!email) return;
-            const { error } = await db.auth.resetPasswordForEmail(email, { redirectTo: window.location.href.split('#')[0] });
-            if (error) return alert("Error: " + error.message);
-            alert("Correo enviado. Revisa tu bandeja de entrada.");
-        }
-        async function guardarNuevaPassword() {
-            const nueva = document.getElementById('newPasswordInput').value.trim();
-            if (!nueva || nueva.length < 6) return alert("Mínimo 6 caracteres.");
-            const { error } = await db.auth.updateUser({ password: nueva });
-            if (error) return alert("Error: " + error.message);
-            document.getElementById('recoveryModal').style.display = 'none'; alert("Contraseña actualizada.");
-        }
-        async function cerrarSesion() {
-            await db.auth.signOut();
-            if (profileChannel) { await db.removeChannel(profileChannel); profileChannel = null; profileChannelUserId = null; }
-            currentUser = null; actualizarInterfazUsuario(); mostrarCatalogo();
-        }
-
-        async function crearNuevaSubasta() {
-            const title = document.getElementById('adminTitle').value.trim();
-            const description = document.getElementById('adminDesc').value.trim();
-            const price = parseInt(document.getElementById('adminPrice').value);
-            const horas = parseInt(document.getElementById('adminDuracion').value);
-            const categoria = document.getElementById('adminCategoria').value;
-            const image_url = document.getElementById('adminImage').value.trim() || '📦';
-            if (!title || isNaN(price)) return alert("Rellena los campos obligatorios.");
-            const { error } = await db.rpc('create_auction', { p_title: title, p_description: description, p_price: price, p_image: image_url, p_hours: horas, p_category: categoria, p_images: fotosAdicionalesAdmin });
-            if (error) return alert("Error: " + error.message);
-            cerrarModalAdmin(); document.getElementById('adminImage').value = ''; document.getElementById('adminImageFile').value = ''; document.getElementById('adminImagePreview').innerHTML = ''; fotosAdicionalesAdmin = [];
-            await cargarSubastas(); alert("¡Subasta creada!");
-        }
-
-        function toggleTema() {
-            document.body.classList.toggle('dark-mode');
-            const el = document.getElementById('dropdownTheme'); if (el) el.innerText = document.body.classList.contains('dark-mode') ? "☀️ Modo Día" : "🌙 Modo Noche";
-            cerrarUserMenu();
-        }
-    </script>
+function toggleTema() {
+    document.body.classList.toggle('dark-mode');
+    document.getElementById('dropdownTheme').innerText = document.body.classList.contains('dark-mode') ? "☀️ Modo Día" : "🌙 Modo Noche";
+    cerrarUserMenu();
+}
+</script>
 </body>
 </html>
