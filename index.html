@@ -902,9 +902,40 @@ if (mostrandoFinalizadas) {
             }
         }
 
-        function hacerPujaMínima() {
+                async function hacerPujaMínima() {
             if (!productoSeleccionado) return;
-            ejecutarPuja(Number(productoSeleccionado.current_price) + 50);
+            if (!currentUser) return abrirModalAuth('register');
+            if (productoSeleccionado.status === 'closed') return alert("Esta subasta ya ha finalizado.");
+            if (accionEnCurso) return;
+            accionEnCurso = true;
+
+            try {
+                // Primero hacemos la puja normal
+                await ejecutarPuja(Number(productoSeleccionado.current_price) + 50);
+
+                // Después incrementamos el contador de pujas mínimas de hoy
+                const { data: cuenta, error: errorCuenta } = await db.rpc('increment_min_bid');
+                if (errorCuenta) {
+                    console.error("Error contando puja mínima:", errorCuenta.message);
+                } else if (cuenta === 3) {
+                    // Al llegar a 3 pujas mínimas, recompensa automática
+                    marcarCambioPropio();
+                    const { data: nuevoSaldo, error: errorRecompensa } = await db.rpc('add_ad_reward'); // Usamos la misma función de recarga base (sin límite)
+                    if (!errorRecompensa) {
+                        currentUser.saldo = nuevoSaldo;
+                        actualizarInterfazUsuario();
+                        mostrarToast("🎯 ¡Misión completada: Gatillo Fácil! Has hecho 3 pujas mínimas hoy. +150 € extra.");
+                    } else {
+                        console.error("Error al dar recompensa:", errorRecompensa.message);
+                    }
+                } else if (cuenta === 1) {
+                    mostrarToast("🔫 Primera puja mínima del día. ¡A por las 3!");
+                } else if (cuenta === 2) {
+                    mostrarToast("🔫🔫 Segunda puja mínima. ¡Una más y premio!");
+                }
+            } finally {
+                accionEnCurso = false;
+            }
         }
 
         function hacerPujaPersonalizada() {
