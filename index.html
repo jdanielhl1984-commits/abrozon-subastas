@@ -165,8 +165,7 @@
         <div style="border-top:1px solid var(--border-color);margin:15px 0;padding-top:15px;">
             <h3>👤 Gestionar usuario</h3>
             <div style="display:flex;gap:8px;"><input type="text" id="adminBuscarAlias" placeholder="Alias"><button onclick="adminBuscarUsuario()">Buscar</button></div>
-                        <div id="adminUserResult"></div>
-
+            <div id="adminUserResult"></div>
             <hr style="border-color: var(--border-color); margin: 15px 0;">
             <button onclick="adminListarUsuarios()" style="background: var(--accent-blue); color:white; border:none; padding:10px 14px; border-radius:8px; font-weight:bold; cursor:pointer; width:100%;">📋 Ver todos los usuarios</button>
             <div id="adminUserList" style="margin-top: 10px; max-height: 300px; overflow-y: auto;"></div>
@@ -250,7 +249,7 @@ const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 let currentUser = null, productoSeleccionado = null, subastasLocales = [], timerInterval = null,
     profileChannel = null, profileChannelUserId = null, saldoCambioPropio = false, accionEnCurso = false,
     mostrandoFinalizadas = false, categoriaActiva = 'Todas', terminoBusqueda = '', fotosAdicionalesAdmin = [],
-    ultimaAccionPropiaTs = 0; // timestamp para evitar auto-notificación
+    ultimaAccionPropiaTs = 0;
 
 const ALL_ACHIEVEMENTS = [
     { key: 'first_bid', name: 'Primera Sangre', icon: '🩸', desc: 'Realiza tu primera puja' },
@@ -316,7 +315,6 @@ async function cargarPerfil(userId) {
                 const saldoAnt = currentUser.saldo;
                 currentUser.saldo = payload.new.saldo; currentUser.esGoat = payload.new.es_goat; currentUser.isAdmin = payload.new.is_admin;
                 actualizarInterfazUsuario();
-                // Ignorar notificación si fue acción propia o en los últimos 5 seg
                 if (saldoCambioPropio || (Date.now() - ultimaAccionPropiaTs < 5000)) return;
                 const diferencia = payload.new.saldo - saldoAnt;
                 if (diferencia > 0) mostrarToast(`💰 ¡Te han superado una puja! Se te han devuelto ${diferencia.toLocaleString('es-ES')} €.`);
@@ -714,7 +712,13 @@ async function adminBuscarUsuario() {
 }
 async function adminActualizarSaldo(alias) { const v = parseInt(document.getElementById('adminNuevoSaldo').value); if (isNaN(v)) return alert("Inválido"); await db.rpc('admin_set_saldo',{p_alias:alias,p_nuevo_saldo:v}); alert("Actualizado."); adminBuscarUsuario(); }
 async function adminToggleBan(alias) { await db.rpc('admin_toggle_ban',{p_alias:alias}); adminBuscarUsuario(); }
-    async function adminListarUsuarios() {
+function renderizarListaAdminSubastas() {
+    const box = document.getElementById('adminAuctionList'); box.innerHTML = '';
+    subastasLocales.forEach(p => { const row = document.createElement('div'); row.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px dashed var(--border-color);'; row.innerHTML = `<span>[${p.category||'General'}] ${p.title} ${p.status==='closed'?'(cerrada)':''}</span><button onclick="adminEliminarSubasta('${p.id}')" style="background:#ef4444;color:white;border:none;padding:5px 10px;border-radius:6px;font-weight:bold;">Eliminar</button>`; box.appendChild(row); });
+}
+async function adminEliminarSubasta(id) { if (!confirm("¿Seguro?")) return; await db.rpc('admin_delete_auction',{p_auction_id:id}); await cargarSubastas(); renderizarListaAdminSubastas(); }
+// NUEVA FUNCIÓN PARA LISTAR USUARIOS
+async function adminListarUsuarios() {
     const box = document.getElementById('adminUserList');
     box.innerHTML = 'Cargando...';
     const { data, error } = await db.rpc('admin_listar_usuarios');
@@ -741,11 +745,6 @@ async function adminToggleBan(alias) { await db.rpc('admin_toggle_ban',{p_alias:
     });
     box.innerHTML = html;
 }
-function renderizarListaAdminSubastas() {
-    const box = document.getElementById('adminAuctionList'); box.innerHTML = '';
-    subastasLocales.forEach(p => { const row = document.createElement('div'); row.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px dashed var(--border-color);'; row.innerHTML = `<span>[${p.category||'General'}] ${p.title} ${p.status==='closed'?'(cerrada)':''}</span><button onclick="adminEliminarSubasta('${p.id}')" style="background:#ef4444;color:white;border:none;padding:5px 10px;border-radius:6px;font-weight:bold;">Eliminar</button>`; box.appendChild(row); });
-}
-async function adminEliminarSubasta(id) { if (!confirm("¿Seguro?")) return; await db.rpc('admin_delete_auction',{p_auction_id:id}); await cargarSubastas(); renderizarListaAdminSubastas(); }
 
 function toggleAuthForm(mode) { document.getElementById('formLogin').style.display = mode==='login'?'block':'none'; document.getElementById('formRegister').style.display = mode==='register'?'block':'none'; }
 
