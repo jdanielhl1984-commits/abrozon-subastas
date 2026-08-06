@@ -165,7 +165,11 @@
         <div style="border-top:1px solid var(--border-color);margin:15px 0;padding-top:15px;">
             <h3>👤 Gestionar usuario</h3>
             <div style="display:flex;gap:8px;"><input type="text" id="adminBuscarAlias" placeholder="Alias"><button onclick="adminBuscarUsuario()">Buscar</button></div>
-            <div id="adminUserResult"></div>
+                        <div id="adminUserResult"></div>
+
+            <hr style="border-color: var(--border-color); margin: 15px 0;">
+            <button onclick="adminListarUsuarios()" style="background: var(--accent-blue); color:white; border:none; padding:10px 14px; border-radius:8px; font-weight:bold; cursor:pointer; width:100%;">📋 Ver todos los usuarios</button>
+            <div id="adminUserList" style="margin-top: 10px; max-height: 300px; overflow-y: auto;"></div>
         </div>
         <div style="border-top:1px solid var(--border-color);margin:15px 0;padding-top:15px;">
             <h3>📋 Subastas existentes</h3><div id="adminAuctionList" style="max-height:220px;overflow-y:auto;"></div>
