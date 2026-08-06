@@ -106,9 +106,17 @@
         .podium-spot.bronze { border: 2px solid #cd853f; order: 3; }
         .hof-list { display: flex; flex-direction: column; gap: 8px; }
         .hof-row { display: flex; justify-content: space-between; background: var(--bg-card); padding: 10px 14px; border-radius: 8px; border: 1px solid var(--border-color); }
-        .achievement-grid { display: flex; flex-wrap: wrap; gap: 10px; margin: 10px 0; }
-        .achievement-badge { background: var(--bg-subtle); border-radius: 8px; padding: 8px 12px; text-align: center; font-size: 0.8rem; border: 1px solid var(--border-color); display: flex; align-items: center; gap: 6px; }
-        .achievement-badge.locked { opacity: 0.5; filter: grayscale(1); }
+
+        /* NUEVOS ESTILOS PARA LA LISTA DE LOGROS */
+        .achievement-list { display: flex; flex-direction: column; gap: 10px; }
+        .achievement-row { display: flex; align-items: center; gap: 15px; padding: 14px 18px; border-radius: 12px; background: var(--bg-card); border: 1px solid var(--border-color); transition: all 0.2s; }
+        .achievement-row.locked { opacity: 0.5; filter: grayscale(1); }
+        .achievement-row.unlocked { background: linear-gradient(135deg, #fef9c3, #fef3c7); border-color: #eab308; box-shadow: 0 0 8px rgba(234,179,8,0.2); }
+        .achievement-icon { font-size: 2rem; width: 50px; text-align: center; flex-shrink: 0; }
+        .achievement-info { flex: 1; }
+        .achievement-name { font-weight: bold; margin-bottom: 2px; }
+        .achievement-desc { font-size: 0.8rem; color: var(--text-muted); }
+        .achievement-status { font-size: 0.8rem; font-weight: bold; }
         @media (max-width: 680px) {
             .search-bar { order: 3; flex-basis: 100%; max-width: none; margin-top: 6px; }
             header { padding: 10px 4%; gap: 8px; } .logo { font-size: 1.4rem; }
@@ -120,11 +128,13 @@
             .toast-abrozon { left: 12px; right: 12px; max-width: none; bottom: 12px; }
             .hof-podium { flex-direction: column; align-items: center; }
             .podium-spot.gold, .podium-spot.silver, .podium-spot.bronze { order: 0; transform: none; }
+            .achievement-row { flex-direction: column; align-items: flex-start; gap: 8px; }
+            .achievement-icon { font-size: 1.8rem; width: auto; }
         }
     </style>
 </head>
 <body>
-<!-- Modales (login, registro, recuperación, admin) -->
+<!-- Modales (login, registro, recuperación, admin) sin cambios -->
 <div id="authModal" class="auth-modal-overlay" style="display:none;">
     <div class="auth-card">
         <button class="btn-close-modal" onclick="cerrarModalAuth()">✕</button>
@@ -233,7 +243,12 @@
         <div class="product-card-detail"><h2 style="font-size:1.1rem;color:#ef4444;">⚠️ Zona de baja</h2><p style="color:var(--text-muted);">Contacta para eliminar tu cuenta.</p><button onclick="solicitarBajaCuenta()" style="background:#ef4444;color:white;border:none;padding:10px;border-radius:8px;font-weight:bold;cursor:pointer;width:100%;">Solicitar baja</button></div>
     </div>
     <div id="viewMisiones" class="view"><button class="btn-back" onclick="mostrarCatalogo()">← Volver al Catálogo</button><h2 style="margin-bottom:20px;">🎯 Misiones</h2><div id="misionesContainer"></div></div>
-    <div id="viewLogros" class="view"><button class="btn-back" onclick="mostrarCatalogo()">← Volver al Catálogo</button><h2 style="margin-bottom:20px;">🏅 Todos los Logros</h2><div id="logrosContainer" class="achievement-grid">Cargando...</div></div>
+    <!-- NUEVA VISTA DE LOGROS EN LISTA -->
+    <div id="viewLogros" class="view">
+        <button class="btn-back" onclick="mostrarCatalogo()">← Volver al Catálogo</button>
+        <h2 style="margin-bottom:20px;">🏅 Todos los Logros</h2>
+        <div id="logrosContainer" class="achievement-list">Cargando...</div>
+    </div>
     <div id="viewHallOfFame" class="view"><button class="btn-back" onclick="mostrarCatalogo()">← Volver al Catálogo</button><h2 style="margin-bottom:20px;">🌟 Hall of Fame</h2><div id="hofContainer">Cargando rankings...</div></div>
     <div id="viewLegal" class="view"><button class="btn-back" onclick="mostrarCatalogo()">← Volver al Catálogo</button><div class="product-card-detail" style="margin-bottom:20px;"><h2 style="color:var(--accent-blue);">Aviso Legal</h2><p style="color:var(--text-muted);line-height:1.7;font-size:0.9rem;"><strong>Titular:</strong> Daniel Hernandez<br><strong>Contacto:</strong> abrozonsubastas@gmail.com<br><br>aBROzon.subastas es una plataforma de entretenimiento y parodia.</p></div><div class="product-card-detail" style="margin-bottom:20px;"><h2 style="color:var(--accent-blue);">Política de Privacidad</h2><p style="color:var(--text-muted);line-height:1.7;font-size:0.9rem;">Recogemos email, alias, saldo ficticio e historial de pujas.</p></div><div class="product-card-detail"><h2 style="color:var(--accent-blue);">Política de Cookies</h2><p style="color:var(--text-muted);line-height:1.7;font-size:0.9rem;">Solo cookies técnicas necesarias para la sesión.</p></div></div>
 </div>
@@ -462,6 +477,7 @@ async function cargarInsignias() {
     }).join('');
 }
 
+// NUEVA FUNCIÓN PARA CARGAR LOGROS EN LISTA
 async function cargarLogros() {
     if (!currentUser) return;
     const container = document.getElementById('logrosContainer');
@@ -471,7 +487,15 @@ async function cargarLogros() {
     const unlockedKeys = unlocked.map(u => u.achievement_key);
     container.innerHTML = ALL_ACHIEVEMENTS.map(a => {
         const isUnlocked = unlockedKeys.includes(a.key);
-        return `<div class="achievement-badge ${isUnlocked ? '' : 'locked'}" title="${a.desc}"><span>${a.icon}</span> ${a.name}</div>`;
+        return `
+        <div class="achievement-row ${isUnlocked ? 'unlocked' : 'locked'}">
+            <div class="achievement-icon">${a.icon}</div>
+            <div class="achievement-info">
+                <div class="achievement-name">${a.name}</div>
+                <div class="achievement-desc">${a.desc}</div>
+            </div>
+            <div class="achievement-status">${isUnlocked ? '✅' : '🔒'}</div>
+        </div>`;
     }).join('');
 }
 
@@ -717,7 +741,6 @@ function renderizarListaAdminSubastas() {
     subastasLocales.forEach(p => { const row = document.createElement('div'); row.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px dashed var(--border-color);'; row.innerHTML = `<span>[${p.category||'General'}] ${p.title} ${p.status==='closed'?'(cerrada)':''}</span><button onclick="adminEliminarSubasta('${p.id}')" style="background:#ef4444;color:white;border:none;padding:5px 10px;border-radius:6px;font-weight:bold;">Eliminar</button>`; box.appendChild(row); });
 }
 async function adminEliminarSubasta(id) { if (!confirm("¿Seguro?")) return; await db.rpc('admin_delete_auction',{p_auction_id:id}); await cargarSubastas(); renderizarListaAdminSubastas(); }
-// NUEVA FUNCIÓN PARA LISTAR USUARIOS
 async function adminListarUsuarios() {
     const box = document.getElementById('adminUserList');
     box.innerHTML = 'Cargando...';
