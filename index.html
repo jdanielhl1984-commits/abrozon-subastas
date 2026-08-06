@@ -714,6 +714,33 @@ async function adminBuscarUsuario() {
 }
 async function adminActualizarSaldo(alias) { const v = parseInt(document.getElementById('adminNuevoSaldo').value); if (isNaN(v)) return alert("Inválido"); await db.rpc('admin_set_saldo',{p_alias:alias,p_nuevo_saldo:v}); alert("Actualizado."); adminBuscarUsuario(); }
 async function adminToggleBan(alias) { await db.rpc('admin_toggle_ban',{p_alias:alias}); adminBuscarUsuario(); }
+    async function adminListarUsuarios() {
+    const box = document.getElementById('adminUserList');
+    box.innerHTML = 'Cargando...';
+    const { data, error } = await db.rpc('admin_listar_usuarios');
+    if (error) {
+        box.innerHTML = `<p style="color:#ef4444;">Error: ${error.message}</p>`;
+        return;
+    }
+    if (!data || data.length === 0) {
+        box.innerHTML = '<p>No hay usuarios registrados.</p>';
+        return;
+    }
+
+    let html = '';
+    data.forEach(u => {
+        html += `
+        <div style="background: var(--bg-subtle); border-radius: 8px; padding: 8px 10px; margin-bottom: 6px; font-size: 0.8rem; display: flex; justify-content: space-between; align-items: center;">
+            <span><strong>${u.username}</strong> ${u.is_admin?'🛠️':''} ${u.es_goat?'🐐':''} ${u.is_banned?'🚫':''}</span>
+            <span style="color: var(--accent-green);">${Number(u.saldo).toLocaleString('es-ES')} €</span>
+            <div>
+                <button onclick="adminActualizarSaldo('${u.username}')" style="background: var(--accent-green); color:white; border:none; padding: 4px 8px; border-radius: 4px; font-size: 0.7rem; cursor:pointer;">💰</button>
+                <button onclick="adminToggleBan('${u.username}')" style="background: ${u.is_banned ? '#16a34a' : '#ef4444'}; color:white; border:none; padding: 4px 8px; border-radius: 4px; font-size: 0.7rem; cursor:pointer;">${u.is_banned ? '✅' : '🚫'}</button>
+            </div>
+        </div>`;
+    });
+    box.innerHTML = html;
+}
 function renderizarListaAdminSubastas() {
     const box = document.getElementById('adminAuctionList'); box.innerHTML = '';
     subastasLocales.forEach(p => { const row = document.createElement('div'); row.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px dashed var(--border-color);'; row.innerHTML = `<span>[${p.category||'General'}] ${p.title} ${p.status==='closed'?'(cerrada)':''}</span><button onclick="adminEliminarSubasta('${p.id}')" style="background:#ef4444;color:white;border:none;padding:5px 10px;border-radius:6px;font-weight:bold;">Eliminar</button>`; box.appendChild(row); });
