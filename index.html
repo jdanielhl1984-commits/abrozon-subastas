@@ -746,10 +746,12 @@ if (mostrandoFinalizadas) {
                 if (dias > 0) {
                     el.innerText = `⏳ ${dias}d ${horas}h`;
                 } else {
-                    el.innerText = `⏳ ${horas}h ${minutos}m ${segundos}s`;
-                }
+                                     el.innerText = `⏳ ${horas}h ${minutos}m ${segundos}s`;
+             }
+         });
+     }
 
-        async function abrirDetalle(id) {
+         async function abrirDetalle(id) {
             productoSeleccionado = subastasLocales.find(p => p.id === id);
             actualizarVistaDetalleDatoVivo();
             iniciarTemporizador(productoSeleccionado.ends_at);
@@ -817,11 +819,12 @@ if (mostrandoFinalizadas) {
                 const horas = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                 const minutos = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
                 const segundos = Math.floor((diff % (1000 * 60)) / 1000);
-                if (dias > 0) {
+                                if (dias > 0) {
                     timeBox.innerText = `⏳ Cierra en: ${dias}d ${horas}h ${minutos}m`;
                 } else {
                     timeBox.innerText = `⏳ Cierra en: ${horas}h ${minutos}m ${segundos}s`;
                 }
+            }  
 
             actualizar();
             timerInterval = setInterval(actualizar, 1000);
