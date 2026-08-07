@@ -26,9 +26,9 @@
         :root { --bg-body: #f8fafc; --bg-card: #ffffff; --bg-header: #ffffff; --bg-subtle: #f1f5f9; --text-main: #0f172a; --text-muted: #64748b; --border-color: #e2e8f0; --accent-blue: #0284c7; --accent-green: #16a34a; --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05); }
         body.dark-mode { --bg-body: #0f172a; --bg-card: #1e293b; --bg-header: #0f172a; --bg-subtle: #1e293b; --text-main: #f8fafc; --text-muted: #94a3b8; --border-color: #334155; --accent-blue: #38bdf8; --accent-green: #4ade80; --shadow-card: none; }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; transition: background-color 0.2s, color 0.2s, border-color 0.2s; }
-        body { background-color: var(--bg-body); color: var(--text-main); min-height: 100vh; overflow-x: hidden; }
+        body { background-color: var(--bg-body); color: var(--text-main); min-height: 100vh; }
         .disclaimer { background-color: var(--bg-subtle); color: var(--text-muted); text-align: center; padding: 8px; font-size: 0.8rem; border-bottom: 1px solid var(--border-color); }
-        header { background-color: var(--bg-header); padding: 12px 5%; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); gap: 12px; position: sticky; top: 0; z-index: 200; overflow-x: auto; white-space: nowrap; }
+        header { background-color: var(--bg-header); padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); gap: 15px; flex-wrap: wrap; position: sticky; top: 0; z-index: 200; }
         .logo { font-size: 1.8rem; font-weight: 900; color: var(--accent-blue); letter-spacing: -1px; cursor: pointer; } .logo span { color: #f97316; }
         .search-bar { flex: 1; max-width: 400px; min-width: 200px; display: flex; background: var(--bg-subtle); border-radius: 20px; border: 1px solid var(--border-color); overflow: hidden; }
         .search-bar input { width: 100%; background: transparent; border: none; padding: 10px 15px; color: var(--text-main); outline: none; font-size: 0.9rem; }
@@ -37,11 +37,6 @@
         .user-balance { background-color: var(--bg-subtle); padding: 8px 14px; border-radius: 20px; font-weight: bold; border: 1px solid var(--border-color); font-size: 0.85rem; }
         .balance-amount { color: var(--accent-green); }
         .btn-header { background: var(--bg-subtle); color: var(--text-main); border: 1px solid var(--border-color); padding: 8px 12px; border-radius: 20px; font-weight: bold; cursor: pointer; font-size: 0.85rem; }
-        .user-menu-wrapper { position: relative; }
-        .user-dropdown { position: absolute; top: 115%; right: 0; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 10px; box-shadow: 0 8px 20px rgba(0,0,0,0.15); min-width: 200px; z-index: 500; overflow: hidden; display: none; }
-        #goatDropdown { right: auto; left: 0; }
-        .dropdown-item { padding: 11px 14px; font-size: 0.85rem; color: var(--text-main); cursor: pointer; border-bottom: 1px solid var(--border-color); }
-        .dropdown-item:last-child { border-bottom: none; } .dropdown-item:hover { background: var(--bg-subtle); }
         .btn-goat { background: linear-gradient(135deg, #eab308, #ca8a04); color: #0f172a; border: none; padding: 8px 14px; border-radius: 20px; font-weight: 900; cursor: pointer; font-size: 0.85rem; opacity: 0.5; }
         .btn-goat.active { opacity: 1; box-shadow: 0 0 10px #eab308; }
         .btn-login { background: var(--accent-blue); color: white; border: none; padding: 8px 16px; border-radius: 20px; font-weight: bold; cursor: pointer; font-size: 0.85rem; }
@@ -126,9 +121,14 @@
         .achievement-name { font-weight: bold; margin-bottom: 2px; }
         .achievement-desc { font-size: 0.8rem; color: var(--text-muted); }
         .achievement-status { font-size: 0.8rem; font-weight: bold; }
+        .user-menu-wrapper { position: relative; }
+        .user-dropdown { position: absolute; top: 115%; right: 0; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 10px; box-shadow: 0 8px 20px rgba(0,0,0,0.15); min-width: 200px; z-index: 500; overflow: hidden; display: none; }
+        #goatDropdown { right: auto; left: 0; }
+        .dropdown-item { padding: 11px 14px; font-size: 0.85rem; color: var(--text-main); cursor: pointer; border-bottom: 1px solid var(--border-color); }
+        .dropdown-item:last-child { border-bottom: none; } .dropdown-item:hover { background: var(--bg-subtle); }
         @media (max-width: 680px) {
+            .search-bar { order: 3; flex-basis: 100%; max-width: none; margin-top: 6px; }
             header { padding: 10px 4%; gap: 8px; }
-            .search-bar { max-width: 160px; min-width: 120px; }
             .logo { font-size: 1.4rem; }
             .header-right { gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
             .btn-header, .btn-goat, .btn-login, .user-balance { font-size: 0.72rem; padding: 6px 9px; }
@@ -144,7 +144,6 @@
     </style>
 </head>
 <body>
-<!-- MODALES - Sin cambios -->
 <div id="authModal" class="auth-modal-overlay" style="display:none;">
     <div class="auth-card">
         <button class="btn-close-modal" onclick="cerrarModalAuth()">✕</button>
@@ -313,22 +312,8 @@ const ALL_ACHIEVEMENTS = [
     { key: 'joya', name: 'Joya', icon: '💎', desc: 'Reclama el bono diario 7 días seguidos' }
 ];
 
-const TITLES = {
-    1: 'Lurker / NPC',
-    5: 'Regular',
-    15: 'Curador',
-    30: 'Broker / Main Character',
-    50: 'Whale',
-    100: 'Final Boss / Admin'
-};
-
-function getTitleForLevel(level) {
-    let title = 'Lurker / NPC';
-    for (const [lvl, t] of Object.entries(TITLES)) {
-        if (level >= parseInt(lvl)) title = t;
-    }
-    return title;
-}
+const TITLES = { 1: 'Lurker / NPC', 5: 'Regular', 15: 'Curador', 30: 'Broker / Main Character', 50: 'Whale', 100: 'Final Boss / Admin' };
+function getTitleForLevel(level) { let title = 'Lurker / NPC'; for (const [lvl, t] of Object.entries(TITLES)) { if (level >= parseInt(lvl)) title = t; } return title; }
 
 function marcarCambioPropio() { saldoCambioPropio = true; ultimaAccionPropiaTs = Date.now(); setTimeout(() => { saldoCambioPropio = false; }, 5000); }
 
@@ -346,15 +331,8 @@ window.onload = async () => {
     await cargarCategorias();
     setInterval(actualizarTemporizadoresCatalogo, 1000);
     db.channel('public-db-changes')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'auctions' }, async (payload) => {
-          await cargarSubastas();
-          if (productoSeleccionado && payload.new && payload.new.id === productoSeleccionado.id) {
-              productoSeleccionado = payload.new; actualizarVistaDetalleDatoVivo();
-          }
-      })
-      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'bids' }, async (payload) => {
-          if (productoSeleccionado && payload.new.auction_id === productoSeleccionado.id) await cargarHistorialPujas(productoSeleccionado.id);
-      })
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'auctions' }, async (payload) => { await cargarSubastas(); if (productoSeleccionado && payload.new && payload.new.id === productoSeleccionado.id) { productoSeleccionado = payload.new; actualizarVistaDetalleDatoVivo(); } })
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'bids' }, async (payload) => { if (productoSeleccionado && payload.new.auction_id === productoSeleccionado.id) await cargarHistorialPujas(productoSeleccionado.id); })
       .subscribe();
 };
 
@@ -370,8 +348,7 @@ async function cargarPerfil(userId) {
                 if (!currentUser) return;
                 const saldoAnt = currentUser.saldo;
                 currentUser.saldo = payload.new.saldo; currentUser.esGoat = payload.new.es_goat; currentUser.isAdmin = payload.new.is_admin;
-                currentUser.xp = payload.new.xp || 0;
-                currentUser.level = payload.new.level || 1;
+                currentUser.xp = payload.new.xp || 0; currentUser.level = payload.new.level || 1;
                 actualizarInterfazUsuario();
                 if (saldoCambioPropio || (Date.now() - ultimaAccionPropiaTs < 5000)) return;
                 const diferencia = payload.new.saldo - saldoAnt;
@@ -380,56 +357,23 @@ async function cargarPerfil(userId) {
     }
 }
 
-function mostrarToast(msg) {
-    let stack = document.getElementById('toastStack');
-    if (!stack) {
-        stack = document.createElement('div');
-        stack.id = 'toastStack';
-        stack.className = 'toast-stack';
-        document.body.appendChild(stack);
-    }
-    const t = document.createElement('div');
-    t.className = 'toast-abrozon';
-    t.innerText = msg;
-    stack.appendChild(t);
-    setTimeout(() => {
-        t.classList.add('toast-out');
-        setTimeout(() => t.remove(), 300);
-    }, 4000);
-}
+function mostrarToast(msg) { let stack = document.getElementById('toastStack'); if (!stack) { stack = document.createElement('div'); stack.id = 'toastStack'; stack.className = 'toast-stack'; document.body.appendChild(stack); } const t = document.createElement('div'); t.className = 'toast-abrozon'; t.innerText = msg; stack.appendChild(t); setTimeout(() => { t.classList.add('toast-out'); setTimeout(() => t.remove(), 300); }, 4000); }
 
-async function addXp(cantidad) {
-    if (!currentUser) return;
-    const { data, error } = await db.rpc('add_xp', { p_xp: cantidad });
-    if (error) {
-        console.error("Error sumando XP:", error.message);
-        return;
-    }
-    await cargarPerfil(currentUser.id);
-    actualizarInterfazUsuario();
-    mostrarToast(`✨ +${cantidad} XP`);
-}
+async function addXp(cantidad) { if (!currentUser) return; const { data, error } = await db.rpc('add_xp', { p_xp: cantidad }); if (error) { console.error("Error sumando XP:", error.message); return; } await cargarPerfil(currentUser.id); actualizarInterfazUsuario(); mostrarToast(`✨ +${cantidad} XP`); }
 
 function updateXpUI() {
-    if (!currentUser) return;
-    const nivel = currentUser.level;
-    const xp = currentUser.xp;
-    const xpParaSiguienteNivel = Math.pow(nivel, 2) * 100;
-    const xpNivelAnterior = Math.pow(nivel - 1, 2) * 100;
+    if (!currentUser) return; const nivel = currentUser.level; const xp = currentUser.xp;
+    const xpParaSiguienteNivel = Math.pow(nivel, 2) * 100; const xpNivelAnterior = Math.pow(nivel - 1, 2) * 100;
     const progreso = ((xp - xpNivelAnterior) / (xpParaSiguienteNivel - xpNivelAnterior)) * 100;
-    document.getElementById('userLevel').innerText = nivel;
-    document.getElementById('userTitle').innerText = getTitleForLevel(nivel);
+    document.getElementById('userLevel').innerText = nivel; document.getElementById('userTitle').innerText = getTitleForLevel(nivel);
     document.getElementById('xpFill').style.width = `${Math.min(progreso, 100)}%`;
-    document.getElementById('perfilNivel').innerText = nivel;
-    document.getElementById('perfilTitulo').innerText = getTitleForLevel(nivel);
-    document.getElementById('perfilXp').innerText = xp;
-    document.getElementById('perfilXpFill').style.width = `${Math.min(progreso, 100)}%`;
+    document.getElementById('perfilNivel').innerText = nivel; document.getElementById('perfilTitulo').innerText = getTitleForLevel(nivel);
+    document.getElementById('perfilXp').innerText = xp; document.getElementById('perfilXpFill').style.width = `${Math.min(progreso, 100)}%`;
 }
 
 function actualizarInterfazUsuario() {
     if (currentUser) {
-        document.getElementById('boxBalance').style.display = 'block';
-        document.getElementById('btnLoginHeader').style.display = 'none';
+        document.getElementById('boxBalance').style.display = 'block'; document.getElementById('btnLoginHeader').style.display = 'none';
         document.getElementById('userMenuWrapper').style.display = 'block';
         document.getElementById('goatMenuWrapper').style.display = 'block';
         document.getElementById('dropdownAdmin').style.display = currentUser.isAdmin ? 'block' : 'none';
@@ -439,540 +383,106 @@ function actualizarInterfazUsuario() {
         if (currentUser.esGoat) {
             document.getElementById('btnGoat').classList.add('active');
             document.getElementById('goatCommentContainer').style.display = 'block';
-            document.getElementById('btnAd').style.display = 'none';
             document.getElementById('goatItemActivar').style.display = 'none';
             document.getElementById('goatItemRecargar').style.display = 'block';
             document.getElementById('goatItemDesactivar').style.display = 'block';
         } else {
             document.getElementById('btnGoat').classList.remove('active');
             document.getElementById('goatCommentContainer').style.display = 'none';
-            document.getElementById('btnAd').style.display = 'block'; document.getElementById('btnAd').innerText = '🎬 +500 € (anuncio)';
             document.getElementById('goatItemActivar').style.display = 'block';
             document.getElementById('goatItemRecargar').style.display = 'none';
             document.getElementById('goatItemDesactivar').style.display = 'none';
         }
         actualizarFormularioPerfil();
     } else {
-        document.getElementById('boxBalance').style.display = 'none';
-        document.getElementById('btnLoginHeader').style.display = 'block';
+        document.getElementById('boxBalance').style.display = 'none'; document.getElementById('btnLoginHeader').style.display = 'block';
         document.getElementById('userMenuWrapper').style.display = 'none';
         document.getElementById('goatMenuWrapper').style.display = 'none';
     }
 }
 
 // ===== CATEGORÍAS =====
-async function cargarCategorias() {
-    const { data, error } = await db.from('categories').select('*').order('name');
-    if (!error) categorias = data || [];
-    renderizarDropdownCategorias();
-    actualizarSelectorCategoriasAdmin();
-}
-
-function renderizarDropdownCategorias() {
-    const menu = document.getElementById('catDropdown');
-    if (!menu) return;
-    menu.innerHTML = categorias.map(c => `
-        <div class="dropdown-item" onclick="filtrarCategoria('${c.name}'); cerrarCatDropdown();">${c.icon} ${c.name}</div>
-    `).join('');
-}
-
-function actualizarSelectorCategoriasAdmin() {
-    const select = document.getElementById('adminCategoria');
-    if (!select) return;
-    select.innerHTML = categorias.map(c => `<option value="${c.name}">${c.icon} ${c.name}</option>`).join('');
-}
-
-function toggleCatDropdown() {
-    const menu = document.getElementById('catDropdown');
-    menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
-}
+async function cargarCategorias() { const { data, error } = await db.from('categories').select('*').order('name'); if (!error) categorias = data || []; renderizarDropdownCategorias(); actualizarSelectorCategoriasAdmin(); }
+function renderizarDropdownCategorias() { const menu = document.getElementById('catDropdown'); if (!menu) return; menu.innerHTML = categorias.map(c => `<div class="dropdown-item" onclick="filtrarCategoria('${c.name}'); cerrarCatDropdown();">${c.icon} ${c.name}</div>`).join(''); }
+function actualizarSelectorCategoriasAdmin() { const select = document.getElementById('adminCategoria'); if (!select) return; select.innerHTML = categorias.map(c => `<option value="${c.name}">${c.icon} ${c.name}</option>`).join(''); }
+function toggleCatDropdown() { const menu = document.getElementById('catDropdown'); menu.style.display = menu.style.display === 'block' ? 'none' : 'block'; }
 function cerrarCatDropdown() { document.getElementById('catDropdown').style.display = 'none'; }
-document.addEventListener('click', (e) => {
-    const wrapper = document.getElementById('catDropdownWrapper');
-    if (wrapper && !wrapper.contains(e.target)) cerrarCatDropdown();
-});
+document.addEventListener('click', (e) => { const wrapper = document.getElementById('catDropdownWrapper'); if (wrapper && !wrapper.contains(e.target)) cerrarCatDropdown(); });
 
 // ===== CATÁLOGO =====
-async function cargarSubastas() {
-    let { data: auctions } = await db.from('auctions').select('*').order('ends_at', { ascending: true }); subastasLocales = auctions || [];
-    let cierres = false;
-    for (let p of subastasLocales) if (p.status !== 'closed' && new Date(p.ends_at) <= Date.now()) { await db.rpc('check_and_close_auction',{p_auction_id:p.id}); cierres = true; }
-    if (cierres) { let { data: a2 } = await db.from('auctions').select('*'); subastasLocales = a2 || []; }
-    renderizarCatalogo();
-}
-
+async function cargarSubastas() { let { data: auctions } = await db.from('auctions').select('*').order('ends_at', { ascending: true }); subastasLocales = auctions || []; let cierres = false; for (let p of subastasLocales) if (p.status !== 'closed' && new Date(p.ends_at) <= Date.now()) { await db.rpc('check_and_close_auction',{p_auction_id:p.id}); cierres = true; } if (cierres) { let { data: a2 } = await db.from('auctions').select('*').order('ends_at', { ascending: true }); subastasLocales = a2 || []; } renderizarCatalogo(); }
 function renderizarImagenProducto(v) { v=(v||'').trim(); if(/^https?:\/\//i.test(v)) return `<img src="${v}" style="display:block;width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML='<span>🖼️</span>';">`; return `<span>${v||'📦'}</span>`; }
-
-async function subirFotoAdmin(e) {
-    const files = Array.from(e.target.files||[]); if(!files.length) return;
-    const preview = document.getElementById('adminImagePreview'); preview.innerText = `⏳ Subiendo ${files.length} foto(s)...`;
-    const urls = [];
-    for (const f of files) {
-        const name = `${Date.now()}-${Math.random().toString(36).slice(2)}-${f.name.replace(/[^a-zA-Z0-9._-]/g,'_')}`;
-        const { error } = await db.storage.from('lotes').upload(name, f);
-        if (error) { preview.innerText = ''; return alert("Error: "+error.message); }
-        const { data } = db.storage.from('lotes').getPublicUrl(name); urls.push(data.publicUrl);
-    }
-    document.getElementById('adminImage').value = urls[0]; fotosAdicionalesAdmin = urls.slice(1);
-    preview.innerHTML = `✅ ${urls.length} foto(s) subida(s):<br>` + urls.map(u => `<img src="${u}" style="width:70px;height:70px;object-fit:cover;border-radius:6px;margin:4px;">`).join('');
-}
-
-function filtrarCategoria(cat) {
-    mostrandoFinalizadas = false; categoriaActiva = cat;
-    document.querySelectorAll('.categories-nav .nav-tab').forEach(t => t.classList.remove('active'));
-    ocultarTodasVistas(); document.getElementById('viewCatalog').classList.add('active'); renderizarCatalogo();
-}
-function mostrarFinalizadas() {
-    mostrandoFinalizadas = true;
-    document.querySelectorAll('.categories-nav .nav-tab').forEach(t => t.classList.remove('active'));
-    document.getElementById('tabFinalizadas').classList.add('active');
-    ocultarTodasVistas(); document.getElementById('viewCatalog').classList.add('active');
-    document.getElementById('searchInput').value = ''; terminoBusqueda = ''; renderizarCatalogo();
-}
+async function subirFotoAdmin(e) { const files = Array.from(e.target.files||[]); if(!files.length) return; const preview = document.getElementById('adminImagePreview'); preview.innerText = `⏳ Subiendo ${files.length} foto(s)...`; const urls = []; for (const f of files) { const name = `${Date.now()}-${Math.random().toString(36).slice(2)}-${f.name.replace(/[^a-zA-Z0-9._-]/g,'_')}`; const { error } = await db.storage.from('lotes').upload(name, f); if (error) { preview.innerText = ''; return alert("Error: "+error.message); } const { data } = db.storage.from('lotes').getPublicUrl(name); urls.push(data.publicUrl); } document.getElementById('adminImage').value = urls[0]; fotosAdicionalesAdmin = urls.slice(1); preview.innerHTML = `✅ ${urls.length} foto(s) subida(s):<br>` + urls.map(u => `<img src="${u}" style="width:70px;height:70px;object-fit:cover;border-radius:6px;margin:4px;">`).join(''); }
+function filtrarCategoria(cat) { mostrandoFinalizadas = false; categoriaActiva = cat; document.querySelectorAll('.categories-nav .nav-tab').forEach(t => t.classList.remove('active')); ocultarTodasVistas(); document.getElementById('viewCatalog').classList.add('active'); renderizarCatalogo(); }
+function mostrarFinalizadas() { mostrandoFinalizadas = true; document.querySelectorAll('.categories-nav .nav-tab').forEach(t => t.classList.remove('active')); document.getElementById('tabFinalizadas').classList.add('active'); ocultarTodasVistas(); document.getElementById('viewCatalog').classList.add('active'); document.getElementById('searchInput').value = ''; terminoBusqueda = ''; renderizarCatalogo(); }
 function buscarEnCatalogo(texto) { terminoBusqueda = (texto||'').trim().toLowerCase(); ocultarTodasVistas(); document.getElementById('viewCatalog').classList.add('active'); renderizarCatalogo(); }
-
-function renderizarCatalogo() {
-    const grid = document.getElementById('catalogGrid'); grid.innerHTML = '';
-    let lista = subastasLocales;
-    if (mostrandoFinalizadas) lista = lista.filter(p => p.status === 'closed');
-    else { lista = lista.filter(p => p.status !== 'closed'); if (categoriaActiva !== 'Todas') lista = lista.filter(p => p.category === categoriaActiva); }
-    if (terminoBusqueda) lista = lista.filter(p => (p.title||'').toLowerCase().includes(terminoBusqueda) || (p.description||'').toLowerCase().includes(terminoBusqueda));
-    if (!lista.length) { grid.innerHTML = '<div>No hay subastas.</div>'; return; }
-    lista.forEach(p => {
-        const card = document.createElement('div'); card.className = 'auction-card'; card.onclick = () => abrirDetalle(p.id);
-        const cerrada = p.status === 'closed';
-        card.innerHTML = `<div class="card-image">${renderizarImagenProducto(p.image_url)}${cerrada ? '<div class="badge-closed">FINALIZADA</div>' : `<div class="card-timer" id="cardTimer-${p.id}">⏳ ...</div>`}</div><div class="card-content"><div class="card-category">${p.category||'General'}${cerrada?' · Adjudicado':''}</div><div class="card-title">${p.title}</div><div class="card-footer"><div><div class="bid-label-sm">${cerrada?'Precio Final':'Puja Actual'}</div><div class="bid-amount-sm">${Number(p.current_price).toLocaleString('es-ES')} €</div></div></div></div>`;
-        grid.appendChild(card);
-    });
-    actualizarTemporizadoresCatalogo();
-}
-
-function actualizarTemporizadoresCatalogo() {
-    subastasLocales.forEach(p => {
-        if (p.status === 'closed') return;
-        const el = document.getElementById('cardTimer-'+p.id); if (!el) return;
-        const diff = new Date(p.ends_at)-Date.now();
-        if (diff <= 0) { el.innerText = '⏳ Cerrando...'; return; }
-        const d = Math.floor(diff/86400000), h = Math.floor((diff%86400000)/3600000), m = Math.floor((diff%3600000)/60000), s = Math.floor((diff%60000)/1000);
-        el.innerText = d>0 ? `⏳ ${d}d ${h}h` : `⏳ ${h}h ${m}m ${s}s`;
-    });
-}
-
-async function abrirDetalle(id) {
-    productoSeleccionado = subastasLocales.find(p => p.id === id);
-    actualizarVistaDetalleDatoVivo(); iniciarTemporizador(productoSeleccionado.ends_at); await cargarHistorialPujas(id);
-    ocultarTodasVistas(); document.getElementById('viewDetail').classList.add('active');
-}
-
-function actualizarVistaDetalleDatoVivo() {
-    if (!productoSeleccionado) return;
-    document.getElementById('detailImage').innerHTML = renderizarImagenProducto(productoSeleccionado.image_url);
-    document.getElementById('detailCategory').innerText = productoSeleccionado.category||'General';
-    document.getElementById('detailTitle').innerText = productoSeleccionado.title;
-    document.getElementById('detailDescription').innerText = productoSeleccionado.description;
-    document.getElementById('detailBid').innerText = Number(productoSeleccionado.current_price).toLocaleString('es-ES') + ' €';
-    const gal = document.getElementById('detailGallery');
-    const fotos = [productoSeleccionado.image_url, ...(productoSeleccionado.images||[])].filter(u => u && /^https?:\/\//i.test(u));
-    gal.innerHTML = fotos.length>1 ? fotos.map(u => `<img src="${u}" onclick="cambiarFotoPrincipal(this.src)" style="width:60px;height:60px;object-fit:cover;border-radius:8px;cursor:pointer;border:2px solid var(--border-color);">`).join('') : '';
-    document.getElementById('biddingControlsContainer').style.display = productoSeleccionado.status === 'closed' ? 'none' : 'block';
-    if (productoSeleccionado.status === 'closed') document.getElementById('detailTime').innerText = `🏆 Finalizada. Ganador: ${productoSeleccionado.winner||'Nadie'}`;
-}
-
+function renderizarCatalogo() { const grid = document.getElementById('catalogGrid'); grid.innerHTML = ''; let lista = subastasLocales; if (mostrandoFinalizadas) lista = lista.filter(p => p.status === 'closed'); else { lista = lista.filter(p => p.status !== 'closed'); if (categoriaActiva !== 'Todas') lista = lista.filter(p => p.category === categoriaActiva); } if (terminoBusqueda) lista = lista.filter(p => (p.title||'').toLowerCase().includes(terminoBusqueda) || (p.description||'').toLowerCase().includes(terminoBusqueda)); if (!lista.length) { grid.innerHTML = '<div>No hay subastas.</div>'; return; } lista.forEach(p => { const card = document.createElement('div'); card.className = 'auction-card'; card.onclick = () => abrirDetalle(p.id); const cerrada = p.status === 'closed'; card.innerHTML = `<div class="card-image">${renderizarImagenProducto(p.image_url)}${cerrada ? '<div class="badge-closed">FINALIZADA</div>' : `<div class="card-timer" id="cardTimer-${p.id}">⏳ ...</div>`}</div><div class="card-content"><div class="card-category">${p.category||'General'}${cerrada?' · Adjudicado':''}</div><div class="card-title">${p.title}</div><div class="card-footer"><div><div class="bid-label-sm">${cerrada?'Precio Final':'Puja Actual'}</div><div class="bid-amount-sm">${Number(p.current_price).toLocaleString('es-ES')} €</div></div></div></div>`; grid.appendChild(card); }); actualizarTemporizadoresCatalogo(); }
+function actualizarTemporizadoresCatalogo() { subastasLocales.forEach(p => { if (p.status === 'closed') return; const el = document.getElementById('cardTimer-'+p.id); if (!el) return; const diff = new Date(p.ends_at)-Date.now(); if (diff <= 0) { el.innerText = '⏳ Cerrando...'; return; } const d = Math.floor(diff/86400000), h = Math.floor((diff%86400000)/3600000), m = Math.floor((diff%3600000)/60000), s = Math.floor((diff%60000)/1000); el.innerText = d>0 ? `⏳ ${d}d ${h}h` : `⏳ ${h}h ${m}m ${s}s`; }); }
+async function abrirDetalle(id) { productoSeleccionado = subastasLocales.find(p => p.id === id); actualizarVistaDetalleDatoVivo(); iniciarTemporizador(productoSeleccionado.ends_at); await cargarHistorialPujas(id); ocultarTodasVistas(); document.getElementById('viewDetail').classList.add('active'); }
+function actualizarVistaDetalleDatoVivo() { if (!productoSeleccionado) return; document.getElementById('detailImage').innerHTML = renderizarImagenProducto(productoSeleccionado.image_url); document.getElementById('detailCategory').innerText = productoSeleccionado.category||'General'; document.getElementById('detailTitle').innerText = productoSeleccionado.title; document.getElementById('detailDescription').innerText = productoSeleccionado.description; document.getElementById('detailBid').innerText = Number(productoSeleccionado.current_price).toLocaleString('es-ES') + ' €'; const gal = document.getElementById('detailGallery'); const fotos = [productoSeleccionado.image_url, ...(productoSeleccionado.images||[])].filter(u => u && /^https?:\/\//i.test(u)); gal.innerHTML = fotos.length>1 ? fotos.map(u => `<img src="${u}" onclick="cambiarFotoPrincipal(this.src)" style="width:60px;height:60px;object-fit:cover;border-radius:8px;cursor:pointer;border:2px solid var(--border-color);">`).join('') : ''; document.getElementById('biddingControlsContainer').style.display = productoSeleccionado.status === 'closed' ? 'none' : 'block'; if (productoSeleccionado.status === 'closed') document.getElementById('detailTime').innerText = `🏆 Finalizada. Ganador: ${productoSeleccionado.winner||'Nadie'}`; }
 function cambiarFotoPrincipal(url) { document.getElementById('detailImage').innerHTML = renderizarImagenProducto(url); }
-
-function iniciarTemporizador(fin) {
-    if (timerInterval) clearInterval(timerInterval);
-    const target = new Date(fin||Date.now()+86400000).getTime(), box = document.getElementById('detailTime');
-    function actualizar() {
-        if (productoSeleccionado && productoSeleccionado.status === 'closed') return;
-        const diff = target - Date.now();
-        if (diff <= 0) { box.innerText = "⏳ Subasta Finalizada"; clearInterval(timerInterval); cargarSubastas(); return; }
-        const d = Math.floor(diff/86400000), h = Math.floor((diff%86400000)/3600000), m = Math.floor((diff%3600000)/60000), s = Math.floor((diff%60000)/1000);
-        box.innerText = d>0 ? `⏳ Cierra en: ${d}d ${h}h ${m}m` : `⏳ Cierra en: ${h}h ${m}m ${s}s`;
-    }
-    actualizar(); timerInterval = setInterval(actualizar, 1000);
-}
-
-async function cargarHistorialPujas(id) {
-    const history = document.getElementById('historyList');
-    const { data: bids } = await db.from('bids').select('*').eq('auction_id', id).order('created_at', { ascending: false });
-    history.innerHTML = bids && bids.length ? '' : '<div style="font-size:0.8rem;color:var(--text-muted);">Sin pujas aún.</div>';
-    if (bids) bids.forEach(b => {
-        const div = document.createElement('div'); div.className = 'history-item';
-        div.innerHTML = `<div style="display:flex;justify-content:space-between;"><div><span style="color:var(--accent-blue);font-weight:bold;">${b.user_name||'Anónimo'}</span>${b.comment?`<div style="font-size:0.75rem;color:#eab308;">"${b.comment}"</div>`:''}</div><span style="font-weight:bold;">${Number(b.amount).toLocaleString('es-ES')} €</span></div>`;
-        history.appendChild(div);
-    });
-}
-
+function iniciarTemporizador(fin) { if (timerInterval) clearInterval(timerInterval); const target = new Date(fin||Date.now()+86400000).getTime(), box = document.getElementById('detailTime'); function actualizar() { if (productoSeleccionado && productoSeleccionado.status === 'closed') return; const diff = target - Date.now(); if (diff <= 0) { box.innerText = "⏳ Subasta Finalizada"; clearInterval(timerInterval); cargarSubastas(); return; } const d = Math.floor(diff/86400000), h = Math.floor((diff%86400000)/3600000), m = Math.floor((diff%3600000)/60000), s = Math.floor((diff%60000)/1000); box.innerText = d>0 ? `⏳ Cierra en: ${d}d ${h}h ${m}m` : `⏳ Cierra en: ${h}h ${m}m ${s}s`; } actualizar(); timerInterval = setInterval(actualizar, 1000); }
+async function cargarHistorialPujas(id) { const history = document.getElementById('historyList'); const { data: bids } = await db.from('bids').select('*').eq('auction_id', id).order('created_at', { ascending: false }); history.innerHTML = bids && bids.length ? '' : '<div style="font-size:0.8rem;color:var(--text-muted);">Sin pujas aún.</div>'; if (bids) bids.forEach(b => { const div = document.createElement('div'); div.className = 'history-item'; div.innerHTML = `<div style="display:flex;justify-content:space-between;"><div><span style="color:var(--accent-blue);font-weight:bold;">${b.user_name||'Anónimo'}</span>${b.comment?`<div style="font-size:0.75rem;color:#eab308;">"${b.comment}"</div>`:''}</div><span style="font-weight:bold;">${Number(b.amount).toLocaleString('es-ES')} €</span></div>`; history.appendChild(div); }); }
 // ===== LOGROS =====
-async function tryUnlockAchievement(key) {
-    if (!currentUser) return;
-    const { data, error } = await db.rpc('unlock_achievement', { p_key: key });
-    if (!error && data === true) {
-        const achievement = ALL_ACHIEVEMENTS.find(a => a.key === key);
-        if (achievement) mostrarToast(`🏅 ¡Nueva insignia: ${achievement.icon} ${achievement.name}!`);
-        if (document.getElementById('viewLogros').classList.contains('active')) cargarLogros();
-        if (document.getElementById('viewPerfil').classList.contains('active')) cargarInsignias();
-    }
-}
-
-async function cargarInsignias() {
-    if (!currentUser) return;
-    const container = document.getElementById('achievementsContainer');
-    if (!container) return;
-    const { data: unlocked, error } = await db.from('user_achievements').select('achievement_key').eq('user_id', currentUser.id);
-    if (error) { container.innerHTML = '<span>Error</span>'; return; }
-    const unlockedKeys = unlocked.map(u => u.achievement_key);
-    container.innerHTML = ALL_ACHIEVEMENTS.map(a => {
-        const isUnlocked = unlockedKeys.includes(a.key);
-        return `<div class="achievement-badge ${isUnlocked ? '' : 'locked'}" title="${a.desc}"><span>${a.icon}</span> ${a.name}</div>`;
-    }).join('');
-}
-
-async function cargarLogros() {
-    if (!currentUser) return;
-    const container = document.getElementById('logrosContainer');
-    if (!container) return;
-    const { data: unlocked, error } = await db.from('user_achievements').select('achievement_key').eq('user_id', currentUser.id);
-    if (error) { container.innerHTML = '<span>Error al cargar logros</span>'; return; }
-    const unlockedKeys = unlocked.map(u => u.achievement_key);
-    container.innerHTML = ALL_ACHIEVEMENTS.map(a => {
-        const isUnlocked = unlockedKeys.includes(a.key);
-        return `
-        <div class="achievement-row ${isUnlocked ? 'unlocked' : 'locked'}">
-            <div class="achievement-icon">${a.icon}</div>
-            <div class="achievement-info">
-                <div class="achievement-name">${a.name}</div>
-                <div class="achievement-desc">${a.desc}</div>
-            </div>
-            <div class="achievement-status">${isUnlocked ? '✅' : '🔒'}</div>
-        </div>`;
-    }).join('');
-}
-
-async function mostrarLogros() {
-    if (!currentUser) return abrirModalAuth('register');
-    ocultarTodasVistas();
-    document.getElementById('viewLogros').classList.add('active');
-    document.querySelectorAll('.categories-nav .nav-tab').forEach(t => t.classList.remove('active'));
-    document.getElementById('tabLogros').classList.add('active');
-    await cargarLogros();
-}
-
+async function tryUnlockAchievement(key) { if (!currentUser) return; const { data, error } = await db.rpc('unlock_achievement', { p_key: key }); if (!error && data === true) { const achievement = ALL_ACHIEVEMENTS.find(a => a.key === key); if (achievement) mostrarToast(`🏅 ¡Nueva insignia: ${achievement.icon} ${achievement.name}!`); if (document.getElementById('viewLogros').classList.contains('active')) cargarLogros(); if (document.getElementById('viewPerfil').classList.contains('active')) cargarInsignias(); } }
+async function cargarInsignias() { if (!currentUser) return; const container = document.getElementById('achievementsContainer'); if (!container) return; const { data: unlocked, error } = await db.from('user_achievements').select('achievement_key').eq('user_id', currentUser.id); if (error) { container.innerHTML = '<span>Error</span>'; return; } const unlockedKeys = unlocked.map(u => u.achievement_key); container.innerHTML = ALL_ACHIEVEMENTS.map(a => { const isUnlocked = unlockedKeys.includes(a.key); return `<div class="achievement-badge ${isUnlocked ? '' : 'locked'}" title="${a.desc}"><span>${a.icon}</span> ${a.name}</div>`; }).join(''); }
+async function cargarLogros() { if (!currentUser) return; const container = document.getElementById('logrosContainer'); if (!container) return; const { data: unlocked, error } = await db.from('user_achievements').select('achievement_key').eq('user_id', currentUser.id); if (error) { container.innerHTML = '<span>Error al cargar logros</span>'; return; } const unlockedKeys = unlocked.map(u => u.achievement_key); container.innerHTML = ALL_ACHIEVEMENTS.map(a => { const isUnlocked = unlockedKeys.includes(a.key); return `<div class="achievement-row ${isUnlocked ? 'unlocked' : 'locked'}"><div class="achievement-icon">${a.icon}</div><div class="achievement-info"><div class="achievement-name">${a.name}</div><div class="achievement-desc">${a.desc}</div></div><div class="achievement-status">${isUnlocked ? '✅' : '🔒'}</div></div>`; }).join(''); }
+async function mostrarLogros() { if (!currentUser) return abrirModalAuth('register'); ocultarTodasVistas(); document.getElementById('viewLogros').classList.add('active'); document.querySelectorAll('.categories-nav .nav-tab').forEach(t => t.classList.remove('active')); document.getElementById('tabLogros').classList.add('active'); await cargarLogros(); }
 // ===== PUJAS =====
-async function ejecutarPuja(total) {
-    if (!currentUser) return abrirModalAuth('register');
-    if (productoSeleccionado.status === 'closed') return alert("Finalizada.");
-    if (accionEnCurso) return;
-    accionEnCurso = true;
-    try {
-        let comment = null;
-        if (currentUser.esGoat) { const ci = document.getElementById('goatCommentInput'); comment = ci ? ci.value.trim() : ''; if (ci) ci.value = ''; }
-        marcarCambioPropio();
-        const { error } = await db.rpc('place_bid', { p_auction_id: productoSeleccionado.id, p_amount: total, p_comment: comment });
-        if (error) {
-            if (error.message && error.message.includes('saldo')) tryUnlockAchievement('delulu');
-            return alert("⚠️ " + error.message);
-        }
-        await cargarPerfil(currentUser.id);
-        productoSeleccionado.current_price = total;
-        actualizarInterfazUsuario();
-        addXp(10);
-        tryUnlockAchievement('first_bid');
-        const tiempoRestante = new Date(productoSeleccionado.ends_at) - Date.now();
-        if (tiempoRestante > 0 && tiempoRestante < 30000) tryUnlockAchievement('sniper');
-        if (currentUser.saldo < 10) tryUnlockAchievement('bancarrota');
-        if (currentUser.saldo >= 1000000) tryUnlockAchievement('liquidez');
-        if (currentUser.saldo === 0) tryUnlockAchievement('bugueado');
-        if (total >= 50000) tryUnlockAchievement('devoraste');
-        if (total >= productoSeleccionado.current_price * 10) tryUnlockAchievement('basado');
-        if (productoSeleccionado.category && productoSeleccionado.category !== 'General') tryUnlockAchievement('skibidi');
-        
-        if (productoSeleccionado.category && productoSeleccionado.category !== 'General') {
-            const { data: c } = await db.rpc('increment_category_bid');
-            if (c === 1) {
-                marcarCambioPropio(); const { data: ns } = await db.rpc('add_mission_reward', { p_amount: 250 });
-                if (ns) { currentUser.saldo = ns; actualizarInterfazUsuario(); mostrarToast("🧭 ¡Explorador! +250 €."); }
-            }
-        }
-    } finally { accionEnCurso = false; }
-}
-
-async function hacerPujaMínima() {
-    if (!productoSeleccionado || !currentUser) return;
-    if (productoSeleccionado.status === 'closed') return alert("Finalizada.");
-    await ejecutarPuja(Number(productoSeleccionado.current_price) + 50);
-    const { data: cuenta } = await db.rpc('increment_min_bid');
-    if (cuenta === 3) { marcarCambioPropio(); const { data: ns } = await db.rpc('add_mission_reward', { p_amount: 150 }); if (ns) { currentUser.saldo = ns; actualizarInterfazUsuario(); mostrarToast("🎯 ¡Gatillo Fácil! +150 €."); addXp(50); } }
-    else if (cuenta === 1) mostrarToast("🔫 Primera puja mínima. ¡A por las 3!");
-    else if (cuenta === 2) mostrarToast("🔫🔫 Segunda puja mínima. ¡Una más!");
-}
-
-function hacerPujaPersonalizada() {
-    if (!productoSeleccionado || !currentUser) return;
-    const input = document.getElementById('customBidInput'), valor = parseInt(input.value);
-    if (isNaN(valor) || valor <= productoSeleccionado.current_price) return alert("Puja inválida.");
-    ejecutarPuja(valor).then(async () => {
-        const { data: cuenta } = await db.rpc('increment_custom_bid');
-        if (cuenta === 1) { marcarCambioPropio(); const { data: ns } = await db.rpc('add_mission_reward', { p_amount: 200 }); if (ns) { currentUser.saldo = ns; actualizarInterfazUsuario(); mostrarToast("💼 ¡El Inversor! +200 €."); addXp(50); } }
-    });
-    input.value = '';
-}
-
-async function verAnuncio() {
-    if (!currentUser) return abrirModalAuth('register');
-    if (accionEnCurso) return;
-    accionEnCurso = true;
-    try {
-        const antes = currentUser.saldo; marcarCambioPropio();
-        const { data, error } = await db.rpc('add_ad_reward');
-        if (error) return alert("⚠️ "+error.message);
-        currentUser.saldo = data; actualizarInterfazUsuario();
-        alert(`¡+${(data-antes).toLocaleString('es-ES')} € añadidos!`);
-        const { data: ca } = await db.rpc('increment_ad_mission');
-        if (ca === 2) { marcarCambioPropio(); const { data: ns } = await db.rpc('add_mission_reward', { p_amount: 300 }); if (ns) { currentUser.saldo = ns; actualizarInterfazUsuario(); mostrarToast("📺 ¡Patrocinador! +300 €."); addXp(50); } }
-        else if (ca === 1) mostrarToast("📺 Primer anuncio del día. ¡Uno más!");
-    } finally { accionEnCurso = false; }
-}
-
-async function activarGoat() {
-    if (!currentUser) return; if (accionEnCurso) return; accionEnCurso = true;
-    try { marcarCambioPropio(); const { data, error } = await db.rpc('toggle_goat'); if (error) return alert(error.message); currentUser.esGoat = data; await cargarPerfil(currentUser.id); actualizarInterfazUsuario(); if (data) { alert("🐐 Modo GOAT activado. +5.000 €."); tryUnlockAchievement('goat'); } } finally { accionEnCurso = false; }
-}
-
-async function reclamarBonusDiario() {
-    if (!currentUser) return; if (accionEnCurso) return; accionEnCurso = true;
-    try { marcarCambioPropio(); const { data, error } = await db.rpc('reclamar_bonus_diario'); if (error) return alert("⚠️ "+error.message); currentUser.saldo = data; actualizarInterfazUsuario(); alert("🎁 +100 € de bono diario."); } finally { accionEnCurso = false; }
-}
-
+async function ejecutarPuja(total) { if (!currentUser) return abrirModalAuth('register'); if (productoSeleccionado.status === 'closed') return alert("Finalizada."); if (accionEnCurso) return; accionEnCurso = true; try { let comment = null; if (currentUser.esGoat) { const ci = document.getElementById('goatCommentInput'); comment = ci ? ci.value.trim() : ''; if (ci) ci.value = ''; } marcarCambioPropio(); const { error } = await db.rpc('place_bid', { p_auction_id: productoSeleccionado.id, p_amount: total, p_comment: comment }); if (error) { if (error.message && error.message.includes('saldo')) tryUnlockAchievement('delulu'); return alert("⚠️ " + error.message); } await cargarPerfil(currentUser.id); productoSeleccionado.current_price = total; actualizarInterfazUsuario(); addXp(10); tryUnlockAchievement('first_bid'); const tiempoRestante = new Date(productoSeleccionado.ends_at) - Date.now(); if (tiempoRestante > 0 && tiempoRestante < 30000) tryUnlockAchievement('sniper'); if (currentUser.saldo < 10) tryUnlockAchievement('bancarrota'); if (currentUser.saldo >= 1000000) tryUnlockAchievement('liquidez'); if (currentUser.saldo === 0) tryUnlockAchievement('bugueado'); if (total >= 50000) tryUnlockAchievement('devoraste'); if (total >= productoSeleccionado.current_price * 10) tryUnlockAchievement('basado'); if (productoSeleccionado.category && productoSeleccionado.category !== 'General') tryUnlockAchievement('skibidi'); if (productoSeleccionado.category && productoSeleccionado.category !== 'General') { const { data: c } = await db.rpc('increment_category_bid'); if (c === 1) { marcarCambioPropio(); const { data: ns } = await db.rpc('add_mission_reward', { p_amount: 250 }); if (ns) { currentUser.saldo = ns; actualizarInterfazUsuario(); mostrarToast("🧭 ¡Explorador! +250 €."); } } } } finally { accionEnCurso = false; } }
+async function hacerPujaMínima() { if (!productoSeleccionado || !currentUser) return; if (productoSeleccionado.status === 'closed') return alert("Finalizada."); await ejecutarPuja(Number(productoSeleccionado.current_price) + 50); const { data: cuenta } = await db.rpc('increment_min_bid'); if (cuenta === 3) { marcarCambioPropio(); const { data: ns } = await db.rpc('add_mission_reward', { p_amount: 150 }); if (ns) { currentUser.saldo = ns; actualizarInterfazUsuario(); mostrarToast("🎯 ¡Gatillo Fácil! +150 €."); addXp(50); } } else if (cuenta === 1) mostrarToast("🔫 Primera puja mínima. ¡A por las 3!"); else if (cuenta === 2) mostrarToast("🔫🔫 Segunda puja mínima. ¡Una más!"); }
+function hacerPujaPersonalizada() { if (!productoSeleccionado || !currentUser) return; const input = document.getElementById('customBidInput'), valor = parseInt(input.value); if (isNaN(valor) || valor <= productoSeleccionado.current_price) return alert("Puja inválida."); ejecutarPuja(valor).then(async () => { const { data: cuenta } = await db.rpc('increment_custom_bid'); if (cuenta === 1) { marcarCambioPropio(); const { data: ns } = await db.rpc('add_mission_reward', { p_amount: 200 }); if (ns) { currentUser.saldo = ns; actualizarInterfazUsuario(); mostrarToast("💼 ¡El Inversor! +200 €."); addXp(50); } } }); input.value = ''; }
+async function verAnuncio() { if (!currentUser) return abrirModalAuth('register'); if (accionEnCurso) return; accionEnCurso = true; try { const antes = currentUser.saldo; marcarCambioPropio(); const { data, error } = await db.rpc('add_ad_reward'); if (error) return alert("⚠️ "+error.message); currentUser.saldo = data; actualizarInterfazUsuario(); alert(`¡+${(data-antes).toLocaleString('es-ES')} € añadidos!`); const { data: ca } = await db.rpc('increment_ad_mission'); if (ca === 2) { marcarCambioPropio(); const { data: ns } = await db.rpc('add_mission_reward', { p_amount: 300 }); if (ns) { currentUser.saldo = ns; actualizarInterfazUsuario(); mostrarToast("📺 ¡Patrocinador! +300 €."); addXp(50); } } else if (ca === 1) mostrarToast("📺 Primer anuncio del día. ¡Uno más!"); } finally { accionEnCurso = false; } }
+async function activarGoat() { if (!currentUser) return; if (accionEnCurso) return; accionEnCurso = true; try { marcarCambioPropio(); const { data, error } = await db.rpc('toggle_goat'); if (error) return alert(error.message); currentUser.esGoat = data; await cargarPerfil(currentUser.id); actualizarInterfazUsuario(); if (data) { alert("🐐 Modo GOAT activado. +5.000 €."); tryUnlockAchievement('goat'); } } finally { accionEnCurso = false; } }
+async function reclamarBonusDiario() { if (!currentUser) return; if (accionEnCurso) return; accionEnCurso = true; try { marcarCambioPropio(); const { data, error } = await db.rpc('reclamar_bonus_diario'); if (error) return alert("⚠️ "+error.message); currentUser.saldo = data; actualizarInterfazUsuario(); alert("🎁 +100 € de bono diario."); } finally { accionEnCurso = false; } }
 // ===== MISIONES =====
-async function mostrarMisiones() {
-    if (!currentUser) return abrirModalAuth('register');
-    ocultarTodasVistas(); document.getElementById('viewMisiones').classList.add('active');
-    document.querySelectorAll('.categories-nav .nav-tab').forEach(t => t.classList.remove('active'));
-    document.getElementById('tabMisiones').classList.add('active');
-    await cargarMisiones();
-}
-async function cargarMisiones() {
-    const container = document.getElementById('misionesContainer'); container.innerHTML = 'Cargando...';
-    const { data, error } = await db.rpc('get_daily_missions');
-    if (error) { container.innerHTML = `<p>Error: ${error.message}</p>`; return; }
-    const m = data; let html = '';
-    html += `<div class="mission-card"><div class="mission-title">🎁 Bono Diario</div><div class="mission-desc">Reclama 100 € cada día.</div>${m.bonus ? `<button onclick="reclamarBonusDiarioDesdeMisiones()" style="background:var(--accent-blue);color:white;border:none;padding:6px 12px;border-radius:6px;cursor:pointer;">Reclamar +100 €</button>` : `<span class="mission-completed">✅ Reclamado hoy</span>`}</div>`;
-    html += `<div class="mission-card"><div class="mission-title">🔫 Gatillo Fácil</div><div class="mission-desc">3 pujas mínimas. ${m.min_bids}/3</div><div class="progress-bar"><div class="progress-fill" style="width:${Math.min(m.min_bids/3*100,100)}%"></div></div>${m.min_bids>=3?'<div class="mission-completed">✅</div>':''}</div>`;
-    html += `<div class="mission-card"><div class="mission-title">💼 El Inversor</div><div class="mission-desc">1 puja personalizada. ${m.custom_bid>=1?'✅':'Pendiente'}</div>${m.custom_bid>=1?'<div class="mission-completed">✅</div>':''}</div>`;
-    html += `<div class="mission-card"><div class="mission-title">📺 Patrocinador</div><div class="mission-desc">2 anuncios. ${m.ad_views}/2</div><div class="progress-bar"><div class="progress-fill" style="width:${Math.min(m.ad_views/2*100,100)}%"></div></div>${m.ad_views>=2?'<div class="mission-completed">✅</div>':''}</div>`;
-    html += `<div class="mission-card"><div class="mission-title">🧭 Explorador</div><div class="mission-desc">Puja en categoría especial. ${m.category_bid>=1?'✅':'Pendiente'}</div>${m.category_bid>=1?'<div class="mission-completed">✅</div>':''}</div>`;
-    container.innerHTML = html;
-}
+async function mostrarMisiones() { if (!currentUser) return abrirModalAuth('register'); ocultarTodasVistas(); document.getElementById('viewMisiones').classList.add('active'); document.querySelectorAll('.categories-nav .nav-tab').forEach(t => t.classList.remove('active')); document.getElementById('tabMisiones').classList.add('active'); await cargarMisiones(); }
+async function cargarMisiones() { const container = document.getElementById('misionesContainer'); container.innerHTML = 'Cargando...'; const { data, error } = await db.rpc('get_daily_missions'); if (error) { container.innerHTML = `<p>Error: ${error.message}</p>`; return; } const m = data; let html = ''; html += `<div class="mission-card"><div class="mission-title">🎁 Bono Diario</div><div class="mission-desc">Reclama 100 € cada día.</div>${m.bonus ? `<button onclick="reclamarBonusDiarioDesdeMisiones()" style="background:var(--accent-blue);color:white;border:none;padding:6px 12px;border-radius:6px;cursor:pointer;">Reclamar +100 €</button>` : `<span class="mission-completed">✅ Reclamado hoy</span>`}</div>`; html += `<div class="mission-card"><div class="mission-title">🔫 Gatillo Fácil</div><div class="mission-desc">3 pujas mínimas. ${m.min_bids}/3</div><div class="progress-bar"><div class="progress-fill" style="width:${Math.min(m.min_bids/3*100,100)}%"></div></div>${m.min_bids>=3?'<div class="mission-completed">✅</div>':''}</div>`; html += `<div class="mission-card"><div class="mission-title">💼 El Inversor</div><div class="mission-desc">1 puja personalizada. ${m.custom_bid>=1?'✅':'Pendiente'}</div>${m.custom_bid>=1?'<div class="mission-completed">✅</div>':''}</div>`; html += `<div class="mission-card"><div class="mission-title">📺 Patrocinador</div><div class="mission-desc">2 anuncios. ${m.ad_views}/2</div><div class="progress-bar"><div class="progress-fill" style="width:${Math.min(m.ad_views/2*100,100)}%"></div></div>${m.ad_views>=2?'<div class="mission-completed">✅</div>':''}</div>`; html += `<div class="mission-card"><div class="mission-title">🧭 Explorador</div><div class="mission-desc">Puja en categoría especial. ${m.category_bid>=1?'✅':'Pendiente'}</div>${m.category_bid>=1?'<div class="mission-completed">✅</div>':''}</div>`; container.innerHTML = html; }
 async function reclamarBonusDiarioDesdeMisiones() { await reclamarBonusDiario(); cargarMisiones(); }
-
 // ===== HALL OF FAME =====
-async function mostrarHallOfFame() {
-    if (!currentUser) return abrirModalAuth('register');
-    ocultarTodasVistas();
-    document.getElementById('viewHallOfFame').classList.add('active');
-    document.querySelectorAll('.categories-nav .nav-tab').forEach(t => t.classList.remove('active'));
-    document.getElementById('tabHallOfFame').classList.add('active');
-    await cargarHallOfFame();
-    if (hallOfFameInterval) clearInterval(hallOfFameInterval);
-    hallOfFameInterval = setInterval(cargarHallOfFame, 30000);
-}
-async function cargarHallOfFame() {
-    const container = document.getElementById('hofContainer'); container.innerHTML = 'Cargando...';
-    const { data, error } = await db.rpc('get_hall_of_fame');
-    if (error) { container.innerHTML = `<p>Error: ${error.message}</p>`; return; }
-    let html = '';
-    html += '<div class="hof-section"><h3>🏆 Rey de la Pista</h3>' + construirPodioYLista(data.ganadores, 'victorias') + '</div>';
-    html += '<div class="hof-section"><h3>💰 La Ballena</h3>' + construirPodioYLista(data.gastadores, 'gastado') + '</div>';
-    html += '<div class="hof-section"><h3>🏛️ El Museo</h3>' + construirPodioYLista(data.coleccionistas, 'certificados') + '</div>';
-    container.innerHTML = html;
-}
-function construirPodioYLista(lista, tipo) {
-    if (!lista || !lista.length) return '<p>No hay datos.</p>';
-    let html = '<div class="hof-podium">';
-    const top3 = lista.slice(0,3), orden = [1,0,2], clases = ['gold','silver','bronze'], medallas = ['🥇','🥈','🥉'];
-    orden.forEach(i => { if (top3[i]) { const val = tipo==='gastado' ? Number(top3[i].total_gastado).toLocaleString('es-ES')+' €' : top3[i].total; html += `<div class="podium-spot ${clases[i]}"><div>${medallas[i]}</div><strong>${top3[i].username}</strong><div>${val}</div></div>`; } });
-    html += '</div>';
-    if (lista.length > 3) { html += '<div class="hof-list">'; for (let i=3; i<lista.length; i++) { const val = tipo==='gastado' ? Number(lista[i].total_gastado).toLocaleString('es-ES')+' €' : lista[i].total; html += `<div class="hof-row"><span>#${i+1} ${lista[i].username}</span><span>${val}</span></div>`; } html += '</div>'; }
-    return html;
-}
-
+async function mostrarHallOfFame() { if (!currentUser) return abrirModalAuth('register'); ocultarTodasVistas(); document.getElementById('viewHallOfFame').classList.add('active'); document.querySelectorAll('.categories-nav .nav-tab').forEach(t => t.classList.remove('active')); document.getElementById('tabHallOfFame').classList.add('active'); await cargarHallOfFame(); if (hallOfFameInterval) clearInterval(hallOfFameInterval); hallOfFameInterval = setInterval(cargarHallOfFame, 30000); }
+async function cargarHallOfFame() { const container = document.getElementById('hofContainer'); container.innerHTML = 'Cargando...'; const { data, error } = await db.rpc('get_hall_of_fame'); if (error) { container.innerHTML = `<p>Error: ${error.message}</p>`; return; } let html = ''; html += '<div class="hof-section"><h3>🏆 Rey de la Pista</h3>' + construirPodioYLista(data.ganadores, 'victorias') + '</div>'; html += '<div class="hof-section"><h3>💰 La Ballena</h3>' + construirPodioYLista(data.gastadores, 'gastado') + '</div>'; html += '<div class="hof-section"><h3>🏛️ El Museo</h3>' + construirPodioYLista(data.coleccionistas, 'certificados') + '</div>'; container.innerHTML = html; }
+function construirPodioYLista(lista, tipo) { if (!lista || !lista.length) return '<p>No hay datos.</p>'; let html = '<div class="hof-podium">'; const top3 = lista.slice(0,3), orden = [1,0,2], clases = ['gold','silver','bronze'], medallas = ['🥇','🥈','🥉']; orden.forEach(i => { if (top3[i]) { const val = tipo==='gastado' ? Number(top3[i].total_gastado).toLocaleString('es-ES')+' €' : top3[i].total; html += `<div class="podium-spot ${clases[i]}"><div>${medallas[i]}</div><strong>${top3[i].username}</strong><div>${val}</div></div>`; } }); html += '</div>'; if (lista.length > 3) { html += '<div class="hof-list">'; for (let i=3; i<lista.length; i++) { const val = tipo==='gastado' ? Number(lista[i].total_gastado).toLocaleString('es-ES')+' €' : lista[i].total; html += `<div class="hof-row"><span>#${i+1} ${lista[i].username}</span><span>${val}</span></div>`; } html += '</div>'; } return html; }
 // ===== ADMIN =====
 function mostrarLegal() { ocultarTodasVistas(); document.getElementById('viewLegal').classList.add('active'); }
-function ocultarTodasVistas() {
-    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-    if (hallOfFameInterval) { clearInterval(hallOfFameInterval); hallOfFameInterval = null; }
-}
+function ocultarTodasVistas() { document.querySelectorAll('.view').forEach(v => v.classList.remove('active')); if (hallOfFameInterval) { clearInterval(hallOfFameInterval); hallOfFameInterval = null; } }
 function mostrarCatalogo() { ocultarTodasVistas(); cargarSubastas(); document.getElementById('viewCatalog').classList.add('active'); }
-
 function abrirModalAuth(mode = 'register') { toggleAuthForm(mode); document.getElementById('authModal').style.display = 'flex'; }
 function cerrarModalAuth() { document.getElementById('authModal').style.display = 'none'; }
 function abrirModalAdmin() { document.getElementById('adminModal').style.display = 'flex'; renderizarListaAdminSubastas(); cargarCategorias().then(() => { actualizarSelectorCategoriasAdmin(); renderizarListaAdminCategorias(); }); }
 function cerrarModalAdmin() { document.getElementById('adminModal').style.display = 'none'; }
-
-async function adminBuscarUsuario() {
-    const alias = (document.getElementById('adminBuscarAlias').value.trim()||'').startsWith('@') ? document.getElementById('adminBuscarAlias').value.trim() : '@'+document.getElementById('adminBuscarAlias').value.trim();
-    const { data, error } = await db.rpc('admin_buscar_usuario',{p_alias:alias});
-    const box = document.getElementById('adminUserResult');
-    if (error || !data || !data.length) { box.innerHTML = '<p>No encontrado.</p>'; return; }
-    const u = data[0];
-    box.innerHTML = `<div style="background:var(--bg-subtle);padding:12px;border-radius:10px;font-size:0.85rem;"><div><strong>${u.username}</strong> ${u.is_admin?'🛠️':''} ${u.es_goat?'🐐':''} ${u.is_banned?'🚫':''}</div><div>Saldo: ${Number(u.saldo).toLocaleString('es-ES')} €</div><div style="display:flex;gap:6px;margin:8px 0;"><input type="number" id="adminNuevoSaldo" placeholder="Nuevo saldo" style="flex:1;padding:8px;border-radius:6px;border:1px solid var(--border-color);"><button onclick="adminActualizarSaldo('${u.username}')" style="background:var(--accent-green);color:white;border:none;padding:8px 12px;border-radius:6px;font-weight:bold;">Fijar</button></div><button onclick="adminToggleBan('${u.username}')" style="width:100%;background:${u.is_banned?'#16a34a':'#ef4444'};color:white;border:none;padding:8px;border-radius:6px;font-weight:bold;">${u.is_banned?'Quitar baneo':'Banear'}</button></div>`;
-}
+async function adminBuscarUsuario() { const alias = (document.getElementById('adminBuscarAlias').value.trim()||'').startsWith('@') ? document.getElementById('adminBuscarAlias').value.trim() : '@'+document.getElementById('adminBuscarAlias').value.trim(); const { data, error } = await db.rpc('admin_buscar_usuario',{p_alias:alias}); const box = document.getElementById('adminUserResult'); if (error || !data || !data.length) { box.innerHTML = '<p>No encontrado.</p>'; return; } const u = data[0]; box.innerHTML = `<div style="background:var(--bg-subtle);padding:12px;border-radius:10px;font-size:0.85rem;"><div><strong>${u.username}</strong> ${u.is_admin?'🛠️':''} ${u.es_goat?'🐐':''} ${u.is_banned?'🚫':''}</div><div>Saldo: ${Number(u.saldo).toLocaleString('es-ES')} €</div><div style="display:flex;gap:6px;margin:8px 0;"><input type="number" id="adminNuevoSaldo" placeholder="Nuevo saldo" style="flex:1;padding:8px;border-radius:6px;border:1px solid var(--border-color);"><button onclick="adminActualizarSaldo('${u.username}')" style="background:var(--accent-green);color:white;border:none;padding:8px 12px;border-radius:6px;font-weight:bold;">Fijar</button></div><button onclick="adminToggleBan('${u.username}')" style="width:100%;background:${u.is_banned?'#16a34a':'#ef4444'};color:white;border:none;padding:8px;border-radius:6px;font-weight:bold;">${u.is_banned?'Quitar baneo':'Banear'}</button></div>`; }
 async function adminActualizarSaldo(alias) { const v = parseInt(document.getElementById('adminNuevoSaldo').value); if (isNaN(v)) return alert("Inválido"); await db.rpc('admin_set_saldo',{p_alias:alias,p_nuevo_saldo:v}); alert("Actualizado."); adminBuscarUsuario(); }
 async function adminToggleBan(alias) { await db.rpc('admin_toggle_ban',{p_alias:alias}); adminBuscarUsuario(); }
-function renderizarListaAdminSubastas() {
-    const box = document.getElementById('adminAuctionList'); box.innerHTML = '';
-    subastasLocales.forEach(p => { const row = document.createElement('div'); row.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px dashed var(--border-color);'; row.innerHTML = `<span>[${p.category||'General'}] ${p.title} ${p.status==='closed'?'(cerrada)':''}</span><button onclick="adminEliminarSubasta('${p.id}')" style="background:#ef4444;color:white;border:none;padding:5px 10px;border-radius:6px;font-weight:bold;">Eliminar</button>`; box.appendChild(row); });
-}
+function renderizarListaAdminSubastas() { const box = document.getElementById('adminAuctionList'); box.innerHTML = ''; subastasLocales.forEach(p => { const row = document.createElement('div'); row.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px dashed var(--border-color);'; row.innerHTML = `<span>[${p.category||'General'}] ${p.title} ${p.status==='closed'?'(cerrada)':''}</span><button onclick="adminEliminarSubasta('${p.id}')" style="background:#ef4444;color:white;border:none;padding:5px 10px;border-radius:6px;font-weight:bold;">Eliminar</button>`; box.appendChild(row); }); }
 async function adminEliminarSubasta(id) { if (!confirm("¿Seguro?")) return; await db.rpc('admin_delete_auction',{p_auction_id:id}); await cargarSubastas(); renderizarListaAdminSubastas(); }
-async function adminListarUsuarios() {
-    const box = document.getElementById('adminUserList');
-    box.innerHTML = 'Cargando...';
-    const { data, error } = await db.rpc('admin_listar_usuarios');
-    if (error) { box.innerHTML = `<p style="color:#ef4444;">Error: ${error.message}</p>`; return; }
-    if (!data || data.length === 0) { box.innerHTML = '<p>No hay usuarios registrados.</p>'; return; }
-    let html = '';
-    data.forEach(u => {
-        html += `
-        <div style="background: var(--bg-subtle); border-radius: 8px; padding: 8px 10px; margin-bottom: 6px; font-size: 0.8rem; display: flex; justify-content: space-between; align-items: center;">
-            <span><strong>${u.username}</strong> ${u.is_admin?'🛠️':''} ${u.es_goat?'🐐':''} ${u.is_banned?'🚫':''}</span>
-            <span style="color: var(--accent-green);">${Number(u.saldo).toLocaleString('es-ES')} €</span>
-            <div>
-                <button onclick="adminActualizarSaldo('${u.username}')" style="background: var(--accent-green); color:white; border:none; padding: 4px 8px; border-radius: 4px; font-size: 0.7rem; cursor:pointer;">💰</button>
-                <button onclick="adminToggleBan('${u.username}')" style="background: ${u.is_banned ? '#16a34a' : '#ef4444'}; color:white; border:none; padding: 4px 8px; border-radius: 4px; font-size: 0.7rem; cursor:pointer;">${u.is_banned ? '✅' : '🚫'}</button>
-            </div>
-        </div>`;
-    });
-    box.innerHTML = html;
-}
-
-async function adminAddCategoria() {
-    const name = document.getElementById('newCatName').value.trim();
-    const icon = document.getElementById('newCatIcon').value.trim() || '📦';
-    if (!name) return alert("Nombre requerido");
-    const { error } = await db.rpc('admin_add_category', { p_name: name, p_icon: icon });
-    if (error) return alert(error.message);
-    document.getElementById('newCatName').value = '';
-    document.getElementById('newCatIcon').value = '';
-    await cargarCategorias();
-    renderizarListaAdminCategorias();
-    actualizarSelectorCategoriasAdmin();
-}
-async function adminDeleteCategoria(id) {
-    if (!confirm("¿Eliminar categoría?")) return;
-    const { error } = await db.rpc('admin_delete_category', { p_id: id });
-    if (error) return alert(error.message);
-    await cargarCategorias();
-    renderizarListaAdminCategorias();
-    actualizarSelectorCategoriasAdmin();
-}
-function renderizarListaAdminCategorias() {
-    const box = document.getElementById('adminCatList');
-    if (!box) return;
-    box.innerHTML = categorias.map(c => `
-        <div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0;font-size:0.85rem;">
-            <span>${c.icon} ${c.name}</span>
-            <button onclick="adminDeleteCategoria(${c.id})" style="background:#ef4444;color:white;border:none;padding:2px 8px;border-radius:4px;font-size:0.7rem;">Eliminar</button>
-        </div>
-    `).join('');
-}
-
+async function adminListarUsuarios() { const box = document.getElementById('adminUserList'); box.innerHTML = 'Cargando...'; const { data, error } = await db.rpc('admin_listar_usuarios'); if (error) { box.innerHTML = `<p style="color:#ef4444;">Error: ${error.message}</p>`; return; } if (!data || data.length === 0) { box.innerHTML = '<p>No hay usuarios registrados.</p>'; return; } let html = ''; data.forEach(u => { html += `<div style="background: var(--bg-subtle); border-radius: 8px; padding: 8px 10px; margin-bottom: 6px; font-size: 0.8rem; display: flex; justify-content: space-between; align-items: center;"><span><strong>${u.username}</strong> ${u.is_admin?'🛠️':''} ${u.es_goat?'🐐':''} ${u.is_banned?'🚫':''}</span><span style="color: var(--accent-green);">${Number(u.saldo).toLocaleString('es-ES')} €</span><div><button onclick="adminActualizarSaldo('${u.username}')" style="background: var(--accent-green); color:white; border:none; padding: 4px 8px; border-radius: 4px; font-size: 0.7rem; cursor:pointer;">💰</button><button onclick="adminToggleBan('${u.username}')" style="background: ${u.is_banned ? '#16a34a' : '#ef4444'}; color:white; border:none; padding: 4px 8px; border-radius: 4px; font-size: 0.7rem; cursor:pointer;">${u.is_banned ? '✅' : '🚫'}</button></div></div>`; }); box.innerHTML = html; }
+async function adminAddCategoria() { const name = document.getElementById('newCatName').value.trim(); const icon = document.getElementById('newCatIcon').value.trim() || '📦'; if (!name) return alert("Nombre requerido"); const { error } = await db.rpc('admin_add_category', { p_name: name, p_icon: icon }); if (error) return alert(error.message); document.getElementById('newCatName').value = ''; document.getElementById('newCatIcon').value = ''; await cargarCategorias(); renderizarListaAdminCategorias(); actualizarSelectorCategoriasAdmin(); }
+async function adminDeleteCategoria(id) { if (!confirm("¿Eliminar categoría?")) return; const { error } = await db.rpc('admin_delete_category', { p_id: id }); if (error) return alert(error.message); await cargarCategorias(); renderizarListaAdminCategorias(); actualizarSelectorCategoriasAdmin(); }
+function renderizarListaAdminCategorias() { const box = document.getElementById('adminCatList'); if (!box) return; box.innerHTML = categorias.map(c => `<div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0;font-size:0.85rem;"><span>${c.icon} ${c.name}</span><button onclick="adminDeleteCategoria(${c.id})" style="background:#ef4444;color:white;border:none;padding:2px 8px;border-radius:4px;font-size:0.7rem;">Eliminar</button></div>`).join(''); }
 // ===== AUTENTICACIÓN =====
 function toggleAuthForm(mode) { document.getElementById('formLogin').style.display = mode==='login'?'block':'none'; document.getElementById('formRegister').style.display = mode==='register'?'block':'none'; }
-
-async function registrarUsuario() {
-    const email = document.getElementById('regEmail').value.trim(), alias = document.getElementById('regUsername').value.trim().startsWith('@')? document.getElementById('regUsername').value.trim() : '@'+document.getElementById('regUsername').value.trim(), pass = document.getElementById('regPassword').value.trim();
-    if (!email||!alias||!pass) return alert("Completa campos.");
-    const { data: libre } = await db.rpc('username_disponible',{p_username:alias}); if (!libre) return alert("Alias en uso.");
-    const { data, error } = await db.auth.signUp({ email, password: pass, options: { data: { username: alias } } });
-    if (error) return alert(error.message);
-    if (!data.session) { alert("Confirma tu correo."); cerrarModalAuth(); return; }
-    await cargarPerfil(data.user.id); cerrarModalAuth(); actualizarInterfazUsuario(); alert("¡Bienvenido! 1.000 €.");
-}
-async function iniciarSesion() {
-    const email = document.getElementById('loginEmail').value.trim(), pass = document.getElementById('loginPassword').value.trim();
-    if (!email||!pass) return alert("Completa campos.");
-    const { data, error } = await db.auth.signInWithPassword({ email, password: pass });
-    if (error) return alert("Error: "+error.message);
-    await cargarPerfil(data.user.id); cerrarModalAuth(); actualizarInterfazUsuario();
-}
-async function solicitarRecuperacion() {
-    const email = prompt("Email:"); if (!email) return;
-    const { error } = await db.auth.resetPasswordForEmail(email, { redirectTo: window.location.href.split('#')[0] });
-    if (error) return alert(error.message); alert("Correo enviado.");
-}
-async function guardarNuevaPassword() {
-    const p = document.getElementById('newPasswordInput').value.trim(); if (p.length<6) return alert("Mínimo 6.");
-    const { error } = await db.auth.updateUser({ password: p }); if (error) return alert(error.message);
-    document.getElementById('recoveryModal').style.display = 'none'; alert("Contraseña actualizada.");
-}
-async function cerrarSesion() {
-    await db.auth.signOut(); if (profileChannel) { await db.removeChannel(profileChannel); profileChannel = null; profileChannelUserId = null; }
-    currentUser = null; actualizarInterfazUsuario(); mostrarCatalogo();
-}
-
+async function registrarUsuario() { const email = document.getElementById('regEmail').value.trim(), alias = document.getElementById('regUsername').value.trim().startsWith('@')? document.getElementById('regUsername').value.trim() : '@'+document.getElementById('regUsername').value.trim(), pass = document.getElementById('regPassword').value.trim(); if (!email||!alias||!pass) return alert("Completa campos."); const { data: libre } = await db.rpc('username_disponible',{p_username:alias}); if (!libre) return alert("Alias en uso."); const { data, error } = await db.auth.signUp({ email, password: pass, options: { data: { username: alias } } }); if (error) return alert(error.message); if (!data.session) { alert("Confirma tu correo."); cerrarModalAuth(); return; } await cargarPerfil(data.user.id); cerrarModalAuth(); actualizarInterfazUsuario(); alert("¡Bienvenido! 1.000 €."); }
+async function iniciarSesion() { const email = document.getElementById('loginEmail').value.trim(), pass = document.getElementById('loginPassword').value.trim(); if (!email||!pass) return alert("Completa campos."); const { data, error } = await db.auth.signInWithPassword({ email, password: pass }); if (error) return alert("Error: "+error.message); await cargarPerfil(data.user.id); cerrarModalAuth(); actualizarInterfazUsuario(); }
+async function solicitarRecuperacion() { const email = prompt("Email:"); if (!email) return; const { error } = await db.auth.resetPasswordForEmail(email, { redirectTo: window.location.href.split('#')[0] }); if (error) return alert(error.message); alert("Correo enviado."); }
+async function guardarNuevaPassword() { const p = document.getElementById('newPasswordInput').value.trim(); if (p.length<6) return alert("Mínimo 6."); const { error } = await db.auth.updateUser({ password: p }); if (error) return alert(error.message); document.getElementById('recoveryModal').style.display = 'none'; alert("Contraseña actualizada."); }
+async function cerrarSesion() { await db.auth.signOut(); if (profileChannel) { await db.removeChannel(profileChannel); profileChannel = null; profileChannelUserId = null; } currentUser = null; actualizarInterfazUsuario(); mostrarCatalogo(); }
 // ===== PERFIL =====
 function mostrarPerfil() { if(!currentUser) return abrirModalAuth('register'); ocultarTodasVistas(); actualizarFormularioPerfil(); document.getElementById('viewPerfil').classList.add('active'); cargarInsignias(); }
-async function actualizarFormularioPerfil() {
-    if (!currentUser) return;
-    document.getElementById('perfilNombre').innerText = `👤 ${currentUser.username}`;
-    const { data: { user } } = await db.auth.getUser(); document.getElementById('perfilEmail').innerText = user ? user.email : '';
-}
-async function guardarNuevoAlias() {
-    let nuevo = document.getElementById('perfilNuevoAlias').value.trim(); if (!nuevo) return alert("Escribe un alias."); if (!nuevo.startsWith('@')) nuevo = '@'+nuevo;
-    if (nuevo === currentUser.username) return alert("Ya tienes ese alias.");
-    const { data: libre } = await db.rpc('username_disponible',{p_username:nuevo}); if (!libre) return alert("Alias en uso.");
-    const { error } = await db.rpc('actualizar_mi_alias',{p_nuevo_alias:nuevo}); if (error) return alert(error.message);
-    currentUser.username = nuevo; actualizarInterfazUsuario(); document.getElementById('perfilNuevoAlias').value = ''; alert("Alias actualizado.");
-}
-async function guardarNuevaPasswordPerfil() {
-    const p = document.getElementById('perfilNuevaPassword').value.trim(); if (p.length < 6) return alert("Mínimo 6 caracteres.");
-    const { error } = await db.auth.updateUser({ password: p }); if (error) return alert(error.message);
-    document.getElementById('perfilNuevaPassword').value = ''; alert("Contraseña actualizada.");
-}
+async function actualizarFormularioPerfil() { if (!currentUser) return; document.getElementById('perfilNombre').innerText = `👤 ${currentUser.username}`; const { data: { user } } = await db.auth.getUser(); document.getElementById('perfilEmail').innerText = user ? user.email : ''; }
+async function guardarNuevoAlias() { let nuevo = document.getElementById('perfilNuevoAlias').value.trim(); if (!nuevo) return alert("Escribe un alias."); if (!nuevo.startsWith('@')) nuevo = '@'+nuevo; if (nuevo === currentUser.username) return alert("Ya tienes ese alias."); const { data: libre } = await db.rpc('username_disponible',{p_username:nuevo}); if (!libre) return alert("Alias en uso."); const { error } = await db.rpc('actualizar_mi_alias',{p_nuevo_alias:nuevo}); if (error) return alert(error.message); currentUser.username = nuevo; actualizarInterfazUsuario(); document.getElementById('perfilNuevoAlias').value = ''; alert("Alias actualizado."); }
+async function guardarNuevaPasswordPerfil() { const p = document.getElementById('perfilNuevaPassword').value.trim(); if (p.length < 6) return alert("Mínimo 6 caracteres."); const { error } = await db.auth.updateUser({ password: p }); if (error) return alert(error.message); document.getElementById('perfilNuevaPassword').value = ''; alert("Contraseña actualizada."); }
 function solicitarBajaCuenta() { alert("Escribe a abrozonsubastas@gmail.com para eliminar tu cuenta."); }
-
-function mostrarVitrina() {
-    if (!currentUser) return abrirModalAuth('register'); ocultarTodasVistas();
-    const grid = document.getElementById('vitrinaGrid'); grid.innerHTML = '';
-    const ganados = subastasLocales.filter(p => p.status === 'closed' && p.winner === currentUser.username);
-    if (ganados.length >= 5) tryUnlockAchievement('collector');
-    if (ganados.length >= 10) tryUnlockAchievement('flex');
-    if (!ganados.length) { grid.innerHTML = '<div style="color:var(--text-muted);">Aún no has ganado ninguna subasta.</div>'; }
-    else ganados.forEach(item => {
-        const card = document.createElement('div'); card.className = 'certificate-card';
-        card.innerHTML = `<div style="width:100%;height:120px;display:flex;align-items:center;justify-content:center;font-size:3rem;background:var(--bg-subtle);">${renderizarImagenProducto(item.image_url)}</div><h3>${item.title}</h3><p style="font-size:0.8rem;color:var(--text-muted);">${item.description}</p><div style="color:var(--accent-green);font-weight:bold;">${Number(item.current_price).toLocaleString('es-ES')} €</div><div style="margin-top:10px;font-size:0.7rem;background:rgba(234,179,8,0.1);padding:6px;border-radius:4px;color:#eab308;font-weight:bold;">📜 CERTIFICADO OFICIAL ABROZON<br>Nº ${item.certificado_codigo||'PENDIENTE'}<br>${new Date(item.ends_at).toLocaleDateString('es-ES')}</div>`;
-        grid.appendChild(card);
-    });
-    document.getElementById('viewVitrina').classList.add('active');
-}
-
+function mostrarVitrina() { if (!currentUser) return abrirModalAuth('register'); ocultarTodasVistas(); const grid = document.getElementById('vitrinaGrid'); grid.innerHTML = ''; const ganados = subastasLocales.filter(p => p.status === 'closed' && p.winner === currentUser.username); if (ganados.length >= 5) tryUnlockAchievement('collector'); if (ganados.length >= 10) tryUnlockAchievement('flex'); if (!ganados.length) { grid.innerHTML = '<div style="color:var(--text-muted);">Aún no has ganado ninguna subasta.</div>'; } else ganados.forEach(item => { const card = document.createElement('div'); card.className = 'certificate-card'; card.innerHTML = `<div style="width:100%;height:120px;display:flex;align-items:center;justify-content:center;font-size:3rem;background:var(--bg-subtle);">${renderizarImagenProducto(item.image_url)}</div><h3>${item.title}</h3><p style="font-size:0.8rem;color:var(--text-muted);">${item.description}</p><div style="color:var(--accent-green);font-weight:bold;">${Number(item.current_price).toLocaleString('es-ES')} €</div><div style="margin-top:10px;font-size:0.7rem;background:rgba(234,179,8,0.1);padding:6px;border-radius:4px;color:#eab308;font-weight:bold;">📜 CERTIFICADO OFICIAL ABROZON<br>Nº ${item.certificado_codigo||'PENDIENTE'}<br>${new Date(item.ends_at).toLocaleDateString('es-ES')}</div>`; grid.appendChild(card); }); document.getElementById('viewVitrina').classList.add('active'); }
 // ===== CREAR SUBASTA =====
-async function crearNuevaSubasta() {
-    const title = document.getElementById('adminTitle').value.trim(), desc = document.getElementById('adminDesc').value.trim(), price = parseInt(document.getElementById('adminPrice').value), horas = parseInt(document.getElementById('adminDuracion').value), categoria = document.getElementById('adminCategoria').value, img = document.getElementById('adminImage').value.trim()||'📦';
-    if (!title||isNaN(price)) return alert("Rellena campos.");
-    const { error } = await db.rpc('create_auction',{p_title:title,p_description:desc,p_price:price,p_image:img,p_hours:horas,p_category:categoria,p_images:fotosAdicionalesAdmin});
-    if (error) return alert(error.message);
-    cerrarModalAdmin(); document.getElementById('adminImage').value=''; document.getElementById('adminImageFile').value=''; document.getElementById('adminImagePreview').innerHTML=''; fotosAdicionalesAdmin=[];
-    await cargarSubastas(); alert("¡Subasta creada!");
-}
-
-function toggleTema() {
-    document.body.classList.toggle('dark-mode');
-    document.getElementById('dropdownTheme').innerText = document.body.classList.contains('dark-mode') ? "☀️ Modo Día" : "🌙 Modo Noche";
-    cerrarUserMenu();
-}
-
+async function crearNuevaSubasta() { const title = document.getElementById('adminTitle').value.trim(), desc = document.getElementById('adminDesc').value.trim(), price = parseInt(document.getElementById('adminPrice').value), horas = parseInt(document.getElementById('adminDuracion').value), categoria = document.getElementById('adminCategoria').value, img = document.getElementById('adminImage').value.trim()||'📦'; if (!title||isNaN(price)) return alert("Rellena campos."); const { error } = await db.rpc('create_auction',{p_title:title,p_description:desc,p_price:price,p_image:img,p_hours:horas,p_category:categoria,p_images:fotosAdicionalesAdmin}); if (error) return alert(error.message); cerrarModalAdmin(); document.getElementById('adminImage').value=''; document.getElementById('adminImageFile').value=''; document.getElementById('adminImagePreview').innerHTML=''; fotosAdicionalesAdmin=[]; await cargarSubastas(); alert("¡Subasta creada!"); }
+function toggleTema() { document.body.classList.toggle('dark-mode'); document.getElementById('dropdownTheme').innerText = document.body.classList.contains('dark-mode') ? "☀️ Modo Día" : "🌙 Modo Noche"; cerrarUserMenu(); }
 // ===== MENÚS =====
 function toggleUserMenu() { const d = document.getElementById('userDropdown'); d.style.display = d.style.display === 'block' ? 'none' : 'block'; }
 function cerrarUserMenu() { document.getElementById('userDropdown').style.display = 'none'; }
 function toggleGoatMenu() { const d = document.getElementById('goatDropdown'); d.style.display = d.style.display === 'block' ? 'none' : 'block'; }
 function cerrarGoatMenu() { document.getElementById('goatDropdown').style.display = 'none'; }
-document.addEventListener('click', (e) => {
-    const w = document.getElementById('userMenuWrapper'); if (w && w.style.display !== 'none' && !w.contains(e.target)) cerrarUserMenu();
-    const g = document.getElementById('goatMenuWrapper'); if (g && g.style.display !== 'none' && !g.contains(e.target)) cerrarGoatMenu();
-});
+document.addEventListener('click', (e) => { const w = document.getElementById('userMenuWrapper'); if (w && w.style.display !== 'none' && !w.contains(e.target)) cerrarUserMenu(); const g = document.getElementById('goatMenuWrapper'); if (g && g.style.display !== 'none' && !g.contains(e.target)) cerrarGoatMenu(); });
 </script>
 </body>
 </html>
