@@ -73,6 +73,8 @@
         .time-box { background: rgba(249,115,22,0.1); border: 1px solid #f97316; color: #f97316; padding: 8px 12px; border-radius: 8px; font-weight: bold; text-align: center; margin-bottom: 15px; font-size: 0.9rem; }
         .btn-bid { width: 100%; background-color: #f97316; color: white; border: none; padding: 12px; font-size: 1rem; font-weight: bold; border-radius: 10px; cursor: pointer; }
         .btn-bid:hover { background-color: #ea580c; }
+        .btn-compra-directa { width: 100%; background-color: #eab308; color: #0f172a; border: none; padding: 12px; font-size: 1rem; font-weight: bold; border-radius: 10px; cursor: pointer; margin-bottom: 10px; display: none; }
+        .btn-compra-directa:hover { background-color: #ca8a04; }
         .history-item { font-size: 0.85rem; padding: 10px 0; border-bottom: 1px dashed var(--border-color); line-height: 1.3; }
         .profile-header { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 20px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; box-shadow: var(--shadow-card); }
         .user-info h2 { font-size: 1.3rem; color: var(--text-main); }
@@ -144,6 +146,7 @@
     </style>
 </head>
 <body>
+<!-- MODALES (login, registro, recuperación, admin) - sin cambios -->
 <div id="authModal" class="auth-modal-overlay" style="display:none;">
     <div class="auth-card">
         <button class="btn-close-modal" onclick="cerrarModalAuth()">✕</button>
@@ -176,7 +179,7 @@
                 <input type="text" id="adminTitle" placeholder="Título"><textarea id="adminDesc" placeholder="Descripción" rows="3"></textarea>
                 <input type="number" id="adminPrice" placeholder="Precio salida (€)"><input type="text" id="adminImage" placeholder="Emoji o URL">
                 <label>Subir fotos:</label><input type="file" id="adminImageFile" accept="image/*" multiple onchange="subirFotoAdmin(event)" style="width:100%;padding:10px;margin-bottom:8px;"><div id="adminImagePreview"></div>
-                                <select id="adminRareza" style="width: 100%; padding: 12px; margin-bottom: 12px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-subtle); color: var(--text-main);">
+                <select id="adminRareza" style="width: 100%; padding: 12px; margin-bottom: 12px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-subtle); color: var(--text-main);">
                     <option value="Común">Común</option>
                     <option value="Rara">Rara</option>
                     <option value="Épica">Épica</option>
@@ -259,6 +262,7 @@
         <span class="nav-tab" id="tabMisiones" onclick="mostrarMisiones()">🎯 Misiones</span>
         <span class="nav-tab" id="tabLogros" onclick="mostrarLogros()">🏅 Logros</span>
         <span class="nav-tab" id="tabHallOfFame" onclick="mostrarHallOfFame()">🌟 Hall of Fame</span>
+        <span class="nav-tab" id="tabMercado" onclick="mostrarMercado()">🛒 Mercado C2C</span>
         <span class="nav-tab" onclick="mostrarVitrina()">🏆 Mi Vitrina</span>
     </div>
 </div>
@@ -268,7 +272,7 @@
         <div class="grid-title">🔥 Subastas Activas</div>
         <div class="auction-grid" id="catalogGrid">Cargando...</div>
     </div>
-    <div id="viewDetail" class="view"><button class="btn-back" onclick="mostrarCatalogo()">← Volver al Catálogo</button><div class="detail-layout"><div class="product-card-detail"><div class="main-image-detail" id="detailImage">📦</div><div id="detailGallery" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:15px;"></div><span class="card-category" id="detailCategory">Categoría</span><h1 id="detailTitle" style="margin:8px 0;font-size:1.4rem;">Título</h1><p id="detailDescription" style="color:var(--text-muted);line-height:1.6;">Descripción...</p></div><div class="auction-panel-detail"><div class="time-box" id="detailTime">⏳ Cierra en: Calculando...</div><div style="margin-bottom:15px;"><div style="font-size:0.8rem;color:var(--text-muted);">Última puja</div><div style="font-size:2.1rem;font-weight:900;" id="detailBid">0 €</div></div><div id="biddingControlsContainer"><div id="goatCommentContainer" style="display:none;margin-bottom:12px;"><input type="text" id="goatCommentInput" placeholder="💬 Mensaje épico GOAT..." style="width:100%;padding:10px;border-radius:8px;border:1px solid #eab308;background:var(--bg-subtle);color:var(--text-main);font-weight:bold;outline:none;font-size:0.85rem;"></div><button class="btn-bid" id="btnMinBid" onclick="hacerPujaMínima()">¡PUJAR MÍNIMO (+50 €)!</button><div style="display:flex;gap:8px;margin-top:10px;"><input type="number" id="customBidInput" placeholder="Cantidad exacta €" style="flex:1;padding:10px;border-radius:8px;border:1px solid var(--border-color);background:var(--bg-subtle);color:var(--text-main);font-weight:bold;outline:none;"><button id="btnCustomBid" onclick="hacerPujaPersonalizada()" style="background:var(--accent-blue);color:white;border:none;padding:10px 14px;border-radius:8px;font-weight:bold;cursor:pointer;">Pujar</button></div></div><div style="margin-top:20px;border-top:1px solid var(--border-color);padding-top:15px;"><h3 style="font-size:0.8rem;color:var(--text-muted);margin-bottom:10px;">Historial de Pujas</h3><div id="historyList" style="max-height:220px;overflow-y:auto;"></div></div></div></div></div>
+    <div id="viewDetail" class="view"><button class="btn-back" onclick="mostrarCatalogo()">← Volver al Catálogo</button><div class="detail-layout"><div class="product-card-detail"><div class="main-image-detail" id="detailImage">📦</div><div id="detailGallery" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:15px;"></div><span class="card-category" id="detailCategory">Categoría</span><h1 id="detailTitle" style="margin:8px 0;font-size:1.4rem;">Título</h1><p id="detailDescription" style="color:var(--text-muted);line-height:1.6;">Descripción...</p></div><div class="auction-panel-detail"><div class="time-box" id="detailTime">⏳ Cierra en: Calculando...</div><div style="margin-bottom:15px;"><div style="font-size:0.8rem;color:var(--text-muted);">Última puja</div><div style="font-size:2.1rem;font-weight:900;" id="detailBid">0 €</div></div><div id="biddingControlsContainer"><div id="goatCommentContainer" style="display:none;margin-bottom:12px;"><input type="text" id="goatCommentInput" placeholder="💬 Mensaje épico GOAT..." style="width:100%;padding:10px;border-radius:8px;border:1px solid #eab308;background:var(--bg-subtle);color:var(--text-main);font-weight:bold;outline:none;font-size:0.85rem;"></div><button id="btnCompraDirecta" class="btn-compra-directa" onclick="comprarDirecto()">💎 COMPRA DIRECTA (30% comisión)</button><button class="btn-bid" id="btnMinBid" onclick="hacerPujaMínima()">¡PUJAR MÍNIMO (+50 €)!</button><div style="display:flex;gap:8px;margin-top:10px;"><input type="number" id="customBidInput" placeholder="Cantidad exacta €" style="flex:1;padding:10px;border-radius:8px;border:1px solid var(--border-color);background:var(--bg-subtle);color:var(--text-main);font-weight:bold;outline:none;"><button id="btnCustomBid" onclick="hacerPujaPersonalizada()" style="background:var(--accent-blue);color:white;border:none;padding:10px 14px;border-radius:8px;font-weight:bold;cursor:pointer;">Pujar</button></div></div><div style="margin-top:20px;border-top:1px solid var(--border-color);padding-top:15px;"><h3 style="font-size:0.8rem;color:var(--text-muted);margin-bottom:10px;">Historial de Pujas</h3><div id="historyList" style="max-height:220px;overflow-y:auto;"></div></div></div></div></div>
     <div id="viewVitrina" class="view"><div class="profile-header"><div class="user-info"><h2 id="profileUserName">👑 Usuario</h2><span class="user-badge" id="profileBadge">Coleccionista</span></div></div><div class="grid-title">📜 Mis Certificados</div><div class="vitrina-grid" id="vitrinaGrid"></div></div>
     <div id="viewPerfil" class="view"><button class="btn-back" onclick="mostrarCatalogo()">← Volver al Catálogo</button><div class="profile-header"><div class="user-info"><h2 id="perfilNombre">👤 Usuario</h2><span class="user-badge" id="perfilEmail">correo@ejemplo.com</span></div></div>
         <div class="product-card-detail" style="margin-bottom:20px;">
@@ -425,10 +429,48 @@ async function subirFotoAdmin(e) { const files = Array.from(e.target.files||[]);
 function filtrarCategoria(cat) { mostrandoFinalizadas = false; categoriaActiva = cat; document.querySelectorAll('.categories-nav .nav-tab').forEach(t => t.classList.remove('active')); ocultarTodasVistas(); document.getElementById('viewCatalog').classList.add('active'); renderizarCatalogo(); }
 function mostrarFinalizadas() { mostrandoFinalizadas = true; document.querySelectorAll('.categories-nav .nav-tab').forEach(t => t.classList.remove('active')); document.getElementById('tabFinalizadas').classList.add('active'); ocultarTodasVistas(); document.getElementById('viewCatalog').classList.add('active'); document.getElementById('searchInput').value = ''; terminoBusqueda = ''; renderizarCatalogo(); }
 function buscarEnCatalogo(texto) { terminoBusqueda = (texto||'').trim().toLowerCase(); ocultarTodasVistas(); document.getElementById('viewCatalog').classList.add('active'); renderizarCatalogo(); }
-function renderizarCatalogo() { const grid = document.getElementById('catalogGrid'); grid.innerHTML = ''; let lista = subastasLocales; if (mostrandoFinalizadas) lista = lista.filter(p => p.status === 'closed'); else { lista = lista.filter(p => p.status !== 'closed'); if (categoriaActiva !== 'Todas') lista = lista.filter(p => p.category === categoriaActiva); } if (terminoBusqueda) lista = lista.filter(p => (p.title||'').toLowerCase().includes(terminoBusqueda) || (p.description||'').toLowerCase().includes(terminoBusqueda)); if (!lista.length) { grid.innerHTML = '<div>No hay subastas.</div>'; return; } lista.forEach(p => { const card = document.createElement('div'); card.className = 'auction-card'; card.onclick = () => abrirDetalle(p.id); const cerrada = p.status === 'closed'; card.innerHTML = `<div class="card-image">${renderizarImagenProducto(p.image_url)}${cerrada ? '<div class="badge-closed">FINALIZADA</div>' : `<div class="card-timer" id="cardTimer-${p.id}">⏳ ...</div>`}</div><div class="card-content"><div class="card-category">${p.category||'General'}${cerrada?' · Adjudicado':''}</div><div class="card-title">${p.title}</div><div class="card-footer"><div><div class="bid-label-sm">${cerrada?'Precio Final':'Puja Actual'}</div><div class="bid-amount-sm">${Number(p.current_price).toLocaleString('es-ES')} €</div></div></div></div>`; grid.appendChild(card); }); actualizarTemporizadoresCatalogo(); }
+function renderizarCatalogo() {
+    const grid = document.getElementById('catalogGrid'); grid.innerHTML = '';
+    let lista = subastasLocales;
+    if (mostrandoFinalizadas) lista = lista.filter(p => p.status === 'closed');
+    else {
+        lista = lista.filter(p => p.status !== 'closed');
+        if (categoriaActiva === 'Mercado') {
+            lista = lista.filter(p => p.category === 'Mercado');
+        } else if (categoriaActiva !== 'Todas') {
+            lista = lista.filter(p => p.category === categoriaActiva);
+        }
+    }
+    if (terminoBusqueda) lista = lista.filter(p => (p.title||'').toLowerCase().includes(terminoBusqueda) || (p.description||'').toLowerCase().includes(terminoBusqueda));
+    if (!lista.length) { grid.innerHTML = '<div>No hay subastas.</div>'; return; }
+    lista.forEach(p => {
+        const card = document.createElement('div'); card.className = 'auction-card'; card.onclick = () => abrirDetalle(p.id);
+        const cerrada = p.status === 'closed';
+        card.innerHTML = `<div class="card-image">${renderizarImagenProducto(p.image_url)}${cerrada ? '<div class="badge-closed">FINALIZADA</div>' : `<div class="card-timer" id="cardTimer-${p.id}">⏳ ...</div>`}</div><div class="card-content"><div class="card-category">${p.category||'General'}${p.seller_id ? ' (Vendedor: ' + (p.seller_username || 'Usuario') + ')' : ''}${cerrada?' · Adjudicado':''}</div><div class="card-title">${p.title}</div><div class="card-footer"><div><div class="bid-label-sm">${cerrada?'Precio Final':'Puja Actual'}</div><div class="bid-amount-sm">${Number(p.current_price).toLocaleString('es-ES')} €</div></div></div></div>`;
+        grid.appendChild(card);
+    });
+    actualizarTemporizadoresCatalogo();
+}
 function actualizarTemporizadoresCatalogo() { subastasLocales.forEach(p => { if (p.status === 'closed') return; const el = document.getElementById('cardTimer-'+p.id); if (!el) return; const diff = new Date(p.ends_at)-Date.now(); if (diff <= 0) { el.innerText = '⏳ Cerrando...'; return; } const d = Math.floor(diff/86400000), h = Math.floor((diff%86400000)/3600000), m = Math.floor((diff%3600000)/60000), s = Math.floor((diff%60000)/1000); el.innerText = d>0 ? `⏳ ${d}d ${h}h` : `⏳ ${h}h ${m}m ${s}s`; }); }
 async function abrirDetalle(id) { productoSeleccionado = subastasLocales.find(p => p.id === id); actualizarVistaDetalleDatoVivo(); iniciarTemporizador(productoSeleccionado.ends_at); await cargarHistorialPujas(id); ocultarTodasVistas(); document.getElementById('viewDetail').classList.add('active'); }
-function actualizarVistaDetalleDatoVivo() { if (!productoSeleccionado) return; document.getElementById('detailImage').innerHTML = renderizarImagenProducto(productoSeleccionado.image_url); document.getElementById('detailCategory').innerText = productoSeleccionado.category||'General'; document.getElementById('detailTitle').innerText = productoSeleccionado.title; document.getElementById('detailDescription').innerText = productoSeleccionado.description; document.getElementById('detailBid').innerText = Number(productoSeleccionado.current_price).toLocaleString('es-ES') + ' €'; const gal = document.getElementById('detailGallery'); const fotos = [productoSeleccionado.image_url, ...(productoSeleccionado.images||[])].filter(u => u && /^https?:\/\//i.test(u)); gal.innerHTML = fotos.length>1 ? fotos.map(u => `<img src="${u}" onclick="cambiarFotoPrincipal(this.src)" style="width:60px;height:60px;object-fit:cover;border-radius:8px;cursor:pointer;border:2px solid var(--border-color);">`).join('') : ''; document.getElementById('biddingControlsContainer').style.display = productoSeleccionado.status === 'closed' ? 'none' : 'block'; if (productoSeleccionado.status === 'closed') document.getElementById('detailTime').innerText = `🏆 Finalizada. Ganador: ${productoSeleccionado.winner||'Nadie'}`; }
+function actualizarVistaDetalleDatoVivo() {
+    if (!productoSeleccionado) return;
+    document.getElementById('detailImage').innerHTML = renderizarImagenProducto(productoSeleccionado.image_url);
+    document.getElementById('detailCategory').innerText = productoSeleccionado.category||'General';
+    document.getElementById('detailTitle').innerText = productoSeleccionado.title;
+    document.getElementById('detailDescription').innerText = productoSeleccionado.description;
+    document.getElementById('detailBid').innerText = Number(productoSeleccionado.current_price).toLocaleString('es-ES') + ' €';
+    const gal = document.getElementById('detailGallery');
+    const fotos = [productoSeleccionado.image_url, ...(productoSeleccionado.images||[])].filter(u => u && /^https?:\/\//i.test(u));
+    gal.innerHTML = fotos.length>1 ? fotos.map(u => `<img src="${u}" onclick="cambiarFotoPrincipal(this.src)" style="width:60px;height:60px;object-fit:cover;border-radius:8px;cursor:pointer;border:2px solid var(--border-color);">`).join('') : '';
+    document.getElementById('biddingControlsContainer').style.display = productoSeleccionado.status === 'closed' ? 'none' : 'block';
+    if (productoSeleccionado.status === 'closed') document.getElementById('detailTime').innerText = `🏆 Finalizada. Ganador: ${productoSeleccionado.winner||'Nadie'}`;
+    // Mostrar/ocultar botón de compra directa según si es mercado y no eres el vendedor
+    const btnCompraDirecta = document.getElementById('btnCompraDirecta');
+    if (btnCompraDirecta) {
+        btnCompraDirecta.style.display = (productoSeleccionado.category === 'Mercado' && currentUser && currentUser.id !== productoSeleccionado.seller_id) ? 'block' : 'none';
+    }
+}
 function cambiarFotoPrincipal(url) { document.getElementById('detailImage').innerHTML = renderizarImagenProducto(url); }
 function iniciarTemporizador(fin) { if (timerInterval) clearInterval(timerInterval); const target = new Date(fin||Date.now()+86400000).getTime(), box = document.getElementById('detailTime'); function actualizar() { if (productoSeleccionado && productoSeleccionado.status === 'closed') return; const diff = target - Date.now(); if (diff <= 0) { box.innerText = "⏳ Subasta Finalizada"; clearInterval(timerInterval); cargarSubastas(); return; } const d = Math.floor(diff/86400000), h = Math.floor((diff%86400000)/3600000), m = Math.floor((diff%3600000)/60000), s = Math.floor((diff%60000)/1000); box.innerText = d>0 ? `⏳ Cierra en: ${d}d ${h}h ${m}m` : `⏳ Cierra en: ${h}h ${m}m ${s}s`; } actualizar(); timerInterval = setInterval(actualizar, 1000); }
 async function cargarHistorialPujas(id) { const history = document.getElementById('historyList'); const { data: bids } = await db.from('bids').select('*').eq('auction_id', id).order('created_at', { ascending: false }); history.innerHTML = bids && bids.length ? '' : '<div style="font-size:0.8rem;color:var(--text-muted);">Sin pujas aún.</div>'; if (bids) bids.forEach(b => { const div = document.createElement('div'); div.className = 'history-item'; div.innerHTML = `<div style="display:flex;justify-content:space-between;"><div><span style="color:var(--accent-blue);font-weight:bold;">${b.user_name||'Anónimo'}</span>${b.comment?`<div style="font-size:0.75rem;color:#eab308;">"${b.comment}"</div>`:''}</div><span style="font-weight:bold;">${Number(b.amount).toLocaleString('es-ES')} €</span></div>`; history.appendChild(div); }); }
@@ -482,7 +524,62 @@ async function actualizarFormularioPerfil() { if (!currentUser) return; document
 async function guardarNuevoAlias() { let nuevo = document.getElementById('perfilNuevoAlias').value.trim(); if (!nuevo) return alert("Escribe un alias."); if (!nuevo.startsWith('@')) nuevo = '@'+nuevo; if (nuevo === currentUser.username) return alert("Ya tienes ese alias."); const { data: libre } = await db.rpc('username_disponible',{p_username:nuevo}); if (!libre) return alert("Alias en uso."); const { error } = await db.rpc('actualizar_mi_alias',{p_nuevo_alias:nuevo}); if (error) return alert(error.message); currentUser.username = nuevo; actualizarInterfazUsuario(); document.getElementById('perfilNuevoAlias').value = ''; alert("Alias actualizado."); }
 async function guardarNuevaPasswordPerfil() { const p = document.getElementById('perfilNuevaPassword').value.trim(); if (p.length < 6) return alert("Mínimo 6 caracteres."); const { error } = await db.auth.updateUser({ password: p }); if (error) return alert(error.message); document.getElementById('perfilNuevaPassword').value = ''; alert("Contraseña actualizada."); }
 function solicitarBajaCuenta() { alert("Escribe a abrozonsubastas@gmail.com para eliminar tu cuenta."); }
-function mostrarVitrina() { if (!currentUser) return abrirModalAuth('register'); ocultarTodasVistas(); const grid = document.getElementById('vitrinaGrid'); grid.innerHTML = ''; const ganados = subastasLocales.filter(p => p.status === 'closed' && p.winner === currentUser.username); if (ganados.length >= 5) tryUnlockAchievement('collector'); if (ganados.length >= 10) tryUnlockAchievement('flex'); if (!ganados.length) { grid.innerHTML = '<div style="color:var(--text-muted);">Aún no has ganado ninguna subasta.</div>'; } else ganados.forEach(item => { const card = document.createElement('div'); card.className = 'certificate-card'; card.innerHTML = `<div style="width:100%;height:120px;display:flex;align-items:center;justify-content:center;font-size:3rem;background:var(--bg-subtle);">${renderizarImagenProducto(item.image_url)}</div><h3>${item.title}</h3><p style="font-size:0.8rem;color:var(--text-muted);">${item.description}</p><div style="color:var(--accent-green);font-weight:bold;">${Number(item.current_price).toLocaleString('es-ES')} €</div><div style="margin-top:10px;font-size:0.7rem;background:rgba(234,179,8,0.1);padding:6px;border-radius:4px;color:#eab308;font-weight:bold;">📜 CERTIFICADO OFICIAL ABROZON<br>Nº ${item.certificado_codigo||'PENDIENTE'}<br>${new Date(item.ends_at).toLocaleDateString('es-ES')}</div>`; grid.appendChild(card); }); document.getElementById('viewVitrina').classList.add('active'); }
+function mostrarVitrina() {
+    if (!currentUser) return abrirModalAuth('register'); ocultarTodasVistas();
+    const grid = document.getElementById('vitrinaGrid'); grid.innerHTML = '';
+    const ganados = subastasLocales.filter(p => p.status === 'closed' && p.winner === currentUser.username);
+    if (ganados.length >= 5) tryUnlockAchievement('collector');
+    if (ganados.length >= 10) tryUnlockAchievement('flex');
+    if (!ganados.length) { grid.innerHTML = '<div style="color:var(--text-muted);">Aún no has ganado ninguna subasta.</div>'; }
+    else ganados.forEach(item => {
+        const card = document.createElement('div'); card.className = 'certificate-card';
+        card.innerHTML = `<div style="width:100%;height:120px;display:flex;align-items:center;justify-content:center;font-size:3rem;background:var(--bg-subtle);">${renderizarImagenProducto(item.image_url)}</div><h3>${item.title}</h3><p style="font-size:0.8rem;color:var(--text-muted);">${item.description}</p><div style="color:var(--accent-green);font-weight:bold;">${Number(item.current_price).toLocaleString('es-ES')} €</div><div style="margin-top:10px;font-size:0.7rem;background:rgba(234,179,8,0.1);padding:6px;border-radius:4px;color:#eab308;font-weight:bold;">📜 CERTIFICADO OFICIAL ABROZON<br>Nº ${item.certificado_codigo||'PENDIENTE'}<br>${new Date(item.ends_at).toLocaleDateString('es-ES')}</div><button onclick="event.stopPropagation(); venderItem('${item.id}')" style="margin-top:10px; background:#f97316; color:white; border:none; padding:6px 12px; border-radius:6px; font-weight:bold; cursor:pointer; width:100%;">💰 Vender en Mercado</button>`;
+        grid.appendChild(card);
+    });
+    document.getElementById('viewVitrina').classList.add('active');
+}
+// ===== MERCADO C2C =====
+function mostrarMercado() {
+    mostrandoFinalizadas = false;
+    categoriaActiva = 'Mercado';
+    document.querySelectorAll('.categories-nav .nav-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('tabMercado').classList.add('active');
+    ocultarTodasVistas();
+    document.getElementById('viewCatalog').classList.add('active');
+    renderizarCatalogo();
+}
+async function venderItem(auctionId) {
+    if (!currentUser) return abrirModalAuth('register');
+    const precio = prompt("¿Precio de salida para el mercado? (€)");
+    if (!precio || isNaN(precio) || Number(precio) <= 0) return alert("Precio inválido.");
+    
+    const fianza = Math.round(Number(precio) * 0.10);
+    if (!confirm(`La fianza es de ${fianza} € (10% del precio). Se te devolverá si se vende. ¿Publicar?`)) return;
+
+    // Buscar el item en user_items
+    const { data: items, error: errorItems } = await db.from('user_items').select('id').eq('auction_id', auctionId).eq('user_id', currentUser.id).single();
+    if (errorItems || !items) return alert("No se encontró el objeto en tu inventario.");
+
+    const { error } = await db.rpc('vender_en_mercado', { p_user_item_id: items.id, p_precio_salida: Number(precio) });
+    if (error) return alert("Error: " + error.message);
+
+    await cargarPerfil(currentUser.id);
+    actualizarInterfazUsuario();
+    await cargarSubastas();
+    mostrarVitrina();
+    alert("¡Objeto publicado en el mercado! Se ha descontado la fianza de tu saldo.");
+}
+async function comprarDirecto() {
+    if (!currentUser || !productoSeleccionado) return;
+    if (!confirm(`¿Comprar directamente por ${Number(productoSeleccionado.current_price).toLocaleString('es-ES')} €? Se aplicará un 30% de comisión.`)) return;
+    const { error } = await db.rpc('comprar_directo', { p_auction_id: productoSeleccionado.id });
+    if (error) return alert("Error: " + error.message);
+    await cargarPerfil(currentUser.id);
+    actualizarInterfazUsuario();
+    await cargarSubastas();
+    mostrarCatalogo();
+    alert("¡Compra realizada con éxito! Revisa tu vitrina.");
+}
 // ===== CREAR SUBASTA =====
 async function crearNuevaSubasta() {
     const title = document.getElementById('adminTitle').value.trim(),
