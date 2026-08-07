@@ -524,18 +524,60 @@ async function actualizarFormularioPerfil() { if (!currentUser) return; document
 async function guardarNuevoAlias() { let nuevo = document.getElementById('perfilNuevoAlias').value.trim(); if (!nuevo) return alert("Escribe un alias."); if (!nuevo.startsWith('@')) nuevo = '@'+nuevo; if (nuevo === currentUser.username) return alert("Ya tienes ese alias."); const { data: libre } = await db.rpc('username_disponible',{p_username:nuevo}); if (!libre) return alert("Alias en uso."); const { error } = await db.rpc('actualizar_mi_alias',{p_nuevo_alias:nuevo}); if (error) return alert(error.message); currentUser.username = nuevo; actualizarInterfazUsuario(); document.getElementById('perfilNuevoAlias').value = ''; alert("Alias actualizado."); }
 async function guardarNuevaPasswordPerfil() { const p = document.getElementById('perfilNuevaPassword').value.trim(); if (p.length < 6) return alert("Mínimo 6 caracteres."); const { error } = await db.auth.updateUser({ password: p }); if (error) return alert(error.message); document.getElementById('perfilNuevaPassword').value = ''; alert("Contraseña actualizada."); }
 function solicitarBajaCuenta() { alert("Escribe a abrozonsubastas@gmail.com para eliminar tu cuenta."); }
-function mostrarVitrina() {
-    if (!currentUser) return abrirModalAuth('register'); ocultarTodasVistas();
-    const grid = document.getElementById('vitrinaGrid'); grid.innerHTML = '';
-    const ganados = subastasLocales.filter(p => p.status === 'closed' && p.winner === currentUser.username);
+async function mostrarVitrina() {
+    if (!currentUser) return abrirModalAuth('register');
+    ocultarTodasVistas();
+
+    const grid = document.getElementById('vitrinaGrid');
+    grid.innerHTML = 'Cargando...';
+
+    // Obtener los items del usuario que NO están en venta
+    const { data: misItems, error: errorItems } = await db.from('user_items')
+        .select('auction_id')
+        .eq('user_id', currentUser.id)
+        .eq('en_venta', false);
+
+    if (errorItems) {
+        grid.innerHTML = '<div style="color:var(--text-muted);">Error al cargar inventario.</div>';
+        return;
+    }
+
+    // Crear un Set con los auction_id que realmente posee (no en venta)
+    const idsPoseidos = new Set(misItems ? misItems.map(i => i.auction_id) : []);
+
+    // Filtrar subastas cerradas donde el ganador es el usuario actual Y que estén en su inventario (no en venta)
+    const ganados = subastasLocales.filter(p =>
+        p.status === 'closed' &&
+        p.winner === currentUser.username &&
+        idsPoseidos.has(p.id)
+    );
+
     if (ganados.length >= 5) tryUnlockAchievement('collector');
     if (ganados.length >= 10) tryUnlockAchievement('flex');
-    if (!ganados.length) { grid.innerHTML = '<div style="color:var(--text-muted);">Aún no has ganado ninguna subasta.</div>'; }
-    else ganados.forEach(item => {
-        const card = document.createElement('div'); card.className = 'certificate-card';
-        card.innerHTML = `<div style="width:100%;height:120px;display:flex;align-items:center;justify-content:center;font-size:3rem;background:var(--bg-subtle);">${renderizarImagenProducto(item.image_url)}</div><h3>${item.title}</h3><p style="font-size:0.8rem;color:var(--text-muted);">${item.description}</p><div style="color:var(--accent-green);font-weight:bold;">${Number(item.current_price).toLocaleString('es-ES')} €</div><div style="margin-top:10px;font-size:0.7rem;background:rgba(234,179,8,0.1);padding:6px;border-radius:4px;color:#eab308;font-weight:bold;">📜 CERTIFICADO OFICIAL ABROZON<br>Nº ${item.certificado_codigo||'PENDIENTE'}<br>${new Date(item.ends_at).toLocaleDateString('es-ES')}</div><button onclick="event.stopPropagation(); venderItem('${item.id}')" style="margin-top:10px; background:#f97316; color:white; border:none; padding:6px 12px; border-radius:6px; font-weight:bold; cursor:pointer; width:100%;">💰 Vender en Mercado</button>`;
-        grid.appendChild(card);
-    });
+
+    grid.innerHTML = '';
+
+    if (ganados.length === 0) {
+        grid.innerHTML = '<div style="color:var(--text-muted);">Aún no tienes objetos en tu vitrina. ¡Gana subastas o compra en el mercado!</div>';
+    } else {
+        ganados.forEach(item => {
+            const card = document.createElement('div');
+            card.className = 'certificate-card';
+            const fecha = item.ends_at ? new Date(item.ends_at).toLocaleDateString('es-ES') : '';
+            card.innerHTML = `
+                <div style="width:100%;height:120px;display:flex;align-items:center;justify-content:center;font-size:3rem;background:var(--bg-subtle);">${renderizarImagenProducto(item.image_url)}</div>
+                <h3>${item.title}</h3>
+                <p style="font-size:0.8rem;color:var(--text-muted);">${item.description}</p>
+                <div style="color:var(--accent-green);font-weight:bold;">${Number(item.current_price).toLocaleString('es-ES')} €</div>
+                <div style="margin-top:10px;font-size:0.7rem;background:rgba(234,179,8,0.1);padding:6px;border-radius:4px;color:#eab308;font-weight:bold;">
+                    📜 CERTIFICADO OFICIAL ABROZON<br>Nº ${item.certificado_codigo || 'PENDIENTE'}<br>${fecha}
+                </div>
+                <button onclick="event.stopPropagation(); venderItem('${item.id}')" style="margin-top:10px; background:#f97316; color:white; border:none; padding:6px 12px; border-radius:6px; font-weight:bold; cursor:pointer; width:100%;">💰 Vender en Mercado</button>
+            `;
+            grid.appendChild(card);
+        });
+    }
+
     document.getElementById('viewVitrina').classList.add('active');
 }
 // ===== MERCADO C2C =====
