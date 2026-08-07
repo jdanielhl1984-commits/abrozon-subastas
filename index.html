@@ -554,7 +554,7 @@ async function venderItem(auctionId) {
     if (!precio || isNaN(precio) || Number(precio) <= 0) return alert("Precio inválido.");
     
     const fianza = Math.round(Number(precio) * 0.10);
-    if (!confirm(`La fianza es de ${fianza} € (10% del precio). Se te devolverá si se vende. ¿Publicar?`)) return;
+    if (!confirm(`La fianza es de ${fianza} € (10% del precio). Si se vende, se te devolverá la fianza y recibirás el precio final menos una comisión del 20%. Si no se vende, perderás la fianza. ¿Publicar?`)) return;
 
     // Buscar el item en user_items
     const { data: items, error: errorItems } = await db.from('user_items').select('id').eq('auction_id', auctionId).eq('user_id', currentUser.id).single();
