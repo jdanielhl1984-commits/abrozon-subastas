@@ -146,7 +146,7 @@
     </style>
 </head>
 <body>
-<!-- MODALES (login, registro, recuperación, admin) - sin cambios -->
+<!-- MODALES -->
 <div id="authModal" class="auth-modal-overlay" style="display:none;">
     <div class="auth-card">
         <button class="btn-close-modal" onclick="cerrarModalAuth()">✕</button>
@@ -465,7 +465,6 @@ function actualizarVistaDetalleDatoVivo() {
     gal.innerHTML = fotos.length>1 ? fotos.map(u => `<img src="${u}" onclick="cambiarFotoPrincipal(this.src)" style="width:60px;height:60px;object-fit:cover;border-radius:8px;cursor:pointer;border:2px solid var(--border-color);">`).join('') : '';
     document.getElementById('biddingControlsContainer').style.display = productoSeleccionado.status === 'closed' ? 'none' : 'block';
     if (productoSeleccionado.status === 'closed') document.getElementById('detailTime').innerText = `🏆 Finalizada. Ganador: ${productoSeleccionado.winner||'Nadie'}`;
-    // Mostrar/ocultar botón de compra directa según si es mercado y no eres el vendedor
     const btnCompraDirecta = document.getElementById('btnCompraDirecta');
     if (btnCompraDirecta) {
         btnCompraDirecta.style.display = (productoSeleccionado.category === 'Mercado' && currentUser && currentUser.id !== productoSeleccionado.seller_id) ? 'block' : 'none';
@@ -505,9 +504,32 @@ function cerrarModalAdmin() { document.getElementById('adminModal').style.displa
 async function adminBuscarUsuario() { const alias = (document.getElementById('adminBuscarAlias').value.trim()||'').startsWith('@') ? document.getElementById('adminBuscarAlias').value.trim() : '@'+document.getElementById('adminBuscarAlias').value.trim(); const { data, error } = await db.rpc('admin_buscar_usuario',{p_alias:alias}); const box = document.getElementById('adminUserResult'); if (error || !data || !data.length) { box.innerHTML = '<p>No encontrado.</p>'; return; } const u = data[0]; box.innerHTML = `<div style="background:var(--bg-subtle);padding:12px;border-radius:10px;font-size:0.85rem;"><div><strong>${u.username}</strong> ${u.is_admin?'🛠️':''} ${u.es_goat?'🐐':''} ${u.is_banned?'🚫':''}</div><div>Saldo: ${Number(u.saldo).toLocaleString('es-ES')} €</div><div style="display:flex;gap:6px;margin:8px 0;"><input type="number" id="adminNuevoSaldo" placeholder="Nuevo saldo" style="flex:1;padding:8px;border-radius:6px;border:1px solid var(--border-color);"><button onclick="adminActualizarSaldo('${u.username}')" style="background:var(--accent-green);color:white;border:none;padding:8px 12px;border-radius:6px;font-weight:bold;">Fijar</button></div><button onclick="adminToggleBan('${u.username}')" style="width:100%;background:${u.is_banned?'#16a34a':'#ef4444'};color:white;border:none;padding:8px;border-radius:6px;font-weight:bold;">${u.is_banned?'Quitar baneo':'Banear'}</button></div>`; }
 async function adminActualizarSaldo(alias) { const v = parseInt(document.getElementById('adminNuevoSaldo').value); if (isNaN(v)) return alert("Inválido"); await db.rpc('admin_set_saldo',{p_alias:alias,p_nuevo_saldo:v}); alert("Actualizado."); adminBuscarUsuario(); }
 async function adminToggleBan(alias) { await db.rpc('admin_toggle_ban',{p_alias:alias}); adminBuscarUsuario(); }
-<button onclick="adminForzarCierre('${p.id}')" style="background:#16a34a; color:white; border:none; padding:5px 10px; border-radius:6px; font-weight:bold; cursor:pointer; font-size:0.75rem; margin-right:4px;">✅ Adjudicar</button>
-    function renderizarListaAdminSubastas() { const box = document.getElementById('adminAuctionList'); box.innerHTML = ''; subastasLocales.forEach(p => { const row = document.createElement('div'); row.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px dashed var(--border-color);'; row.innerHTML = `<span>[${p.category||'General'}] ${p.title} ${p.status==='closed'?'(cerrada)':''}</span><button onclick="adminEliminarSubasta('${p.id}')" style="background:#ef4444;color:white;border:none;padding:5px 10px;border-radius:6px;font-weight:bold;">Eliminar</button>`; box.appendChild(row); }); }
+function renderizarListaAdminSubastas() {
+    const box = document.getElementById('adminAuctionList');
+    if (!box) return;
+    box.innerHTML = '';
+    subastasLocales.forEach(p => {
+        const row = document.createElement('div');
+        row.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px dashed var(--border-color);font-size:0.85rem;';
+        row.innerHTML = `
+            <span>[${p.category||'General'}] ${p.title} ${p.status==='closed'?'(cerrada)':''}</span>
+            <div style="display:flex; align-items:center;">
+                ${p.status === 'active' ? `<button onclick="adminForzarCierre('${p.id}')" style="background:#16a34a; color:white; border:none; padding:5px 10px; border-radius:6px; font-weight:bold; cursor:pointer; font-size:0.75rem; margin-right:4px;">✅ Adjudicar</button>` : ''}
+                <button onclick="adminEliminarSubasta('${p.id}')" style="background:#ef4444;color:white;border:none;padding:5px 10px;border-radius:6px;font-weight:bold;cursor:pointer;font-size:0.75rem;">Eliminar</button>
+            </div>
+        `;
+        box.appendChild(row);
+    });
+}
 async function adminEliminarSubasta(id) { if (!confirm("¿Seguro?")) return; await db.rpc('admin_delete_auction',{p_auction_id:id}); await cargarSubastas(); renderizarListaAdminSubastas(); }
+async function adminForzarCierre(id) {
+    if (!confirm("¿Forzar cierre y adjudicarte esta subasta? Se añadirá a tu inventario.")) return;
+    const { error } = await db.rpc('admin_forzar_cierre_y_adjudicar', { p_auction_id: id });
+    if (error) return alert("Error: " + error.message);
+    await cargarSubastas();
+    renderizarListaAdminSubastas();
+    alert("Subasta adjudicada a tu usuario. Revisa tu vitrina.");
+}
 async function adminListarUsuarios() { const box = document.getElementById('adminUserList'); box.innerHTML = 'Cargando...'; const { data, error } = await db.rpc('admin_listar_usuarios'); if (error) { box.innerHTML = `<p style="color:#ef4444;">Error: ${error.message}</p>`; return; } if (!data || data.length === 0) { box.innerHTML = '<p>No hay usuarios registrados.</p>'; return; } let html = ''; data.forEach(u => { html += `<div style="background: var(--bg-subtle); border-radius: 8px; padding: 8px 10px; margin-bottom: 6px; font-size: 0.8rem; display: flex; justify-content: space-between; align-items: center;"><span><strong>${u.username}</strong> ${u.is_admin?'🛠️':''} ${u.es_goat?'🐐':''} ${u.is_banned?'🚫':''}</span><span style="color: var(--accent-green);">${Number(u.saldo).toLocaleString('es-ES')} €</span><div><button onclick="adminActualizarSaldo('${u.username}')" style="background: var(--accent-green); color:white; border:none; padding: 4px 8px; border-radius: 4px; font-size: 0.7rem; cursor:pointer;">💰</button><button onclick="adminToggleBan('${u.username}')" style="background: ${u.is_banned ? '#16a34a' : '#ef4444'}; color:white; border:none; padding: 4px 8px; border-radius: 4px; font-size: 0.7rem; cursor:pointer;">${u.is_banned ? '✅' : '🚫'}</button></div></div>`; }); box.innerHTML = html; }
 async function adminAddCategoria() { const name = document.getElementById('newCatName').value.trim(); const icon = document.getElementById('newCatIcon').value.trim() || '📦'; if (!name) return alert("Nombre requerido"); const { error } = await db.rpc('admin_add_category', { p_name: name, p_icon: icon }); if (error) return alert(error.message); document.getElementById('newCatName').value = ''; document.getElementById('newCatIcon').value = ''; await cargarCategorias(); renderizarListaAdminCategorias(); actualizarSelectorCategoriasAdmin(); }
 async function adminDeleteCategoria(id) { if (!confirm("¿Eliminar categoría?")) return; const { error } = await db.rpc('admin_delete_category', { p_id: id }); if (error) return alert(error.message); await cargarCategorias(); renderizarListaAdminCategorias(); actualizarSelectorCategoriasAdmin(); }
@@ -528,36 +550,22 @@ function solicitarBajaCuenta() { alert("Escribe a abrozonsubastas@gmail.com para
 async function mostrarVitrina() {
     if (!currentUser) return abrirModalAuth('register');
     ocultarTodasVistas();
-
     const grid = document.getElementById('vitrinaGrid');
     grid.innerHTML = 'Cargando...';
-
-    // Obtener los items del usuario que NO están en venta
     const { data: misItems, error: errorItems } = await db.from('user_items')
         .select('auction_id')
         .eq('user_id', currentUser.id)
         .eq('en_venta', false);
-
-    if (errorItems) {
-        grid.innerHTML = '<div style="color:var(--text-muted);">Error al cargar inventario.</div>';
-        return;
-    }
-
-    // Crear un Set con los auction_id que realmente posee (no en venta)
+    if (errorItems) { grid.innerHTML = '<div style="color:var(--text-muted);">Error al cargar inventario.</div>'; return; }
     const idsPoseidos = new Set(misItems ? misItems.map(i => i.auction_id) : []);
-
-    // Filtrar subastas cerradas donde el ganador es el usuario actual Y que estén en su inventario (no en venta)
     const ganados = subastasLocales.filter(p =>
         p.status === 'closed' &&
         p.winner === currentUser.username &&
         idsPoseidos.has(p.id)
     );
-
     if (ganados.length >= 5) tryUnlockAchievement('collector');
     if (ganados.length >= 10) tryUnlockAchievement('flex');
-
     grid.innerHTML = '';
-
     if (ganados.length === 0) {
         grid.innerHTML = '<div style="color:var(--text-muted);">Aún no tienes objetos en tu vitrina. ¡Gana subastas o compra en el mercado!</div>';
     } else {
@@ -578,7 +586,6 @@ async function mostrarVitrina() {
             grid.appendChild(card);
         });
     }
-
     document.getElementById('viewVitrina').classList.add('active');
 }
 // ===== MERCADO C2C =====
@@ -595,17 +602,12 @@ async function venderItem(auctionId) {
     if (!currentUser) return abrirModalAuth('register');
     const precio = prompt("¿Precio de salida para el mercado? (€)");
     if (!precio || isNaN(precio) || Number(precio) <= 0) return alert("Precio inválido.");
-    
     const fianza = Math.round(Number(precio) * 0.10);
     if (!confirm(`La fianza es de ${fianza} € (10% del precio). Si se vende, se te devolverá la fianza y recibirás el precio final menos una comisión del 20%. Si no se vende, perderás la fianza. ¿Publicar?`)) return;
-
-    // Buscar el item en user_items
     const { data: items, error: errorItems } = await db.from('user_items').select('id').eq('auction_id', auctionId).eq('user_id', currentUser.id).single();
     if (errorItems || !items) return alert("No se encontró el objeto en tu inventario.");
-
     const { error } = await db.rpc('vender_en_mercado', { p_user_item_id: items.id, p_precio_salida: Number(precio) });
     if (error) return alert("Error: " + error.message);
-
     await cargarPerfil(currentUser.id);
     actualizarInterfazUsuario();
     await cargarSubastas();
@@ -634,34 +636,13 @@ async function crearNuevaSubasta() {
           stock = parseInt(document.getElementById('adminStock').value) || 0,
           metadataRaw = document.getElementById('adminMetadata').value.trim(),
           img = document.getElementById('adminImage').value.trim() || '📦';
-
     if (!title || isNaN(price)) return alert("Rellena los campos obligatorios.");
-
     let metadata = {};
     if (metadataRaw) {
-        try {
-            metadata = JSON.parse(metadataRaw);
-        } catch (e) {
-            alert("El campo Metadata no es un JSON válido. Revisa las comillas y la sintaxis.");
-            return;
-        }
+        try { metadata = JSON.parse(metadataRaw); } catch (e) { alert("El campo Metadata no es un JSON válido."); return; }
     }
-
-    const { error } = await db.rpc('create_auction', {
-        p_title: title,
-        p_description: desc,
-        p_price: price,
-        p_image: img,
-        p_hours: horas,
-        p_category: categoria,
-        p_rareza: rareza,
-        p_stock_maximo: stock,
-        p_metadata: metadata,
-        p_images: fotosAdicionalesAdmin
-    });
-
+    const { error } = await db.rpc('create_auction', { p_title: title, p_description: desc, p_price: price, p_image: img, p_hours: horas, p_category: categoria, p_rareza: rareza, p_stock_maximo: stock, p_metadata: metadata, p_images: fotosAdicionalesAdmin });
     if (error) return alert("Error: " + error.message);
-
     cerrarModalAdmin();
     document.getElementById('adminTitle').value = '';
     document.getElementById('adminDesc').value = '';
@@ -678,15 +659,7 @@ async function crearNuevaSubasta() {
 }
 function toggleTema() { document.body.classList.toggle('dark-mode'); document.getElementById('dropdownTheme').innerText = document.body.classList.contains('dark-mode') ? "☀️ Modo Día" : "🌙 Modo Noche"; cerrarUserMenu(); }
 // ===== MENÚS =====
-async function adminForzarCierre(id) {
-    if (!confirm("¿Forzar cierre y adjudicarte esta subasta? Se añadirá a tu inventario.")) return;
-    const { error } = await db.rpc('admin_forzar_cierre_y_adjudicar', { p_auction_id: id });
-    if (error) return alert("Error: " + error.message);
-    await cargarSubastas();
-    renderizarListaAdminSubastas();
-    alert("Subasta adjudicada a tu usuario. Revisa tu vitrina.");
-}
-    function toggleUserMenu() { const d = document.getElementById('userDropdown'); d.style.display = d.style.display === 'block' ? 'none' : 'block'; }
+function toggleUserMenu() { const d = document.getElementById('userDropdown'); d.style.display = d.style.display === 'block' ? 'none' : 'block'; }
 function cerrarUserMenu() { document.getElementById('userDropdown').style.display = 'none'; }
 function toggleGoatMenu() { const d = document.getElementById('goatDropdown'); d.style.display = d.style.display === 'block' ? 'none' : 'block'; }
 function cerrarGoatMenu() { document.getElementById('goatDropdown').style.display = 'none'; }
