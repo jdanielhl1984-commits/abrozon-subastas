@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Economía - aBROzon</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f1f5f9; color: #0f172a; padding: 20px; max-width: 700px; margin: auto; }
+        h1 { color: #0284c7; }
+        .section { background: white; border-radius: 12px; padding: 20px; margin: 15px 0; box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
+        label { display: flex; justify-content: space-between; margin-bottom: 10px; }
+        input, select { padding: 6px; border: 1px solid #ccc; border-radius: 6px; width: 120px; text-align: right; }
+        button { background: #0284c7; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; font-size: 1rem; }
+        .result { background: #e2e8f0; padding: 15px; border-radius: 8px; margin-top: 15px; }
+        .positive { color: #16a34a; font-weight: bold; }
+        .negative { color: #ef4444; font-weight: bold; }
+        .danger { background: #fee2e2; padding: 10px; border-radius: 6px; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <h1>🧮 Calculadora de Economía aBROzon</h1>
+    <p>Ajusta los parámetros para simular la creación y destrucción de dinero ficticio en una semana.</p>
+
+    <div class="section">
+        <h3>👥 Usuarios</h3>
+        <label>Usuarios activos diarios: <input id="usuariosActivos" type="number" value="10" min="1"></label>
+        <label>De ellos, cuántos son GOAT: <input id="usuariosGoat" type="number" value="2" min="0"></label>
+    </div>
+
+    <div class="section">
+        <h3>💰 Entradas (Grifos)</h3>
+        <label>Límite diario de anuncios por usuario normal: <input id="limiteAnunciosNormal" type="number" value="5" min="0"></label>
+        <label>Recompensa por anuncio (€): <input id="rewardAnuncio" type="number" value="500" min="0"></label>
+        <label>Recargas GOAT por día (por usuario GOAT): <input id="recargasGoatDia" type="number" value="3" min="0"></label>
+        <label>Recompensa por recarga GOAT (€): <input id="rewardRecargaGoat" type="number" value="1000" min="0"></label>
+        <label>Bono diario (€, 1 vez al día): <input id="bonoDiario" type="number" value="100" min="0"></label>
+        <label>Recompensa media por misión cumplida (€): <input id="rewardMision" type="number" value="200" min="0"></label>
+        <label>Misiones completadas por usuario/día (media): <input id="misionesDia" type="number" value="2" min="0" step="0.1"></label>
+    </div>
+
+    <div class="section">
+        <h3>🔥 Salidas (Sumideros)</h3>
+        <label>Subastas cerradas por semana: <input id="subastasSemana" type="number" value="3" min="0"></label>
+        <label>Precio medio de cierre (€): <input id="precioMedio" type="number" value="3000" min="0"></label>
+        <label>Comisión del mercado (%): <input id="comisionMercado" type="number" value="10" min="0" max="100" step="0.1"></label>
+        <label>¿La comisión destruye dinero? (Sí, se quema): <input type="checkbox" id="quemarComision" checked></label>
+    </div>
+
+    <button onclick="calcular()">🔍 Calcular balance semanal</button>
+
+    <div id="resultado" class="result" style="display:none;"></div>
+
+    <script>
+        function calcular() {
+            // Recoger valores
+            const u = parseInt(document.getElementById('usuariosActivos').value) || 0;
+            const g = parseInt(document.getElementById('usuariosGoat').value) || 0;
+            const normal = u - g;
+
+            const anunciosDia = parseInt(document.getElementById('limiteAnunciosNormal').value) || 0;
+            const rewardAnuncio = parseInt(document.getElementById('rewardAnuncio').value) || 0;
+            const recargasGoat = parseInt(document.getElementById('recargasGoatDia').value) || 0;
+            const rewardRecarga = parseInt(document.getElementById('rewardRecargaGoat').value) || 0;
+            const bono = parseInt(document.getElementById('bonoDiario').value) || 0;
+            const rewardMision = parseInt(document.getElementById('rewardMision').value) || 0;
+            const misionesDia = parseFloat(document.getElementById('misionesDia').value) || 0;
+
+            const subastasSem = parseInt(document.getElementById('subastasSemana').value) || 0;
+            const precioMedio = parseInt(document.getElementById('precioMedio').value) || 0;
+            const comisionPct = parseFloat(document.getElementById('comisionMercado').value) || 0;
+            const quemar = document.getElementById('quemarComision').checked;
+
+            // Ingresos semanales
+            let ingresos = 0;
+            // Anuncios usuarios normales
+            ingresos += normal * anunciosDia * rewardAnuncio * 7;
+            // Recargas GOAT
+            ingresos += g * recargasGoat * rewardRecarga * 7;
+            // Bono diario
+            ingresos += u * bono * 7;
+            // Misiones
+            ingresos += u * misionesDia * rewardMision * 7;
+
+            // Egresos semanales (dinero destruido)
+            let egresos = subastasSem * precioMedio; // la puja ganadora se quema
+
+            // Si la comisión se quema, añadimos ese 10% del volumen total de subastas (precio medio * subastas)
+            // Nota: aquí asumimos que la comisión se aplica al precio de adjudicación de todas las subastas.
+            if (quemar) {
+                egresos += (subastasSem * precioMedio) * (comisionPct / 100);
+            }
+
+            const balance = ingresos - egresos;
+
+            const resultadoDiv = document.getElementById('resultado');
+            resultadoDiv.style.display = 'block';
+            let html = `<h3>📊 Resultados semanales</h3>`;
+            html += `<p>💰 Ingresos totales generados: <strong>${ingresos.toLocaleString('es-ES')} €</strong></p>`;
+            html += `<p>🔥 Dinero destruido (subastas ${quemar ? '+ comisión' : ''}): <strong>${egresos.toLocaleString('es-ES')} €</strong></p>`;
+            html += `<p>⚖️ Balance neto (inyección neta): <strong class="${balance > 0 ? 'positive' : 'negative'}">${balance.toLocaleString('es-ES')} €</strong></p>`;
+
+            if (balance > 0) {
+                html += `<div class="danger">⚠️ Se está <strong>inyectando más dinero del que se destruye</strong>. La inflación subirá. Reduce grifos o aumenta sumideros.</div>`;
+            } else if (balance < 0) {
+                html += `<p style="color:#16a34a;">✅ El sistema destruye más dinero del que crea. La economía es deflacionaria, podría faltar saldo si no se ajusta.</p>`;
+            } else {
+                html += `<p style="color:#0284c7;">⚖️ Equilibrio perfecto.</p>`;
+            }
+            resultadoDiv.innerHTML = html;
+        }
+
+        // Calcular al cargar la página para que veas algo
+        window.onload = calcular;
+    </script>
+</body>
+</html>
