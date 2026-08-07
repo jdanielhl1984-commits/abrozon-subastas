@@ -494,7 +494,7 @@ document.addEventListener('click', (e) => {
 
 // ===== CATÁLOGO =====
 async function cargarSubastas() {
-    let { data: auctions } = await db.from('auctions').select('*'); subastasLocales = auctions || [];
+    let { data: auctions } = await db.from('auctions').select('*').order('ends_at', { ascending: true }); subastasLocales = auctions || [];
     let cierres = false;
     for (let p of subastasLocales) if (p.status !== 'closed' && new Date(p.ends_at) <= Date.now()) { await db.rpc('check_and_close_auction',{p_auction_id:p.id}); cierres = true; }
     if (cierres) { let { data: a2 } = await db.from('auctions').select('*'); subastasLocales = a2 || []; }
