@@ -485,19 +485,18 @@ function solicitarBajaCuenta() { alert("Escribe a abrozonsubastas@gmail.com para
 function mostrarVitrina() { if (!currentUser) return abrirModalAuth('register'); ocultarTodasVistas(); const grid = document.getElementById('vitrinaGrid'); grid.innerHTML = ''; const ganados = subastasLocales.filter(p => p.status === 'closed' && p.winner === currentUser.username); if (ganados.length >= 5) tryUnlockAchievement('collector'); if (ganados.length >= 10) tryUnlockAchievement('flex'); if (!ganados.length) { grid.innerHTML = '<div style="color:var(--text-muted);">Aún no has ganado ninguna subasta.</div>'; } else ganados.forEach(item => { const card = document.createElement('div'); card.className = 'certificate-card'; card.innerHTML = `<div style="width:100%;height:120px;display:flex;align-items:center;justify-content:center;font-size:3rem;background:var(--bg-subtle);">${renderizarImagenProducto(item.image_url)}</div><h3>${item.title}</h3><p style="font-size:0.8rem;color:var(--text-muted);">${item.description}</p><div style="color:var(--accent-green);font-weight:bold;">${Number(item.current_price).toLocaleString('es-ES')} €</div><div style="margin-top:10px;font-size:0.7rem;background:rgba(234,179,8,0.1);padding:6px;border-radius:4px;color:#eab308;font-weight:bold;">📜 CERTIFICADO OFICIAL ABROZON<br>Nº ${item.certificado_codigo||'PENDIENTE'}<br>${new Date(item.ends_at).toLocaleDateString('es-ES')}</div>`; grid.appendChild(card); }); document.getElementById('viewVitrina').classList.add('active'); }
 // ===== CREAR SUBASTA =====
 async function crearNuevaSubasta() {
-    const title = document.getElementById('adminTitle').value.trim();
-    const desc = document.getElementById('adminDesc').value.trim();
-    const price = parseInt(document.getElementById('adminPrice').value);
-    const horas = parseInt(document.getElementById('adminDuracion').value);
-    const categoria = document.getElementById('adminCategoria').value;
-    const rareza = document.getElementById('adminRareza').value;
-    const stock = parseInt(document.getElementById('adminStock').value) || 0;
-    const metadataRaw = document.getElementById('adminMetadata').value.trim();
-    const img = document.getElementById('adminImage').value.trim() || '📦';
+    const title = document.getElementById('adminTitle').value.trim(),
+          desc = document.getElementById('adminDesc').value.trim(),
+          price = parseInt(document.getElementById('adminPrice').value),
+          horas = parseInt(document.getElementById('adminDuracion').value),
+          categoria = document.getElementById('adminCategoria').value,
+          rareza = document.getElementById('adminRareza').value,
+          stock = parseInt(document.getElementById('adminStock').value) || 0,
+          metadataRaw = document.getElementById('adminMetadata').value.trim(),
+          img = document.getElementById('adminImage').value.trim() || '📦';
 
     if (!title || isNaN(price)) return alert("Rellena los campos obligatorios.");
 
-    // Validar metadata si se ha escrito algo
     let metadata = {};
     if (metadataRaw) {
         try {
@@ -524,7 +523,6 @@ async function crearNuevaSubasta() {
     if (error) return alert("Error: " + error.message);
 
     cerrarModalAdmin();
-    // Limpiar todos los campos
     document.getElementById('adminTitle').value = '';
     document.getElementById('adminDesc').value = '';
     document.getElementById('adminPrice').value = '';
