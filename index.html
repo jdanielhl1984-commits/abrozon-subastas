@@ -30,9 +30,10 @@
         .disclaimer { background-color: var(--bg-subtle); color: var(--text-muted); text-align: center; padding: 8px; font-size: 0.8rem; border-bottom: 1px solid var(--border-color); }
         header { background-color: var(--bg-header); padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); gap: 15px; flex-wrap: wrap; position: sticky; top: 0; z-index: 200; }
         .logo { font-size: 1.8rem; font-weight: 900; color: var(--accent-blue); letter-spacing: -1px; cursor: pointer; } .logo span { color: #f97316; }
-        .search-bar { flex: 1; max-width: 400px; min-width: 200px; display: flex; background: var(--bg-subtle); border-radius: 20px; border: 1px solid var(--border-color); overflow: hidden; }
-        .search-bar input { width: 100%; background: transparent; border: none; padding: 10px 15px; color: var(--text-main); outline: none; font-size: 0.9rem; }
-        .search-bar button { background: var(--accent-blue); color: white; border: none; padding: 0 18px; font-weight: bold; cursor: pointer; }
+        .search-bar { flex: 1; max-width: 460px; min-width: 200px; display: flex; align-items: center; background: var(--bg-subtle); border-radius: 999px; border: 1px solid var(--border-color); overflow: hidden; padding-left: 14px; transition: border-color 0.2s, box-shadow 0.2s; }
+        .search-bar:focus-within { border-color: var(--accent-blue); box-shadow: 0 0 0 3px rgba(2,132,199,0.15); }
+        .search-bar .search-icon { color: var(--text-muted); font-size: 0.9rem; cursor: pointer; flex-shrink: 0; }
+        .search-bar input { width: 100%; background: transparent; border: none; padding: 10px 12px; color: var(--text-main); outline: none; font-size: 0.9rem; }
         .header-right { display: flex; align-items: center; gap: 8px; }
         .user-balance { background-color: var(--bg-subtle); padding: 8px 14px; border-radius: 20px; font-weight: bold; border: 1px solid var(--border-color); font-size: 0.85rem; }
         .balance-amount { color: var(--accent-green); }
@@ -40,12 +41,15 @@
         .btn-goat { background: linear-gradient(135deg, #eab308, #ca8a04); color: #0f172a; border: none; padding: 8px 14px; border-radius: 20px; font-weight: 900; cursor: pointer; font-size: 0.85rem; opacity: 0.5; }
         .btn-goat.active { opacity: 1; box-shadow: 0 0 10px #eab308; }
         .btn-login { background: var(--accent-blue); color: white; border: none; padding: 8px 16px; border-radius: 20px; font-weight: bold; cursor: pointer; font-size: 0.85rem; }
-        .categories-nav { background-color: var(--bg-header); padding: 10px 5%; display: flex; gap: 15px; border-bottom: 1px solid var(--border-color); overflow: visible; align-items: center; }
-        .scroll-tabs { display: flex; gap: 15px; overflow-x: auto; white-space: nowrap; flex-shrink: 1; -webkit-overflow-scrolling: touch; }
-        .nav-tab { color: var(--text-muted); text-decoration: none; font-size: 0.85rem; font-weight: 600; padding: 6px 12px; border-radius: 12px; cursor: pointer; white-space: nowrap; }
-        .nav-tab:hover, .nav-tab.active { color: var(--text-main); background-color: var(--bg-subtle); }
-        .cat-dropdown { position: relative; display: inline-block; flex-shrink: 0; }
-        .cat-dropdown-menu { position: absolute; top: 100%; left: 0; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; box-shadow: 0 8px 20px rgba(0,0,0,0.2); min-width: 180px; z-index: 999; display: none; }
+        .primary-nav { background-color: var(--bg-header); padding: 0 5%; display: flex; gap: 4px; border-bottom: 1px solid var(--border-color); overflow-x: auto; align-items: center; -webkit-overflow-scrolling: touch; }
+        .nav-tab { position: relative; color: var(--text-muted); text-decoration: none; font-size: 0.85rem; font-weight: 600; padding: 13px 14px; cursor: pointer; white-space: nowrap; }
+        .nav-tab:hover { color: var(--text-main); }
+        .nav-tab.active { color: var(--accent-blue); }
+        .nav-tab.active::after { content: ''; position: absolute; left: 14px; right: 14px; bottom: 0; height: 2px; background: var(--accent-blue); border-radius: 2px 2px 0 0; }
+        .category-chips { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 6px; margin-bottom: 20px; -webkit-overflow-scrolling: touch; }
+        .chip { flex-shrink: 0; padding: 8px 16px; border-radius: 999px; background: var(--bg-subtle); border: 1px solid var(--border-color); color: var(--text-muted); font-size: 0.82rem; font-weight: 600; cursor: pointer; white-space: nowrap; }
+        .chip:hover { color: var(--text-main); }
+        .chip.active { background: var(--accent-blue); color: white; border-color: var(--accent-blue); }
         .container { max-width: 1200px; margin: 30px auto; padding: 0 20px; }
         .hero-banner { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 25px; margin-bottom: 30px; box-shadow: var(--shadow-card); }
         .hero-text h2 { font-size: 1.4rem; color: var(--accent-blue); margin-bottom: 4px; }
@@ -135,7 +139,8 @@
             .header-right { gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
             .btn-header, .btn-goat, .btn-login, .user-balance { font-size: 0.72rem; padding: 6px 9px; }
             .user-dropdown { position: fixed; top: 58px; left: 12px; right: 12px; width: auto; max-width: none; }
-            .categories-nav { padding: 8px 4%; gap: 10px; } .nav-tab { font-size: 0.78rem; padding: 5px 9px; }
+            .primary-nav { padding: 0 4%; gap: 0; } .nav-tab { font-size: 0.78rem; padding: 11px 10px; }
+            .chip { font-size: 0.78rem; padding: 7px 13px; }
             .container { padding: 0 12px; } .detail-layout { grid-template-columns: 1fr; }
             .toast-stack { left: 12px; right: 12px; max-width: none; bottom: 12px; }
             .hof-podium { flex-direction: column; align-items: center; }
@@ -217,7 +222,10 @@
 <div class="disclaimer">⚠️ Sincronización en Tiempo Real & Cierre Automático Activos</div>
 <header>
     <div class="logo" onclick="mostrarCatalogo()">aBROzon<span>.subastas</span></div>
-    <div class="search-bar"><input type="text" id="searchInput" placeholder="Buscar..." oninput="buscarEnCatalogo(this.value)"><button onclick="buscarEnCatalogo(document.getElementById('searchInput').value)">🔍</button></div>
+    <div class="search-bar">
+        <span class="search-icon" onclick="buscarEnCatalogo(document.getElementById('searchInput').value)">🔍</span>
+        <input type="text" id="searchInput" placeholder="Buscar subastas..." oninput="buscarEnCatalogo(this.value)">
+    </div>
     <div class="header-right">
         <button class="btn-header" id="btnAd" onclick="verAnuncio()">🎬 +500 €</button>
         <div class="user-menu-wrapper" id="goatMenuWrapper" style="display:none;">
@@ -238,10 +246,6 @@
             <button class="btn-header" onclick="toggleUserMenu()">👤 Menú ▾</button>
             <div class="user-dropdown" id="userDropdown">
                 <div class="dropdown-item" onclick="mostrarPerfil()">👤 Mi Perfil</div>
-                <div class="dropdown-item" onclick="mostrarVitrina()">🏆 Mi Vitrina</div>
-                <div class="dropdown-item" onclick="mostrarMisiones()">🎯 Misiones</div>
-                <div class="dropdown-item" onclick="mostrarLogros()">🏅 Logros</div>
-                <div class="dropdown-item" onclick="mostrarHallOfFame()">🌟 Hall of Fame</div>
                 <div class="dropdown-item" id="dropdownTheme" onclick="toggleTema()">🌙 Modo Noche</div>
                 <div class="dropdown-item" id="dropdownAdmin" onclick="abrirModalAdmin()" style="display:none;">🛠️ Panel Admin</div>
                 <div class="dropdown-item" onclick="mostrarLegal()">📄 Legal</div>
@@ -250,23 +254,18 @@
         </div>
     </div>
 </header>
-<div class="categories-nav">
-    <div class="cat-dropdown" id="catDropdownWrapper" style="flex-shrink: 0;">
-        <span class="nav-tab" onclick="toggleCatDropdown()">📂 Categorías ▾</span>
-        <div class="cat-dropdown-menu" id="catDropdown"></div>
-    </div>
-    <div class="scroll-tabs">
-        <span class="nav-tab active" id="tabTodas" onclick="filtrarCategoria('Todas')">Todas</span>
-        <span class="nav-tab" id="tabFinalizadas" onclick="mostrarFinalizadas()">📜 Finalizadas</span>
-        <span class="nav-tab" id="tabMisiones" onclick="mostrarMisiones()">🎯 Misiones</span>
-        <span class="nav-tab" id="tabLogros" onclick="mostrarLogros()">🏅 Logros</span>
-        <span class="nav-tab" id="tabHallOfFame" onclick="mostrarHallOfFame()">🌟 Hall of Fame</span>
-        <span class="nav-tab" id="tabMercado" onclick="mostrarMercado()">🛒 Mercado C2C</span>
-        <span class="nav-tab" onclick="mostrarVitrina()">🏆 Mi Vitrina</span>
-    </div>
-</div>
+<nav class="primary-nav">
+    <span class="nav-tab active" id="tabTodas" onclick="mostrarCatalogo()">🏠 Catálogo</span>
+    <span class="nav-tab" id="tabMercado" onclick="mostrarMercado()">🛒 Mercado C2C</span>
+    <span class="nav-tab" id="tabMisiones" onclick="mostrarMisiones()">🎯 Misiones</span>
+    <span class="nav-tab" id="tabLogros" onclick="mostrarLogros()">🏅 Logros</span>
+    <span class="nav-tab" id="tabHallOfFame" onclick="mostrarHallOfFame()">🌟 Hall of Fame</span>
+    <span class="nav-tab" id="tabFinalizadas" onclick="mostrarFinalizadas()">📜 Finalizadas</span>
+    <span class="nav-tab" id="tabVitrina" onclick="mostrarVitrina()">🏆 Mi Vitrina</span>
+</nav>
 <div class="container">
     <div id="viewCatalog" class="view active">
+        <div class="category-chips" id="categoryChips"></div>
         <div class="hero-banner"><div class="hero-text"><span class="badge-trend">Plataforma Dinámica</span><h2>Especial Creadores & Polémicas</h2><p>Pujas sincronizadas en directo.</p></div></div>
         <div class="grid-title">🔥 Subastas Activas</div>
         <div class="auction-grid" id="catalogGrid">Cargando...</div>
@@ -413,21 +412,25 @@ function actualizarInterfazUsuario() {
 }
 
 // ===== CATEGORÍAS =====
-async function cargarCategorias() { const { data, error } = await db.from('categories').select('*').order('name'); if (!error) categorias = data || []; renderizarDropdownCategorias(); actualizarSelectorCategoriasAdmin(); }
-function renderizarDropdownCategorias() { const menu = document.getElementById('catDropdown'); if (!menu) return; menu.innerHTML = categorias.map(c => `<div class="dropdown-item" onclick="filtrarCategoria('${c.name}'); cerrarCatDropdown();">${c.icon} ${c.name}</div>`).join(''); }
+async function cargarCategorias() { const { data, error } = await db.from('categories').select('*').order('name'); if (!error) categorias = data || []; renderizarCategoryChips(); actualizarSelectorCategoriasAdmin(); }
+function renderizarCategoryChips() {
+    const box = document.getElementById('categoryChips'); if (!box) return;
+    if (mostrandoFinalizadas || categoriaActiva === 'Mercado') { box.style.display = 'none'; return; }
+    box.style.display = 'flex';
+    const chips = [{ name: 'Todas', icon: '🗂️' }, ...categorias];
+    box.innerHTML = chips.map(c => `<span class="chip ${categoriaActiva === c.name ? 'active' : ''}" onclick="filtrarCategoria('${c.name}')">${c.icon} ${c.name}</span>`).join('');
+}
 function actualizarSelectorCategoriasAdmin() { const select = document.getElementById('adminCategoria'); if (!select) return; select.innerHTML = categorias.map(c => `<option value="${c.name}">${c.icon} ${c.name}</option>`).join(''); }
-function toggleCatDropdown() { const menu = document.getElementById('catDropdown'); menu.style.display = menu.style.display === 'block' ? 'none' : 'block'; }
-function cerrarCatDropdown() { document.getElementById('catDropdown').style.display = 'none'; }
-document.addEventListener('click', (e) => { const wrapper = document.getElementById('catDropdownWrapper'); if (wrapper && !wrapper.contains(e.target)) cerrarCatDropdown(); });
 
 // ===== CATÁLOGO =====
 async function cargarSubastas() { let { data: auctions } = await db.from('auctions').select('*').order('ends_at', { ascending: true }); subastasLocales = auctions || []; let cierres = false; for (let p of subastasLocales) if (p.status !== 'closed' && new Date(p.ends_at) <= Date.now()) { await db.rpc('check_and_close_auction',{p_auction_id:p.id}); cierres = true; } if (cierres) { let { data: a2 } = await db.from('auctions').select('*').order('ends_at', { ascending: true }); subastasLocales = a2 || []; } renderizarCatalogo(); }
 function renderizarImagenProducto(v) { v=(v||'').trim(); if(/^https?:\/\//i.test(v)) return `<img src="${v}" style="display:block;width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML='<span>🖼️</span>';">`; return `<span>${v||'📦'}</span>`; }
 async function subirFotoAdmin(e) { const files = Array.from(e.target.files||[]); if(!files.length) return; const preview = document.getElementById('adminImagePreview'); preview.innerText = `⏳ Subiendo ${files.length} foto(s)...`; const urls = []; for (const f of files) { const name = `${Date.now()}-${Math.random().toString(36).slice(2)}-${f.name.replace(/[^a-zA-Z0-9._-]/g,'_')}`; const { error } = await db.storage.from('lotes').upload(name, f); if (error) { preview.innerText = ''; return alert("Error: "+error.message); } const { data } = db.storage.from('lotes').getPublicUrl(name); urls.push(data.publicUrl); } document.getElementById('adminImage').value = urls[0]; fotosAdicionalesAdmin = urls.slice(1); preview.innerHTML = `✅ ${urls.length} foto(s) subida(s):<br>` + urls.map(u => `<img src="${u}" style="width:70px;height:70px;object-fit:cover;border-radius:6px;margin:4px;">`).join(''); }
-function filtrarCategoria(cat) { mostrandoFinalizadas = false; categoriaActiva = cat; document.querySelectorAll('.categories-nav .nav-tab').forEach(t => t.classList.remove('active')); ocultarTodasVistas(); document.getElementById('viewCatalog').classList.add('active'); renderizarCatalogo(); }
-function mostrarFinalizadas() { mostrandoFinalizadas = true; document.querySelectorAll('.categories-nav .nav-tab').forEach(t => t.classList.remove('active')); document.getElementById('tabFinalizadas').classList.add('active'); ocultarTodasVistas(); document.getElementById('viewCatalog').classList.add('active'); document.getElementById('searchInput').value = ''; terminoBusqueda = ''; renderizarCatalogo(); }
+function filtrarCategoria(cat) { mostrandoFinalizadas = false; categoriaActiva = cat; document.querySelectorAll('.primary-nav .nav-tab').forEach(t => t.classList.remove('active')); document.getElementById('tabTodas').classList.add('active'); ocultarTodasVistas(); document.getElementById('viewCatalog').classList.add('active'); renderizarCatalogo(); renderizarCategoryChips(); }
+function mostrarFinalizadas() { mostrandoFinalizadas = true; document.querySelectorAll('.primary-nav .nav-tab').forEach(t => t.classList.remove('active')); document.getElementById('tabFinalizadas').classList.add('active'); ocultarTodasVistas(); document.getElementById('viewCatalog').classList.add('active'); document.getElementById('searchInput').value = ''; terminoBusqueda = ''; renderizarCatalogo(); renderizarCategoryChips(); }
 function buscarEnCatalogo(texto) { terminoBusqueda = (texto||'').trim().toLowerCase(); ocultarTodasVistas(); document.getElementById('viewCatalog').classList.add('active'); renderizarCatalogo(); }
 function renderizarCatalogo() {
+    renderizarCategoryChips();
     const grid = document.getElementById('catalogGrid'); grid.innerHTML = '';
     let lista = subastasLocales;
     if (mostrandoFinalizadas) lista = lista.filter(p => p.status === 'closed');
@@ -475,7 +478,7 @@ async function cargarHistorialPujas(id) { const history = document.getElementByI
 async function tryUnlockAchievement(key) { if (!currentUser) return; const { data, error } = await db.rpc('unlock_achievement', { p_key: key }); if (!error && data === true) { const achievement = ALL_ACHIEVEMENTS.find(a => a.key === key); if (achievement) mostrarToast(`🏅 ¡Nueva insignia: ${achievement.icon} ${achievement.name}!`); if (document.getElementById('viewLogros').classList.contains('active')) cargarLogros(); if (document.getElementById('viewPerfil').classList.contains('active')) cargarInsignias(); } }
 async function cargarInsignias() { if (!currentUser) return; const container = document.getElementById('achievementsContainer'); if (!container) return; const { data: unlocked, error } = await db.from('user_achievements').select('achievement_key').eq('user_id', currentUser.id); if (error) { container.innerHTML = '<span>Error</span>'; return; } const unlockedKeys = unlocked.map(u => u.achievement_key); container.innerHTML = ALL_ACHIEVEMENTS.map(a => { const isUnlocked = unlockedKeys.includes(a.key); return `<div class="achievement-badge ${isUnlocked ? '' : 'locked'}" title="${a.desc}"><span>${a.icon}</span> ${a.name}</div>`; }).join(''); }
 async function cargarLogros() { if (!currentUser) return; const container = document.getElementById('logrosContainer'); if (!container) return; const { data: unlocked, error } = await db.from('user_achievements').select('achievement_key').eq('user_id', currentUser.id); if (error) { container.innerHTML = '<span>Error al cargar logros</span>'; return; } const unlockedKeys = unlocked.map(u => u.achievement_key); container.innerHTML = ALL_ACHIEVEMENTS.map(a => { const isUnlocked = unlockedKeys.includes(a.key); return `<div class="achievement-row ${isUnlocked ? 'unlocked' : 'locked'}"><div class="achievement-icon">${a.icon}</div><div class="achievement-info"><div class="achievement-name">${a.name}</div><div class="achievement-desc">${a.desc}</div></div><div class="achievement-status">${isUnlocked ? '✅' : '🔒'}</div></div>`; }).join(''); }
-async function mostrarLogros() { if (!currentUser) return abrirModalAuth('register'); ocultarTodasVistas(); document.getElementById('viewLogros').classList.add('active'); document.querySelectorAll('.categories-nav .nav-tab').forEach(t => t.classList.remove('active')); document.getElementById('tabLogros').classList.add('active'); await cargarLogros(); }
+async function mostrarLogros() { if (!currentUser) return abrirModalAuth('register'); ocultarTodasVistas(); document.getElementById('viewLogros').classList.add('active'); document.querySelectorAll('.primary-nav .nav-tab').forEach(t => t.classList.remove('active')); document.getElementById('tabLogros').classList.add('active'); await cargarLogros(); }
 // ===== PUJAS =====
 async function ejecutarPuja(total) { if (!currentUser) return abrirModalAuth('register'); if (productoSeleccionado.status === 'closed') return alert("Finalizada."); if (accionEnCurso) return; accionEnCurso = true; try { let comment = null; if (currentUser.esGoat) { const ci = document.getElementById('goatCommentInput'); comment = ci ? ci.value.trim() : ''; if (ci) ci.value = ''; } marcarCambioPropio(); const { error } = await db.rpc('place_bid', { p_auction_id: productoSeleccionado.id, p_amount: total, p_comment: comment }); if (error) { if (error.message && error.message.includes('saldo')) tryUnlockAchievement('delulu'); return alert("⚠️ " + error.message); } await cargarPerfil(currentUser.id); productoSeleccionado.current_price = total; actualizarInterfazUsuario(); addXp(10); tryUnlockAchievement('first_bid'); const tiempoRestante = new Date(productoSeleccionado.ends_at) - Date.now(); if (tiempoRestante > 0 && tiempoRestante < 30000) tryUnlockAchievement('sniper'); if (currentUser.saldo < 10) tryUnlockAchievement('bancarrota'); if (currentUser.saldo >= 1000000) tryUnlockAchievement('liquidez'); if (currentUser.saldo === 0) tryUnlockAchievement('bancarrota'); if (total >= 50000) tryUnlockAchievement('devoraste'); if (total >= productoSeleccionado.current_price * 10) tryUnlockAchievement('basado'); if (productoSeleccionado.category && productoSeleccionado.category !== 'General') tryUnlockAchievement('skibidi'); if (productoSeleccionado.category && productoSeleccionado.category !== 'General') { const { data: c } = await db.rpc('increment_category_bid'); if (c === 1) { marcarCambioPropio(); const { data: ns } = await db.rpc('add_mission_reward', { p_amount: 250 }); if (ns) { currentUser.saldo = ns; actualizarInterfazUsuario(); mostrarToast("🧭 ¡Explorador! +250 €."); } } } } finally { accionEnCurso = false; } }
 async function hacerPujaMínima() { if (!productoSeleccionado || !currentUser) return; if (productoSeleccionado.status === 'closed') return alert("Finalizada."); await ejecutarPuja(Number(productoSeleccionado.current_price) + 50); const { data: cuenta } = await db.rpc('increment_min_bid'); if (cuenta === 3) { marcarCambioPropio(); const { data: ns } = await db.rpc('add_mission_reward', { p_amount: 150 }); if (ns) { currentUser.saldo = ns; actualizarInterfazUsuario(); mostrarToast("🎯 ¡Gatillo Fácil! +150 €."); addXp(50); } } else if (cuenta === 1) mostrarToast("🔫 Primera puja mínima. ¡A por las 3!"); else if (cuenta === 2) mostrarToast("🔫🔫 Segunda puja mínima. ¡Una más!"); }
@@ -484,17 +487,17 @@ async function verAnuncio() { if (!currentUser) return abrirModalAuth('register'
 async function activarGoat() { if (!currentUser) return; if (accionEnCurso) return; accionEnCurso = true; try { marcarCambioPropio(); const { data, error } = await db.rpc('toggle_goat'); if (error) return alert(error.message); currentUser.esGoat = data; await cargarPerfil(currentUser.id); actualizarInterfazUsuario(); if (data) { alert("🐐 Modo GOAT activado. +5.000 €."); tryUnlockAchievement('goat'); } } finally { accionEnCurso = false; } }
 async function reclamarBonusDiario() { if (!currentUser) return; if (accionEnCurso) return; accionEnCurso = true; try { marcarCambioPropio(); const { data, error } = await db.rpc('reclamar_bonus_diario'); if (error) return alert("⚠️ "+error.message); currentUser.saldo = data; actualizarInterfazUsuario(); alert("🎁 +100 € de bono diario."); } finally { accionEnCurso = false; } }
 // ===== MISIONES =====
-async function mostrarMisiones() { if (!currentUser) return abrirModalAuth('register'); ocultarTodasVistas(); document.getElementById('viewMisiones').classList.add('active'); document.querySelectorAll('.categories-nav .nav-tab').forEach(t => t.classList.remove('active')); document.getElementById('tabMisiones').classList.add('active'); await cargarMisiones(); }
+async function mostrarMisiones() { if (!currentUser) return abrirModalAuth('register'); ocultarTodasVistas(); document.getElementById('viewMisiones').classList.add('active'); document.querySelectorAll('.primary-nav .nav-tab').forEach(t => t.classList.remove('active')); document.getElementById('tabMisiones').classList.add('active'); await cargarMisiones(); }
 async function cargarMisiones() { const container = document.getElementById('misionesContainer'); container.innerHTML = 'Cargando...'; const { data, error } = await db.rpc('get_daily_missions'); if (error) { container.innerHTML = `<p>Error: ${error.message}</p>`; return; } const m = data; let html = ''; html += `<div class="mission-card"><div class="mission-title">🎁 Bono Diario</div><div class="mission-desc">Reclama 100 € cada día.</div>${m.bonus ? `<button onclick="reclamarBonusDiarioDesdeMisiones()" style="background:var(--accent-blue);color:white;border:none;padding:6px 12px;border-radius:6px;cursor:pointer;">Reclamar +100 €</button>` : `<span class="mission-completed">✅ Reclamado hoy</span>`}</div>`; html += `<div class="mission-card"><div class="mission-title">🔫 Gatillo Fácil</div><div class="mission-desc">3 pujas mínimas. ${m.min_bids}/3</div><div class="progress-bar"><div class="progress-fill" style="width:${Math.min(m.min_bids/3*100,100)}%"></div></div>${m.min_bids>=3?'<div class="mission-completed">✅</div>':''}</div>`; html += `<div class="mission-card"><div class="mission-title">💼 El Inversor</div><div class="mission-desc">1 puja personalizada. ${m.custom_bid>=1?'✅':'Pendiente'}</div>${m.custom_bid>=1?'<div class="mission-completed">✅</div>':''}</div>`; html += `<div class="mission-card"><div class="mission-title">📺 Patrocinador</div><div class="mission-desc">2 anuncios. ${m.ad_views}/2</div><div class="progress-bar"><div class="progress-fill" style="width:${Math.min(m.ad_views/2*100,100)}%"></div></div>${m.ad_views>=2?'<div class="mission-completed">✅</div>':''}</div>`; html += `<div class="mission-card"><div class="mission-title">🧭 Explorador</div><div class="mission-desc">Puja en categoría especial. ${m.category_bid>=1?'✅':'Pendiente'}</div>${m.category_bid>=1?'<div class="mission-completed">✅</div>':''}</div>`; container.innerHTML = html; }
 async function reclamarBonusDiarioDesdeMisiones() { await reclamarBonusDiario(); cargarMisiones(); }
 // ===== HALL OF FAME =====
-async function mostrarHallOfFame() { if (!currentUser) return abrirModalAuth('register'); ocultarTodasVistas(); document.getElementById('viewHallOfFame').classList.add('active'); document.querySelectorAll('.categories-nav .nav-tab').forEach(t => t.classList.remove('active')); document.getElementById('tabHallOfFame').classList.add('active'); await cargarHallOfFame(); if (hallOfFameInterval) clearInterval(hallOfFameInterval); hallOfFameInterval = setInterval(cargarHallOfFame, 30000); }
+async function mostrarHallOfFame() { if (!currentUser) return abrirModalAuth('register'); ocultarTodasVistas(); document.getElementById('viewHallOfFame').classList.add('active'); document.querySelectorAll('.primary-nav .nav-tab').forEach(t => t.classList.remove('active')); document.getElementById('tabHallOfFame').classList.add('active'); await cargarHallOfFame(); if (hallOfFameInterval) clearInterval(hallOfFameInterval); hallOfFameInterval = setInterval(cargarHallOfFame, 30000); }
 async function cargarHallOfFame() { const container = document.getElementById('hofContainer'); container.innerHTML = 'Cargando...'; const { data, error } = await db.rpc('get_hall_of_fame'); if (error) { container.innerHTML = `<p>Error: ${error.message}</p>`; return; } let html = ''; html += '<div class="hof-section"><h3>🏆 Rey de la Pista</h3>' + construirPodioYLista(data.ganadores, 'victorias') + '</div>'; html += '<div class="hof-section"><h3>💰 La Ballena</h3>' + construirPodioYLista(data.gastadores, 'gastado') + '</div>'; html += '<div class="hof-section"><h3>🏛️ El Museo</h3>' + construirPodioYLista(data.coleccionistas, 'certificados') + '</div>'; container.innerHTML = html; }
 function construirPodioYLista(lista, tipo) { if (!lista || !lista.length) return '<p>No hay datos.</p>'; let html = '<div class="hof-podium">'; const top3 = lista.slice(0,3), orden = [1,0,2], clases = ['gold','silver','bronze'], medallas = ['🥇','🥈','🥉']; orden.forEach(i => { if (top3[i]) { const val = tipo==='gastado' ? Number(top3[i].total_gastado).toLocaleString('es-ES')+' €' : top3[i].total; html += `<div class="podium-spot ${clases[i]}"><div>${medallas[i]}</div><strong>${top3[i].username}</strong><div>${val}</div></div>`; } }); html += '</div>'; if (lista.length > 3) { html += '<div class="hof-list">'; for (let i=3; i<lista.length; i++) { const val = tipo==='gastado' ? Number(lista[i].total_gastado).toLocaleString('es-ES')+' €' : lista[i].total; html += `<div class="hof-row"><span>#${i+1} ${lista[i].username}</span><span>${val}</span></div>`; } html += '</div>'; } return html; }
 // ===== ADMIN =====
 function mostrarLegal() { ocultarTodasVistas(); document.getElementById('viewLegal').classList.add('active'); }
 function ocultarTodasVistas() { document.querySelectorAll('.view').forEach(v => v.classList.remove('active')); if (hallOfFameInterval) { clearInterval(hallOfFameInterval); hallOfFameInterval = null; } }
-function mostrarCatalogo() { ocultarTodasVistas(); cargarSubastas(); document.getElementById('viewCatalog').classList.add('active'); }
+function mostrarCatalogo() { mostrandoFinalizadas = false; categoriaActiva = 'Todas'; ocultarTodasVistas(); cargarSubastas(); document.getElementById('viewCatalog').classList.add('active'); document.querySelectorAll('.primary-nav .nav-tab').forEach(t => t.classList.remove('active')); document.getElementById('tabTodas').classList.add('active'); renderizarCategoryChips(); }
 function abrirModalAuth(mode = 'register') { toggleAuthForm(mode); document.getElementById('authModal').style.display = 'flex'; }
 function cerrarModalAuth() { document.getElementById('authModal').style.display = 'none'; }
 function abrirModalAdmin() { document.getElementById('adminModal').style.display = 'flex'; renderizarListaAdminSubastas(); cargarCategorias().then(() => { actualizarSelectorCategoriasAdmin(); renderizarListaAdminCategorias(); }); }
@@ -548,6 +551,8 @@ function solicitarBajaCuenta() { alert("Escribe a abrozonsubastas@gmail.com para
 async function mostrarVitrina() {
     if (!currentUser) return abrirModalAuth('register');
     ocultarTodasVistas();
+    document.querySelectorAll('.primary-nav .nav-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('tabVitrina').classList.add('active');
     const grid = document.getElementById('vitrinaGrid');
     grid.innerHTML = 'Cargando...';
     const { data: misItems, error: errorItems } = await db.from('user_items')
@@ -590,11 +595,12 @@ async function mostrarVitrina() {
 function mostrarMercado() {
     mostrandoFinalizadas = false;
     categoriaActiva = 'Mercado';
-    document.querySelectorAll('.categories-nav .nav-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.primary-nav .nav-tab').forEach(t => t.classList.remove('active'));
     document.getElementById('tabMercado').classList.add('active');
     ocultarTodasVistas();
     document.getElementById('viewCatalog').classList.add('active');
     renderizarCatalogo();
+    renderizarCategoryChips();
 }
 async function venderItem(auctionId) {
     if (!currentUser) return abrirModalAuth('register');
