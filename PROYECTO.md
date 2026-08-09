@@ -56,6 +56,7 @@
 * ✅ Galería de imágenes en el detalle del producto
 * ✅ Calculadora de economía (archivo aparte)
 * ✅ Menús reorganizados (versión moderna, propuesta de Claudio ya integrada)
+* ✅ **Textos legales completos y adaptados a LSSI-CE/RGPD** (Aviso Legal, Política de Privacidad, Política de Cookies). Incluyen los datos de aBROzon SL (en constitución), NIF pendiente, ubicación en Granollers (Barcelona). Redactados con ayuda de Gemini para cumplir con la normativa española.
 
 ## 🚧 Próximos pasos (Roadmap priorizado para MVP)
 
@@ -107,6 +108,7 @@
 * Misiones sociales (compartir, visitar streamer).
 * Dashboard de administrador con estadísticas.
 * Colecciones temáticas y eventos especiales.
+* Navegación con hash (#) para que funcione la flecha de retroceder del navegador.
 
 ## 💰 Modelo de monetización (planificado)
 
