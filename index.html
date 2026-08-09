@@ -606,11 +606,23 @@ async function venderItem(auctionId) {
     if (!currentUser) return abrirModalAuth('register');
     const precio = prompt("¿Precio de salida para el mercado? (€)");
     if (!precio || isNaN(precio) || Number(precio) <= 0) return alert("Precio inválido.");
+    
+    const duracion = prompt("¿Duración de la subasta?\n1 → 24 horas\n3 → 3 días\n7 → 7 días\n(Escribe 1, 3 o 7)", "3");
+    const horas = parseInt(duracion);
+    if (horas !== 1 && horas !== 3 && horas !== 7) return alert("Duración inválida. Elige 1 (24h), 3 (3 días) o 7 (7 días).");
+    const horasReales = horas === 1 ? 24 : horas * 24; // 1 día = 24h, 3 días = 72h, 7 días = 168h
+    
     const fianza = Math.round(Number(precio) * 0.10);
     if (!confirm(`La fianza es de ${fianza} € (10% del precio). Si se vende, se te devolverá la fianza y recibirás el precio final menos una comisión del 20%. Si no se vende, perderás la fianza. ¿Publicar?`)) return;
+    
     const { data: items, error: errorItems } = await db.from('user_items').select('id').eq('auction_id', auctionId).eq('user_id', currentUser.id).single();
     if (errorItems || !items) return alert("No se encontró el objeto en tu inventario.");
-    const { error } = await db.rpc('vender_en_mercado', { p_user_item_id: items.id, p_precio_salida: Number(precio) });
+    
+    const { error } = await db.rpc('vender_en_mercado', { 
+        p_user_item_id: items.id, 
+        p_precio_salida: Number(precio),
+        p_duracion_horas: horasReales 
+    });
     if (error) return alert("Error: " + error.message);
     await cargarPerfil(currentUser.id);
     actualizarInterfazUsuario();
