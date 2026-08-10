@@ -527,7 +527,9 @@ function actualizarVistaDetalleDatoVivo() {
     // Botón cancelar venta (solo para el vendedor en mercado activo)
     const btnCancelar = document.getElementById('btnCancelarVenta');
     if (btnCancelar) {
-        btnCancelar.style.display = (productoSeleccionado.category === 'Mercado' && currentUser && currentUser.id === productoSeleccionado.seller_id && productoSeleccionado.status === 'active') ? 'block' : 'none';
+        const soyVendedor = (currentUser && productoSeleccionado.seller_id && currentUser.id === productoSeleccionado.seller_id) ||
+                            (currentUser && productoSeleccionado.seller_username && productoSeleccionado.seller_username === currentUser.username);
+        btnCancelar.style.display = (productoSeleccionado.category === 'Mercado' && soyVendedor && productoSeleccionado.status === 'active') ? 'block' : 'none';
     }
     // Mostrar certificado si es un objeto del mercado
     const certDiv = document.getElementById('certInfo');
@@ -636,8 +638,8 @@ async function mostrarVitrina() {
     if (errorItems) { grid.innerHTML = '<div style="color:var(--text-muted);">Error al cargar inventario.</div>'; return; }
     const idsPoseidos = new Set(misItems ? misItems.map(i => i.auction_id) : []);
     const ganados = subastasLocales.filter(p =>
-        p.status === 'closed' &&
-        p.winner === currentUser.username &&
+        (p.status === 'closed' || p.status === 'cancelled') &&
+        (p.winner === currentUser.username || p.seller_id === currentUser.id) &&
         idsPoseidos.has(p.id)
     );
     if (ganados.length >= 5) tryUnlockAchievement('collector');
