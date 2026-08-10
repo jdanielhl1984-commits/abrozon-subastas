@@ -79,6 +79,8 @@
         .btn-bid:hover { background-color: #ea580c; }
         .btn-compra-directa { width: 100%; background-color: #eab308; color: #0f172a; border: none; padding: 12px; font-size: 1rem; font-weight: bold; border-radius: 10px; cursor: pointer; margin-bottom: 10px; display: none; }
         .btn-compra-directa:hover { background-color: #ca8a04; }
+        .btn-cancelar-venta { width: 100%; background-color: #ef4444; color: white; border: none; padding: 12px; font-size: 1rem; font-weight: bold; border-radius: 10px; cursor: pointer; margin-bottom: 10px; display: none; }
+        .btn-cancelar-venta:hover { background-color: #dc2626; }
         .history-item { font-size: 0.85rem; padding: 10px 0; border-bottom: 1px dashed var(--border-color); line-height: 1.3; }
         .profile-header { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 20px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; box-shadow: var(--shadow-card); }
         .user-info h2 { font-size: 1.3rem; color: var(--text-main); }
@@ -270,7 +272,7 @@
         <div class="grid-title">🔥 Subastas Activas</div>
         <div class="auction-grid" id="catalogGrid">Cargando...</div>
     </div>
-    <div id="viewDetail" class="view"><button class="btn-back" onclick="mostrarCatalogo()">← Volver al Catálogo</button><div class="detail-layout"><div class="product-card-detail"><div class="main-image-detail" id="detailImage">📦</div><div id="detailGallery" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:15px;"></div><span class="card-category" id="detailCategory">Categoría</span><h1 id="detailTitle" style="margin:8px 0;font-size:1.4rem;">Título</h1><p id="detailDescription" style="color:var(--text-muted);line-height:1.6;">Descripción...</p></div><div class="auction-panel-detail"><div class="time-box" id="detailTime">⏳ Cierra en: Calculando...</div><div style="margin-bottom:15px;"><div style="font-size:0.8rem;color:var(--text-muted);">Última puja</div><div style="font-size:2.1rem;font-weight:900;" id="detailBid">0 €</div></div><div id="biddingControlsContainer"><div id="goatCommentContainer" style="display:none;margin-bottom:12px;"><input type="text" id="goatCommentInput" placeholder="💬 Mensaje épico GOAT..." style="width:100%;padding:10px;border-radius:8px;border:1px solid #eab308;background:var(--bg-subtle);color:var(--text-main);font-weight:bold;outline:none;font-size:0.85rem;"></div><button id="btnCompraDirecta" class="btn-compra-directa" onclick="comprarDirecto()">💎 COMPRA DIRECTA (30% comisión)</button><button class="btn-bid" id="btnMinBid" onclick="hacerPujaMínima()">¡PUJAR MÍNIMO (+50 €)!</button><div style="display:flex;gap:8px;margin-top:10px;"><input type="number" id="customBidInput" placeholder="Cantidad exacta €" style="flex:1;padding:10px;border-radius:8px;border:1px solid var(--border-color);background:var(--bg-subtle);color:var(--text-main);font-weight:bold;outline:none;"><button id="btnCustomBid" onclick="hacerPujaPersonalizada()" style="background:var(--accent-blue);color:white;border:none;padding:10px 14px;border-radius:8px;font-weight:bold;cursor:pointer;">Pujar</button></div></div><div style="margin-top:20px;border-top:1px solid var(--border-color);padding-top:15px;"><h3 style="font-size:0.8rem;color:var(--text-muted);margin-bottom:10px;">Historial de Pujas</h3><div id="historyList" style="max-height:220px;overflow-y:auto;"></div></div></div></div></div>
+    <div id="viewDetail" class="view"><button class="btn-back" onclick="mostrarCatalogo()">← Volver al Catálogo</button><div class="detail-layout"><div class="product-card-detail"><div class="main-image-detail" id="detailImage">📦</div><div id="detailGallery" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:15px;"></div><span class="card-category" id="detailCategory">Categoría</span><h1 id="detailTitle" style="margin:8px 0;font-size:1.4rem;">Título</h1><p id="detailDescription" style="color:var(--text-muted);line-height:1.6;">Descripción...</p><div id="certInfo" style="display:none; margin-top:12px; padding:10px; background:rgba(234,179,8,0.1); border-radius:8px; font-size:0.85rem; color:var(--text-main);"></div></div><div class="auction-panel-detail"><div class="time-box" id="detailTime">⏳ Cierra en: Calculando...</div><div style="margin-bottom:15px;"><div style="font-size:0.8rem;color:var(--text-muted);">Última puja</div><div style="font-size:2.1rem;font-weight:900;" id="detailBid">0 €</div></div><div id="biddingControlsContainer"><div id="goatCommentContainer" style="display:none;margin-bottom:12px;"><input type="text" id="goatCommentInput" placeholder="💬 Mensaje épico GOAT..." style="width:100%;padding:10px;border-radius:8px;border:1px solid #eab308;background:var(--bg-subtle);color:var(--text-main);font-weight:bold;outline:none;font-size:0.85rem;"></div><button id="btnCompraDirecta" class="btn-compra-directa" onclick="comprarDirecto()">💎 COMPRA DIRECTA (30% comisión)</button><button id="btnCancelarVenta" class="btn-cancelar-venta" onclick="cancelarVentaMercado()">❌ Cancelar venta (pierdes la fianza)</button><button class="btn-bid" id="btnMinBid" onclick="hacerPujaMínima()">¡PUJAR MÍNIMO (+50 €)!</button><div style="display:flex;gap:8px;margin-top:10px;"><input type="number" id="customBidInput" placeholder="Cantidad exacta €" style="flex:1;padding:10px;border-radius:8px;border:1px solid var(--border-color);background:var(--bg-subtle);color:var(--text-main);font-weight:bold;outline:none;"><button id="btnCustomBid" onclick="hacerPujaPersonalizada()" style="background:var(--accent-blue);color:white;border:none;padding:10px 14px;border-radius:8px;font-weight:bold;cursor:pointer;">Pujar</button></div></div><div style="margin-top:20px;border-top:1px solid var(--border-color);padding-top:15px;"><h3 style="font-size:0.8rem;color:var(--text-muted);margin-bottom:10px;">Historial de Pujas</h3><div id="historyList" style="max-height:220px;overflow-y:auto;"></div></div></div></div></div>
     <div id="viewVitrina" class="view"><div class="profile-header"><div class="user-info"><h2 id="profileUserName">👑 Usuario</h2><span class="user-badge" id="profileBadge">Coleccionista</span></div></div><div class="grid-title">📜 Mis Certificados</div><div class="vitrina-grid" id="vitrinaGrid"></div></div>
     <div id="viewPerfil" class="view"><button class="btn-back" onclick="mostrarCatalogo()">← Volver al Catálogo</button><div class="profile-header"><div class="user-info"><h2 id="perfilNombre">👤 Usuario</h2><span class="user-badge" id="perfilEmail">correo@ejemplo.com</span></div></div>
         <div class="product-card-detail" style="margin-bottom:20px;">
@@ -522,6 +524,26 @@ function actualizarVistaDetalleDatoVivo() {
             btnCompraDirecta.innerText = `💎 COMPRA DIRECTA (${Number(productoSeleccionado.compra_directa_price).toLocaleString('es-ES')} € + 30% comisión)`;
         }
     }
+    // Botón cancelar venta (solo para el vendedor en mercado activo)
+    const btnCancelar = document.getElementById('btnCancelarVenta');
+    if (btnCancelar) {
+        btnCancelar.style.display = (productoSeleccionado.category === 'Mercado' && currentUser && currentUser.id === productoSeleccionado.seller_id && productoSeleccionado.status === 'active') ? 'block' : 'none';
+    }
+    // Mostrar certificado si es un objeto del mercado
+    const certDiv = document.getElementById('certInfo');
+    if (certDiv) {
+        if (productoSeleccionado.category === 'Mercado' && productoSeleccionado.metadata) {
+            const meta = typeof productoSeleccionado.metadata === 'string' ? JSON.parse(productoSeleccionado.metadata) : productoSeleccionado.metadata;
+            if (meta.certificado_codigo || meta.fecha_compra) {
+                certDiv.style.display = 'block';
+                certDiv.innerHTML = `<strong>📜 Certificado:</strong> ${meta.certificado_codigo || 'N/A'}<br><strong>📅 Comprado:</strong> ${meta.fecha_compra ? new Date(meta.fecha_compra).toLocaleDateString('es-ES') : 'N/A'}`;
+            } else {
+                certDiv.style.display = 'none';
+            }
+        } else {
+            certDiv.style.display = 'none';
+        }
+    }
 }
 function cambiarFotoPrincipal(url) { document.getElementById('detailImage').innerHTML = renderizarImagenProducto(url); }
 function iniciarTemporizador(fin) { if (timerInterval) clearInterval(timerInterval); const target = new Date(fin||Date.now()+86400000).getTime(), box = document.getElementById('detailTime'); function actualizar() { if (productoSeleccionado && productoSeleccionado.status === 'closed') return; const diff = target - Date.now(); if (diff <= 0) { box.innerText = "⏳ Subasta Finalizada"; clearInterval(timerInterval); cargarSubastas(); return; } const d = Math.floor(diff/86400000), h = Math.floor((diff%86400000)/3600000), m = Math.floor((diff%3600000)/60000), s = Math.floor((diff%60000)/1000); box.innerText = d>0 ? `⏳ Cierra en: ${d}d ${h}h ${m}m` : `⏳ Cierra en: ${h}h ${m}m ${s}s`; } actualizar(); timerInterval = setInterval(actualizar, 1000); }
@@ -656,25 +678,17 @@ function mostrarMercado() {
 }
 async function venderItem(auctionId) {
     if (!currentUser) return abrirModalAuth('register');
-    
-    // 1. Precio de salida
     const precio = prompt("¿Precio de salida para la subasta? (€)");
     if (!precio || isNaN(precio) || Number(precio) <= 0) return alert("Precio inválido.");
-    
-    // 2. Duración
     const duracion = prompt("¿Duración de la subasta?\n1 → 24 horas\n3 → 3 días\n7 → 7 días\n(Escribe 1, 3 o 7)", "3");
     const horas = parseInt(duracion);
     if (horas !== 1 && horas !== 3 && horas !== 7) return alert("Duración inválida. Elige 1 (24h), 3 (3 días) o 7 (7 días).");
     const horasReales = horas === 1 ? 24 : horas * 24;
-    
-    // 3. Precio de compra directa (opcional)
     const compraDirectaInput = prompt("¿Precio de COMPRA DIRECTA? (deja vacío si no quieres)\nSi pones un precio, cualquier usuario podrá comprarlo instantáneamente por ese importe (con un 30% de comisión).", "");
     let compraDirecta = null;
     if (compraDirectaInput && !isNaN(compraDirectaInput) && Number(compraDirectaInput) > 0) {
         compraDirecta = Math.round(Number(compraDirectaInput));
     }
-    
-    // 4. Confirmación con fianza
     const fianza = Math.round(Number(precio) * 0.10);
     let mensaje = `Fianza: ${fianza} € (10% del precio de salida).\n`;
     mensaje += `Si se vende, recuperas la fianza y recibes el precio final -20% comisión.\n`;
@@ -682,10 +696,8 @@ async function venderItem(auctionId) {
     if (compraDirecta) mensaje += `Precio de compra directa: ${compraDirecta} € (+30% comisión).\n`;
     mensaje += `¿Publicar?`;
     if (!confirm(mensaje)) return;
-    
     const { data: items, error: errorItems } = await db.from('user_items').select('id').eq('auction_id', auctionId).eq('user_id', currentUser.id).single();
     if (errorItems || !items) return alert("No se encontró el objeto en tu inventario.");
-    
     const { error } = await db.rpc('vender_en_mercado', { 
         p_user_item_id: items.id, 
         p_precio_salida: Number(precio),
@@ -701,12 +713,9 @@ async function venderItem(auctionId) {
 }
 async function comprarDirecto() {
     if (!currentUser || !productoSeleccionado) return;
-    
     const precioCompra = productoSeleccionado.compra_directa_price;
     if (!precioCompra) return alert("Esta subasta no tiene opción de compra directa.");
-    
     if (!confirm(`¿Comprar directamente por ${Number(precioCompra).toLocaleString('es-ES')} €? Se aplicará un 30% de comisión.`)) return;
-    
     const { error } = await db.rpc('comprar_directo', { p_auction_id: productoSeleccionado.id });
     if (error) return alert("Error: " + error.message);
     await cargarPerfil(currentUser.id);
@@ -714,6 +723,15 @@ async function comprarDirecto() {
     await cargarSubastas();
     mostrarCatalogo();
     alert("¡Compra realizada con éxito! Revisa tu vitrina.");
+}
+async function cancelarVentaMercado() {
+    if (!currentUser || !productoSeleccionado) return;
+    if (!confirm("¿Cancelar esta venta? Perderás la fianza pero recuperarás tu objeto.")) return;
+    const { error } = await db.rpc('cancelar_venta_mercado', { p_auction_id: productoSeleccionado.id });
+    if (error) return alert("Error: " + error.message);
+    await cargarSubastas();
+    mostrarCatalogo();
+    alert("Venta cancelada. El objeto vuelve a tu vitrina.");
 }
 // ===== CREAR SUBASTA =====
 async function crearNuevaSubasta() {
