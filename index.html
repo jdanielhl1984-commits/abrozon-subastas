@@ -59,6 +59,10 @@
         .auction-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
         .auction-card { background: var(--bg-card); border-radius: 14px; border: 1px solid var(--border-color); overflow: hidden; cursor: pointer; box-shadow: var(--shadow-card); position: relative; }
         .auction-card:hover { transform: translateY(-3px); border-color: var(--accent-blue); }
+        .auction-card.rareza-comun { border: 2px solid #94a3b8; }
+        .auction-card.rareza-rara { border: 2px solid #3b82f6; }
+        .auction-card.rareza-epica { border: 2px solid #8b5cf6; }
+        .auction-card.rareza-legendaria { border: 2px solid #f97316; box-shadow: 0 0 8px rgba(249,115,22,0.3); }
         .card-image { width: 100%; height: 180px; background-color: var(--bg-subtle); display: flex; align-items: center; justify-content: center; font-size: 4.5rem; position: relative; border-bottom: 1px solid var(--border-color); overflow: hidden; }
         .badge-closed { position: absolute; top: 10px; left: 10px; background: #ef4444; color: white; font-size: 0.65rem; font-weight: bold; padding: 3px 8px; border-radius: 6px; text-transform: uppercase; }
         .card-timer { position: absolute; top: 10px; right: 10px; background: rgba(239,68,68,0.15); color: #ef4444; font-size: 0.7rem; font-weight: bold; padding: 3px 8px; border-radius: 6px; font-family: monospace; }
@@ -496,9 +500,11 @@ function renderizarCatalogo() {
     if (terminoBusqueda) lista = lista.filter(p => (p.title||'').toLowerCase().includes(terminoBusqueda) || (p.description||'').toLowerCase().includes(terminoBusqueda));
     if (!lista.length) { grid.innerHTML = '<div>No hay subastas.</div>'; return; }
     lista.forEach(p => {
-        const rarezaClase = p.rareza ? 'rareza-' + p.rareza.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '') : 'rareza-comun';         const card = document.createElement('div'); card.className = 'auction-card ' + rarezaClase; card.onclick = () => abrirDetalle(p.id);
+        const rarezaClase = p.rareza ? 'rareza-' + p.rareza.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '') : 'rareza-comun';
+        const card = document.createElement('div'); card.className = 'auction-card ' + rarezaClase; card.onclick = () => abrirDetalle(p.id);
         const cerrada = p.status === 'closed';
-        card.innerHTML = `<div class="card-image">${renderizarImagenProducto(p.image_url)}${cerrada ? '<div class="badge-closed">FINALIZADA</div>' : `<div class="card-timer" id="cardTimer-${p.id}">⏳ ...</div>`}</div><div class="card-content"><div class="card-category">${p.category||'General'}${p.seller_id ? ' (Vendedor: ' + (p.seller_username || 'Usuario') + ')' : ''}${cerrada?' · Adjudicado':''}</div><div class="card-title">${p.title}</div>${!cerrada && p.last_bidder ? `<div style="font-size:0.7rem;color:var(--text-muted);margin-bottom:6px;">👤 Último pujador: <strong>${p.last_bidder}</strong></div>` : ''}<div class="card-footer"><div><div class="bid-label-sm">${cerrada?'Precio Final':'Puja Actual'}</div><div class="bid-amount-sm">${Number(p.current_price).toLocaleString('es-ES')} €</div></div></div></div>`;
+        const rarezaChip = p.rareza ? `<div class="badge-trend" style="position:absolute;bottom:8px;left:8px;font-size:0.6rem;">${p.rareza}</div>` : '';
+        card.innerHTML = `<div class="card-image">${renderizarImagenProducto(p.image_url)}${cerrada ? '<div class="badge-closed">FINALIZADA</div>' : `<div class="card-timer" id="cardTimer-${p.id}">⏳ ...</div>`}${rarezaChip}</div><div class="card-content"><div class="card-category">${p.category||'General'}${p.seller_id ? ' (Vendedor: ' + (p.seller_username || 'Usuario') + ')' : ''}${cerrada?' · Adjudicado':''}</div><div class="card-title">${p.title}</div>${!cerrada && p.last_bidder ? `<div style="font-size:0.7rem;color:var(--text-muted);margin-bottom:6px;">👤 Último pujador: <strong>${p.last_bidder}</strong></div>` : ''}<div class="card-footer"><div><div class="bid-label-sm">${cerrada?'Precio Final':'Puja Actual'}</div><div class="bid-amount-sm">${Number(p.current_price).toLocaleString('es-ES')} €</div></div></div></div>`;
         grid.appendChild(card);
     });
     actualizarTemporizadoresCatalogo();
