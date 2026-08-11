@@ -28,7 +28,7 @@
 ### Funciones RPC (backend)
 
 * `place_bid`, `add_ad_reward`, `check_and_close_auction`, `unlock_achievement`, `admin_buscar_usuario`, `admin_set_saldo`, `admin_toggle_ban`, `admin_delete_auction`, `create_auction`, `get_daily_missions`, `get_hall_of_fame`, `increment_min_bid`, `increment_custom_bid`, `increment_ad_mission`, `increment_category_bid`, `toggle_goat`, `reclamar_bonus_diario`, `username_disponible`, `actualizar_mi_alias`, `admin_listar_usuarios`, `add_xp`, `admin_add_category`, `admin_delete_category`
-* **Mercado C2C:** `vender_en_mercado`, `cerrar_subasta_mercado`, `comprar_directo`, `admin_forzar_cierre_y_adjudicar`
+* **Mercado C2C:** `vender_en_mercado`, `cerrar_subasta_mercado`, `comprar_directo`, `admin_forzar_cierre_y_adjudicar`, `cancelar_venta_mercado`
 
 ### Seguridad
 
@@ -45,7 +45,12 @@
 * ✅ 15 logros/insignias desbloqueables (actualmente, con vista en lista y notificaciones toast). *Pendiente de revisión:* se detectó duplicado ("Bugueado" y "Margin Call" premiaban lo mismo). Se planea ampliar a ~21 logros con temática de jerga Z/Alpha (Glow Up, Inversor Nato, A Full, etc.).
 * ✅ Sistema de experiencia (XP) y niveles con títulos equipables (Lurker, Regular, Curador, Broker/Main Character, Whale, Final Boss/Admin)
 * ✅ Sistema de Rarezas (Común/Rara/Épica/Legendaria) y Metadata Flexible (JSONB) para efectos visuales y colecciones temáticas
-* ✅ **Mercado C2C (Fase 1):** inventario de usuarios, pestaña "🛒 Mercado C2C", botón "Vender en Mercado" en la vitrina, compra directa con 30% de comisión, sistema de fianzas (10%) y comisiones por venta (20%)
+* ✅ **Mercado C2C (Fase 1 completada):**
+  * Inventario de usuarios, pestaña "🛒 Mercado C2C", botón "Vender en Mercado" en la vitrina.
+  * Compra directa con 30% de comisión, sistema de fianzas (10%) y comisiones por venta (20%).
+  * **Nuevo:** Se copia la foto real del objeto al publicarlo en el mercado.
+  * **Nuevo:** Cajita de detalles del certificado en la vista de producto (certificado original, fecha de adjudicación y vendedor).
+  * **Nuevo:** Botón "Cancelar venta" (solo para el vendedor, no devuelve la fianza).
 * ✅ Hall of Fame (rankings de ganadores, gastadores y coleccionistas) – se actualiza cada 30 s
 * ✅ PWA (instalable en móvil como app)
 * ✅ Modo GOAT (activación, recargas, comentarios destacados) — actualmente es gratuito y da +5.000 €; en el futuro será la suscripción premium (3.99 €/mes)
