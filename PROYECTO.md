@@ -57,7 +57,7 @@
   * Mítica (roja, solo manual, 1.000.001 €+, 14 días)
 * ✅ **Marcos y chips visuales por rareza:** Cada tarjeta en el catálogo muestra un borde y una etiqueta de color según su rareza.
 * ✅ **Último pujador visible** en cada tarjeta del catálogo (debajo del título).
-* ✅ **Filtro "Novedades"** (🆕) que muestra solo las subastas creadas en las últimas 24 horas.
+* ✅ **Filtro "Novedades"** (🆕) que muestra solo las subastas creadas en las últimas 24 horas, ordenadas de más reciente a más antigua.
 * ✅ **Generación automática de subastas:**
   * Tabla `objetos_automaticos` con 20 objetos de temática streamers/fútbol.
   * Función `generar_subasta_automatica` que sortea rareza (según %), precio y duración.
@@ -81,6 +81,7 @@
 * ✅ Calculadora de economía (archivo aparte)
 * ✅ Menús reorganizados (versión moderna, propuesta de Claudio ya integrada)
 * ✅ **Textos legales completos y adaptados a LSSI-CE/RGPD** (Aviso Legal, Política de Privacidad, Política de Cookies). Incluyen los datos de aBROzon SL (en constitución), NIF pendiente, ubicación en Granollers (Barcelona). Redactados con ayuda de Gemini para cumplir con la normativa española.
+* ✅ **Banner de fase beta**: La web muestra un aviso `🚧 FASE BETA · PRUEBAS EN CURSO 🚧` en la cabecera.
 
 ## 🚧 Próximos pasos (Roadmap priorizado para MVP)
 
@@ -127,8 +128,9 @@
 
 ## 🌐 Dominio
 
-* **Dominio deseado:** `aBROzon.com` (pendiente de compra tras validar el MVP con testers).
-* **URL actual:** [https://jdanielhl1984-commits.github.io/abrozon-subastas/](https://jdanielhl1984-commits.github.io/abrozon-subastas/)
+* **Dominio:** `abrozon.com` — **Comprado y conectado a GitHub Pages**. La web ya está disponible en [https://abrozon.com](https://abrozon.com).
+* **Redirección:** La URL antigua de GitHub Pages redirige automáticamente al nuevo dominio.
+* **HTTPS:** Activado (certificado SSL gestionado por GitHub).
 
 ## ⚠️ Notas para la IA
 
