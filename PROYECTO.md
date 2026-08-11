@@ -24,11 +24,13 @@
 * `daily_bid_counts`, `daily_custom_bids`, `daily_ad_views_mission`, `daily_category_bids`
 * `categories` (nombre, icono; dinámica desde admin)
 * `user_items` (inventario de objetos de cada usuario, relaciona `user_id` con `auction_id`)
+* `objetos_automaticos` (catálogo de objetos que el sistema usa para generar subastas automáticas)
 
 ### Funciones RPC (backend)
 
 * `place_bid`, `add_ad_reward`, `check_and_close_auction`, `unlock_achievement`, `admin_buscar_usuario`, `admin_set_saldo`, `admin_toggle_ban`, `admin_delete_auction`, `create_auction`, `get_daily_missions`, `get_hall_of_fame`, `increment_min_bid`, `increment_custom_bid`, `increment_ad_mission`, `increment_category_bid`, `toggle_goat`, `reclamar_bonus_diario`, `username_disponible`, `actualizar_mi_alias`, `admin_listar_usuarios`, `add_xp`, `admin_add_category`, `admin_delete_category`
 * **Mercado C2C:** `vender_en_mercado`, `cerrar_subasta_mercado`, `comprar_directo`, `admin_forzar_cierre_y_adjudicar`, `cancelar_venta_mercado`
+* **Generación automática:** `generar_subasta_automatica` (crea subastas aleatorias con rarezas y precios según probabilidades)
 
 ## 🔒 Seguridad
 
@@ -44,9 +46,24 @@
 * ✅ Subastas en tiempo real (pujas, temporizadores con días/horas, cierre automático con `check_and_close_auction` al visitar el catálogo)
 * ✅ Panel de administración (crear/eliminar subastas, gestionar usuarios, ver lista completa, banear, fijar saldo, añadir/eliminar categorías dinámicas, adjudicar subastas al admin para pruebas)
 * ✅ Sistema de misiones diarias (bono diario, pujas mínimas, puja personalizada, ver anuncios, explorar categorías)
-* ✅ 15 logros/insignias desbloqueables (actualmente, con vista en lista y notificaciones toast). *Pendiente de revisión:* se detectó duplicado ("Bugueado" y "Margin Call" premiaban lo mismo). Se planea ampliar a ~21 logros con temática de jerga Z/Alpha (Glow Up, Inversor Nato, A Full, etc.).
+* ✅ 15 logros/insignias desbloqueables (con vista en lista y notificaciones toast). *Pendiente de revisión:* se detectó duplicado ("Bugueado" y "Margin Call" premiaban lo mismo). Se planea ampliar a ~21 logros con temática de jerga Z/Alpha (Glow Up, Inversor Nato, A Full, etc.).
 * ✅ Sistema de experiencia (XP) y niveles con títulos equipables (Lurker, Regular, Curador, Broker/Main Character, Whale, Final Boss/Admin)
-* ✅ Sistema de Rarezas (Común/Rara/Épica/Legendaria) y Metadata Flexible (JSONB) para efectos visuales y colecciones temáticas
+* ✅ **Sistema de Rarezas completo (6 niveles):**
+  * Común (gris, 60% prob, 1-1.000 €, 24h)
+  * Poco común (verde, 20% prob, 500-2.000 €, 24h)
+  * Rara (azul, 15% prob, 1.001-5.000 €, 24h)
+  * Épica (lila, 4% prob, 5.001-10.000 €, 3 días)
+  * Legendaria (naranja, 1% prob, 10.001-1.000.000 €, 7 días)
+  * Mítica (roja, solo manual, 1.000.001 €+, 14 días)
+* ✅ **Marcos y chips visuales por rareza:** Cada tarjeta en el catálogo muestra un borde y una etiqueta de color según su rareza.
+* ✅ **Último pujador visible** en cada tarjeta del catálogo (debajo del título).
+* ✅ **Filtro "Novedades"** (🆕) que muestra solo las subastas creadas en las últimas 24 horas.
+* ✅ **Generación automática de subastas:**
+  * Tabla `objetos_automaticos` con 20 objetos de temática streamers/fútbol.
+  * Función `generar_subasta_automatica` que sortea rareza (según %), precio y duración.
+  * **Cron job configurado** en `cron-job.org` para ejecutar la generación automáticamente cada X horas.
+* ✅ **Sistema de reliquidación:** Si una subasta automática termina sin pujas, se vuelve a publicar automáticamente con un 10% de descuento (hasta un mínimo de 1 €).
+* ✅ Metadata Flexible (JSONB) para efectos visuales y colecciones temáticas
 * ✅ **Mercado C2C (Fase 1 completada):**
   * Inventario de usuarios, pestaña "🛒 Mercado C2C", botón "Vender en Mercado" en la vitrina.
   * Compra directa con 30% de comisión, sistema de fianzas (10%) y comisiones por venta (20%).
@@ -69,44 +86,27 @@
 
 ### Fase 1: MVP sólido y gratuito (para testear con 5 amigos)
 
-1. **Automatización de cierres de subasta (Cron Job)** ⬜ Pendiente
-* Crear una función RPC (`cron_check_auctions`) en Supabase que revise y cierre subastas caducadas.
-* Usar un servicio externo gratuito (`cron-job.org`) para ejecutarla cada minuto.
-* *Objetivo:* La web funciona 24/7 sin intervención manual.
-
+1. ~~**Automatización de cierres de subasta (Cron Job)**~~ → ✅ HECHO (cron-job.org + `generar_subasta_automatica`)
 2. **Vitrina Espectacular y Compartible** ⬜ Pendiente
-* Efectos visuales CSS por rareza (brillo azul, holográfico, dorado con partículas).
-* Numeración de serie visible en Legendarias.
-* Botón de compartir vitrina en redes sociales (texto/imagen generada).
-
+   * Efectos visuales CSS por rareza en la vitrina.
+   * Numeración de serie visible en Legendarias.
+   * Botón de compartir vitrina en redes sociales (texto/imagen generada).
 3. **Nuevos logros y corrección del duplicado** ⬜ Pendiente
-* Reemplazar "Margin Call" por un logro original (ej: ganar la primera venta en el Mercado C2C).
-* Añadir 5-6 logros nuevos inspirados en el DicZionario (Glow Up, Inversor Nato, A Full, etc.) para fomentar la retención.
-
+   * Reemplazar "Margin Call" por un logro original (ej: ganar la primera venta en el Mercado C2C).
+   * Añadir 5-6 logros nuevos inspirados en el DicZionario (Glow Up, Inversor Nato, A Full, etc.) para fomentar la retención.
 4. **Ajuste de la economía (control de inflación)** ⬜ Pendiente
-* Limitar anuncios diarios y recargas GOAT usando la calculadora.
-* Ajustar recompensas de misiones según el feedback.
+   * Limitar anuncios diarios y recargas GOAT usando la calculadora.
+   * Ajustar recompensas de misiones según el feedback.
 
 ### Fase 2: Monetización (cuando el MVP tenga usuarios recurrentes)
 
 1. **Integración de pagos con Stripe** ⬜ Pendiente
-* Suscripción GOAT premium (3.99 €/mes) con ventajas (más anuncios, comentarios en pujas, chapa dorada).
-* Tienda de monedas/tokens para comprar saldo virtual con dinero real.
-
 2. **Anuncios reales (Google AdSense)** ⬜ Pendiente
-* Reemplazar los anuncios simulados por anuncios reales para monetizar a los usuarios F2P.
-
 3. **Mejoras de seguridad/arquitectura (para producción con pagos)** ⬜ Pendiente
-* Implementar `FOR UPDATE` en funciones de puja para evitar condiciones de carrera en subastas.
-* Evaluar dividir el `index.html` en módulos JS si el mantenimiento se vuelve complejo.
 
 ### Ideas futuras (post-MVP)
 
-* **Colección Temática "Jägger Lore":** Colección de ítems parodia utilizando la columna `metadata` (JSONB) para filtros y efectos visuales (`lore_source`, `frame_effect`, `quote`):
-  * *La Plota* (Épica | GIF animado en movimiento).
-  * *La Caca de Viruzz* (Legendaria | Stock: 1 unidad | Marco dorado).
-  * *Tatuaje Aspiradora Roomba* (Legendaria | Cosmético para vitrina/perfil).
-  * *Guantes de la Velada* (Épica) y *El Saltpeper* (Rara).
+* **Colección Temática "Jägger Lore":** *La Plota, La Caca de Viruzz, Tatuaje Aspiradora Roomba, Guantes de la Velada, El Saltpeper.*
 * Categoría Legacy / Rage Comics (memes antiguos).
 * Misiones sociales (compartir, visitar streamer).
 * Dashboard de administrador con estadísticas.
@@ -118,8 +118,9 @@
 * **Modo GOAT (Suscripción 3.99 €/mes):** Sin límites de anuncios, posibilidad de escribir comentarios en pujas, insignia exclusiva, y otras ventajas.
 * **Tienda de monedas:** Compra directa de saldo virtual con Stripe.
 
-## 📢 Estrategia de lanzamiento (idea preliminar)
+## 📢 Redes Sociales y Estrategia de Lanzamiento
 
+* **X (Twitter):** [@aBROzonsubastas](https://x.com/aBROzonsubastas) — Perfil oficial creado. Primeras interacciones con capturas de subastas y etiquetado a streamers (ej: Jägger).
 * **Beta Privada (5-10 usuarios):** Probar con amigos para encontrar bugs y pulir la experiencia.
 * **Beta con Micro-streamers:** Si la beta privada funciona, invitar a streamers pequeños para medir la retención real.
 * **Contenido viral:** Crear clips de subastas absurdas para TikTok/X que enganchen a la comunidad.
