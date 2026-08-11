@@ -30,11 +30,13 @@
 * `place_bid`, `add_ad_reward`, `check_and_close_auction`, `unlock_achievement`, `admin_buscar_usuario`, `admin_set_saldo`, `admin_toggle_ban`, `admin_delete_auction`, `create_auction`, `get_daily_missions`, `get_hall_of_fame`, `increment_min_bid`, `increment_custom_bid`, `increment_ad_mission`, `increment_category_bid`, `toggle_goat`, `reclamar_bonus_diario`, `username_disponible`, `actualizar_mi_alias`, `admin_listar_usuarios`, `add_xp`, `admin_add_category`, `admin_delete_category`
 * **Mercado C2C:** `vender_en_mercado`, `cerrar_subasta_mercado`, `comprar_directo`, `admin_forzar_cierre_y_adjudicar`, `cancelar_venta_mercado`
 
-### Seguridad
+## 🔒 Seguridad
 
-* Row Level Security (RLS) activo con políticas personalizadas.
-* Las funciones RPC sensibles usan `SECURITY DEFINER` para ejecutar la lógica de negocio en el servidor, no en el navegador del cliente.
-* *A futuro (cuando se integren pagos reales):* Se planea añadir `FOR UPDATE` en funciones de puja para evitar condiciones de carrera, y migrar lógica crítica a Edge Functions.
+* **Row Level Security (RLS):** Activo y verificado en todas las tablas. 
+  * `profiles`: `(auth.uid() = id)` — Cada usuario solo ve su propia fila (saldos protegidos).
+  * `auctions` y `bids`: Lectura pública para mantener la fluidez del catálogo.
+* **Funciones RPC:** Usan `SECURITY DEFINER` para ejecutar la lógica financiera (saldos, fianzas del 10%, comisiones del 20%) en el servidor.
+* **Prevención de Race Conditions:** La RPC `place_bid` incluye bloqueo atómico `FOR UPDATE` para procesar pujas simultáneas en cola sin duplicar saldos ni pujas.
 
 ## ✨ Funcionalidades implementadas
 
@@ -48,9 +50,9 @@
 * ✅ **Mercado C2C (Fase 1 completada):**
   * Inventario de usuarios, pestaña "🛒 Mercado C2C", botón "Vender en Mercado" en la vitrina.
   * Compra directa con 30% de comisión, sistema de fianzas (10%) y comisiones por venta (20%).
-  * **Nuevo:** Se copia la foto real del objeto al publicarlo en el mercado.
-  * **Nuevo:** Cajita de detalles del certificado en la vista de producto (certificado original, fecha de adjudicación y vendedor).
-  * **Nuevo:** Botón "Cancelar venta" (solo para el vendedor, no devuelve la fianza).
+  * Se copia la foto real del objeto al publicarlo en el mercado.
+  * Cajita de detalles del certificado en la vista de producto (certificado original, fecha de adjudicación y vendedor).
+  * Botón "Cancelar venta" (solo para el vendedor, no devuelve la fianza).
 * ✅ Hall of Fame (rankings de ganadores, gastadores y coleccionistas) – se actualiza cada 30 s
 * ✅ PWA (instalable en móvil como app)
 * ✅ Modo GOAT (activación, recargas, comentarios destacados) — actualmente es gratuito y da +5.000 €; en el futuro será la suscripción premium (3.99 €/mes)
@@ -72,23 +74,18 @@
 * Usar un servicio externo gratuito (`cron-job.org`) para ejecutarla cada minuto.
 * *Objetivo:* La web funciona 24/7 sin intervención manual.
 
-
 2. **Vitrina Espectacular y Compartible** ⬜ Pendiente
 * Efectos visuales CSS por rareza (brillo azul, holográfico, dorado con partículas).
 * Numeración de serie visible en Legendarias.
 * Botón de compartir vitrina en redes sociales (texto/imagen generada).
 
-
 3. **Nuevos logros y corrección del duplicado** ⬜ Pendiente
 * Reemplazar "Margin Call" por un logro original (ej: ganar la primera venta en el Mercado C2C).
 * Añadir 5-6 logros nuevos inspirados en el DicZionario (Glow Up, Inversor Nato, A Full, etc.) para fomentar la retención.
 
-
 4. **Ajuste de la economía (control de inflación)** ⬜ Pendiente
 * Limitar anuncios diarios y recargas GOAT usando la calculadora.
 * Ajustar recompensas de misiones según el feedback.
-
-
 
 ### Fase 2: Monetización (cuando el MVP tenga usuarios recurrentes)
 
@@ -96,23 +93,23 @@
 * Suscripción GOAT premium (3.99 €/mes) con ventajas (más anuncios, comentarios en pujas, chapa dorada).
 * Tienda de monedas/tokens para comprar saldo virtual con dinero real.
 
-
 2. **Anuncios reales (Google AdSense)** ⬜ Pendiente
 * Reemplazar los anuncios simulados por anuncios reales para monetizar a los usuarios F2P.
-
 
 3. **Mejoras de seguridad/arquitectura (para producción con pagos)** ⬜ Pendiente
 * Implementar `FOR UPDATE` en funciones de puja para evitar condiciones de carrera en subastas.
 * Evaluar dividir el `index.html` en módulos JS si el mantenimiento se vuelve complejo.
 
-
-
 ### Ideas futuras (post-MVP)
 
+* **Colección Temática "Jägger Lore":** Colección de ítems parodia utilizando la columna `metadata` (JSONB) para filtros y efectos visuales (`lore_source`, `frame_effect`, `quote`):
+  * *La Plota* (Épica | GIF animado en movimiento).
+  * *La Caca de Viruzz* (Legendaria | Stock: 1 unidad | Marco dorado).
+  * *Tatuaje Aspiradora Roomba* (Legendaria | Cosmético para vitrina/perfil).
+  * *Guantes de la Velada* (Épica) y *El Saltpeper* (Rara).
 * Categoría Legacy / Rage Comics (memes antiguos).
 * Misiones sociales (compartir, visitar streamer).
 * Dashboard de administrador con estadísticas.
-* Colecciones temáticas y eventos especiales.
 * Navegación con hash (#) para que funcione la flecha de retroceder del navegador.
 
 ## 💰 Modelo de monetización (planificado)
@@ -120,6 +117,12 @@
 * **F2P (Gratis):** Usuarios ven anuncios limitados para conseguir moneda virtual.
 * **Modo GOAT (Suscripción 3.99 €/mes):** Sin límites de anuncios, posibilidad de escribir comentarios en pujas, insignia exclusiva, y otras ventajas.
 * **Tienda de monedas:** Compra directa de saldo virtual con Stripe.
+
+## 📢 Estrategia de lanzamiento (idea preliminar)
+
+* **Beta Privada (5-10 usuarios):** Probar con amigos para encontrar bugs y pulir la experiencia.
+* **Beta con Micro-streamers:** Si la beta privada funciona, invitar a streamers pequeños para medir la retención real.
+* **Contenido viral:** Crear clips de subastas absurdas para TikTok/X que enganchen a la comunidad.
 
 ## 🌐 Dominio
 
