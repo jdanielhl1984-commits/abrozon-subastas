@@ -465,7 +465,7 @@ function renderizarCategoryChips() {
     const box = document.getElementById('categoryChips'); if (!box) return;
     if (mostrandoFinalizadas || categoriaActiva === 'Mercado') { box.style.display = 'none'; return; }
     box.style.display = 'flex';
-    const chips = [{ name: 'Todas', icon: '🗂️' }, ...categorias];
+    const chips = [{ name: 'Todas', icon: '🗂️' }, { name: 'Novedades', icon: '🆕' }, ...categorias];
     box.innerHTML = chips.map(c => `<span class="chip ${categoriaActiva === c.name ? 'active' : ''}" onclick="filtrarCategoria('${c.name}')">${c.icon} ${c.name}</span>`).join('');
 }
 function actualizarSelectorCategoriasAdmin() { const select = document.getElementById('adminCategoria'); if (!select) return; select.innerHTML = categorias.map(c => `<option value="${c.name}">${c.icon} ${c.name}</option>`).join(''); }
@@ -484,8 +484,11 @@ function renderizarCatalogo() {
     if (mostrandoFinalizadas) lista = lista.filter(p => p.status === 'closed');
     else {
         lista = lista.filter(p => p.status !== 'closed');
-        if (categoriaActiva === 'Mercado') {
+                if (categoriaActiva === 'Mercado') {
             lista = lista.filter(p => p.category === 'Mercado');
+        } else if (categoriaActiva === 'Novedades') {
+            const hace24h = new Date(Date.now() - 24*60*60*1000).toISOString();
+            lista = lista.filter(p => p.created_at >= hace24h);
         } else if (categoriaActiva !== 'Todas') {
             lista = lista.filter(p => p.category === categoriaActiva);
         }
