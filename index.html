@@ -765,7 +765,7 @@ async function crearNuevaSubasta() {
     if (metadataRaw) {
         try { metadata = JSON.parse(metadataRaw); } catch (e) { alert("El campo Metadata no es un JSON válido."); return; }
     }
-    const { error } = await db.rpc('create_auction', { p_title: title, p_description: desc, p_price: price, p_image: img, p_hours: horas, p_category: categoria, p_rareza: rareza, p_stock_maximo: stock, p_metadata: metadata, p_images: fotosAdicionalesAdmin });
+    const tituloConRareza = '[' + rareza + '] ' + title;     const { error } = await db.rpc('create_auction', { p_title: tituloConRareza, p_description: desc, p_price: price, p_image: img, p_hours: horas, p_category: categoria, p_rareza: rareza, p_stock_maximo: stock, p_metadata: metadata, p_images: fotosAdicionalesAdmin });
     if (error) return alert("Error: " + error.message);
     cerrarModalAdmin();
     document.getElementById('adminTitle').value = '';
