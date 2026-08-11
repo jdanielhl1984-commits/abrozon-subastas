@@ -238,7 +238,7 @@
         </div>
     </div>
 </div>
-<div class="disclaimer">⚠️ Sincronización en Tiempo Real & Cierre Automático Activos</div>
+<div class="disclaimer">🚧 FASE BETA · PRUEBAS EN CURSO 🚧</div>
 <header>
     <div class="logo" onclick="mostrarCatalogo()">aBROzon<span>.subastas</span></div>
     <div class="search-bar">
@@ -508,6 +508,7 @@ function renderizarCatalogo() {
         } else if (categoriaActiva === 'Novedades') {
             const hace24h = new Date(Date.now() - 24*60*60*1000).toISOString();
             lista = lista.filter(p => p.created_at >= hace24h);
+            lista.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
         } else if (categoriaActiva !== 'Todas') {
             lista = lista.filter(p => p.category === categoriaActiva);
         }
