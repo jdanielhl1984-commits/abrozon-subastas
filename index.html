@@ -456,17 +456,16 @@ async function cargarPerfil(userId) {
 
 function actualizarContadorProximaSubasta() {
     const ahora = new Date();
-    const minutosActuales = ahora.getMinutes();
-    const segundosActuales = ahora.getSeconds();
-    let minutosRestantes = 60 - minutosActuales;
-    if (segundosActuales > 0) minutosRestantes--;
-    if (minutosRestantes < 0) minutosRestantes = 0;
-    const horasRestantes = Math.floor(minutosRestantes / 60);
-    const minsRestantes = minutosRestantes % 60;
+    const minutosRestantes = 59 - ahora.getMinutes();
+    const segundosRestantes = 59 - ahora.getSeconds();
     let texto = '';
-    if (horasRestantes > 0) texto += horasRestantes + 'h ';
-    if (minsRestantes > 0) texto += minsRestantes + 'min';
-    if (texto === '') texto = 'menos de 1 min';
+    if (minutosRestantes > 0) {
+        texto = minutosRestantes + ' min';
+    } else if (segundosRestantes > 0) {
+        texto = segundosRestantes + ' s';
+    } else {
+        texto = 'ahora mismo';
+    }
     const el = document.getElementById('contadorProximaSubasta');
     if (el) el.innerText = '⏳ Próxima subasta en: ' + texto;
 }
