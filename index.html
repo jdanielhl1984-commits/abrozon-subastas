@@ -536,10 +536,10 @@ function renderizarCatalogo() {
     if (terminoBusqueda) lista = lista.filter(p => (p.title||'').toLowerCase().includes(terminoBusqueda) || (p.description||'').toLowerCase().includes(terminoBusqueda));
     if (!lista.length) { grid.innerHTML = '<div>No hay subastas.</div>'; return; }
     lista.forEach(p => {
-        const rarezaClase = p.rareza ? 'rareza-' + p.rareza.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '') : 'rareza-comun';
+        const rarezaClase = p.rareza ? 'rareza-' + p.rareza.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-') : 'rareza-comun';
         const card = document.createElement('div'); card.className = 'auction-card ' + rarezaClase; card.onclick = () => abrirDetalle(p.id);
         const cerrada = p.status === 'closed';
-        const rarezaChip = p.rareza ? `<div class="chip-rareza chip-rareza-${p.rareza.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')}" style="position:absolute;bottom:8px;left:8px;">${p.rareza}</div>` : '';
+        const rarezaChip = p.rareza ? `<div class="chip-rareza chip-rareza-${p.rareza.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-')}" style="position:absolute;bottom:8px;left:8px;">${p.rareza}</div>` : '';
         card.innerHTML = `<div class="card-image">${renderizarImagenProducto(p.image_url)}${cerrada ? '<div class="badge-closed">FINALIZADA</div>' : `<div class="card-timer" id="cardTimer-${p.id}">⏳ ...</div>`}${rarezaChip}</div><div class="card-content"><div class="card-category">${p.category||'General'}${p.seller_id ? ' (Vendedor: ' + (p.seller_username || 'Usuario') + ')' : ''}${cerrada?' · Adjudicado':''}</div><div class="card-title">${p.title}</div>${!cerrada && p.last_bidder ? `<div style="font-size:0.7rem;color:var(--text-muted);margin-bottom:6px;">👤 Último pujador: <strong>${p.last_bidder}</strong></div>` : ''}<div class="card-footer"><div><div class="bid-label-sm">${cerrada?'Precio Final':'Puja Actual'}</div><div class="bid-amount-sm">${Number(p.current_price).toLocaleString('es-ES')} €</div></div></div></div>`;
         grid.appendChild(card);
     });
@@ -560,7 +560,7 @@ function actualizarVistaDetalleDatoVivo() {
 
     const detailContainer = document.querySelector('#viewDetail .product-card-detail');
     if (detailContainer && productoSeleccionado.rareza) {
-        const claseRareza = 'rareza-' + productoSeleccionado.rareza.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+        const claseRareza = 'rareza-' + productoSeleccionado.rareza.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-');
         detailContainer.className = 'product-card-detail ' + claseRareza;
     } else if (detailContainer) {
         detailContainer.className = 'product-card-detail';
@@ -569,7 +569,7 @@ function actualizarVistaDetalleDatoVivo() {
     const chipRareza = document.getElementById('detailRarezaChip');
     if (chipRareza && productoSeleccionado.rareza) {
         chipRareza.style.display = 'block';
-        chipRareza.innerHTML = `<span class="chip-rareza chip-rareza-${productoSeleccionado.rareza.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')}">${productoSeleccionado.rareza}</span>`;
+        chipRareza.innerHTML = `<span class="chip-rareza chip-rareza-${productoSeleccionado.rareza.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-')}">${productoSeleccionado.rareza}</span>`;
     } else if (chipRareza) {
         chipRareza.style.display = 'none';
     }
