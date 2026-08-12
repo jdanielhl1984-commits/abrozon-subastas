@@ -645,12 +645,12 @@ async function cargarHallOfFame() {
     if (error) { container.innerHTML = `<p>Error: ${error.message}</p>`; return; }
     
     let html = '';
-    html += '<div class="hof-section"><h3>🐐 La Cabra (GOAT)</h3>' + construirPodioYLista(data.ganadores, 'victorias') + '</div>';
-    html += '<div class="hof-section"><h3>💰 El Más Chetado</h3>' + construirPodioYLista(data.gastadores, 'gastado') + '</div>';
-    html += '<div class="hof-section"><h3>🏛️ El Museo</h3>' + construirPodioYLista(data.coleccionistas, 'certificados') + '</div>';
-    html += '<div class="hof-section"><h3>👑 El Más Old</h3>' + construirPodioYLista(data.antiguos, 'fecha') + '</div>';
-    html += '<div class="hof-section"><h3>🤝 El Más Broker</h3>' + construirPodioYLista(data.brokers, 'gastado') + '</div>';
-    html += '<div class="hof-section"><h3>🤑 El Más Rico</h3>' + construirPodioYLista(data.ricos, 'oculto') + '</div>';
+    html += '<div class="hof-section"><h3>🤑 El Más Rico</h3><p style="color:var(--text-muted);font-size:0.8rem;margin-bottom:10px;">Mayor saldo actual (cifra oculta 🔒)</p>' + construirPodioYLista(data.ricos, 'oculto') + '</div>';
+    html += '<div class="hof-section"><h3>🐐 La Cabra (GOAT)</h3><p style="color:var(--text-muted);font-size:0.8rem;margin-bottom:10px;">Más subastas ganadas</p>' + construirPodioYLista(data.ganadores, 'victorias') + '</div>';
+    html += '<div class="hof-section"><h3>💰 El Más Chetado</h3><p style="color:var(--text-muted);font-size:0.8rem;margin-bottom:10px;">Más dinero gastado en pujas</p>' + construirPodioYLista(data.gastadores, 'gastado') + '</div>';
+    html += '<div class="hof-section"><h3>🏛️ El Museo</h3><p style="color:var(--text-muted);font-size:0.8rem;margin-bottom:10px;">Más objetos en su colección</p>' + construirPodioYLista(data.coleccionistas, 'certificados') + '</div>';
+    html += '<div class="hof-section"><h3>👑 El Más Old</h3><p style="color:var(--text-muted);font-size:0.8rem;margin-bottom:10px;">Cuenta más antigua</p>' + construirPodioYLista(data.antiguos, 'fecha') + '</div>';
+    html += '<div class="hof-section"><h3>🤝 El Más Broker</h3><p style="color:var(--text-muted);font-size:0.8rem;margin-bottom:10px;">Más ganancias vendiendo en el mercado</p>' + construirPodioYLista(data.brokers, 'gastado') + '</div>';
     container.innerHTML = html;
 }
 function construirPodioYLista(lista, tipo) {
