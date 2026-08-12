@@ -55,7 +55,7 @@
   * Épica (lila, 4% prob, 5.001-10.000 €, 3 días)
   * Legendaria (naranja, 1% prob, 10.001-1.000.000 €, 7 días)
   * Mítica (roja, solo manual, 1.000.001 €+, 14 días)
-* ✅ **Marcos y chips visuales por rareza:** Cada tarjeta en el catálogo muestra un borde y una etiqueta de color según su rareza.
+* ✅ **Marcos y chips visuales por rareza** en catálogo y vista de detalle.
 * ✅ **Último pujador visible** en cada tarjeta del catálogo (debajo del título).
 * ✅ **Filtro "Novedades"** (🆕) que muestra solo las subastas creadas en las últimas 24 horas, ordenadas de más reciente a más antigua.
 * ✅ **Generación automática de subastas:**
@@ -82,32 +82,58 @@
 * ✅ Menús reorganizados (versión moderna, propuesta de Claudio ya integrada)
 * ✅ **Textos legales completos y adaptados a LSSI-CE/RGPD** (Aviso Legal, Política de Privacidad, Política de Cookies). Incluyen los datos de aBROzon SL (en constitución), NIF pendiente, ubicación en Granollers (Barcelona). Redactados con ayuda de Gemini para cumplir con la normativa española.
 * ✅ **Banner de fase beta**: La web muestra un aviso `🚧 FASE BETA · PRUEBAS EN CURSO 🚧` en la cabecera.
+* ✅ **Modal de registro oportuno**: Solo se pide login al intentar pujar, no al entrar.
+* ✅ **Contador de próxima subasta**: Muestra el tiempo restante hasta la siguiente generación automática.
 
-## 🚧 Próximos pasos (Roadmap priorizado para MVP)
+## 🚧 Próximos pasos (Roadmap priorizado)
 
-### Fase 1: MVP sólido y gratuito (para testear con 5 amigos)
+### Fase 2: Pulido UX/UI y Engagement Temprano
+*En progreso*
 
-1. ~~**Automatización de cierres de subasta (Cron Job)**~~ → ✅ HECHO (cron-job.org + `generar_subasta_automatica`)
-2. **Vitrina Espectacular y Compartible** ⬜ Pendiente
-   * Efectos visuales CSS por rareza en la vitrina.
-   * Numeración de serie visible en Legendarias.
-   * Botón de compartir vitrina en redes sociales (texto/imagen generada).
-3. **Nuevos logros y corrección del duplicado** ⬜ Pendiente
-   * Reemplazar "Margin Call" por un logro original (ej: ganar la primera venta en el Mercado C2C).
-   * Añadir 5-6 logros nuevos inspirados en el DicZionario (Glow Up, Inversor Nato, A Full, etc.) para fomentar la retención.
-4. **Ajuste de la economía (control de inflación)** ⬜ Pendiente
-   * Limitar anuncios diarios y recargas GOAT usando la calculadora.
-   * Ajustar recompensas de misiones según el feedback.
+1. ~~**Modal de registro oportuno**~~ → ✅ HECHO
+2. ~~**Contador de próxima subasta**~~ → ✅ HECHO
+3. ~~**Marcos y chips de rareza en detalle**~~ → ✅ HECHO
+4. ~~**Corrección visual objetos Poco Comunes (verdes)**~~ → ✅ HECHO
+5. **Pestaña "Mis pujas"** ⬜ Pendiente — Consultar en tiempo real las pujas activas y el historial de compras.
+6. **Racha de inicio de sesión (Streak Bonus de 7 días)** ⬜ Pendiente — Recompensa diaria creciente que culmina con un gran bote al día 7.
+7. **Recompensa por subir de nivel** ⬜ Pendiente — Monedas extra al alcanzar cada nuevo título.
+8. **Reciclaje / Desguace de objetos** ⬜ Pendiente — Vender objetos comunes del inventario a cambio de monedas inmediatas.
+9. **Compartir en redes sociales** ⬜ Pendiente — Botón para publicar logros o subastas ganadas.
+10. **Sistema de recompensas por anuncios voluntarios** ⬜ Pendiente — Monedas gratis por ver anuncios (simulados o reales en el futuro).
+11. **Controles Anti-Pay-to-Win básicos** ⬜ Pendiente — Límite diario de incremento por puja y topes para evitar que el dinero real domine.
 
-### Fase 2: Monetización (cuando el MVP tenga usuarios recurrentes)
+### Fase 3: Gamificación y Retención
 
-1. **Integración de pagos con Stripe** ⬜ Pendiente
-2. **Anuncios reales (Google AdSense)** ⬜ Pendiente
-3. **Mejoras de seguridad/arquitectura (para producción con pagos)** ⬜ Pendiente
+1. **Nuevos logros y corrección del duplicado** ⬜ Pendiente
+   * Reemplazar "Margin Call" por un logro original.
+   * Añadir 5-6 logros nuevos (Glow Up, Inversor Nato, A Full, etc.).
+2. **Ajuste de la economía (control de inflación)** ⬜ Pendiente — Limitar anuncios diarios y recargas GOAT, ajustar recompensas.
+3. **Sistema de referidos** ⬜ Pendiente — Bonificaciones por invitar nuevos usuarios mediante enlace único.
+4. **Personalización de avatar** ⬜ Pendiente — Equipar objetos coleccionables en el avatar.
+5. **Personalización de perfil** ⬜ Pendiente — Fondos y banners exclusivos equipables.
+6. **Beneficios por antigüedad** ⬜ Pendiente — Ventajas e insignias para los usuarios más veteranos.
+7. **Vitrina Espectacular y Compartible** ⬜ Pendiente — Efectos CSS por rareza en la vitrina, numeración de serie en Legendarias, botón de compartir.
 
-### Ideas futuras (post-MVP)
+### Fase 4: Monetización (cuando haya usuarios recurrentes)
 
-* **Colección Temática "Jägger Lore":** *La Plota, La Caca de Viruzz, Tatuaje Aspiradora Roomba, Guantes de la Velada, El Saltpeper.*
+1. **Integración de pagos con Stripe** ⬜ Pendiente — Suscripción GOAT premium (3.99 €/mes) y tienda de monedas.
+2. **Anuncios reales (Google AdSense)** ⬜ Pendiente — Reemplazar anuncios simulados.
+3. **Límite diario de compra de monedas** ⬜ Pendiente — Control de whales e hiperinflación.
+4. **Subastas restringidas para novatos** ⬜ Pendiente — Salas exclusivas para cuentas nuevas.
+5. **Subastas inversas** ⬜ Pendiente — El precio baja hasta que alguien compra.
+6. **Pases de temporada** ⬜ Pendiente — Progresión con recompensas exclusivas (gratis y GOAT).
+
+### Fase 5: Comunidad, Eventos y PVE
+
+1. **Eventos y desafíos temporales** ⬜ Pendiente — Misiones especiales con recompensas únicas.
+2. **Votaciones comunitarias** ⬜ Pendiente — La comunidad decide la temática de subastas especiales.
+3. **Sorteos comunitarios** ⬜ Pendiente — Sorteos periódicos entre miembros activos.
+4. **Donaciones comunitarias** ⬜ Pendiente — Donar objetos o fondos a la comunidad.
+5. **Sección FAQ participativo** ⬜ Pendiente — Usuarios responden dudas de novatos.
+6. **Arena PVE "Subasta contra Bots"** ⬜ Pendiente — Modo entrenamiento con IAs paródicas, chat dinámico, y zona Raid de alta dificultad.
+7. **Colección Temática "Jägger Lore"** ⬜ Pendiente — *La Plota, La Caca de Viruzz, Tatuaje Aspiradora Roomba, Guantes de la Velada, El Saltpeper.*
+
+### Ideas lejanas (post-MVP)
 * Categoría Legacy / Rage Comics (memes antiguos).
 * Misiones sociales (compartir, visitar streamer).
 * Dashboard de administrador con estadísticas.
