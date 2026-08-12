@@ -14,7 +14,7 @@
     <meta property="og:title" content="aBROzon.subastas — Subastas Paródicas">
     <meta property="og:description" content="Puja por objetos absurdos y virales (100% de broma)">
     <meta property="og:image" content="[URL DE UNA IMAGEN PARA COMPARTIR]">
-    <meta property="og:url" content="https://jdanielhl1984-commits.github.io/abrozon-subastas/">
+    <meta property="og:url" content="https://abrozon.com/">
     <meta property="og:type" content="website">
     <meta name="twitter:card" content="summary_large_image">
     <link rel="manifest" href="manifest.json">
@@ -59,16 +59,17 @@
         .auction-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
         .auction-card { background: var(--bg-card); border-radius: 14px; border: 1px solid var(--border-color); overflow: hidden; cursor: pointer; box-shadow: var(--shadow-card); position: relative; }
         .auction-card:hover { transform: translateY(-3px); border-color: var(--accent-blue); }
-        .auction-card.rareza-comun { border: 2px solid #94a3b8; }
-        .auction-card.rareza-poco-comun { border: 2px solid #22c55e; }
-        .auction-card.rareza-rara { border: 2px solid #3b82f6; }
-        .auction-card.rareza-epica { border: 2px solid #8b5cf6; }
-        .auction-card.rareza-legendaria { border: 2px solid #f97316; box-shadow: 0 0 8px rgba(249,115,22,0.3); }
-        .auction-card.rareza-mitica { border: 2px solid #ef4444; box-shadow: 0 0 12px rgba(239,68,68,0.4); }
+        .auction-card.rareza-comun, .product-card-detail.rareza-comun { border: 2px solid #94a3b8; }
+        .auction-card.rareza-poco-comun, .product-card-detail.rareza-poco-comun { border: 2px solid #22c55e; }
+        .auction-card.rareza-rara, .product-card-detail.rareza-rara { border: 2px solid #3b82f6; }
+        .auction-card.rareza-epica, .product-card-detail.rareza-epica { border: 2px solid #8b5cf6; }
+        .auction-card.rareza-legendaria, .product-card-detail.rareza-legendaria { border: 2px solid #f97316; box-shadow: 0 0 8px rgba(249,115,22,0.3); }
+        .auction-card.rareza-mitica, .product-card-detail.rareza-mitica { border: 2px solid #ef4444; box-shadow: 0 0 12px rgba(239,68,68,0.4); }
         .chip-rareza {
-            position: absolute; bottom: 8px; left: 8px;
+            display: inline-block;
             font-size: 0.6rem; font-weight: bold; padding: 3px 8px;
             border-radius: 8px; text-transform: uppercase; color: white;
+            margin-bottom: 6px;
         }
         .chip-rareza-comun { background: #94a3b8; }
         .chip-rareza-poco-comun { background: #22c55e; }
@@ -285,7 +286,7 @@
 <div class="container">
     <div id="viewCatalog" class="view active">
         <div class="category-chips" id="categoryChips"></div>
-        <div class="hero-banner"><div class="hero-text"><span class="badge-trend">Plataforma Dinámica</span><h2>Especial Creadores & Polémicas</h2><p>Pujas sincronizadas en directo.</p></div></div>
+        <div class="hero-banner"><div class="hero-text"><span class="badge-trend">Plataforma Dinámica</span><h2>Especial Creadores & Polémicas</h2><p>Pujas sincronizadas en directo. <span id="contadorProximaSubasta" style="font-weight:bold;color:#f97316;"></span></p></div></div>
         <div class="grid-title">🔥 Subastas Activas</div>
         <div class="auction-grid" id="catalogGrid">Cargando...</div>
     </div>
@@ -407,6 +408,8 @@ window.onload = async () => {
     await cargarSubastas();
     await cargarCategorias();
     setInterval(actualizarTemporizadoresCatalogo, 1000);
+    setInterval(actualizarContadorProximaSubasta, 30000);
+    actualizarContadorProximaSubasta();
     db.channel('public-db-changes')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'auctions' }, async (payload) => { await cargarSubastas(); if (productoSeleccionado && payload.new && payload.new.id === productoSeleccionado.id) { productoSeleccionado = payload.new; actualizarVistaDetalleDatoVivo(); } })
       .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'bids' }, async (payload) => { if (productoSeleccionado && payload.new.auction_id === productoSeleccionado.id) await cargarHistorialPujas(productoSeleccionado.id); })
@@ -432,6 +435,23 @@ async function cargarPerfil(userId) {
                 if (diferencia > 0) mostrarToast(`💰 ¡Te han superado una puja! Se te han devuelto ${diferencia.toLocaleString('es-ES')} €.`);
             }).subscribe();
     }
+}
+
+function actualizarContadorProximaSubasta() {
+    const ahora = new Date();
+    const minutosActuales = ahora.getMinutes();
+    const segundosActuales = ahora.getSeconds();
+    let minutosRestantes = 60 - minutosActuales;
+    if (segundosActuales > 0) minutosRestantes--;
+    if (minutosRestantes < 0) minutosRestantes = 0;
+    const horasRestantes = Math.floor(minutosRestantes / 60);
+    const minsRestantes = minutosRestantes % 60;
+    let texto = '';
+    if (horasRestantes > 0) texto += horasRestantes + 'h ';
+    if (minsRestantes > 0) texto += minsRestantes + 'min';
+    if (texto === '') texto = 'menos de 1 min';
+    const el = document.getElementById('contadorProximaSubasta');
+    if (el) el.innerText = '⏳ Próxima subasta en: ' + texto;
 }
 
 function mostrarToast(msg) { let stack = document.getElementById('toastStack'); if (!stack) { stack = document.createElement('div'); stack.id = 'toastStack'; stack.className = 'toast-stack'; document.body.appendChild(stack); } const t = document.createElement('div'); t.className = 'toast-abrozon'; t.innerText = msg; stack.appendChild(t); setTimeout(() => { t.classList.add('toast-out'); setTimeout(() => t.remove(), 300); }, 4000); }
@@ -519,7 +539,7 @@ function renderizarCatalogo() {
         const rarezaClase = p.rareza ? 'rareza-' + p.rareza.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '') : 'rareza-comun';
         const card = document.createElement('div'); card.className = 'auction-card ' + rarezaClase; card.onclick = () => abrirDetalle(p.id);
         const cerrada = p.status === 'closed';
-        const rarezaChip = p.rareza ? `<div class="chip-rareza chip-rareza-${p.rareza.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')}">${p.rareza}</div>` : '';
+        const rarezaChip = p.rareza ? `<div class="chip-rareza chip-rareza-${p.rareza.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')}" style="position:absolute;bottom:8px;left:8px;">${p.rareza}</div>` : '';
         card.innerHTML = `<div class="card-image">${renderizarImagenProducto(p.image_url)}${cerrada ? '<div class="badge-closed">FINALIZADA</div>' : `<div class="card-timer" id="cardTimer-${p.id}">⏳ ...</div>`}${rarezaChip}</div><div class="card-content"><div class="card-category">${p.category||'General'}${p.seller_id ? ' (Vendedor: ' + (p.seller_username || 'Usuario') + ')' : ''}${cerrada?' · Adjudicado':''}</div><div class="card-title">${p.title}</div>${!cerrada && p.last_bidder ? `<div style="font-size:0.7rem;color:var(--text-muted);margin-bottom:6px;">👤 Último pujador: <strong>${p.last_bidder}</strong></div>` : ''}<div class="card-footer"><div><div class="bid-label-sm">${cerrada?'Precio Final':'Puja Actual'}</div><div class="bid-amount-sm">${Number(p.current_price).toLocaleString('es-ES')} €</div></div></div></div>`;
         grid.appendChild(card);
     });
@@ -538,7 +558,6 @@ function actualizarVistaDetalleDatoVivo() {
     const fotos = [productoSeleccionado.image_url, ...(productoSeleccionado.images||[])].filter(u => u && /^https?:\/\//i.test(u));
     gal.innerHTML = fotos.length>1 ? fotos.map(u => `<img src="${u}" onclick="cambiarFotoPrincipal(this.src)" style="width:60px;height:60px;object-fit:cover;border-radius:8px;cursor:pointer;border:2px solid var(--border-color);">`).join('') : '';
 
-    // Aplicar borde de rareza al contenedor del detalle
     const detailContainer = document.querySelector('#viewDetail .product-card-detail');
     if (detailContainer && productoSeleccionado.rareza) {
         const claseRareza = 'rareza-' + productoSeleccionado.rareza.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
@@ -547,7 +566,6 @@ function actualizarVistaDetalleDatoVivo() {
         detailContainer.className = 'product-card-detail';
     }
 
-    // Mostrar chip de rareza
     const chipRareza = document.getElementById('detailRarezaChip');
     if (chipRareza && productoSeleccionado.rareza) {
         chipRareza.style.display = 'block';
@@ -556,7 +574,6 @@ function actualizarVistaDetalleDatoVivo() {
         chipRareza.style.display = 'none';
     }
 
-    // Cajita de detalles del certificado, solo para lotes vendidos por otro usuario en el Mercado
     const infoBox = document.getElementById('mercadoInfoBox');
     if (productoSeleccionado.category === 'Mercado') {
         const meta = productoSeleccionado.metadata || {};
@@ -570,7 +587,6 @@ function actualizarVistaDetalleDatoVivo() {
     document.getElementById('biddingControlsContainer').style.display = productoSeleccionado.status === 'closed' ? 'none' : 'block';
     if (productoSeleccionado.status === 'closed') document.getElementById('detailTime').innerText = `🏆 Finalizada. Ganador: ${productoSeleccionado.winner||'Nadie'}`;
 
-    // Botón de cancelar venta: solo visible para el vendedor, en su propio lote del Mercado, mientras siga activo
     const btnCancelar = document.getElementById('btnCancelarVenta');
     if (btnCancelar) {
         btnCancelar.style.display = (productoSeleccionado.category === 'Mercado' && currentUser && currentUser.id === productoSeleccionado.seller_id && productoSeleccionado.status !== 'closed') ? 'block' : 'none';
@@ -595,8 +611,8 @@ async function cargarLogros() { if (!currentUser) return; const container = docu
 async function mostrarLogros() { if (!currentUser) return abrirModalAuth('register'); ocultarTodasVistas(); document.getElementById('viewLogros').classList.add('active'); document.querySelectorAll('.primary-nav .nav-tab').forEach(t => t.classList.remove('active')); document.getElementById('tabLogros').classList.add('active'); await cargarLogros(); }
 // ===== PUJAS =====
 async function ejecutarPuja(total) { if (!currentUser) return abrirModalAuth('register'); if (productoSeleccionado.status === 'closed') return alert("Finalizada."); if (accionEnCurso) return; accionEnCurso = true; try { let comment = null; if (currentUser.esGoat) { const ci = document.getElementById('goatCommentInput'); comment = ci ? ci.value.trim() : ''; if (ci) ci.value = ''; } marcarCambioPropio(); const { error } = await db.rpc('place_bid', { p_auction_id: productoSeleccionado.id, p_amount: total, p_comment: comment }); if (error) { if (error.message && error.message.includes('saldo')) tryUnlockAchievement('delulu'); return alert("⚠️ " + error.message); } await cargarPerfil(currentUser.id); productoSeleccionado.current_price = total; actualizarInterfazUsuario(); addXp(10); tryUnlockAchievement('first_bid'); const tiempoRestante = new Date(productoSeleccionado.ends_at) - Date.now(); if (tiempoRestante > 0 && tiempoRestante < 30000) tryUnlockAchievement('sniper'); if (currentUser.saldo < 10) tryUnlockAchievement('bancarrota'); if (currentUser.saldo >= 1000000) tryUnlockAchievement('liquidez'); if (currentUser.saldo === 0) tryUnlockAchievement('bancarrota'); if (total >= 50000) tryUnlockAchievement('devoraste'); if (total >= productoSeleccionado.current_price * 10) tryUnlockAchievement('basado'); if (productoSeleccionado.category && productoSeleccionado.category !== 'General') tryUnlockAchievement('skibidi'); if (productoSeleccionado.category && productoSeleccionado.category !== 'General') { const { data: c } = await db.rpc('increment_category_bid'); if (c === 1) { marcarCambioPropio(); const { data: ns } = await db.rpc('add_mission_reward', { p_amount: 250 }); if (ns) { currentUser.saldo = ns; actualizarInterfazUsuario(); mostrarToast("🧭 ¡Explorador! +250 €."); } } } } finally { accionEnCurso = false; } }
-async function hacerPujaMínima() { if (!productoSeleccionado || !currentUser) return; if (productoSeleccionado.status === 'closed') return alert("Finalizada."); await ejecutarPuja(Number(productoSeleccionado.current_price) + 50); const { data: cuenta } = await db.rpc('increment_min_bid'); if (cuenta === 3) { marcarCambioPropio(); const { data: ns } = await db.rpc('add_mission_reward', { p_amount: 150 }); if (ns) { currentUser.saldo = ns; actualizarInterfazUsuario(); mostrarToast("🎯 ¡Gatillo Fácil! +150 €."); addXp(50); } } else if (cuenta === 1) mostrarToast("🔫 Primera puja mínima. ¡A por las 3!"); else if (cuenta === 2) mostrarToast("🔫🔫 Segunda puja mínima. ¡Una más!"); }
-function hacerPujaPersonalizada() { if (!productoSeleccionado || !currentUser) return; const input = document.getElementById('customBidInput'), valor = parseInt(input.value); if (isNaN(valor) || valor <= productoSeleccionado.current_price) return alert("Puja inválida."); ejecutarPuja(valor).then(async () => { const { data: cuenta } = await db.rpc('increment_custom_bid'); if (cuenta === 1) { marcarCambioPropio(); const { data: ns } = await db.rpc('add_mission_reward', { p_amount: 200 }); if (ns) { currentUser.saldo = ns; actualizarInterfazUsuario(); mostrarToast("💼 ¡El Inversor! +200 €."); addXp(50); } } }); input.value = ''; }
+async function hacerPujaMínima() { if (!currentUser) return abrirModalAuth('register'); if (!productoSeleccionado || !currentUser) return; if (productoSeleccionado.status === 'closed') return alert("Finalizada."); await ejecutarPuja(Number(productoSeleccionado.current_price) + 50); const { data: cuenta } = await db.rpc('increment_min_bid'); if (cuenta === 3) { marcarCambioPropio(); const { data: ns } = await db.rpc('add_mission_reward', { p_amount: 150 }); if (ns) { currentUser.saldo = ns; actualizarInterfazUsuario(); mostrarToast("🎯 ¡Gatillo Fácil! +150 €."); addXp(50); } } else if (cuenta === 1) mostrarToast("🔫 Primera puja mínima. ¡A por las 3!"); else if (cuenta === 2) mostrarToast("🔫🔫 Segunda puja mínima. ¡Una más!"); }
+function hacerPujaPersonalizada() { if (!currentUser) return abrirModalAuth('register'); if (!productoSeleccionado || !currentUser) return; const input = document.getElementById('customBidInput'), valor = parseInt(input.value); if (isNaN(valor) || valor <= productoSeleccionado.current_price) return alert("Puja inválida."); ejecutarPuja(valor).then(async () => { const { data: cuenta } = await db.rpc('increment_custom_bid'); if (cuenta === 1) { marcarCambioPropio(); const { data: ns } = await db.rpc('add_mission_reward', { p_amount: 200 }); if (ns) { currentUser.saldo = ns; actualizarInterfazUsuario(); mostrarToast("💼 ¡El Inversor! +200 €."); addXp(50); } } }); input.value = ''; }
 async function verAnuncio() { if (!currentUser) return abrirModalAuth('register'); if (accionEnCurso) return; accionEnCurso = true; try { const antes = currentUser.saldo; marcarCambioPropio(); const { data, error } = await db.rpc('add_ad_reward'); if (error) return alert("⚠️ "+error.message); currentUser.saldo = data; actualizarInterfazUsuario(); alert(`¡+${(data-antes).toLocaleString('es-ES')} € añadidos!`); const { data: ca } = await db.rpc('increment_ad_mission'); if (ca === 2) { marcarCambioPropio(); const { data: ns } = await db.rpc('add_mission_reward', { p_amount: 300 }); if (ns) { currentUser.saldo = ns; actualizarInterfazUsuario(); mostrarToast("📺 ¡Patrocinador! +300 €."); addXp(50); } } else if (ca === 1) mostrarToast("📺 Primer anuncio del día. ¡Uno más!"); } finally { accionEnCurso = false; } }
 async function activarGoat() { if (!currentUser) return; if (accionEnCurso) return; accionEnCurso = true; try { marcarCambioPropio(); const { data, error } = await db.rpc('toggle_goat'); if (error) return alert(error.message); currentUser.esGoat = data; await cargarPerfil(currentUser.id); actualizarInterfazUsuario(); if (data) { alert("🐐 Modo GOAT activado. +5.000 €."); tryUnlockAchievement('goat'); } } finally { accionEnCurso = false; } }
 async function reclamarBonusDiario() { if (!currentUser) return; if (accionEnCurso) return; accionEnCurso = true; try { marcarCambioPropio(); const { data, error } = await db.rpc('reclamar_bonus_diario'); if (error) return alert("⚠️ "+error.message); currentUser.saldo = data; actualizarInterfazUsuario(); alert("🎁 +100 € de bono diario."); } finally { accionEnCurso = false; } }
@@ -718,25 +734,17 @@ function mostrarMercado() {
 }
 async function venderItem(auctionId) {
     if (!currentUser) return abrirModalAuth('register');
-    
-    // 1. Precio de salida
     const precio = prompt("¿Precio de salida para la subasta? (€)");
     if (!precio || isNaN(precio) || Number(precio) <= 0) return alert("Precio inválido.");
-    
-    // 2. Duración
     const duracion = prompt("¿Duración de la subasta?\n1 → 24 horas\n3 → 3 días\n7 → 7 días\n(Escribe 1, 3 o 7)", "3");
     const horas = parseInt(duracion);
     if (horas !== 1 && horas !== 3 && horas !== 7) return alert("Duración inválida. Elige 1 (24h), 3 (3 días) o 7 (7 días).");
     const horasReales = horas === 1 ? 24 : horas * 24;
-    
-    // 3. Precio de compra directa (opcional)
     const compraDirectaInput = prompt("¿Precio de COMPRA DIRECTA? (deja vacío si no quieres)\nSi pones un precio, cualquier usuario podrá comprarlo instantáneamente por ese importe (con un 30% de comisión).", "");
     let compraDirecta = null;
     if (compraDirectaInput && !isNaN(compraDirectaInput) && Number(compraDirectaInput) > 0) {
         compraDirecta = Math.round(Number(compraDirectaInput));
     }
-    
-    // 4. Confirmación con fianza
     const fianza = Math.round(Number(precio) * 0.10);
     let mensaje = `Fianza: ${fianza} € (10% del precio de salida).\n`;
     mensaje += `Si se vende, recuperas la fianza y recibes el precio final -20% comisión.\n`;
@@ -744,10 +752,8 @@ async function venderItem(auctionId) {
     if (compraDirecta) mensaje += `Precio de compra directa: ${compraDirecta} € (+30% comisión).\n`;
     mensaje += `¿Publicar?`;
     if (!confirm(mensaje)) return;
-    
     const { data: items, error: errorItems } = await db.from('user_items').select('id').eq('auction_id', auctionId).eq('user_id', currentUser.id).single();
     if (errorItems || !items) return alert("No se encontró el objeto en tu inventario.");
-    
     const { error } = await db.rpc('vender_en_mercado', { 
         p_user_item_id: items.id, 
         p_precio_salida: Number(precio),
@@ -763,24 +769,21 @@ async function venderItem(auctionId) {
 }
 
 async function cancelarVentaMercado() {
+    if (!currentUser) return abrirModalAuth('register');
     if (!productoSeleccionado) return;
     if (!confirm("¿Seguro que quieres cancelar esta venta?\n\nPerderás la fianza que pagaste al publicarla (no se devuelve). El objeto volverá a tu vitrina.")) return;
-
     const { error } = await db.rpc('cancelar_venta_mercado', { p_auction_id: productoSeleccionado.id });
     if (error) return alert("Error: " + error.message);
-
     alert("Venta cancelada. El objeto ha vuelto a tu vitrina (la fianza no se recupera).");
     await cargarSubastas();
     mostrarVitrina();
 }
 async function comprarDirecto() {
-    if (!currentUser || !productoSeleccionado) return;
-    
+    if (!currentUser) return abrirModalAuth('register');
+    if (!productoSeleccionado) return;
     const precioCompra = productoSeleccionado.compra_directa_price;
     if (!precioCompra) return alert("Esta subasta no tiene opción de compra directa.");
-    
     if (!confirm(`¿Comprar directamente por ${Number(precioCompra).toLocaleString('es-ES')} €? Se aplicará un 30% de comisión.`)) return;
-    
     const { error } = await db.rpc('comprar_directo', { p_auction_id: productoSeleccionado.id });
     if (error) return alert("Error: " + error.message);
     await cargarPerfil(currentUser.id);
