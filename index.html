@@ -56,6 +56,10 @@
         .hero-text p { color: var(--text-muted); font-size: 0.9rem; }
         .badge-trend { background: #f97316; color: white; font-size: 0.7rem; font-weight: bold; padding: 3px 8px; border-radius: 8px; text-transform: uppercase; }
         .grid-title { font-size: 1.2rem; margin-bottom: 20px; color: var(--text-main); display: flex; align-items: center; gap: 8px; }
+        .sort-bar { display: flex; gap: 8px; margin-bottom: 20px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        .sort-chip { flex-shrink: 0; padding: 6px 14px; border-radius: 999px; background: var(--bg-subtle); border: 1px solid var(--border-color); color: var(--text-muted); font-size: 0.78rem; font-weight: 600; cursor: pointer; white-space: nowrap; }
+        .sort-chip:hover { color: var(--text-main); }
+        .sort-chip.active { background: var(--accent-green); color: white; border-color: var(--accent-green); }
         .auction-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
         .auction-card { background: var(--bg-card); border-radius: 14px; border: 1px solid var(--border-color); overflow: hidden; cursor: pointer; box-shadow: var(--shadow-card); position: relative; }
         .auction-card:hover { transform: translateY(-3px); border-color: var(--accent-blue); }
@@ -302,6 +306,13 @@
         <div class="category-chips" id="categoryChips"></div>
         <div class="hero-banner"><div class="hero-text"><span class="badge-trend">Plataforma Dinámica</span><h2>Especial Creadores & Polémicas</h2><p>Pujas sincronizadas en directo. <span id="contadorProximaSubasta" style="font-weight:bold;color:#f97316;"></span></p></div></div>
         <div class="grid-title">🔥 Subastas Activas</div>
+        <div class="sort-bar" id="sortBarCatalog">
+            <span class="sort-chip active" onclick="ordenarCatalogo('fecha')">📅 Más recientes</span>
+            <span class="sort-chip" onclick="ordenarCatalogo('duracion')">⏳ Más cercanas</span>
+            <span class="sort-chip" onclick="ordenarCatalogo('rareza')">🏷️ Por rareza</span>
+            <span class="sort-chip" onclick="ordenarCatalogo('precio-asc')">💰 Precio ↑</span>
+            <span class="sort-chip" onclick="ordenarCatalogo('precio-desc')">💰 Precio ↓</span>
+        </div>
         <div class="auction-grid" id="catalogGrid">Cargando...</div>
     </div>
     <div id="viewDetail" class="view"><button class="btn-back" onclick="mostrarCatalogo()">← Volver al Catálogo</button><div class="detail-layout"><div class="product-card-detail"><div class="main-image-detail" id="detailImage">📦</div><div id="detailGallery" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:15px;"></div><span class="card-category" id="detailCategory">Categoría</span><h1 id="detailTitle" style="margin:8px 0;font-size:1.4rem;">Título</h1><div id="detailRarezaChip" style="display:none;"></div><p id="detailDescription" style="color:var(--text-muted);line-height:1.6;">Descripción...</p><div id="mercadoInfoBox" style="display:none;margin-top:14px;padding:12px;background:rgba(234,179,8,0.1);border:1px solid #eab308;border-radius:8px;font-size:0.85rem;color:var(--text-main);"></div></div><div class="auction-panel-detail"><div class="time-box" id="detailTime">⏳ Cierra en: Calculando...</div><div style="margin-bottom:15px;"><div style="font-size:0.8rem;color:var(--text-muted);">Última puja</div><div style="font-size:2.1rem;font-weight:900;" id="detailBid">0 €</div></div><div id="biddingControlsContainer"><div id="goatCommentContainer" style="display:none;margin-bottom:12px;"><input type="text" id="goatCommentInput" placeholder="💬 Mensaje épico GOAT..." style="width:100%;padding:10px;border-radius:8px;border:1px solid #eab308;background:var(--bg-subtle);color:var(--text-main);font-weight:bold;outline:none;font-size:0.85rem;"></div><button id="btnCompraDirecta" class="btn-compra-directa" onclick="comprarDirecto()">💎 COMPRA DIRECTA (30% comisión)</button><button id="btnCancelarVenta" onclick="cancelarVentaMercado()" style="display:none;width:100%;background:#ef4444;color:white;border:none;padding:10px;border-radius:8px;font-weight:bold;cursor:pointer;margin-bottom:10px;">🚫 Cancelar venta (pierdes la fianza)</button><button class="btn-bid" id="btnMinBid" onclick="hacerPujaMínima()">¡PUJAR MÍNIMO (+50 €)!</button><div style="display:flex;gap:8px;margin-top:10px;"><input type="number" id="customBidInput" placeholder="Cantidad exacta €" style="flex:1;padding:10px;border-radius:8px;border:1px solid var(--border-color);background:var(--bg-subtle);color:var(--text-main);font-weight:bold;outline:none;"><button id="btnCustomBid" onclick="hacerPujaPersonalizada()" style="background:var(--accent-blue);color:white;border:none;padding:10px 14px;border-radius:8px;font-weight:bold;cursor:pointer;">Pujar</button></div></div><!-- Botones de compartir --><div style="margin-top:20px;border-top:1px solid var(--border-color);padding-top:15px;"><h3 style="font-size:0.8rem;color:var(--text-muted);margin-bottom:10px;">📤 Compartir esta subasta</h3><button class="btn-share btn-share-x" onclick="compartirEnX()">𝕏 Compartir en X</button><button class="btn-share btn-share-copy" onclick="copiarEnlace()">🔗 Copiar enlace</button></div><div style="margin-top:20px;border-top:1px solid var(--border-color);padding-top:15px;"><h3 style="font-size:0.8rem;color:var(--text-muted);margin-bottom:10px;">Historial de Pujas</h3><div id="historyList" style="max-height:220px;overflow-y:auto;"></div></div></div></div></div>
@@ -402,7 +413,8 @@ const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 let currentUser = null, productoSeleccionado = null, subastasLocales = [], timerInterval = null,
     profileChannel = null, profileChannelUserId = null, saldoCambioPropio = false, accionEnCurso = false,
     mostrandoFinalizadas = false, categoriaActiva = 'Todas', terminoBusqueda = '', fotosAdicionalesAdmin = [],
-    ultimaAccionPropiaTs = 0, categorias = [], hallOfFameInterval = null;
+    ultimaAccionPropiaTs = 0, categorias = [], hallOfFameInterval = null,
+    ordenCatalogoActual = 'fecha';
 
 const ALL_ACHIEVEMENTS = [
     { key: 'first_bid', name: 'Primer Clic', icon: '🖱️', desc: 'Realiza tu primera puja' },
@@ -547,6 +559,19 @@ async function subirFotoAdmin(e) { const files = Array.from(e.target.files||[]);
 function filtrarCategoria(cat) { mostrandoFinalizadas = false; categoriaActiva = cat; document.querySelectorAll('.primary-nav .nav-tab').forEach(t => t.classList.remove('active')); document.getElementById('tabTodas').classList.add('active'); ocultarTodasVistas(); document.getElementById('viewCatalog').classList.add('active'); renderizarCatalogo(); renderizarCategoryChips(); }
 function mostrarFinalizadas() { mostrandoFinalizadas = true; document.querySelectorAll('.primary-nav .nav-tab').forEach(t => t.classList.remove('active')); document.getElementById('tabFinalizadas').classList.add('active'); ocultarTodasVistas(); document.getElementById('viewCatalog').classList.add('active'); document.getElementById('searchInput').value = ''; terminoBusqueda = ''; renderizarCatalogo(); renderizarCategoryChips(); }
 function buscarEnCatalogo(texto) { terminoBusqueda = (texto||'').trim().toLowerCase(); ocultarTodasVistas(); document.getElementById('viewCatalog').classList.add('active'); renderizarCatalogo(); }
+
+function ordenarCatalogo(criterio) {
+    ordenCatalogoActual = criterio;
+    document.querySelectorAll('#sortBarCatalog .sort-chip').forEach(c => c.classList.remove('active'));
+    const chips = document.querySelectorAll('#sortBarCatalog .sort-chip');
+    if (criterio === 'fecha') chips[0].classList.add('active');
+    else if (criterio === 'duracion') chips[1].classList.add('active');
+    else if (criterio === 'rareza') chips[2].classList.add('active');
+    else if (criterio === 'precio-asc') chips[3].classList.add('active');
+    else if (criterio === 'precio-desc') chips[4].classList.add('active');
+    renderizarCatalogo();
+}
+
 function renderizarCatalogo() {
     renderizarCategoryChips();
     const grid = document.getElementById('catalogGrid'); grid.innerHTML = '';
@@ -554,17 +579,41 @@ function renderizarCatalogo() {
     if (mostrandoFinalizadas) lista = lista.filter(p => p.status === 'closed');
     else {
         lista = lista.filter(p => p.status !== 'closed');
-                if (categoriaActiva === 'Mercado') {
+        if (categoriaActiva === 'Mercado') {
             lista = lista.filter(p => p.category === 'Mercado');
         } else if (categoriaActiva === 'Novedades') {
             const hace24h = new Date(Date.now() - 24*60*60*1000).toISOString();
             lista = lista.filter(p => p.created_at >= hace24h);
-            lista.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
         } else if (categoriaActiva !== 'Todas') {
             lista = lista.filter(p => p.category === categoriaActiva);
         }
     }
     if (terminoBusqueda) lista = lista.filter(p => (p.title||'').toLowerCase().includes(terminoBusqueda) || (p.description||'').toLowerCase().includes(terminoBusqueda));
+    
+    // Ordenar según criterio
+    switch (ordenCatalogoActual) {
+        case 'fecha':
+            lista.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+            break;
+        case 'duracion':
+            lista.sort((a, b) => new Date(a.ends_at) - new Date(b.ends_at));
+            break;
+        case 'rareza':
+            const rarezaOrder = ['Común','Poco común','Rara','Épica','Legendaria','Mítica'];
+            lista.sort((a, b) => {
+                const aR = a.rareza || 'Común';
+                const bR = b.rareza || 'Común';
+                return rarezaOrder.indexOf(bR) - rarezaOrder.indexOf(aR);
+            });
+            break;
+        case 'precio-asc':
+            lista.sort((a, b) => a.current_price - b.current_price);
+            break;
+        case 'precio-desc':
+            lista.sort((a, b) => b.current_price - a.current_price);
+            break;
+    }
+    
     if (!lista.length) { grid.innerHTML = '<div>No hay subastas.</div>'; return; }
     lista.forEach(p => {
         const rarezaClase = p.rareza ? 'rareza-' + p.rareza.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-') : 'rareza-comun';
