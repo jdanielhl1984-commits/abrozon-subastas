@@ -638,8 +638,50 @@ async function cargarMisiones() { const container = document.getElementById('mis
 async function reclamarBonusDiarioDesdeMisiones() { await reclamarBonusDiario(); cargarMisiones(); }
 // ===== HALL OF FAME =====
 async function mostrarHallOfFame() { if (!currentUser) return abrirModalAuth('register'); ocultarTodasVistas(); document.getElementById('viewHallOfFame').classList.add('active'); document.querySelectorAll('.primary-nav .nav-tab').forEach(t => t.classList.remove('active')); document.getElementById('tabHallOfFame').classList.add('active'); await cargarHallOfFame(); if (hallOfFameInterval) clearInterval(hallOfFameInterval); hallOfFameInterval = setInterval(cargarHallOfFame, 30000); }
-async function cargarHallOfFame() { const container = document.getElementById('hofContainer'); container.innerHTML = 'Cargando...'; const { data, error } = await db.rpc('get_hall_of_fame'); if (error) { container.innerHTML = `<p>Error: ${error.message}</p>`; return; } let html = ''; html += '<div class="hof-section"><h3>🏆 Rey de la Pista</h3>' + construirPodioYLista(data.ganadores, 'victorias') + '</div>'; html += '<div class="hof-section"><h3>💰 La Ballena</h3>' + construirPodioYLista(data.gastadores, 'gastado') + '</div>'; html += '<div class="hof-section"><h3>🏛️ El Museo</h3>' + construirPodioYLista(data.coleccionistas, 'certificados') + '</div>'; container.innerHTML = html; }
-function construirPodioYLista(lista, tipo) { if (!lista || !lista.length) return '<p>No hay datos.</p>'; let html = '<div class="hof-podium">'; const top3 = lista.slice(0,3), orden = [1,0,2], clases = ['gold','silver','bronze'], medallas = ['🥇','🥈','🥉']; orden.forEach(i => { if (top3[i]) { const val = tipo==='gastado' ? Number(top3[i].total_gastado).toLocaleString('es-ES')+' €' : top3[i].total; html += `<div class="podium-spot ${clases[i]}"><div>${medallas[i]}</div><strong>${top3[i].username}</strong><div>${val}</div></div>`; } }); html += '</div>'; if (lista.length > 3) { html += '<div class="hof-list">'; for (let i=3; i<lista.length; i++) { const val = tipo==='gastado' ? Number(lista[i].total_gastado).toLocaleString('es-ES')+' €' : lista[i].total; html += `<div class="hof-row"><span>#${i+1} ${lista[i].username}</span><span>${val}</span></div>`; } html += '</div>'; } return html; }
+async function cargarHallOfFame() {
+    const container = document.getElementById('hofContainer');
+    container.innerHTML = 'Cargando...';
+    const { data, error } = await db.rpc('get_hall_of_fame');
+    if (error) { container.innerHTML = `<p>Error: ${error.message}</p>`; return; }
+    
+    let html = '';
+    html += '<div class="hof-section"><h3>🐐 La Cabra (GOAT)</h3>' + construirPodioYLista(data.ganadores, 'victorias') + '</div>';
+    html += '<div class="hof-section"><h3>💰 El Más Chetado</h3>' + construirPodioYLista(data.gastadores, 'gastado') + '</div>';
+    html += '<div class="hof-section"><h3>🏛️ El Museo</h3>' + construirPodioYLista(data.coleccionistas, 'certificados') + '</div>';
+    html += '<div class="hof-section"><h3>👑 El Más Old</h3>' + construirPodioYLista(data.antiguos, 'fecha') + '</div>';
+    html += '<div class="hof-section"><h3>🤝 El Más Broker</h3>' + construirPodioYLista(data.brokers, 'gastado') + '</div>';
+    html += '<div class="hof-section"><h3>🤑 El Más Rico</h3>' + construirPodioYLista(data.ricos, 'oculto') + '</div>';
+    container.innerHTML = html;
+}
+function construirPodioYLista(lista, tipo) {
+    if (!lista || !lista.length) return '<p>No hay datos.</p>';
+    let html = '<div class="hof-podium">';
+    const top3 = lista.slice(0,3), orden = [1,0,2], clases = ['gold','silver','bronze'], medallas = ['🥇','🥈','🥉'];
+    orden.forEach(i => {
+        if (top3[i]) {
+            let val;
+            if (tipo === 'gastado') val = Number(top3[i].total_gastado).toLocaleString('es-ES') + ' €';
+            else if (tipo === 'fecha') val = new Date(top3[i].total).toLocaleDateString('es-ES');
+            else if (tipo === 'oculto') val = '🔒';
+            else val = top3[i].total;
+            html += `<div class="podium-spot ${clases[i]}"><div>${medallas[i]}</div><strong>${top3[i].username}</strong><div>${val}</div></div>`;
+        }
+    });
+    html += '</div>';
+    if (lista.length > 3) {
+        html += '<div class="hof-list">';
+        for (let i = 3; i < lista.length; i++) {
+            let val;
+            if (tipo === 'gastado') val = Number(lista[i].total_gastado).toLocaleString('es-ES') + ' €';
+            else if (tipo === 'fecha') val = new Date(lista[i].total).toLocaleDateString('es-ES');
+            else if (tipo === 'oculto') val = '🔒';
+            else val = lista[i].total;
+            html += `<div class="hof-row"><span>#${i+1} ${lista[i].username}</span><span>${val}</span></div>`;
+        }
+        html += '</div>';
+    }
+    return html;
+}
 // ===== ADMIN =====
 function mostrarLegal() { ocultarTodasVistas(); document.getElementById('viewLegal').classList.add('active'); }
 function ocultarTodasVistas() { document.querySelectorAll('.view').forEach(v => v.classList.remove('active')); if (hallOfFameInterval) { clearInterval(hallOfFameInterval); hallOfFameInterval = null; } }
