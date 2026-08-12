@@ -31,6 +31,7 @@
 * `place_bid`, `add_ad_reward`, `check_and_close_auction`, `unlock_achievement`, `admin_buscar_usuario`, `admin_set_saldo`, `admin_toggle_ban`, `admin_delete_auction`, `create_auction`, `get_daily_missions`, `get_hall_of_fame`, `increment_min_bid`, `increment_custom_bid`, `increment_ad_mission`, `increment_category_bid`, `toggle_goat`, `reclamar_bonus_diario`, `username_disponible`, `actualizar_mi_alias`, `admin_listar_usuarios`, `add_xp`, `admin_add_category`, `admin_delete_category`
 * **Mercado C2C:** `vender_en_mercado`, `cerrar_subasta_mercado`, `comprar_directo`, `admin_forzar_cierre_y_adjudicar`, `cancelar_venta_mercado`
 * **Generación automática:** `generar_subasta_automatica` (crea subastas aleatorias con rarezas y precios según probabilidades)
+* **Certificados:** Tanto `check_and_close_auction` como `admin_forzar_cierre_y_adjudicar` generan automáticamente un código de certificado único para cada objeto adjudicado.
 
 ## 🔒 Seguridad
 
@@ -49,11 +50,11 @@
 * ✅ 15 logros/insignias desbloqueables (con vista en lista y notificaciones toast). *Pendiente de revisión:* se detectó duplicado ("Bugueado" y "Margin Call" premiaban lo mismo). Se planea ampliar a ~21 logros con temática de jerga Z/Alpha (Glow Up, Inversor Nato, A Full, etc.).
 * ✅ Sistema de experiencia (XP) y niveles con títulos equipables (Lurker, Regular, Curador, Broker/Main Character, Whale, Final Boss/Admin)
 * ✅ **Sistema de Rarezas completo (6 niveles):**
-  * Común (gris, 60% prob, 1-1.000 €, 24h)
-  * Poco común (verde, 20% prob, 500-2.000 €, 24h)
-  * Rara (azul, 15% prob, 1.001-5.000 €, 24h)
-  * Épica (lila, 4% prob, 5.001-10.000 €, 3 días)
-  * Legendaria (naranja, 1% prob, 10.001-1.000.000 €, 7 días)
+  * Común (gris, 55% prob, 1-1.000 €, 24h)
+  * Poco común (verde, 25% prob, 500-2.000 €, 24h)
+  * Rara (azul, 13% prob, 1.001-5.000 €, 24h)
+  * Épica (lila, 5% prob, 5.001-10.000 €, 3 días)
+  * Legendaria (naranja, 2% prob, 10.001-1.000.000 €, 7 días)
   * Mítica (roja, solo manual, 1.000.001 €+, 14 días)
 * ✅ **Marcos y chips visuales por rareza** en catálogo y vista de detalle (incluyendo la corrección de espacios en "Poco común").
 * ✅ **Último pujador visible** en cada tarjeta del catálogo (debajo del título).
@@ -64,6 +65,7 @@
   * **Cron job configurado** en `cron-job.org` para ejecutar la generación automáticamente **cada 1 hora** (24 subastas/día).
   * **Contador de próxima subasta sincronizado** con el cron job real.
 * ✅ **Sistema de reliquidación:** Si una subasta automática termina sin pujas, se vuelve a publicar automáticamente con un 10% de descuento (hasta un mínimo de 1 €).
+* ✅ **Certificados automáticos:** Cada subasta ganada genera un código de certificado único (tanto en cierre normal como en adjudicación del admin).
 * ✅ Metadata Flexible (JSONB) para efectos visuales y colecciones temáticas
 * ✅ **Mercado C2C (Fase 1 completada):**
   * Inventario de usuarios, pestaña "🛒 Mercado C2C", botón "Vender en Mercado" en la vitrina.
@@ -71,7 +73,10 @@
   * Se copia la foto real del objeto al publicarlo en el mercado.
   * Cajita de detalles del certificado en la vista de producto (certificado original, fecha de adjudicación y vendedor).
   * Botón "Cancelar venta" (solo para el vendedor, no devuelve la fianza).
-* ✅ Hall of Fame (rankings de ganadores, gastadores y coleccionistas) – se actualiza cada 30 s
+* ✅ **Hall of Fame renovado (6 rankings):** El Más Rico, La Cabra, El Más Chetado, El Museo, El Más Old, El Más Broker. Con podios y descripciones.
+* ✅ **Pestaña "📋 Mis pujas":** Lista ordenable de todas las pujas del usuario con estado en tiempo real (vas ganando / superado / ganada / perdida).
+* ✅ **Botón de compartir en redes:** En la vista de detalle, botones para compartir en X (Twitter) y copiar enlace al portapapeles.
+* ✅ **Barra de ordenación en catálogo:** Ordenar las subastas por fecha, duración, rareza o precio (ascendente/descendente).
 * ✅ PWA (instalable en móvil como app)
 * ✅ Modo GOAT (activación, recargas, comentarios destacados) — actualmente es gratuito y da +5.000 €; en el futuro será la suscripción premium (3.99 €/mes)
 * ✅ Buscador de subastas
@@ -89,21 +94,28 @@
 
 ## 🚧 Próximos pasos (Roadmap priorizado)
 
+### 🎯 Antes de la Beta Privada (prioridad máxima)
+
+0. **📖 Página de Ayuda / Tutorial / FAQ** ⬜ PENDIENTE — Sección con tutorial rápido (4-5 pasos), guía visual de rarezas, cómo ganar monedas y preguntas frecuentes. Esencial para que los nuevos usuarios no reboten.
+
+---
+
 ### Fase 2: Pulido UX/UI y Engagement Temprano
-*En progreso*
+*En progreso — objetivo: completar los puntos restantes antes de la beta privada*
 
 1. ~~**Modal de registro oportuno**~~ → ✅ HECHO
 2. ~~**Contador de próxima subasta**~~ → ✅ HECHO
 3. ~~**Marcos y chips de rareza en detalle**~~ → ✅ HECHO
 4. ~~**Corrección visual objetos Poco Comunes (verdes)**~~ → ✅ HECHO
 5. ~~**Bono diario por completar todas las misiones (1.000 €)**~~ → ✅ HECHO
-6. **Pestaña "Mis pujas"** ⬜ Pendiente — Consultar en tiempo real las pujas activas y el historial de compras.
-7. **Racha de inicio de sesión (Streak Bonus de 7 días)** ⬜ Pendiente — Recompensa diaria creciente que culmina con un gran bote al día 7.
-8. **Recompensa por subir de nivel** ⬜ Pendiente — Monedas extra al alcanzar cada nuevo título.
-9. **Reciclaje / Desguace de objetos** ⬜ Pendiente — Vender objetos comunes del inventario a cambio de monedas inmediatas.
-10. **Compartir en redes sociales** ⬜ Pendiente — Botón para publicar logros o subastas ganadas.
-11. **Sistema de recompensas por anuncios voluntarios** ⬜ Pendiente — Monedas gratis por ver anuncios (simulados o reales en el futuro).
-12. **Controles Anti-Pay-to-Win básicos** ⬜ Pendiente — Límite diario de incremento por puja y topes para evitar que el dinero real domine.
+6. ~~**Pestaña "📋 Mis pujas"**~~ → ✅ HECHO
+7. ~~**Botón de compartir en redes**~~ → ✅ HECHO
+8. ~~**Barra de ordenación en catálogo**~~ → ✅ HECHO
+9. **Racha de inicio de sesión (Streak Bonus de 7 días)** ⬜ AHORA — Recompensa diaria creciente que culmina con un gran bote al día 7.
+10. **Recompensa por subir de nivel** ⬜ Pendiente — Monedas extra al alcanzar cada nuevo título.
+11. **Reciclaje / Desguace de objetos** ⬜ Pendiente — Vender objetos comunes del inventario a cambio de monedas inmediatas.
+12. **Sistema de recompensas por anuncios voluntarios** ⬜ Pendiente — Monedas gratis por ver anuncios (simulados o reales en el futuro).
+13. **Controles Anti-Pay-to-Win básicos** ⬜ Pendiente — Límite diario de incremento por puja y topes para evitar que el dinero real domine.
 
 ### Fase 3: Gamificación y Retención
 
@@ -133,9 +145,9 @@
 3. **Sorteos comunitarios** ⬜ Pendiente — Sorteos periódicos entre miembros activos.
 4. **Donaciones comunitarias** ⬜ Pendiente — Donar objetos o fondos a la comunidad.
 5. **Sección FAQ participativo** ⬜ Pendiente — Usuarios responden dudas de novatos.
-6. **Arena PVE "Subasta contra Bots"** ⬜ Pendiente — Modo entrenamiento con IAs paródicas, chat dinámico, y zona Raid de alta dificultad.
+6. **Arena PVE "Subasta contra Bots" (Farmeo de XP)** ⬜ Pendiente — Sección exclusiva de entrenamiento para usuarios de Nivel 1-4 donde practicar contra bots con personalidades paródicas, ganar XP y monedas sin presión, y aprender la mecánica de subastas antes del PVP. Incluye modo Raid (Nivel 5+) con dificultad alta y recompensas multiplicadas.
 7. **Colección Temática "Jägger Lore"** ⬜ Pendiente — *La Plota, La Caca de Viruzz, Tatuaje Aspiradora Roomba, Guantes de la Velada, El Saltpeper.*
-8. **Foro / Tablón de anuncios comunitario** ⬜ Pendiente — Espacio donde los usuarios pueden dejar anuncios de intercambio, peticiones de objetos o simplemente socializar.
+8. **Foro / Tablón de anuncios comunitario** ⬜ Pendiente — Espacio donde los usuarios pueden dejar anuncios de intercambio, peticiones de objetos, compartir noticias de streamers, salseo o simplemente socializar.
 9. **Sistema de trueque entre usuarios** ⬜ Pendiente — Intercambio directo de objetos del inventario entre dos usuarios (con o sin comisión).
 
 ### Ideas lejanas (post-MVP)
