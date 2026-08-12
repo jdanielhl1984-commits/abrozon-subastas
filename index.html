@@ -150,6 +150,13 @@
         #goatDropdown { right: auto; left: 0; }
         .dropdown-item { padding: 11px 14px; font-size: 0.85rem; color: var(--text-main); cursor: pointer; border-bottom: 1px solid var(--border-color); }
         .dropdown-item:last-child { border-bottom: none; } .dropdown-item:hover { background: var(--bg-subtle); }
+        /* Estilos para Mis pujas */
+        .mis-pujas-table { width: 100%; border-collapse: collapse; }
+        .mis-pujas-table th { text-align: left; padding: 10px; background: var(--bg-subtle); font-size: 0.8rem; color: var(--text-muted); border-bottom: 1px solid var(--border-color); }
+        .mis-pujas-table td { padding: 10px; border-bottom: 1px solid var(--border-color); font-size: 0.85rem; }
+        .mis-pujas-table tr:hover { background: var(--bg-subtle); }
+        .sort-btn { background: none; border: none; color: var(--accent-blue); cursor: pointer; font-weight: bold; font-size: 0.8rem; margin-left: 5px; }
+        .sort-btn.active { text-decoration: underline; }
         @media (max-width: 680px) {
             .search-bar { order: 3; flex-basis: 100%; max-width: none; margin-top: 6px; }
             header { padding: 10px 4%; gap: 8px; }
@@ -165,6 +172,7 @@
             .podium-spot.gold, .podium-spot.silver, .podium-spot.bronze { order: 0; transform: none; }
             .achievement-row { flex-direction: column; align-items: flex-start; gap: 8px; }
             .achievement-icon { font-size: 1.8rem; width: auto; }
+            .mis-pujas-table { font-size: 0.75rem; }
         }
     </style>
 </head>
@@ -277,6 +285,7 @@
 <nav class="primary-nav">
     <span class="nav-tab active" id="tabTodas" onclick="mostrarCatalogo()">🏠 Catálogo</span>
     <span class="nav-tab" id="tabMercado" onclick="mostrarMercado()">🛒 Mercado C2C</span>
+    <span class="nav-tab" id="tabMisPujas" onclick="mostrarMisPujas()">📋 Mis pujas</span>
     <span class="nav-tab" id="tabMisiones" onclick="mostrarMisiones()">🎯 Misiones</span>
     <span class="nav-tab" id="tabLogros" onclick="mostrarLogros()">🏅 Logros</span>
     <span class="nav-tab" id="tabHallOfFame" onclick="mostrarHallOfFame()">🌟 Hall of Fame</span>
@@ -291,6 +300,7 @@
         <div class="auction-grid" id="catalogGrid">Cargando...</div>
     </div>
     <div id="viewDetail" class="view"><button class="btn-back" onclick="mostrarCatalogo()">← Volver al Catálogo</button><div class="detail-layout"><div class="product-card-detail"><div class="main-image-detail" id="detailImage">📦</div><div id="detailGallery" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:15px;"></div><span class="card-category" id="detailCategory">Categoría</span><h1 id="detailTitle" style="margin:8px 0;font-size:1.4rem;">Título</h1><div id="detailRarezaChip" style="display:none;"></div><p id="detailDescription" style="color:var(--text-muted);line-height:1.6;">Descripción...</p><div id="mercadoInfoBox" style="display:none;margin-top:14px;padding:12px;background:rgba(234,179,8,0.1);border:1px solid #eab308;border-radius:8px;font-size:0.85rem;color:var(--text-main);"></div></div><div class="auction-panel-detail"><div class="time-box" id="detailTime">⏳ Cierra en: Calculando...</div><div style="margin-bottom:15px;"><div style="font-size:0.8rem;color:var(--text-muted);">Última puja</div><div style="font-size:2.1rem;font-weight:900;" id="detailBid">0 €</div></div><div id="biddingControlsContainer"><div id="goatCommentContainer" style="display:none;margin-bottom:12px;"><input type="text" id="goatCommentInput" placeholder="💬 Mensaje épico GOAT..." style="width:100%;padding:10px;border-radius:8px;border:1px solid #eab308;background:var(--bg-subtle);color:var(--text-main);font-weight:bold;outline:none;font-size:0.85rem;"></div><button id="btnCompraDirecta" class="btn-compra-directa" onclick="comprarDirecto()">💎 COMPRA DIRECTA (30% comisión)</button><button id="btnCancelarVenta" onclick="cancelarVentaMercado()" style="display:none;width:100%;background:#ef4444;color:white;border:none;padding:10px;border-radius:8px;font-weight:bold;cursor:pointer;margin-bottom:10px;">🚫 Cancelar venta (pierdes la fianza)</button><button class="btn-bid" id="btnMinBid" onclick="hacerPujaMínima()">¡PUJAR MÍNIMO (+50 €)!</button><div style="display:flex;gap:8px;margin-top:10px;"><input type="number" id="customBidInput" placeholder="Cantidad exacta €" style="flex:1;padding:10px;border-radius:8px;border:1px solid var(--border-color);background:var(--bg-subtle);color:var(--text-main);font-weight:bold;outline:none;"><button id="btnCustomBid" onclick="hacerPujaPersonalizada()" style="background:var(--accent-blue);color:white;border:none;padding:10px 14px;border-radius:8px;font-weight:bold;cursor:pointer;">Pujar</button></div></div><div style="margin-top:20px;border-top:1px solid var(--border-color);padding-top:15px;"><h3 style="font-size:0.8rem;color:var(--text-muted);margin-bottom:10px;">Historial de Pujas</h3><div id="historyList" style="max-height:220px;overflow-y:auto;"></div></div></div></div></div>
+    <div id="viewMisPujas" class="view"><button class="btn-back" onclick="mostrarCatalogo()">← Volver al Catálogo</button><h2 style="margin-bottom:20px;">📋 Mis Pujas</h2><div style="margin-bottom:15px;"><button class="sort-btn active" onclick="ordenarMisPujas('fecha')">📅 Más recientes</button> <button class="sort-btn" onclick="ordenarMisPujas('duracion')">⏳ Por finalización</button> <button class="sort-btn" onclick="ordenarMisPujas('rareza')">🏷️ Por rareza</button> <button class="sort-btn" onclick="ordenarMisPujas('cantidad')">💰 Por cantidad</button></div><div id="misPujasContainer">Cargando...</div></div>
     <div id="viewVitrina" class="view"><div class="profile-header"><div class="user-info"><h2 id="profileUserName">👑 Usuario</h2><span class="user-badge" id="profileBadge">Coleccionista</span></div></div><div class="grid-title">📜 Mis Certificados</div><div class="vitrina-grid" id="vitrinaGrid"></div></div>
     <div id="viewPerfil" class="view"><button class="btn-back" onclick="mostrarCatalogo()">← Volver al Catálogo</button><div class="profile-header"><div class="user-info"><h2 id="perfilNombre">👤 Usuario</h2><span class="user-badge" id="perfilEmail">correo@ejemplo.com</span></div></div>
         <div class="product-card-detail" style="margin-bottom:20px;">
@@ -682,6 +692,112 @@ function construirPodioYLista(lista, tipo) {
     }
     return html;
 }
+// ===== MIS PUJAS =====
+let misPujasData = [];
+let ordenActual = 'fecha';
+
+async function mostrarMisPujas() {
+    if (!currentUser) return abrirModalAuth('register');
+    ocultarTodasVistas();
+    document.querySelectorAll('.primary-nav .nav-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('tabMisPujas').classList.add('active');
+    document.getElementById('viewMisPujas').classList.add('active');
+    await cargarMisPujas();
+}
+
+async function cargarMisPujas() {
+    const container = document.getElementById('misPujasContainer');
+    container.innerHTML = 'Cargando...';
+    const { data: bids, error } = await db.from('bids')
+        .select('*, auctions(*)')
+        .eq('user_id', currentUser.id)
+        .order('created_at', { ascending: false });
+    if (error) { container.innerHTML = `<p>Error: ${error.message}</p>`; return; }
+    misPujasData = bids || [];
+    ordenarMisPujas(ordenActual);
+}
+
+function ordenarMisPujas(criterio) {
+    ordenActual = criterio;
+    // Actualizar botones activos
+    document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
+    const botones = document.querySelectorAll('.sort-btn');
+    if (criterio === 'fecha') botones[0].classList.add('active');
+    else if (criterio === 'duracion') botones[1].classList.add('active');
+    else if (criterio === 'rareza') botones[2].classList.add('active');
+    else if (criterio === 'cantidad') botones[3].classList.add('active');
+
+    let data = [...misPujasData];
+    switch (criterio) {
+        case 'fecha':
+            data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+            break;
+        case 'duracion':
+            data.sort((a, b) => {
+                const aEnd = a.auctions ? new Date(a.auctions.ends_at) : new Date(0);
+                const bEnd = b.auctions ? new Date(b.auctions.ends_at) : new Date(0);
+                return aEnd - bEnd;
+            });
+            break;
+        case 'rareza':
+            const rarezaOrder = ['Común','Poco común','Rara','Épica','Legendaria','Mítica'];
+            data.sort((a, b) => {
+                const aR = a.auctions?.rareza || 'Común';
+                const bR = b.auctions?.rareza || 'Común';
+                return rarezaOrder.indexOf(aR) - rarezaOrder.indexOf(bR);
+            });
+            break;
+        case 'cantidad':
+            data.sort((a, b) => b.amount - a.amount);
+            break;
+    }
+    renderizarMisPujas(data);
+}
+
+function renderizarMisPujas(data) {
+    const container = document.getElementById('misPujasContainer');
+    if (!data.length) { container.innerHTML = '<p>Aún no has hecho ninguna puja.</p>'; return; }
+    let html = '<table class="mis-pujas-table"><tr><th>Subasta</th><th>Rareza</th><th>Tu puja</th><th>Estado</th><th>Fin</th></tr>';
+    data.forEach(b => {
+        const auction = b.auctions;
+        if (!auction) return;
+        const title = auction.title || 'Sin título';
+        const rareza = auction.rareza || 'Común';
+        const rarezaClase = rareza.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-');
+        const amount = Number(b.amount).toLocaleString('es-ES') + ' €';
+        const isClosed = auction.status === 'closed';
+        const endDate = new Date(auction.ends_at);
+        const now = new Date();
+        const timeLeft = isClosed ? 'Cerrada' : (endDate > now ? formatTimeLeft(endDate - now) : 'Cerrando...');
+        let estado = '';
+        if (isClosed) {
+            estado = auction.winner === currentUser.username ? '🏆 Ganada' : '❌ Perdida';
+        } else {
+            const highestBid = auction.current_price;
+            const isWinning = highestBid === b.amount && auction.last_bidder === currentUser.username;
+            estado = isWinning ? '🟢 Vas ganando' : '🔴 Superado';
+        }
+        html += `<tr onclick="abrirDetalle('${auction.id}')" style="cursor:pointer;">
+            <td>${title}</td>
+            <td><span class="chip-rareza chip-rareza-${rarezaClase}" style="position:static;display:inline-block;">${rareza}</span></td>
+            <td>${amount}</td>
+            <td>${estado}</td>
+            <td>${timeLeft}</td>
+        </tr>`;
+    });
+    html += '</table>';
+    container.innerHTML = html;
+}
+
+function formatTimeLeft(ms) {
+    const d = Math.floor(ms/86400000);
+    const h = Math.floor((ms%86400000)/3600000);
+    const m = Math.floor((ms%3600000)/60000);
+    if (d > 0) return d + 'd ' + h + 'h';
+    if (h > 0) return h + 'h ' + m + 'min';
+    return m + ' min';
+}
+
 // ===== ADMIN =====
 function mostrarLegal() { ocultarTodasVistas(); document.getElementById('viewLegal').classList.add('active'); }
 function ocultarTodasVistas() { document.querySelectorAll('.view').forEach(v => v.classList.remove('active')); if (hallOfFameInterval) { clearInterval(hallOfFameInterval); hallOfFameInterval = null; } }
