@@ -45,7 +45,7 @@
 * ✅ Registro/login con email (Supabase Auth + recuperación de contraseña)
 * ✅ Subastas en tiempo real (pujas, temporizadores con días/horas, cierre automático con `check_and_close_auction` al visitar el catálogo)
 * ✅ Panel de administración (crear/eliminar subastas, gestionar usuarios, ver lista completa, banear, fijar saldo, añadir/eliminar categorías dinámicas, adjudicar subastas al admin para pruebas)
-* ✅ Sistema de misiones diarias (bono diario, pujas mínimas, puja personalizada, ver anuncios, explorar categorías)
+* ✅ **Sistema de misiones diarias mejorado:** Las 4 misiones (Gatillo Fácil, El Inversor, Patrocinador, Explorador) deben completarse para desbloquear el **Bono Diario de 1.000 €** (antes 100 €, y solo reclamable una vez al día tras completarlas todas).
 * ✅ 15 logros/insignias desbloqueables (con vista en lista y notificaciones toast). *Pendiente de revisión:* se detectó duplicado ("Bugueado" y "Margin Call" premiaban lo mismo). Se planea ampliar a ~21 logros con temática de jerga Z/Alpha (Glow Up, Inversor Nato, A Full, etc.).
 * ✅ Sistema de experiencia (XP) y niveles con títulos equipables (Lurker, Regular, Curador, Broker/Main Character, Whale, Final Boss/Admin)
 * ✅ **Sistema de Rarezas completo (6 niveles):**
@@ -55,7 +55,7 @@
   * Épica (lila, 4% prob, 5.001-10.000 €, 3 días)
   * Legendaria (naranja, 1% prob, 10.001-1.000.000 €, 7 días)
   * Mítica (roja, solo manual, 1.000.001 €+, 14 días)
-* ✅ **Marcos y chips visuales por rareza** en catálogo y vista de detalle.
+* ✅ **Marcos y chips visuales por rareza** en catálogo y vista de detalle (incluyendo la corrección de espacios en "Poco común").
 * ✅ **Último pujador visible** en cada tarjeta del catálogo (debajo del título).
 * ✅ **Filtro "Novedades"** (🆕) que muestra solo las subastas creadas en las últimas 24 horas, ordenadas de más reciente a más antigua.
 * ✅ **Generación automática de subastas:**
@@ -80,7 +80,7 @@
 * ✅ Galería de imágenes en el detalle del producto
 * ✅ Calculadora de economía (archivo aparte)
 * ✅ Menús reorganizados (versión moderna, propuesta de Claudio ya integrada)
-* ✅ **Textos legales completos y adaptados a LSSI-CE/RGPD** (Aviso Legal, Política de Privacidad, Política de Cookies). Incluyen los datos de aBROzon SL (en constitución), NIF pendiente, ubicación en Granollers (Barcelona). Redactados con ayuda de Gemini para cumplir con la normativa española.
+* ✅ **Textos legales completos y adaptados a LSSI-CE/RGPD** (Aviso Legal, Política de Privacidad, Política de Cookies). El titular figura como persona física (Daniel Hernandez) hasta la constitución formal de una SL. Ubicación en Granollers (Barcelona).
 * ✅ **Banner de fase beta**: La web muestra un aviso `🚧 FASE BETA · PRUEBAS EN CURSO 🚧` en la cabecera.
 * ✅ **Modal de registro oportuno**: Solo se pide login al intentar pujar, no al entrar.
 * ✅ **Contador de próxima subasta**: Muestra el tiempo restante hasta la siguiente generación automática.
@@ -94,13 +94,14 @@
 2. ~~**Contador de próxima subasta**~~ → ✅ HECHO
 3. ~~**Marcos y chips de rareza en detalle**~~ → ✅ HECHO
 4. ~~**Corrección visual objetos Poco Comunes (verdes)**~~ → ✅ HECHO
-5. **Pestaña "Mis pujas"** ⬜ Pendiente — Consultar en tiempo real las pujas activas y el historial de compras.
-6. **Racha de inicio de sesión (Streak Bonus de 7 días)** ⬜ Pendiente — Recompensa diaria creciente que culmina con un gran bote al día 7.
-7. **Recompensa por subir de nivel** ⬜ Pendiente — Monedas extra al alcanzar cada nuevo título.
-8. **Reciclaje / Desguace de objetos** ⬜ Pendiente — Vender objetos comunes del inventario a cambio de monedas inmediatas.
-9. **Compartir en redes sociales** ⬜ Pendiente — Botón para publicar logros o subastas ganadas.
-10. **Sistema de recompensas por anuncios voluntarios** ⬜ Pendiente — Monedas gratis por ver anuncios (simulados o reales en el futuro).
-11. **Controles Anti-Pay-to-Win básicos** ⬜ Pendiente — Límite diario de incremento por puja y topes para evitar que el dinero real domine.
+5. ~~**Bono diario por completar todas las misiones (1.000 €)**~~ → ✅ HECHO
+6. **Pestaña "Mis pujas"** ⬜ Pendiente — Consultar en tiempo real las pujas activas y el historial de compras.
+7. **Racha de inicio de sesión (Streak Bonus de 7 días)** ⬜ Pendiente — Recompensa diaria creciente que culmina con un gran bote al día 7.
+8. **Recompensa por subir de nivel** ⬜ Pendiente — Monedas extra al alcanzar cada nuevo título.
+9. **Reciclaje / Desguace de objetos** ⬜ Pendiente — Vender objetos comunes del inventario a cambio de monedas inmediatas.
+10. **Compartir en redes sociales** ⬜ Pendiente — Botón para publicar logros o subastas ganadas.
+11. **Sistema de recompensas por anuncios voluntarios** ⬜ Pendiente — Monedas gratis por ver anuncios (simulados o reales en el futuro).
+12. **Controles Anti-Pay-to-Win básicos** ⬜ Pendiente — Límite diario de incremento por puja y topes para evitar que el dinero real domine.
 
 ### Fase 3: Gamificación y Retención
 
