@@ -61,7 +61,8 @@
 * ✅ **Generación automática de subastas:**
   * Tabla `objetos_automaticos` con 20 objetos de temática streamers/fútbol.
   * Función `generar_subasta_automatica` que sortea rareza (según %), precio y duración.
-  * **Cron job configurado** en `cron-job.org` para ejecutar la generación automáticamente cada X horas.
+  * **Cron job configurado** en `cron-job.org` para ejecutar la generación automáticamente **cada 1 hora** (24 subastas/día).
+  * **Contador de próxima subasta sincronizado** con el cron job real.
 * ✅ **Sistema de reliquidación:** Si una subasta automática termina sin pujas, se vuelve a publicar automáticamente con un 10% de descuento (hasta un mínimo de 1 €).
 * ✅ Metadata Flexible (JSONB) para efectos visuales y colecciones temáticas
 * ✅ **Mercado C2C (Fase 1 completada):**
@@ -83,7 +84,8 @@
 * ✅ **Textos legales completos y adaptados a LSSI-CE/RGPD** (Aviso Legal, Política de Privacidad, Política de Cookies). El titular figura como persona física (Daniel Hernandez) hasta la constitución formal de una SL. Ubicación en Granollers (Barcelona).
 * ✅ **Banner de fase beta**: La web muestra un aviso `🚧 FASE BETA · PRUEBAS EN CURSO 🚧` en la cabecera.
 * ✅ **Modal de registro oportuno**: Solo se pide login al intentar pujar, no al entrar.
-* ✅ **Contador de próxima subasta**: Muestra el tiempo restante hasta la siguiente generación automática.
+* ✅ **Google Analytics configurado** con ID `G-C30L0HE0L7` para el dominio `abrozon.com`. Mide tráfico en tiempo real, fuente de usuarios y comportamiento.
+* ✅ **Base de datos limpia** — Catálogo, pujas e inventario reseteado para empezar la beta desde cero.
 
 ## 🚧 Próximos pasos (Roadmap priorizado)
 
@@ -133,6 +135,8 @@
 5. **Sección FAQ participativo** ⬜ Pendiente — Usuarios responden dudas de novatos.
 6. **Arena PVE "Subasta contra Bots"** ⬜ Pendiente — Modo entrenamiento con IAs paródicas, chat dinámico, y zona Raid de alta dificultad.
 7. **Colección Temática "Jägger Lore"** ⬜ Pendiente — *La Plota, La Caca de Viruzz, Tatuaje Aspiradora Roomba, Guantes de la Velada, El Saltpeper.*
+8. **Foro / Tablón de anuncios comunitario** ⬜ Pendiente — Espacio donde los usuarios pueden dejar anuncios de intercambio, peticiones de objetos o simplemente socializar.
+9. **Sistema de trueque entre usuarios** ⬜ Pendiente — Intercambio directo de objetos del inventario entre dos usuarios (con o sin comisión).
 
 ### Ideas lejanas (post-MVP)
 * Categoría Legacy / Rage Comics (memes antiguos).
