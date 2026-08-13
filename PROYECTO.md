@@ -47,15 +47,17 @@
 * ✅ Subastas en tiempo real (pujas, temporizadores con días/horas, cierre automático con `check_and_close_auction` al visitar el catálogo)
 * ✅ Panel de administración (crear/eliminar subastas, gestionar usuarios, ver lista completa, banear, fijar saldo, añadir/eliminar categorías dinámicas, adjudicar subastas al admin para pruebas)
 * ✅ **Sistema de misiones diarias mejorado:** Las 4 misiones (Gatillo Fácil, El Inversor, Patrocinador, Explorador) deben completarse para desbloquear el **Bono Diario de 1.000 €** (antes 100 €, y solo reclamable una vez al día tras completarlas todas).
+* ✅ **Racha de inicio de sesión (Streak Bonus):** Recompensa diaria creciente (día 1→100€, día 2→200€, ..., día 7→1000€). Se calcula en el servidor para evitar trampas.
+* ✅ **Simulador de anuncios con diferenciación:** Botón +500€ (anuncio normal) y Recargar GOAT (anuncio premium de 1000€). Ambos con contador de 3 segundos y feedback visual.
 * ✅ 15 logros/insignias desbloqueables (con vista en lista y notificaciones toast). *Pendiente de revisión:* se detectó duplicado ("Bugueado" y "Margin Call" premiaban lo mismo). Se planea ampliar a ~21 logros con temática de jerga Z/Alpha (Glow Up, Inversor Nato, A Full, etc.).
 * ✅ Sistema de experiencia (XP) y niveles con títulos equipables (Lurker, Regular, Curador, Broker/Main Character, Whale, Final Boss/Admin)
 * ✅ **Sistema de Rarezas completo (6 niveles):**
   * Común (gris, 55% prob, 1-1.000 €, 24h)
-  * Poco común (verde, 25% prob, 500-2.000 €, 24h)
+  * Poco común (verde, 30% prob, 500-2.000 €, 24h)
   * Rara (azul, 13% prob, 1.001-5.000 €, 24h)
   * Épica (lila, 5% prob, 5.001-10.000 €, 3 días)
-  * Legendaria (naranja, 2% prob, 10.001-1.000.000 €, 7 días)
-  * Mítica (roja, solo manual, 1.000.001 €+, 14 días)
+  * Legendaria (naranja, 1% prob, 10.001-1.000.000 €, 7 días)
+  * Mítica (roja, solo manual/evento, 1.000.001 €+, duración de evento)
 * ✅ **Marcos y chips visuales por rareza** en catálogo y vista de detalle (incluyendo la corrección de espacios en "Poco común").
 * ✅ **Último pujador visible** en cada tarjeta del catálogo (debajo del título).
 * ✅ **Filtro "Novedades"** (🆕) que muestra solo las subastas creadas en las últimas 24 horas, ordenadas de más reciente a más antigua.
@@ -74,34 +76,39 @@
   * Cajita de detalles del certificado en la vista de producto (certificado original, fecha de adjudicación y vendedor).
   * Botón "Cancelar venta" (solo para el vendedor, no devuelve la fianza).
 * ✅ **Hall of Fame renovado (6 rankings):** El Más Rico, La Cabra, El Más Chetado, El Museo, El Más Old, El Más Broker. Con podios y descripciones.
-* ✅ **Pestaña "📋 Mis pujas":** Lista ordenable de todas las pujas del usuario con estado en tiempo real (vas ganando / superado / ganada / perdida).
+* ✅ **Pestaña "📋 Mis pujas":** Lista ordenable de todas las pujas del usuario con estado en tiempo real (vas ganando / superado por ti / superado / ganada / perdida).
 * ✅ **Botón de compartir en redes:** En la vista de detalle, botones para compartir en X (Twitter) y copiar enlace al portapapeles.
 * ✅ **Barra de ordenación en catálogo:** Ordenar las subastas por fecha, duración, rareza o precio (ascendente/descendente).
 * ✅ PWA (instalable en móvil como app)
-* ✅ Modo GOAT (activación, recargas, comentarios destacados) — actualmente es gratuito y da +5.000 €; en el futuro será la suscripción premium (3.99 €/mes)
+* ✅ Modo GOAT (activación, recargas premium de 1000€, comentarios destacados) — actualmente es gratuito y da +5.000 €; en el futuro será la suscripción premium (3.99 €/mes)
 * ✅ Buscador de subastas
 * ✅ Pestaña de "Finalizadas" para ver subastas cerradas
 * ✅ Modo oscuro/claro
-* ✅ Subida de fotos para subastas (Storage de Supabase)
+* ✅ Subida de fotos para subastas (Storage de Supabase) con validación de tipo y tamaño
 * ✅ Galería de imágenes en el detalle del producto
 * ✅ Calculadora de economía (archivo aparte)
 * ✅ Menús reorganizados (versión moderna, propuesta de Claudio ya integrada)
 * ✅ **Textos legales completos y adaptados a LSSI-CE/RGPD** (Aviso Legal, Política de Privacidad, Política de Cookies). El titular figura como persona física (Daniel Hernandez) hasta la constitución formal de una SL. Ubicación en Granollers (Barcelona).
 * ✅ **Banner de fase beta**: La web muestra un aviso `🚧 FASE BETA · PRUEBAS EN CURSO 🚧` en la cabecera.
+* ✅ **Banner de Beta Privada**: Con enlace a formulario de Google para feedback.
 * ✅ **Modal de registro oportuno**: Solo se pide login al intentar pujar, no al entrar.
 * ✅ **Google Analytics configurado** con ID `G-C30L0HE0L7` para el dominio `abrozon.com`. Mide tráfico en tiempo real, fuente de usuarios y comportamiento.
 * ✅ **Base de datos limpia** — Catálogo, pujas e inventario reseteado para empezar la beta desde cero.
+* ✅ **Página de Ayuda / Tutorial / FAQ** con tutorial rápido, guía de rarezas, cómo ganar monedas y preguntas frecuentes.
+* ✅ **Reemplazo de `alert()` por toasts** en toda la web (salvo algunos confirm críticos).
+* ✅ **Feedback visual** (spinners y botones deshabilitados) durante acciones como pujar, anuncios, etc.
+* ✅ **Actualización automática de la vitrina** tras vender, comprar o cancelar en el mercado.
 
 ## 🚧 Próximos pasos (Roadmap priorizado)
 
 ### 🎯 Antes de la Beta Privada (prioridad máxima)
 
-0. **📖 Página de Ayuda / Tutorial / FAQ** ⬜ PENDIENTE — Sección con tutorial rápido (4-5 pasos), guía visual de rarezas, cómo ganar monedas y preguntas frecuentes. Esencial para que los nuevos usuarios no reboten.
+0. **📖 Página de Ayuda / Tutorial / FAQ** → ✅ HECHO (ya integrada como pestaña "❓ Ayuda").
 
 ---
 
 ### Fase 2: Pulido UX/UI y Engagement Temprano
-*En progreso — objetivo: completar los puntos restantes antes de la beta privada*
+*Completada (salvo puntos opcionales)*
 
 1. ~~**Modal de registro oportuno**~~ → ✅ HECHO
 2. ~~**Contador de próxima subasta**~~ → ✅ HECHO
@@ -111,7 +118,7 @@
 6. ~~**Pestaña "📋 Mis pujas"**~~ → ✅ HECHO
 7. ~~**Botón de compartir en redes**~~ → ✅ HECHO
 8. ~~**Barra de ordenación en catálogo**~~ → ✅ HECHO
-9. **Racha de inicio de sesión (Streak Bonus de 7 días)** ⬜ AHORA — Recompensa diaria creciente que culmina con un gran bote al día 7.
+9. ~~**Racha de inicio de sesión (Streak Bonus de 7 días)**~~ → ✅ HECHO
 10. **Recompensa por subir de nivel** ⬜ Pendiente — Monedas extra al alcanzar cada nuevo título.
 11. **Reciclaje / Desguace de objetos** ⬜ Pendiente — Vender objetos comunes del inventario a cambio de monedas inmediatas.
 12. **Sistema de recompensas por anuncios voluntarios** ⬜ Pendiente — Monedas gratis por ver anuncios (simulados o reales en el futuro).
@@ -209,22 +216,23 @@
 Basándonos en el estado actual del proyecto, se han identificado las siguientes tareas **críticas** para poder lanzar una beta privada estable y segura:
 
 ### 🔴 Seguridad (prioridad máxima)
-- **Proteger todas las RPCs de administrador** (`admin_*`) añadiendo una verificación de `is_admin` al inicio de cada función. Esto evita que usuarios normales puedan ejecutarlas desde la consola.
-- **Validar el tipo de archivo** en la subida de imágenes (solo imágenes, tamaño máximo 5 MB).
-- **Sanitizar el campo `metadata`** en la creación de subastas (usar `try/catch` al parsear JSON).
+- **Proteger todas las RPCs de administrador** (`admin_*`) añadiendo una verificación de `is_admin` al inicio de cada función. Esto evita que usuarios normales puedan ejecutarlas desde la consola. ⬜ **Pendiente** (se hará en el backend de Supabase).
+- **Validar el tipo de archivo** en la subida de imágenes (solo imágenes, tamaño máximo 5 MB). ✅ **HECHO** (ya está en `subirFotoAdmin`).
+- **Sanitizar el campo `metadata`** en la creación de subastas (usar `try/catch` al parsear JSON). ✅ **HECHO** (ya está en `crearNuevaSubasta`).
 
 ### 🟡 Experiencia de usuario (engagement)
-- **Crear la página de Ayuda / Tutorial / FAQ** (sección con 4-5 pasos, guía de rarezas, cómo ganar monedas y preguntas frecuentes). Esencial para que los nuevos usuarios no reboten.
-- **Implementar la Racha de inicio de sesión (Streak Bonus de 7 días)** con recompensa creciente y bote final.
-- **Reemplazar todos los `alert()` por el sistema de toasts** ya implementado, para una experiencia más fluida.
-- **Añadir feedback visual** (spinners o botones deshabilitados) durante la ejecución de acciones como pujar, anuncios, etc.
+- **Crear la página de Ayuda / Tutorial / FAQ** (sección con 4-5 pasos, guía de rarezas, cómo ganar monedas y preguntas frecuentes). ✅ **HECHO** (pestaña "❓ Ayuda").
+- **Implementar la Racha de inicio de sesión (Streak Bonus de 7 días)** con recompensa creciente y bote final. ✅ **HECHO**.
+- **Reemplazar todos los `alert()` por el sistema de toasts** ya implementado, para una experiencia más fluida. ✅ **HECHO**.
+- **Añadir feedback visual** (spinners o botones deshabilitados) durante la ejecución de acciones como pujar, anuncios, etc. ✅ **HECHO**.
 
 ### 🟢 Pulido final
-- **Actualizar automáticamente la vitrina** después de vender o comprar en el mercado.
-- **Optimizar el catálogo** para que no se recargue entero con cada cambio Realtime (se hará una actualización diferencial).
-- **Añadir un banner visible de "Beta Privada"** con un enlace a un formulario de feedback (Google Forms o similar).
+- **Actualizar automáticamente la vitrina** después de vender o comprar en el mercado. ✅ **HECHO** (se recarga con `cargarVitrina()`).
+- **Optimizar el catálogo** para que no se recargue entero con cada cambio Realtime (se hará una actualización diferencial). ⬜ **Pendiente** (mejora futura).
+- **Añadir un banner visible de "Beta Privada"** con un enlace a un formulario de feedback (Google Forms o similar). ✅ **HECHO** (banner superior con enlace).
 
 **Nota:** Estas tareas son complementarias a las ya planificadas en el roadmap y se consideran imprescindibles antes de abrir la beta a usuarios externos.
+
 ## ⚠️ Notas para la IA
 
 * **Soy un programador novato.** Necesito explicaciones paso a paso, sin tecnicismos innecesarios. Si algún concepto es complejo, por favor, tradúcemelo a un lenguaje sencillo.
