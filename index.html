@@ -178,6 +178,12 @@
         .faq-item:last-child { border-bottom: none; }
         .faq-pregunta { font-weight: bold; color: var(--text-main); }
         .faq-respuesta { color: var(--text-muted); margin-top: 4px; font-size: 0.9rem; }
+        /* Estilos para el modal de anuncio */
+        #adCountdown {
+            font-size: 4rem;
+            font-weight: 900;
+            color: var(--accent-blue);
+        }
         @media (max-width: 680px) {
             .search-bar { order: 3; flex-basis: 100%; max-width: none; margin-top: 6px; }
             header { padding: 10px 4%; gap: 8px; }
@@ -278,6 +284,15 @@
         </div>
     </div>
 </div>
+<!-- Modal simulador de anuncio -->
+<div id="adModal" class="auth-modal-overlay" style="display:none;">
+    <div class="auth-card" style="max-width:380px; text-align:center;">
+        <h2 style="color:var(--accent-blue);">📺 Anuncio en progreso</h2>
+        <p style="font-size:1.2rem; margin:15px 0;" id="adMessage">Viendo anuncio...</p>
+        <div id="adCountdown">3</div>
+        <p style="color:var(--text-muted); font-size:0.8rem; margin-top:10px;">(Simulación beta)</p>
+    </div>
+</div>
 <div class="disclaimer">🚧 FASE BETA · PRUEBAS EN CURSO 🚧</div>
 <header>
     <div class="logo" onclick="mostrarCatalogo()">aBROzon<span>.subastas</span></div>
@@ -286,12 +301,12 @@
         <input type="text" id="searchInput" placeholder="Buscar subastas..." oninput="buscarEnCatalogo(this.value)">
     </div>
     <div class="header-right">
-        <button class="btn-header" id="btnAd" onclick="verAnuncio()">🎬 +500 €</button>
+        <button class="btn-header" id="btnAd" onclick="verAnuncio('normal')">🎬 +500 €</button>
         <div class="user-menu-wrapper" id="goatMenuWrapper" style="display:none;">
             <button class="btn-goat" id="btnGoat" onclick="toggleGoatMenu()">🐐 GOAT ▾</button>
             <div class="user-dropdown" id="goatDropdown">
                 <div class="dropdown-item" id="goatItemActivar" onclick="activarGoat()">🐐 Activar</div>
-                <div class="dropdown-item" id="goatItemRecargar" onclick="verAnuncio()" style="display:none;">⚡ Recargar</div>
+                <div class="dropdown-item" id="goatItemRecargar" onclick="verAnuncio('goat')" style="display:none;">⚡ Recargar</div>
                 <div class="dropdown-item" id="goatItemDesactivar" onclick="activarGoat()" style="display:none;color:#ef4444;">Desactivar</div>
             </div>
         </div>
@@ -828,7 +843,75 @@ async function mostrarLogros() { if (!currentUser) return abrirModalAuth('regist
 async function ejecutarPuja(total) { if (!currentUser) return abrirModalAuth('register'); if (productoSeleccionado.status === 'closed') return alert("Finalizada."); if (accionEnCurso) return; accionEnCurso = true; try { let comment = null; if (currentUser.esGoat) { const ci = document.getElementById('goatCommentInput'); comment = ci ? ci.value.trim() : ''; if (ci) ci.value = ''; } marcarCambioPropio(); const { error } = await db.rpc('place_bid', { p_auction_id: productoSeleccionado.id, p_amount: total, p_comment: comment }); if (error) { if (error.message && error.message.includes('saldo')) tryUnlockAchievement('delulu'); return alert("⚠️ " + error.message); } await cargarPerfil(currentUser.id); productoSeleccionado.current_price = total; actualizarInterfazUsuario(); addXp(10); tryUnlockAchievement('first_bid'); const tiempoRestante = new Date(productoSeleccionado.ends_at) - Date.now(); if (tiempoRestante > 0 && tiempoRestante < 30000) tryUnlockAchievement('sniper'); if (currentUser.saldo < 10) tryUnlockAchievement('bancarrota'); if (currentUser.saldo >= 1000000) tryUnlockAchievement('liquidez'); if (currentUser.saldo === 0) tryUnlockAchievement('bancarrota'); if (total >= 50000) tryUnlockAchievement('devoraste'); if (total >= productoSeleccionado.current_price * 10) tryUnlockAchievement('basado'); if (productoSeleccionado.category && productoSeleccionado.category !== 'General') tryUnlockAchievement('skibidi'); if (productoSeleccionado.category && productoSeleccionado.category !== 'General') { const { data: c } = await db.rpc('increment_category_bid'); if (c === 1) { marcarCambioPropio(); const { data: ns } = await db.rpc('add_mission_reward', { p_amount: 250 }); if (ns) { currentUser.saldo = ns; actualizarInterfazUsuario(); mostrarToast("🧭 ¡Explorador! +250 €."); } } } } finally { accionEnCurso = false; } }
 async function hacerPujaMínima() { if (!currentUser) return abrirModalAuth('register'); if (!productoSeleccionado || !currentUser) return; if (productoSeleccionado.status === 'closed') return alert("Finalizada."); await ejecutarPuja(Number(productoSeleccionado.current_price) + 50); const { data: cuenta } = await db.rpc('increment_min_bid'); if (cuenta === 3) { marcarCambioPropio(); const { data: ns } = await db.rpc('add_mission_reward', { p_amount: 150 }); if (ns) { currentUser.saldo = ns; actualizarInterfazUsuario(); mostrarToast("🎯 ¡Gatillo Fácil! +150 €."); addXp(50); } } else if (cuenta === 1) mostrarToast("🔫 Primera puja mínima. ¡A por las 3!"); else if (cuenta === 2) mostrarToast("🔫🔫 Segunda puja mínima. ¡Una más!"); }
 function hacerPujaPersonalizada() { if (!currentUser) return abrirModalAuth('register'); if (!productoSeleccionado || !currentUser) return; const input = document.getElementById('customBidInput'), valor = parseInt(input.value); if (isNaN(valor) || valor <= productoSeleccionado.current_price) return alert("Puja inválida."); ejecutarPuja(valor).then(async () => { const { data: cuenta } = await db.rpc('increment_custom_bid'); if (cuenta === 1) { marcarCambioPropio(); const { data: ns } = await db.rpc('add_mission_reward', { p_amount: 200 }); if (ns) { currentUser.saldo = ns; actualizarInterfazUsuario(); mostrarToast("💼 ¡El Inversor! +200 €."); addXp(50); } } }); input.value = ''; }
-async function verAnuncio() { if (!currentUser) return abrirModalAuth('register'); if (accionEnCurso) return; accionEnCurso = true; try { const antes = currentUser.saldo; marcarCambioPropio(); const { data, error } = await db.rpc('add_ad_reward'); if (error) return alert("⚠️ "+error.message); currentUser.saldo = data; actualizarInterfazUsuario(); alert(`¡+${(data-antes).toLocaleString('es-ES')} € añadidos!`); const { data: ca } = await db.rpc('increment_ad_mission'); if (ca === 2) { marcarCambioPropio(); const { data: ns } = await db.rpc('add_mission_reward', { p_amount: 300 }); if (ns) { currentUser.saldo = ns; actualizarInterfazUsuario(); mostrarToast("📺 ¡Patrocinador! +300 €."); addXp(50); } } else if (ca === 1) mostrarToast("📺 Primer anuncio del día. ¡Uno más!"); } finally { accionEnCurso = false; } }
+
+// ===== SIMULADOR DE ANUNCIOS =====
+async function verAnuncio(tipo) {
+    // tipo puede ser 'normal' (500€) o 'goat' (1000€)
+    if (!currentUser) return abrirModalAuth('register');
+    if (accionEnCurso) return;
+    
+    // Mostrar el modal simulador
+    const modal = document.getElementById('adModal');
+    const mensaje = document.getElementById('adMessage');
+    const contador = document.getElementById('adCountdown');
+    
+    const esGoat = (tipo === 'goat');
+    const recompensa = esGoat ? 1000 : 500;
+    mensaje.innerText = esGoat ? '📺 Anuncio premium GOAT...' : '📺 Viendo anuncio...';
+    modal.style.display = 'flex';
+    
+    // Contador de 3 segundos
+    let segundos = 3;
+    contador.innerText = segundos;
+    
+    await new Promise((resolve) => {
+        const intervalo = setInterval(() => {
+            segundos--;
+            contador.innerText = segundos;
+            if (segundos <= 0) {
+                clearInterval(intervalo);
+                resolve();
+            }
+        }, 1000);
+    });
+    
+    // Cerrar modal
+    modal.style.display = 'none';
+    
+    // Ejecutar la recompensa
+    accionEnCurso = true;
+    try {
+        const antes = currentUser.saldo;
+        marcarCambioPropio();
+        
+        // Llamar a la RPC con el tipo de anuncio
+        const { data, error } = await db.rpc('add_ad_reward', { p_tipo: tipo });
+        if (error) return alert("⚠️ "+error.message);
+        
+        currentUser.saldo = data;
+        actualizarInterfazUsuario();
+        mostrarToast(`💰 +${recompensa.toLocaleString('es-ES')} € por ver anuncio.`);
+        
+        // Incrementar misión de anuncios
+        const { data: ca } = await db.rpc('increment_ad_mission');
+        if (ca === 2) {
+            marcarCambioPropio();
+            const { data: ns } = await db.rpc('add_mission_reward', { p_amount: 300 });
+            if (ns) {
+                currentUser.saldo = ns;
+                actualizarInterfazUsuario();
+                mostrarToast("📺 ¡Patrocinador! +300 €.");
+                addXp(50);
+            }
+        } else if (ca === 1) {
+            mostrarToast("📺 Primer anuncio del día. ¡Uno más!");
+        }
+    } finally {
+        accionEnCurso = false;
+    }
+}
+// ===== FIN SIMULADOR DE ANUNCIOS =====
+
 async function activarGoat() { if (!currentUser) return; if (accionEnCurso) return; accionEnCurso = true; try { marcarCambioPropio(); const { data, error } = await db.rpc('toggle_goat'); if (error) return alert(error.message); currentUser.esGoat = data; await cargarPerfil(currentUser.id); actualizarInterfazUsuario(); if (data) { alert("🐐 Modo GOAT activado. +5.000 €."); tryUnlockAchievement('goat'); } } finally { accionEnCurso = false; } }
 async function reclamarBonusDiario() { if (!currentUser) return; if (accionEnCurso) return; accionEnCurso = true; try { marcarCambioPropio(); const { data, error } = await db.rpc('reclamar_bonus_diario'); if (error) return alert("⚠️ "+error.message); currentUser.saldo = data; actualizarInterfazUsuario(); alert("🎁 ¡Misiones completadas! Has recibido +1.000 € de bono diario."); } finally { accionEnCurso = false; } }
 // ===== MISIONES =====
