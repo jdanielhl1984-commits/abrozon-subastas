@@ -252,12 +252,94 @@
     🚧 BETA PRIVADA · Envíanos tu feedback en <a href="https://forms.gle/4S2s5q2oZtttsjzr8" target="_blank">este formulario</a>.
 </div>
 
-<!-- MODALES -->
-<div id="authModal" class="auth-modal-overlay" style="display:none;">...</div>
-<div id="recoveryModal" class="auth-modal-overlay" style="display:none;">...</div>
-<div id="adminModal" class="auth-modal-overlay" style="display:none;">...</div>
-<div id="adModal" class="auth-modal-overlay" style="display:none;">...</div>
-
+<div id="authModal" class="auth-modal-overlay" style="display:none;">
+    <div class="auth-card">
+        <button class="btn-close-modal" onclick="cerrarModalAuth()">✕</button>
+        <div class="logo" style="text-align:center;margin-bottom:15px;">aBROzon<span>.subastas</span></div>
+        <div id="formLogin" class="auth-form">
+            <h2>Iniciar Sesión</h2><p>Identifícate para pujar.</p>
+            <input type="email" id="loginEmail" placeholder="Tu correo"><input type="password" id="loginPassword" placeholder="Contraseña">
+            <button onclick="iniciarSesion()">Acceder</button>
+            <div class="auth-toggle"><span onclick="solicitarRecuperacion()">¿Olvidaste tu contraseña?</span></div>
+            <div class="auth-toggle">¿No tienes cuenta? <span onclick="toggleAuthForm('register')">Regístrate gratis</span></div>
+        </div>
+        <div id="formRegister" class="auth-form" style="display:none;">
+            <h2>Crear Perfil</h2><p>¡Únete y recibe 1.000 €!</p>
+            <input type="email" id="regEmail" placeholder="Tu correo"><input type="text" id="regUsername" placeholder="Alias"><input type="password" id="regPassword" placeholder="Contraseña">
+            <button onclick="registrarUsuario()" style="background:var(--accent-green);">Crear Cuenta</button>
+            <div class="auth-toggle">¿Ya tienes cuenta? <span onclick="toggleAuthForm('login')">Iniciar sesión</span></div>
+        </div>
+    </div>
+</div>
+<div id="recoveryModal" class="auth-modal-overlay" style="display:none;">
+    <div class="auth-card"><h2>Crear nueva contraseña</h2><div class="auth-form"><input type="password" id="newPasswordInput" placeholder="Nueva contraseña"><button onclick="guardarNuevaPassword()">Guardar</button></div></div>
+</div>
+<div id="adminModal" class="auth-modal-overlay" style="display:none;">
+    <div class="auth-card" style="max-width:550px;max-height:85vh;overflow-y:auto;">
+        <button class="btn-close-modal" onclick="cerrarModalAdmin()">✕</button>
+        <h2>🛠️ Panel Admin</h2>
+        <div style="border-top:1px solid var(--border-color);margin:15px 0;padding-top:15px;">
+            <h3>➕ Crear subasta</h3>
+            <div class="auth-form">
+                <input type="text" id="adminTitle" placeholder="Título"><textarea id="adminDesc" placeholder="Descripción" rows="3"></textarea>
+                <input type="number" id="adminPrice" placeholder="Precio salida (€)"><input type="text" id="adminImage" placeholder="Emoji o URL">
+                <label>Subir fotos:</label><input type="file" id="adminImageFile" accept="image/*" multiple onchange="subirFotoAdmin(event)" style="width:100%;padding:10px;margin-bottom:8px;"><div id="adminImagePreview"></div>
+                <select id="adminRareza" style="width: 100%; padding: 12px; margin-bottom: 12px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-subtle); color: var(--text-main);">
+                    <option value="Común">Común</option>
+                    <option value="Poco común">Poco común</option>
+                    <option value="Rara">Rara</option>
+                    <option value="Épica">Épica</option>
+                    <option value="Legendaria">Legendaria</option>
+                    <option value="Mítica">Mítica</option>
+                </select>
+                <input type="number" id="adminStock" placeholder="Stock máximo (0 = ilimitado)" style="width: 100%; padding: 12px; margin-bottom: 12px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-subtle); color: var(--text-main);" value="0">
+                <label style="font-size:0.8rem; color: var(--text-muted); margin-bottom:4px;">Metadata (JSON) - opcional:</label>
+                <textarea id="adminMetadata" placeholder='{"lore_source":"Míster Jägger","is_animated":true}' rows="3" style="width: 100%; padding: 12px; margin-bottom: 12px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-subtle); color: var(--text-main); resize: vertical; font-family: monospace; font-size: 0.8rem;"></textarea>
+                <select id="adminCategoria" style="width: 100%; padding: 12px; margin-bottom: 12px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-subtle); color: var(--text-main);"></select>
+                <select id="adminDuracion">
+                    <option value="0.0167">1 min</option>
+                    <option value="1">1h</option>
+                    <option value="6">6h</option>
+                    <option value="24" selected>24h</option>
+                    <option value="72">3d</option>
+                    <option value="168">7d</option>
+                    <option value="336">14 días</option>
+                    <option value="720">30 días</option>
+                </select>
+                <button onclick="crearNuevaSubasta()" style="background:#8b5cf6;">Publicar</button>
+            </div>
+        </div>
+        <div style="border-top:1px solid var(--border-color);margin:15px 0;padding-top:15px;">
+            <h3>👤 Gestionar usuario</h3>
+            <div style="display:flex;gap:8px;"><input type="text" id="adminBuscarAlias" placeholder="Alias"><button onclick="adminBuscarUsuario()">Buscar</button></div>
+            <div id="adminUserResult"></div>
+            <hr style="border-color: var(--border-color); margin: 15px 0;">
+            <button onclick="adminListarUsuarios()" style="background: var(--accent-blue); color:white; border:none; padding:10px 14px; border-radius:8px; font-weight:bold; cursor:pointer; width:100%;">📋 Ver todos los usuarios</button>
+            <div id="adminUserList" style="margin-top: 10px; max-height: 300px; overflow-y: auto;"></div>
+        </div>
+        <div style="border-top:1px solid var(--border-color);margin:15px 0;padding-top:15px;">
+            <h3>📋 Subastas existentes</h3><div id="adminAuctionList" style="max-height:220px;overflow-y:auto;"></div>
+        </div>
+        <div style="border-top:1px solid var(--border-color);margin:15px 0;padding-top:15px;">
+            <h3>🏷️ Gestionar categorías</h3>
+            <div style="display:flex;gap:8px;margin-bottom:8px;">
+                <input type="text" id="newCatName" placeholder="Nombre categoría" style="flex:1;padding:8px;border-radius:6px;border:1px solid var(--border-color);background:var(--bg-card);color:var(--text-main);">
+                <input type="text" id="newCatIcon" placeholder="Icono (emoji)" style="width:80px;padding:8px;border-radius:6px;border:1px solid var(--border-color);background:var(--bg-card);color:var(--text-main);">
+                <button onclick="adminAddCategoria()" style="background:var(--accent-green);color:white;border:none;padding:8px 12px;border-radius:6px;font-weight:bold;">Añadir</button>
+            </div>
+            <div id="adminCatList"></div>
+        </div>
+    </div>
+</div>
+<!-- Modal simulador de anuncio -->
+<div id="adModal" class="auth-modal-overlay" style="display:none;">
+    <div class="auth-card" style="max-width:380px; text-align:center;">
+        <h2 style="color:var(--accent-blue);">📺 Anuncio en progreso</h2>
+        <p style="font-size:1.2rem; margin:15px 0;" id="adMessage">Viendo anuncio...</p>
+        <div id="adCountdown">3</div>
+        <p style="color:var(--text-muted); font-size:0.8rem; margin-top:10px;">(Simulación beta)</p>
+    </div>
+</div>
 <div class="disclaimer">🚧 FASE BETA · PRUEBAS EN CURSO 🚧</div>
 
 <header>
@@ -323,16 +405,9 @@
 </nav>
 
 <div class="container">
-    <!-- VIEWS -->
     <div id="viewCatalog" class="view active">
         <div class="category-chips" id="categoryChips"></div>
-        <div class="hero-banner">
-            <div class="hero-text">
-                <span class="badge-trend">Plataforma Dinámica</span>
-                <h2>Especial Creadores & Polémicas</h2>
-                <p>Pujas sincronizadas en directo. <span id="contadorProximaSubasta" style="font-weight:bold;color:#f97316;"></span></p>
-            </div>
-        </div>
+        <div class="hero-banner"><div class="hero-text"><span class="badge-trend">Plataforma Dinámica</span><h2>Especial Creadores & Polémicas</h2><p>Pujas sincronizadas en directo. <span id="contadorProximaSubasta" style="font-weight:bold;color:#f97316;"></span></p></div></div>
         <div class="grid-title">🔥 Subastas Activas</div>
         <div class="sort-bar" id="sortBarCatalog">
             <span class="sort-chip active" onclick="ordenarCatalogo('fecha')">📅 Más recientes</span>
@@ -343,7 +418,148 @@
         </div>
         <div class="auction-grid" id="catalogGrid">Cargando...</div>
     </div>
-    <!-- El resto de vistas igual que antes, pero con tamaños adaptados -->
+    <div id="viewDetail" class="view"><button class="btn-back" onclick="mostrarCatalogo()">← Volver al Catálogo</button><div class="detail-layout"><div class="product-card-detail"><div class="main-image-detail" id="detailImage">📦</div><div id="detailGallery" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:15px;"></div><span class="card-category" id="detailCategory">Categoría</span><h1 id="detailTitle" style="margin:8px 0;font-size:1.4rem;">Título</h1><div id="detailRarezaChip" style="display:none;"></div><p id="detailDescription" style="color:var(--text-muted);line-height:1.6;">Descripción...</p><div id="mercadoInfoBox" style="display:none;margin-top:14px;padding:12px;background:rgba(234,179,8,0.1);border:1px solid #eab308;border-radius:8px;font-size:0.85rem;color:var(--text-main);"></div></div><div class="auction-panel-detail"><div class="time-box" id="detailTime">⏳ Cierra en: Calculando...</div><div style="margin-bottom:15px;"><div style="font-size:0.8rem;color:var(--text-muted);">Última puja</div><div style="font-size:2.1rem;font-weight:900;" id="detailBid">0 €</div></div><div id="biddingControlsContainer"><div id="goatCommentContainer" style="display:none;margin-bottom:12px;"><input type="text" id="goatCommentInput" placeholder="💬 Mensaje épico GOAT..." style="width:100%;padding:10px;border-radius:8px;border:1px solid #eab308;background:var(--bg-subtle);color:var(--text-main);font-weight:bold;outline:none;font-size:0.85rem;"></div><button id="btnCompraDirecta" class="btn-compra-directa" onclick="comprarDirecto()">💎 COMPRA DIRECTA (30% comisión)</button><button id="btnCancelarVenta" onclick="cancelarVentaMercado()" style="display:none;width:100%;background:#ef4444;color:white;border:none;padding:10px;border-radius:8px;font-weight:bold;cursor:pointer;margin-bottom:10px;">🚫 Cancelar venta (pierdes la fianza)</button><button class="btn-bid" id="btnMinBid" onclick="hacerPujaMínima()">¡PUJAR MÍNIMO (+50 €)!</button><div style="display:flex;gap:8px;margin-top:10px;"><input type="number" id="customBidInput" placeholder="Cantidad exacta €" style="flex:1;padding:10px;border-radius:8px;border:1px solid var(--border-color);background:var(--bg-subtle);color:var(--text-main);font-weight:bold;outline:none;"><button id="btnCustomBid" onclick="hacerPujaPersonalizada()" style="background:var(--accent-blue);color:white;border:none;padding:10px 14px;border-radius:8px;font-weight:bold;cursor:pointer;">Pujar</button></div></div><!-- Botones de compartir --><div style="margin-top:20px;border-top:1px solid var(--border-color);padding-top:15px;"><h3 style="font-size:0.8rem;color:var(--text-muted);margin-bottom:10px;">📤 Compartir esta subasta</h3><button class="btn-share btn-share-x" onclick="compartirEnX()">𝕏 Compartir en X</button><button class="btn-share btn-share-copy" onclick="copiarEnlace()">🔗 Copiar enlace</button></div><div style="margin-top:20px;border-top:1px solid var(--border-color);padding-top:15px;"><h3 style="font-size:0.8rem;color:var(--text-muted);margin-bottom:10px;">Historial de Pujas</h3><div id="historyList" style="max-height:220px;overflow-y:auto;"></div></div></div></div></div>
+    <div id="viewMisPujas" class="view"><button class="btn-back" onclick="mostrarCatalogo()">← Volver al Catálogo</button><h2 style="margin-bottom:20px;">📋 Mis Pujas</h2>
+        <div style="margin-bottom:15px; display:flex; gap:8px; flex-wrap:wrap;">
+            <button class="filter-btn active" onclick="filtrarMisPujas('todas')">📋 Todas</button>
+            <button class="filter-btn" onclick="filtrarMisPujas('activas')">🟢 Activas</button>
+            <button class="filter-btn" onclick="filtrarMisPujas('ganadas')">🏆 Ganadas</button>
+            <button class="filter-btn" onclick="filtrarMisPujas('perdidas')">❌ Perdidas</button>
+        </div>
+        <div style="margin-bottom:15px;">
+            <button class="sort-btn active" onclick="ordenarMisPujas('fecha')">📅 Más recientes</button>
+            <button class="sort-btn" onclick="ordenarMisPujas('duracion')">⏳ Por finalización</button>
+            <button class="sort-btn" onclick="ordenarMisPujas('rareza')">🏷️ Por rareza</button>
+            <button class="sort-btn" onclick="ordenarMisPujas('cantidad')">💰 Por cantidad</button>
+        </div>
+        <div id="misPujasContainer">Cargando...</div>
+    </div>
+    <div id="viewVitrina" class="view"><div class="profile-header"><div class="user-info"><h2 id="profileUserName">👑 Usuario</h2><span class="user-badge" id="profileBadge">Coleccionista</span></div></div><div class="grid-title">📜 Mis Certificados</div><div class="vitrina-grid" id="vitrinaGrid"></div></div>
+    <div id="viewPerfil" class="view"><button class="btn-back" onclick="mostrarCatalogo()">← Volver al Catálogo</button><div class="profile-header"><div class="user-info"><h2 id="perfilNombre">👤 Usuario</h2><span class="user-badge" id="perfilEmail">correo@ejemplo.com</span></div></div>
+        <div class="product-card-detail" style="margin-bottom:20px;">
+            <h2 style="font-size:1.1rem;">📊 Progreso</h2>
+            <p>Nivel <strong id="perfilNivel">1</strong> · <span id="perfilTitulo">Lurker</span></p>
+            <div class="xp-bar"><div class="xp-fill" id="perfilXpFill" style="width:0%"></div></div>
+            <p style="font-size:0.8rem; color:var(--text-muted);">XP: <span id="perfilXp">0</span></p>
+        </div>
+        <div class="product-card-detail" style="margin-bottom:20px;">
+            <h2 style="font-size:1.1rem; margin-bottom:12px;">🏅 Insignias</h2>
+            <div id="achievementsContainer" class="achievement-grid">Cargando...</div>
+        </div>
+        <div class="product-card-detail" style="margin-bottom:20px;"><h2 style="font-size:1.1rem;">✏️ Cambiar alias</h2><div class="auth-form"><input type="text" id="perfilNuevoAlias" placeholder="Nuevo alias"><button onclick="guardarNuevoAlias()">Guardar</button></div></div>
+        <div class="product-card-detail" style="margin-bottom:20px;"><h2 style="font-size:1.1rem;">🔒 Cambiar contraseña</h2><div class="auth-form"><input type="password" id="perfilNuevaPassword" placeholder="Nueva contraseña"><button onclick="guardarNuevaPasswordPerfil()">Guardar</button></div></div>
+        <div class="product-card-detail"><h2 style="font-size:1.1rem;color:#ef4444;">⚠️ Zona de baja</h2><p style="color:var(--text-muted);">Contacta para eliminar tu cuenta.</p><button onclick="solicitarBajaCuenta()" style="background:#ef4444;color:white;border:none;padding:10px;border-radius:8px;font-weight:bold;cursor:pointer;width:100%;">Solicitar baja</button></div>
+    </div>
+    <div id="viewMisiones" class="view"><button class="btn-back" onclick="mostrarCatalogo()">← Volver al Catálogo</button><h2 style="margin-bottom:20px;">🎯 Misiones</h2><div id="misionesContainer"></div></div>
+    <div id="viewLogros" class="view"><button class="btn-back" onclick="mostrarCatalogo()">← Volver al Catálogo</button><h2 style="margin-bottom:20px;">🏅 Todos los Logros</h2><div id="logrosContainer" class="achievement-list">Cargando...</div></div>
+    <div id="viewHallOfFame" class="view"><button class="btn-back" onclick="mostrarCatalogo()">← Volver al Catálogo</button><h2 style="margin-bottom:20px;">🌟 Hall of Fame</h2><div id="hofContainer">Cargando rankings...</div></div>
+    <div id="viewLegal" class="view">
+    <button class="btn-back" onclick="mostrarCatalogo()">← Volver al Catálogo</button>
+    <div class="product-card-detail" style="margin-bottom:20px;">
+        <h2 style="color:var(--accent-blue);">Aviso Legal</h2>
+        <p style="color:var(--text-muted);line-height:1.7;font-size:0.9rem;">
+            <strong>1. Datos identificativos</strong><br>
+            En cumplimiento del artículo 10 de la Ley 34/2002, de 11 de julio, de Servicios de la Sociedad de la Información y Comercio Electrónico (LSSI-CE), se exponen a continuación los datos identificativos del titular de la web:<br><br>
+            <strong>Titular:</strong> Daniel Hernandez<br>
+            <strong>Ubicación:</strong> Granollers (Barcelona, España)<br>
+            <strong>Contacto:</strong> abrozonsubastas@gmail.com<br><br>
+            <strong>2. Naturaleza de la plataforma y exención de responsabilidad</strong><br>
+            aBROzon.subastas es una plataforma de entretenimiento y parodia. Todos los productos, subastas, saldos y cantidades mostradas son estrictamente ficticios, no tienen valor monetario real y en ningún caso son canjeables por dinero de curso legal.<br><br>
+            Cualquier referencia a personas públicas, creadores de contenido, marcas o entidades es una parodia realizada exclusivamente con fines humorísticos, sin que exista ninguna relación, patrocinio ni respaldo por parte de dichas personas o entidades.<br><br>
+            El titular no se hace responsable del uso indebido que los usuarios puedan hacer de la plataforma, ni de la veracidad, exactitud o legalidad de los comentarios, pujas o contenidos publicados por terceros en la misma (artículo 16 de la LSSI-CE).<br><br>
+            <strong>Contenido de usuarios:</strong> Los usuarios pueden publicar comentarios y subir imágenes. Cada usuario es responsable del contenido que publique y garantiza tener los derechos necesarios sobre el mismo. Al publicar en aBROzon.subastas, cedes a la plataforma una licencia no exclusiva, gratuita y mundial para mostrar dicho contenido dentro de la web.<br><br>
+            <strong>Disponibilidad:</strong> aBROzon.subastas se esfuerza por mantener el servicio disponible de forma continua, pero no garantiza la disponibilidad 24/7. No nos hacemos responsables de pérdidas de datos, saldos ficticios o interrupciones del servicio causadas por fallos de los proveedores externos (Supabase, GitHub Pages) o por mantenimiento técnico.
+        </p>
+    </div>
+    <div class="product-card-detail" style="margin-bottom:20px;">
+        <h2 style="color:var(--accent-blue);">Política de Privacidad</h2>
+        <p style="color:var(--text-muted);line-height:1.7;font-size:0.9rem;">
+            <strong>1. Responsable del tratamiento</strong><br>
+            Daniel Hernandez — abrozonsubastas@gmail.com<br><br>
+            <strong>2. Datos que recogemos y finalidad</strong><br>
+            Datos: Dirección de correo electrónico, el alias (nombre de usuario) que elijas, saldo ficticio e historial de pujas y actividad en la plataforma.<br>
+            Finalidad: Gestionar la creación y mantenimiento de tu cuenta, mostrar el historial de subastas, permitir tu participación en el juego y prevenir el fraude o abuso del sistema.<br><br>
+            <strong>3. Base legal y conservación</strong><br>
+            El tratamiento de tus datos se basa en tu consentimiento expreso otorgado al momento de registrarte en la plataforma. Los datos se conservarán mientras tu cuenta permanezca activa. Puedes solicitar su eliminación en cualquier momento, lo que conllevará la pérdida de tu progreso y saldo ficticio.<br><br>
+            <strong>4. Terceros y alojamiento de datos (Transferencias Internacionales)</strong><br>
+            Los datos de los usuarios se almacenan en los servidores de Supabase (proveedor de base de datos e infraestructura). Supabase procesa los datos garantizando las medidas de seguridad adecuadas y operando bajo acuerdos de procesamiento de datos compatibles con el RGPD.<br><br>
+            <strong>5. Tus derechos</strong><br>
+            Como usuario, tienes derecho a solicitar el acceso, rectificación, limitación y supresión de tus datos. Para ejercer estos derechos, puedes enviar un correo electrónico a abrozonsubastas@gmail.com indicando tu petición.<br><br>
+            <strong>6. Menores de edad</strong><br>
+            Esta plataforma no está dirigida a menores de 14 años.<br><br>
+            <strong>Cambios en esta política:</strong> se notificarán mediante aviso en la web.
+        </p>
+    </div>
+    <div class="product-card-detail">
+        <h2 style="color:var(--accent-blue);">Política de Cookies</h2>
+        <p style="color:var(--text-muted);line-height:1.7;font-size:0.9rem;">
+            Esta web utiliza únicamente cookies técnicas y de sesión, necesarias para el funcionamiento de la plataforma.<br><br>
+            Al ser cookies técnicas imprescindibles, están exentas de la obligación de recabar el consentimiento según el artículo 22.2 de la LSSI.
+        </p>
+    </div>
+</div>
+    <div id="viewAyuda" class="view">
+        <button class="btn-back" onclick="mostrarCatalogo()">← Volver al Catálogo</button>
+        <h2 style="color:var(--accent-blue);">❓ Ayuda y Tutorial</h2>
+        <p style="color:var(--text-muted); margin-bottom:20px;">Bienvenido a aBROzon.subastas. Aquí te explicamos cómo funciona todo.</p>
+        <div class="ayuda-grid">
+            <div class="ayuda-card">
+                <h3>📝 1. Regístrate</h3>
+                <p style="color:var(--text-muted);">Haz clic en <strong>🔑 Entrar</strong> y luego en <strong>Regístrate gratis</strong>. Recibirás <strong>1.000 €</strong> de saldo inicial.</p>
+            </div>
+            <div class="ayuda-card">
+                <h3>💰 2. Gana monedas</h3>
+                <ul>
+                    <li>🎬 <strong>Anuncios:</strong> +500 € cada uno (10 al día).</li>
+                    <li>🎯 <strong>Misiones:</strong> Completa las 4 misiones diarias y reclama <strong>+1.000 €</strong>.</li>
+                    <li>🏆 <strong>Subastas ganadas:</strong> Te llevas el objeto y puedes revenderlo en el mercado.</li>
+                    <li>📅 <strong>Racha diaria:</strong> Entra varios días seguidos, ¡hasta 1.000 € el día 7!</li>
+                    <li>🎲 <strong>Botín Diario:</strong> ¡Reclama tu recompensa diaria! Puedes ganar hasta 1.000 €.</li>
+                </ul>
+            </div>
+            <div class="ayuda-card">
+                <h3>🛒 3. Pujar y comprar</h3>
+                <ul>
+                    <li>✅ <strong>Puja mínima:</strong> +50 € sobre la puja actual.</li>
+                    <li>✏️ <strong>Puja personalizada:</strong> Introduce la cantidad exacta que quieras.</li>
+                    <li>💎 <strong>Compra directa:</strong> Si el vendedor la ha activado, compra al instante (30% comisión).</li>
+                </ul>
+            </div>
+            <div class="ayuda-card">
+                <h3>🏅 4. Progreso</h3>
+                <ul>
+                    <li>📊 <strong>Niveles:</strong> Ganas XP al pujar y completar misiones. Sube de nivel para desbloquear títulos.</li>
+                    <li>🏅 <strong>Logros:</strong> 30 insignias por acciones especiales.</li>
+                    <li>🐐 <strong>Modo GOAT:</strong> Actívalo desde el menú para comentar en las pujas.</li>
+                </ul>
+            </div>
+        </div>
+        <div class="product-card-detail" style="margin-top:20px;">
+            <h3 style="color:var(--accent-blue);">⭐ Tabla de Rarezas</h3>
+            <p style="color:var(--text-muted);font-size:0.9rem;margin-bottom:10px;">Cada subasta tiene una rareza que determina su color, precio inicial y duración.</p>
+            <table class="tabla-rareza">
+                <thead>
+                    <tr><th>Rareza</th><th>Color</th><th>Precio salida</th><th>Duración</th><th>Probabilidad</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Común</td><td style="color:#94a3b8;">Gris</td><td>1-1.000 €</td><td>24h</td><td>55%</td></tr>
+                    <tr><td>Poco común</td><td style="color:#22c55e;">Verde</td><td>500-2.000 €</td><td>24h</td><td>30%</td></tr>
+                    <tr><td>Rara</td><td style="color:#3b82f6;">Azul</td><td>1.001-5.000 €</td><td>24h</td><td>13%</td></tr>
+                    <tr><td>Épica</td><td style="color:#8b5cf6;">Lila</td><td>5.001-10.000 €</td><td>3 días</td><td>5%</td></tr>
+                    <tr><td>Legendaria</td><td style="color:#f97316;">Naranja</td><td>10.001-1.000.000 €</td><td>7 días</td><td>1%</td></tr>
+                    <tr><td>Mítica</td><td style="color:#ef4444;">Roja</td><td>1.000.001 €+</td><td>Evento</td><td>Evento</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="product-card-detail" style="margin-top:20px;">
+            <h3 style="color:var(--accent-blue);">❓ Preguntas Frecuentes (FAQ)</h3>
+            <div class="faq-item"><div class="faq-pregunta">¿El dinero es real?</div><div class="faq-respuesta">No, todo es ficticio. Es una plataforma de entretenimiento y parodia.</div></div>
+            <div class="faq-item"><div class="faq-pregunta">¿Cómo recupero mi contraseña?</div><div class="faq-respuesta">En la pantalla de inicio de sesión, pulsa "¿Olvidaste tu contraseña?". Recibirás un correo.</div></div>
+            <div class="faq-item"><div class="faq-pregunta">¿Qué pasa si mi subasta no recibe pujas?</div><div class="faq-respuesta">Se reliquida automáticamente con un 10% de descuento.</div></div>
+            <div class="faq-item"><div class="faq-pregunta">¿Puedo vender mis objetos?</div><div class="faq-respuesta">Sí, desde tu vitrina pulsa "Vender en Mercado".</div></div>
+            <div class="faq-item"><div class="faq-pregunta">¿Qué son los certificados?</div><div class="faq-respuesta">Cuando ganas una subasta, recibes un certificado oficial con un código único. Es tu prueba de propiedad.</div></div>
+        </div>
+    </div>
 </div>
 
 <footer style="text-align:center;padding:16px 12px;color:var(--text-muted);font-size:0.75rem;border-top:1px solid var(--border-color);">
@@ -368,7 +584,6 @@ let notificaciones = JSON.parse(localStorage.getItem('abrozon_notificaciones') |
 
 // ===== 30 ACHIEVEMENTS =====
 const ALL_ACHIEVEMENTS = [
-    // === PROGRESO Y NIVEL (7) ===
     { key: 'first_bid', name: 'Primer Clic', icon: '🖱️', desc: 'Realiza tu primera puja' },
     { key: 'level_5', name: 'Glow Up', icon: '✨', desc: 'Alcanza el nivel 5' },
     { key: 'level_10', name: 'Subiendo', icon: '📈', desc: 'Alcanza el nivel 10' },
@@ -376,8 +591,6 @@ const ALL_ACHIEVEMENTS = [
     { key: 'level_50', name: 'Nivel Máximo', icon: '👑', desc: 'Alcanza el nivel 50' },
     { key: 'level_75', name: 'Leyenda', icon: '🏆', desc: 'Alcanza el nivel 75' },
     { key: 'level_100', name: 'Dios', icon: '🌟', desc: 'Alcanza el nivel 100' },
-
-    // === ECONOMÍA Y SALDO (7) ===
     { key: 'bancarrota', name: 'Bugueado', icon: '🪲', desc: 'Quédate con exactamente 0 €' },
     { key: 'saldo_1k', name: '1k', icon: '💰', desc: 'Acumula 1.000 € de saldo' },
     { key: 'saldo_10k', name: '10k', icon: '💵', desc: 'Acumula 10.000 € de saldo' },
@@ -385,23 +598,17 @@ const ALL_ACHIEVEMENTS = [
     { key: 'chetado', name: 'Chetado', icon: '⚡', desc: 'Acumula 100.000 € de saldo' },
     { key: 'saldo_500k', name: '500k', icon: '🏦', desc: 'Acumula 500.000 € de saldo' },
     { key: 'liquidez', name: '1M', icon: '💧', desc: 'Acumula 1.000.000 € de saldo' },
-
-    // === SUBASTAS GANADAS (5) ===
     { key: 'win_1', name: 'Primer Trofeo', icon: '🏅', desc: 'Gana tu primera subasta' },
     { key: 'win_5', name: 'Coleccionista', icon: '🏛️', desc: 'Gana 5 subastas' },
     { key: 'win_10', name: 'La Cabra', icon: '🐐', desc: 'Gana 10 subastas' },
     { key: 'win_25', name: 'Leyenda viva', icon: '📜', desc: 'Gana 25 subastas' },
     { key: 'win_50', name: 'El Rey', icon: '👑', desc: 'Gana 50 subastas' },
-
-    // === PUJAS ESPECIALES (6) ===
     { key: 'sniper', name: 'Snipe', icon: '🎯', desc: 'Puja en los últimos 30 segundos' },
     { key: 'basado', name: 'Basado', icon: '🗿', desc: 'Haz una puja 10x mayor que el precio actual' },
     { key: 'delulu', name: 'Delulu', icon: '🦄', desc: 'Intenta pujar más de tu saldo' },
     { key: 'no_fear', name: 'No Fear', icon: '😎', desc: 'Puja en una subasta Mítica' },
     { key: 'sigma', name: 'Sigma', icon: '🗿', desc: 'Puja exactamente 69 € en una subasta' },
     { key: 'a_full', name: 'A Full', icon: '🔥', desc: 'Ten 3 objetos Épicos o superiores en tu vitrina' },
-
-    // === COLECCIONISMO Y MERCADO (5) ===
     { key: 'cert_3', name: 'Principiante', icon: '🎒', desc: 'Consigue 3 certificados' },
     { key: 'collector', name: 'Coleccionista', icon: '🏛️', desc: 'Consigue 5 certificados' },
     { key: 'cert_10', name: 'Experto', icon: '🧐', desc: 'Consigue 10 certificados' },
@@ -456,7 +663,6 @@ function marcarLeida(id) {
     renderizarNotificaciones();
 }
 
-// Cerrar panel al hacer clic fuera
 document.addEventListener('click', (e) => {
     const panel = document.getElementById('notifPanel');
     const btn = document.getElementById('btnNotif');
@@ -495,18 +701,15 @@ async function checkStreakAndReward() {
 async function reclamarBotinDiario() {
     if (!currentUser) return abrirModalAuth('register');
     if (accionEnCurso) return;
-    
     accionEnCurso = true;
     const btn = document.getElementById('btnRuleta');
     if (btn) { btn.disabled = true; btn.innerText = '🎰...'; }
-    
     try {
         const { data, error } = await db.rpc('reclamar_botin_diario');
         if (error) {
             mostrarToast('⚠️ ' + error.message);
             return;
         }
-        
         if (data && data.recompensa > 0) {
             currentUser.saldo += data.recompensa;
             actualizarInterfazUsuario();
@@ -541,7 +744,6 @@ window.onload = async () => {
         }
         actualizarInterfazUsuario();
     });
-
     const urlParams = new URLSearchParams(window.location.search);
     const recoveryToken = urlParams.get('token');
     const recoveryType = urlParams.get('type');
@@ -552,7 +754,6 @@ window.onload = async () => {
     if (sessionStorage.getItem('abrozon_recovery_pending') === 'true') {
         document.getElementById('recoveryModal').style.display = 'flex';
     }
-
     await cargarSubastas();
     await cargarCategorias();
     setInterval(actualizarTemporizadoresCatalogo, 1000);
@@ -760,7 +961,6 @@ function renderizarCatalogo() {
         }
     }
     if (terminoBusqueda) lista = lista.filter(p => (p.title||'').toLowerCase().includes(terminoBusqueda) || (p.description||'').toLowerCase().includes(terminoBusqueda));
-    
     switch (ordenCatalogoActual) {
         case 'fecha':
             lista.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
@@ -783,7 +983,6 @@ function renderizarCatalogo() {
             lista.sort((a, b) => b.current_price - a.current_price);
             break;
     }
-    
     if (!lista.length) { grid.innerHTML = '<div>No hay subastas.</div>'; return; }
     lista.forEach(p => {
         const rarezaClase = p.rareza ? 'rareza-' + p.rareza.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-') : 'rareza-comun';
@@ -807,7 +1006,6 @@ function actualizarVistaDetalleDatoVivo() {
     const gal = document.getElementById('detailGallery');
     const fotos = [productoSeleccionado.image_url, ...(productoSeleccionado.images||[])].filter(u => u && /^https?:\/\//i.test(u));
     gal.innerHTML = fotos.length>1 ? fotos.map(u => `<img src="${u}" onclick="cambiarFotoPrincipal(this.src)" style="width:60px;height:60px;object-fit:cover;border-radius:8px;cursor:pointer;border:2px solid var(--border-color);">`).join('') : '';
-
     const detailContainer = document.querySelector('#viewDetail .product-card-detail');
     if (detailContainer && productoSeleccionado.rareza) {
         const claseRareza = 'rareza-' + productoSeleccionado.rareza.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-');
@@ -815,7 +1013,6 @@ function actualizarVistaDetalleDatoVivo() {
     } else if (detailContainer) {
         detailContainer.className = 'product-card-detail';
     }
-
     const chipRareza = document.getElementById('detailRarezaChip');
     if (chipRareza && productoSeleccionado.rareza) {
         chipRareza.style.display = 'block';
@@ -823,7 +1020,6 @@ function actualizarVistaDetalleDatoVivo() {
     } else if (chipRareza) {
         chipRareza.style.display = 'none';
     }
-
     const infoBox = document.getElementById('mercadoInfoBox');
     if (productoSeleccionado.category === 'Mercado') {
         const meta = productoSeleccionado.metadata || {};
@@ -833,15 +1029,12 @@ function actualizarVistaDetalleDatoVivo() {
     } else {
         infoBox.style.display = 'none';
     }
-
     document.getElementById('biddingControlsContainer').style.display = productoSeleccionado.status === 'closed' ? 'none' : 'block';
     if (productoSeleccionado.status === 'closed') document.getElementById('detailTime').innerText = `🏆 Finalizada. Ganador: ${productoSeleccionado.winner||'Nadie'}`;
-
     const btnCancelar = document.getElementById('btnCancelarVenta');
     if (btnCancelar) {
         btnCancelar.style.display = (productoSeleccionado.category === 'Mercado' && currentUser && currentUser.id === productoSeleccionado.seller_id && productoSeleccionado.status !== 'closed') ? 'block' : 'none';
     }
-
     const btnCompraDirecta = document.getElementById('btnCompraDirecta');
     if (btnCompraDirecta) {
         const tieneCompraDirecta = productoSeleccionado.compra_directa_price && productoSeleccionado.compra_directa_price > 0;
@@ -940,19 +1133,15 @@ function hacerPujaPersonalizada() { if (!currentUser) return abrirModalAuth('reg
 async function verAnuncio(tipo) {
     if (!currentUser) return abrirModalAuth('register');
     if (accionEnCurso) return;
-    
     const modal = document.getElementById('adModal');
     const mensaje = document.getElementById('adMessage');
     const contador = document.getElementById('adCountdown');
-    
     const esGoat = (tipo === 'goat');
     const recompensa = esGoat ? 1000 : 500;
     mensaje.innerText = esGoat ? '📺 Anuncio premium GOAT...' : '📺 Viendo anuncio...';
     modal.style.display = 'flex';
-    
     let segundos = 3;
     contador.innerText = segundos;
-    
     await new Promise((resolve) => {
         const intervalo = setInterval(() => {
             segundos--;
@@ -963,13 +1152,10 @@ async function verAnuncio(tipo) {
             }
         }, 1000);
     });
-    
     modal.style.display = 'none';
-    
     const btnAd = document.getElementById('btnAd');
     btnAd.disabled = true;
     btnAd.innerText = '⏳ Procesando...';
-    
     accionEnCurso = true;
     try {
         const antes = currentUser.saldo;
@@ -1013,12 +1199,10 @@ async function actualizarContadorAnuncios() {
             .eq('id', currentUser.id)
             .single();
         if (error) return;
-        
         const hoy = new Date().toISOString().split('T')[0];
         const esHoy = data.last_ad_date === hoy;
         const usados = esHoy ? data.ad_views_today : 0;
         const restantes = Math.max(0, 10 - usados);
-        
         const span = document.getElementById('anunciosRestantes');
         if (span) span.innerText = `(${restantes}/10 hoy)`;
     } catch (e) {
@@ -1037,7 +1221,6 @@ async function cargarHallOfFame() {
     container.innerHTML = 'Cargando...';
     const { data, error } = await db.rpc('get_hall_of_fame');
     if (error) { container.innerHTML = `<p>Error: ${error.message}</p>`; return; }
-    
     let html = '';
     html += '<div class="hof-section"><h3>🤑 El Más Rico</h3><p style="color:var(--text-muted);font-size:0.8rem;margin-bottom:10px;">Mayor saldo actual (cifra oculta 🔒)</p>' + construirPodioYLista(data.ricos, 'oculto') + '</div>';
     html += '<div class="hof-section"><h3>🐐 La Cabra (GOAT)</h3><p style="color:var(--text-muted);font-size:0.8rem;margin-bottom:10px;">Más subastas ganadas</p>' + construirPodioYLista(data.ganadores, 'victorias') + '</div>';
@@ -1098,7 +1281,6 @@ async function cargarMisPujas() {
         .eq('user_id', currentUser.id)
         .order('created_at', { ascending: false });
     if (error) { container.innerHTML = `<p>Error: ${error.message}</p>`; return; }
-    
     const latestBids = {};
     (bids || []).forEach(b => {
         const auctionId = b.auction_id;
@@ -1107,7 +1289,6 @@ async function cargarMisPujas() {
         }
     });
     misPujasData = Object.values(latestBids);
-    
     ordenarMisPujas(ordenActual);
 }
 
@@ -1119,7 +1300,6 @@ function ordenarMisPujas(criterio) {
     else if (criterio === 'duracion') botones[1].classList.add('active');
     else if (criterio === 'rareza') botones[2].classList.add('active');
     else if (criterio === 'cantidad') botones[3].classList.add('active');
-
     let data = [...misPujasData];
     switch (criterio) {
         case 'fecha':
@@ -1159,7 +1339,6 @@ function filtrarMisPujas(filtro) {
 function renderizarMisPujas(data) {
     const container = document.getElementById('misPujasContainer');
     if (!data.length) { container.innerHTML = '<p>Aún no has hecho ninguna puja.</p>'; return; }
-    
     let datosFiltrados = data;
     if (misPujasFiltro === 'activas') {
         datosFiltrados = data.filter(b => b.auctions && b.auctions.status !== 'closed');
@@ -1168,12 +1347,10 @@ function renderizarMisPujas(data) {
     } else if (misPujasFiltro === 'perdidas') {
         datosFiltrados = data.filter(b => b.auctions && b.auctions.status === 'closed' && b.auctions.winner !== currentUser.username);
     }
-    
     if (!datosFiltrados.length) {
         container.innerHTML = '<p>No hay pujas en esta categoría.</p>';
         return;
     }
-    
     let html = '<table class="mis-pujas-table"><tr><th>Subasta</th><th>Rareza</th><th>Tu puja</th><th>Estado</th><th>Fin</th></tr>';
     datosFiltrados.forEach(b => {
         const auction = b.auctions;
@@ -1267,9 +1444,7 @@ function renderizarListaAdminCategorias() { const box = document.getElementById(
 // ===== AUTENTICACIÓN =====
 function toggleAuthForm(mode) { document.getElementById('formLogin').style.display = mode==='login'?'block':'none'; document.getElementById('formRegister').style.display = mode==='register'?'block':'none'; }
 async function registrarUsuario() { const email = document.getElementById('regEmail').value.trim(), alias = document.getElementById('regUsername').value.trim().startsWith('@')? document.getElementById('regUsername').value.trim() : '@'+document.getElementById('regUsername').value.trim(), pass = document.getElementById('regPassword').value.trim(); if (!email||!alias||!pass) return mostrarToast("⚠️ Completa todos los campos."); const { data: libre } = await db.rpc('username_disponible',{p_username:alias}); if (!libre) return mostrarToast("⚠️ Alias en uso."); const { data, error } = await db.auth.signUp({ email, password: pass, options: { data: { username: alias } } }); if (error) return mostrarToast('⚠️ ' + error.message); if (!data.session) { mostrarToast("📧 Confirma tu correo."); cerrarModalAuth(); return; } await cargarPerfil(data.user.id); cerrarModalAuth(); actualizarInterfazUsuario(); mostrarToast("¡Bienvenido! 1.000 €."); }
-async function iniciarSesion() { const email = document.getElementById('loginEmail').value.trim(), pass = document.getElementById('loginPassword').value.trim(); if (!email||!pass) return mostrarToast("⚠️ Completa campos."); const { data, error } = await db.auth.signInWithPassword({ email, password: pass }); if (error) return mostrarToast('⚠️ ' + error.message); await cargarPerfil(data.user.id); cerrarModalAuth(); actualizarInterfazUsuario();
-    await checkStreakAndReward();
-}
+async function iniciarSesion() { const email = document.getElementById('loginEmail').value.trim(), pass = document.getElementById('loginPassword').value.trim(); if (!email||!pass) return mostrarToast("⚠️ Completa campos."); const { data, error } = await db.auth.signInWithPassword({ email, password: pass }); if (error) return mostrarToast('⚠️ ' + error.message); await cargarPerfil(data.user.id); cerrarModalAuth(); actualizarInterfazUsuario(); await checkStreakAndReward(); }
 async function solicitarRecuperacion() { const email = prompt("Email:"); if (!email) return; const { error } = await db.auth.resetPasswordForEmail(email, { redirectTo: window.location.href.split('#')[0] }); if (error) return mostrarToast('⚠️ ' + error.message); mostrarToast('📧 Correo enviado.'); }
 async function guardarNuevaPassword() {
     const p = document.getElementById('newPasswordInput').value.trim();
@@ -1328,9 +1503,7 @@ async function cargarVitrina() {
             card.className = 'certificate-card ' + rarezaClaseVitrina;
             const fecha = item.ends_at ? new Date(item.ends_at).toLocaleDateString('es-ES') : '';
             const userItemId = userItemIds[item.id] || '';
-
             const reciclable = (rareza === 'Común' || rareza === 'Poco común' || rareza === 'Rara' || rareza === 'Épica');
-
             let valorReciclajeNum = Math.round(item.starting_price * 0.20);
             if (rareza === 'Común') {
                 valorReciclajeNum = Math.min(Math.max(valorReciclajeNum, 50), 300);
@@ -1343,7 +1516,6 @@ async function cargarVitrina() {
             }
             const valorReciclajeTexto = valorReciclajeNum.toLocaleString('es-ES') + ' €';
             const rarezaClase = 'chip-rareza-' + rareza.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-');
-
             card.innerHTML = `
                 <div style="width:100%;height:120px;display:flex;align-items:center;justify-content:center;font-size:3rem;background:var(--bg-subtle);">${renderizarImagenProducto(item.image_url)}</div>
                 <h3>${item.title}</h3>
