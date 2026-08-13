@@ -36,11 +36,13 @@
         .search-bar:focus-within { border-color: var(--accent-blue); box-shadow: 0 0 0 3px rgba(2,132,199,0.15); }
         .search-bar .search-icon { color: var(--text-muted); font-size: 0.9rem; cursor: pointer; flex-shrink: 0; }
         .search-bar input { width: 100%; background: transparent; border: none; padding: 10px 12px; color: var(--text-main); outline: none; font-size: 0.9rem; }
-        .header-right { display: flex; align-items: center; gap: 8px; }
+        .header-right { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
         .user-balance { background-color: var(--bg-subtle); padding: 8px 14px; border-radius: 20px; font-weight: bold; border: 1px solid var(--border-color); font-size: 0.85rem; }
         .balance-amount { color: var(--accent-green); }
         .btn-header { background: var(--bg-subtle); color: var(--text-main); border: 1px solid var(--border-color); padding: 8px 12px; border-radius: 20px; font-weight: bold; cursor: pointer; font-size: 0.85rem; transition: opacity 0.2s; position: relative; }
         .btn-header:disabled { opacity: 0.5; cursor: not-allowed; }
+        .btn-ruleta { background: linear-gradient(135deg, #f97316, #eab308); color: white; border: none; padding: 8px 14px; border-radius: 20px; font-weight: bold; cursor: pointer; font-size: 0.85rem; transition: opacity 0.2s; }
+        .btn-ruleta:disabled { opacity: 0.5; cursor: not-allowed; }
         .btn-goat { background: linear-gradient(135deg, #eab308, #ca8a04); color: #0f172a; border: none; padding: 8px 14px; border-radius: 20px; font-weight: 900; cursor: pointer; font-size: 0.85rem; opacity: 0.5; transition: opacity 0.2s; }
         .btn-goat.active { opacity: 1; box-shadow: 0 0 10px #eab308; }
         .btn-goat:disabled { opacity: 0.3; cursor: not-allowed; }
@@ -123,7 +125,6 @@
         .vitrina-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
         .certificate-card { background: var(--bg-card); border-radius: 16px; padding: 20px; box-shadow: var(--shadow-card); text-align: center; position: relative; transition: all 0.3s ease; }
         .certificate-card h3 { color: var(--accent-blue); font-size: 1.1rem; margin-bottom: 6px; }
-        /* Efectos visuales para la vitrina según rareza */
         .certificate-card.vitrina-comun { border: 2px solid #94a3b8; }
         .certificate-card.vitrina-poco-comun { border: 2px solid #22c55e; box-shadow: 0 0 15px rgba(34,197,94,0.2); }
         .certificate-card.vitrina-rara { border: 2px solid #3b82f6; box-shadow: 0 0 20px rgba(59,130,246,0.3); }
@@ -177,7 +178,8 @@
         #goatDropdown { right: auto; left: 0; }
         .dropdown-item { padding: 11px 14px; font-size: 0.85rem; color: var(--text-main); cursor: pointer; border-bottom: 1px solid var(--border-color); }
         .dropdown-item:last-child { border-bottom: none; } .dropdown-item:hover { background: var(--bg-subtle); }
-        /* Notificaciones */
+        /* NOTIFICACIONES */
+        .notif-wrapper { position: relative; display: inline-block; }
         #notifPanel { display: none; position: absolute; top: 100%; right: 0; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 10px; min-width: 300px; max-height: 350px; overflow-y: auto; padding: 10px; z-index: 1000; box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
         #notifPanel::-webkit-scrollbar { width: 6px; }
         #notifPanel::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 3px; }
@@ -190,14 +192,12 @@
         .filter-btn { background: var(--bg-subtle); border: 1px solid var(--border-color); padding: 6px 14px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 0.8rem; color: var(--text-muted); transition: all 0.2s; }
         .filter-btn.active { background: var(--accent-blue); color: white; border-color: var(--accent-blue); }
         .filter-btn:hover { color: var(--text-main); }
-        /* Estilos para Mis pujas */
         .mis-pujas-table { width: 100%; border-collapse: collapse; }
         .mis-pujas-table th { text-align: left; padding: 10px; background: var(--bg-subtle); font-size: 0.8rem; color: var(--text-muted); border-bottom: 1px solid var(--border-color); }
         .mis-pujas-table td { padding: 10px; border-bottom: 1px solid var(--border-color); font-size: 0.85rem; }
         .mis-pujas-table tr:hover { background: var(--bg-subtle); }
         .sort-btn { background: none; border: none; color: var(--accent-blue); cursor: pointer; font-weight: bold; font-size: 0.8rem; margin-left: 5px; }
         .sort-btn.active { text-decoration: underline; }
-        /* Estilos para la página de Ayuda */
         .ayuda-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px; }
         .ayuda-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; box-shadow: var(--shadow-card); }
         .ayuda-card h3 { margin-bottom: 10px; color: var(--accent-blue); }
@@ -209,31 +209,15 @@
         .faq-item:last-child { border-bottom: none; }
         .faq-pregunta { font-weight: bold; color: var(--text-main); }
         .faq-respuesta { color: var(--text-muted); margin-top: 4px; font-size: 0.9rem; }
-        /* Estilos para el modal de anuncio */
-        #adCountdown {
-            font-size: 4rem;
-            font-weight: 900;
-            color: var(--accent-blue);
-        }
-        /* Spinner para feedback visual */
-        .spinner {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255,255,255,0.3);
-            border-radius: 50%;
-            border-top-color: #fff;
-            animation: spin 1s ease-in-out infinite;
-            vertical-align: middle;
-            margin-right: 8px;
-        }
+        #adCountdown { font-size: 4rem; font-weight: 900; color: var(--accent-blue); }
+        .spinner { display: inline-block; width: 20px; height: 20px; border: 3px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: #fff; animation: spin 1s ease-in-out infinite; vertical-align: middle; margin-right: 8px; }
         @keyframes spin { to { transform: rotate(360deg); } }
         @media (max-width: 680px) {
             .search-bar { order: 3; flex-basis: 100%; max-width: none; margin-top: 6px; }
             header { padding: 10px 4%; gap: 8px; }
             .logo { font-size: 1.4rem; }
             .header-right { gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
-            .btn-header, .btn-goat, .btn-login, .user-balance { font-size: 0.72rem; padding: 6px 9px; }
+            .btn-header, .btn-ruleta, .btn-goat, .btn-login, .user-balance { font-size: 0.72rem; padding: 6px 9px; }
             .user-dropdown { position: fixed; top: 58px; left: 12px; right: 12px; width: auto; max-width: none; }
             .primary-nav { padding: 0 4%; gap: 0; } .nav-tab { font-size: 0.78rem; padding: 11px 10px; }
             .chip { font-size: 0.78rem; padding: 7px 13px; }
@@ -245,7 +229,8 @@
             .achievement-icon { font-size: 1.8rem; width: auto; }
             .mis-pujas-table { font-size: 0.75rem; }
             .ayuda-grid { grid-template-columns: 1fr; }
-            #notifPanel { min-width: 200px; right: -60px; }
+            #notifPanel { position: fixed !important; top: 60px; right: 10px; left: 10px; width: auto !important; min-width: unset !important; max-height: 60vh; z-index: 9999; }
+            #btnNotif { position: relative; z-index: 100; }
         }
     </style>
 </head>
@@ -352,16 +337,17 @@
         <input type="text" id="searchInput" placeholder="Buscar subastas..." oninput="buscarEnCatalogo(this.value)">
     </div>
     <div class="header-right">
-        <button class="btn-header" id="btnNotif" onclick="toggleNotificaciones()" style="position:relative;">
-            🔔
-            <span class="notif-badge" id="notifCount">0</span>
-        </button>
-        <div class="user-menu-wrapper" style="position:relative; display:inline-block;">
+        <div class="notif-wrapper">
+            <button class="btn-header" id="btnNotif" onclick="toggleNotificaciones()" style="position:relative;">
+                🔔
+                <span class="notif-badge" id="notifCount">0</span>
+            </button>
             <div id="notifPanel">
                 <div id="notifList" style="font-size:0.85rem; color:var(--text-muted);">No hay notificaciones.</div>
             </div>
         </div>
         <button class="btn-header" id="btnAd" onclick="verAnuncio('normal')">🎬 +500 €</button>
+        <button class="btn-ruleta" id="btnRuleta" onclick="reclamarBotinDiario()">🎲 Ruleta</button>
         <div class="user-menu-wrapper" id="goatMenuWrapper" style="display:none;">
             <button class="btn-goat" id="btnGoat" onclick="toggleGoatMenu()">🐐 GOAT ▾</button>
             <div class="user-dropdown" id="goatDropdown">
@@ -436,11 +422,6 @@
             <p>Nivel <strong id="perfilNivel">1</strong> · <span id="perfilTitulo">Lurker</span></p>
             <div class="xp-bar"><div class="xp-fill" id="perfilXpFill" style="width:0%"></div></div>
             <p style="font-size:0.8rem; color:var(--text-muted);">XP: <span id="perfilXp">0</span></p>
-        </div>
-        <div class="product-card-detail" style="margin-bottom:20px;">
-            <h2 style="font-size:1.1rem;">🎲 Botín Diario</h2>
-            <p style="color:var(--text-muted);font-size:0.9rem;">¡Recoge tu recompensa diaria! Puedes ganar hasta 1000 €.</p>
-            <button onclick="reclamarBotinDiario()" id="btnBotin" style="width:100%;padding:12px;background:linear-gradient(135deg,#f97316,#eab308);color:white;border:none;border-radius:8px;font-weight:bold;font-size:1rem;cursor:pointer;transition:opacity 0.2s;">🎲 ¡Reclamar Botín!</button>
         </div>
         <div class="product-card-detail" style="margin-bottom:20px;">
             <h2 style="font-size:1.1rem; margin-bottom:12px;">🏅 Insignias</h2>
@@ -552,7 +533,7 @@
                 <h3>🏅 4. Progreso</h3>
                 <ul>
                     <li>📊 <strong>Niveles:</strong> Ganas XP al pujar y completar misiones. Sube de nivel para desbloquear títulos.</li>
-                    <li>🏅 <strong>Logros:</strong> 15 insignias por acciones especiales (primera puja, ser GOAT, etc.).</li>
+                    <li>🏅 <strong>Logros:</strong> 30 insignias por acciones especiales (primera puja, ser GOAT, acumular saldo, etc.).</li>
                     <li>🐐 <strong>Modo GOAT:</strong> Actívalo desde el menú para comentar en las pujas y obtener ventajas.</li>
                 </ul>
             </div>
@@ -619,23 +600,47 @@ let misPujasFiltro = 'todas';
 // ===== NOTIFICACIONES =====
 let notificaciones = JSON.parse(localStorage.getItem('abrozon_notificaciones') || '[]');
 
-// ===== ACHIEVEMENTS =====
+// ===== 30 ACHIEVEMENTS =====
 const ALL_ACHIEVEMENTS = [
+    // === PROGRESO Y NIVEL (7) ===
     { key: 'first_bid', name: 'Primer Clic', icon: '🖱️', desc: 'Realiza tu primera puja' },
-    { key: 'sniper', name: 'Snipe', icon: '🎯', desc: 'Puja en los últimos 30 segundos' },
+    { key: 'level_5', name: 'Glow Up', icon: '✨', desc: 'Alcanza el nivel 5' },
+    { key: 'level_10', name: 'Subiendo', icon: '📈', desc: 'Alcanza el nivel 10' },
+    { key: 'level_25', name: 'Experto', icon: '🧠', desc: 'Alcanza el nivel 25' },
+    { key: 'level_50', name: 'Nivel Máximo', icon: '👑', desc: 'Alcanza el nivel 50' },
+    { key: 'level_75', name: 'Leyenda', icon: '🏆', desc: 'Alcanza el nivel 75' },
+    { key: 'level_100', name: 'Dios', icon: '🌟', desc: 'Alcanza el nivel 100' },
+
+    // === ECONOMÍA Y SALDO (7) ===
     { key: 'bancarrota', name: 'Bugueado', icon: '🪲', desc: 'Quédate con exactamente 0 €' },
-    { key: 'liquidez', name: 'Liquidez', icon: '💧', desc: 'Acumula 1.000.000 € de saldo' },
-    { key: 'collector', name: 'Coleccionista', icon: '🏛️', desc: 'Consigue 5 certificados' },
-    { key: 'goat', name: 'Modo GOAT', icon: '🐐', desc: 'Activa el modo GOAT' },
-    { key: 'cabra', name: 'La Cabra', icon: '🐐', desc: 'Gana 10 subastas' },
-    { key: 'devoraste', name: 'Devoraste', icon: '🍽️', desc: 'Gana una subasta con puja > 50.000 €' },
+    { key: 'saldo_1k', name: '1k', icon: '💰', desc: 'Acumula 1.000 € de saldo' },
+    { key: 'saldo_10k', name: '10k', icon: '💵', desc: 'Acumula 10.000 € de saldo' },
+    { key: 'saldo_50k', name: '50k', icon: '💎', desc: 'Acumula 50.000 € de saldo' },
     { key: 'chetado', name: 'Chetado', icon: '⚡', desc: 'Acumula 100.000 € de saldo' },
-    { key: 'flex', name: 'Flex', icon: '💪', desc: 'Consigue 10 certificados' },
-    { key: 'f_chat', name: 'F en el chat', icon: '🙏', desc: 'Pierde una subasta por menos de 100 €' },
+    { key: 'saldo_500k', name: '500k', icon: '🏦', desc: 'Acumula 500.000 € de saldo' },
+    { key: 'liquidez', name: '1M', icon: '💧', desc: 'Acumula 1.000.000 € de saldo' },
+
+    // === SUBASTAS GANADAS (5) ===
+    { key: 'win_1', name: 'Primer Trofeo', icon: '🏅', desc: 'Gana tu primera subasta' },
+    { key: 'win_5', name: 'Coleccionista', icon: '🏛️', desc: 'Gana 5 subastas' },
+    { key: 'win_10', name: 'La Cabra', icon: '🐐', desc: 'Gana 10 subastas' },
+    { key: 'win_25', name: 'Leyenda viva', icon: '📜', desc: 'Gana 25 subastas' },
+    { key: 'win_50', name: 'El Rey', icon: '👑', desc: 'Gana 50 subastas' },
+
+    // === PUJAS ESPECIALES (6) ===
+    { key: 'sniper', name: 'Snipe', icon: '🎯', desc: 'Puja en los últimos 30 segundos' },
     { key: 'basado', name: 'Basado', icon: '🗿', desc: 'Haz una puja 10x mayor que el precio actual' },
     { key: 'delulu', name: 'Delulu', icon: '🦄', desc: 'Intenta pujar más de tu saldo' },
-    { key: 'skibidi', name: 'Skibidi', icon: '🚽', desc: 'Gana una subasta de categoría especial' },
-    { key: 'joya', name: 'Joya', icon: '💎', desc: 'Reclama el bono diario 7 días seguidos' }
+    { key: 'no_fear', name: 'No Fear', icon: '😎', desc: 'Puja en una subasta Mítica' },
+    { key: 'sigma', name: 'Sigma', icon: '🗿', desc: 'Puja exactamente 69 € en una subasta' },
+    { key: 'a_full', name: 'A Full', icon: '🔥', desc: 'Ten 3 objetos Épicos o superiores en tu vitrina' },
+
+    // === COLECCIONISMO Y MERCADO (5) ===
+    { key: 'cert_3', name: 'Principiante', icon: '🎒', desc: 'Consigue 3 certificados' },
+    { key: 'collector', name: 'Coleccionista', icon: '🏛️', desc: 'Consigue 5 certificados' },
+    { key: 'cert_10', name: 'Experto', icon: '🧐', desc: 'Consigue 10 certificados' },
+    { key: 'flex', name: 'Flex', icon: '💪', desc: 'Consigue 15 certificados' },
+    { key: 'vender_1', name: 'Primer Vendedor', icon: '🛒', desc: 'Vende tu primer objeto en el mercado' }
 ];
 
 const TITLES = { 1: 'Lurker / NPC', 5: 'Regular', 15: 'Curador', 30: 'Broker / Main Character', 50: 'Whale', 100: 'Final Boss / Admin' };
@@ -720,15 +725,14 @@ async function checkStreakAndReward() {
     }
 }
 
-// ===== BOTÍN DIARIO =====
+// ===== BOTÍN DIARIO (RULETA) =====
 async function reclamarBotinDiario() {
     if (!currentUser) return abrirModalAuth('register');
     if (accionEnCurso) return;
     
     accionEnCurso = true;
-    const btn = document.getElementById('btnBotin');
-    btn.disabled = true;
-    btn.innerText = '🎰 Girando...';
+    const btn = document.getElementById('btnRuleta');
+    if (btn) { btn.disabled = true; btn.innerText = '🎰...'; }
     
     try {
         const { data, error } = await db.rpc('reclamar_botin_diario');
@@ -750,8 +754,7 @@ async function reclamarBotinDiario() {
         console.error(e);
     } finally {
         accionEnCurso = false;
-        btn.disabled = false;
-        btn.innerText = '🎲 ¡Reclamar Botín!';
+        if (btn) { btn.disabled = false; btn.innerText = '🎲 Ruleta'; }
     }
 }
 
@@ -832,7 +835,7 @@ async function cargarPerfil(userId) {
     }
 }
 
-// ===== FUNCIONES BASICAS (mostrarToast, addXp, updateXpUI, etc.) =====
+// ===== FUNCIONES BASICAS =====
 function actualizarContadorProximaSubasta() {
     const ahora = new Date();
     const minutosRestantes = 59 - ahora.getMinutes();
@@ -902,7 +905,6 @@ function actualizarInterfazUsuario() {
             document.getElementById('goatItemDesactivar').style.display = 'none';
         }
         actualizarFormularioPerfil();
-        // Actualizar contador de notificaciones
         actualizarContadorNotificaciones();
     } else {
         document.getElementById('boxBalance').style.display = 'none'; document.getElementById('btnLoginHeader').style.display = 'block';
@@ -1371,7 +1373,6 @@ function renderizarMisPujas(data) {
     const container = document.getElementById('misPujasContainer');
     if (!data.length) { container.innerHTML = '<p>Aún no has hecho ninguna puja.</p>'; return; }
     
-    // Filtrar según estado
     let datosFiltrados = data;
     if (misPujasFiltro === 'activas') {
         datosFiltrados = data.filter(b => b.auctions && b.auctions.status !== 'closed');
@@ -1525,8 +1526,10 @@ async function cargarVitrina() {
         p.winner === currentUser.username &&
         idsPoseidos.has(p.id)
     );
-    if (ganados.length >= 5) tryUnlockAchievement('collector');
-    if (ganados.length >= 10) tryUnlockAchievement('flex');
+    if (ganados.length >= 5) tryUnlockAchievement('win_5');
+    if (ganados.length >= 10) tryUnlockAchievement('win_10');
+    if (ganados.length >= 25) tryUnlockAchievement('win_25');
+    if (ganados.length >= 50) tryUnlockAchievement('win_50');
     grid.innerHTML = '';
     if (ganados.length === 0) {
         grid.innerHTML = '<div style="color:var(--text-muted);">Aún no tienes objetos en tu vitrina. ¡Gana subastas o compra en el mercado!</div>';
