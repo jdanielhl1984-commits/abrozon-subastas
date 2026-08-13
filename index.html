@@ -592,19 +592,16 @@ async function checkStreakAndReward() {
             console.warn('Streak check error:', error.message);
             return;
         }
-        if (data && data.reward > 0) {
-            // Actualizar saldo local
-            currentUser.saldo = data.new_saldo;
-            // Mostrar toast con la racha
-            const dias = data.streak;
-            let msg = `📅 ¡Racha de ${dias} días! Has ganado +${data.reward.toLocaleString('es-ES')} €.`;
+        if (data && data.reward_amount > 0) {
+            currentUser.saldo = data.new_balance;
+            const dias = data.streak_count;
+            let msg = `📅 ¡Racha de ${dias} días! Has ganado +${data.reward_amount.toLocaleString('es-ES')} €.`;
             if (dias === 7) {
                 msg = '🎉 ¡RACHA COMPLETA DE 7 DÍAS! Has ganado el bote de +1000 €. ¡Enhorabuena!';
             }
             mostrarToast(msg);
             actualizarInterfazUsuario();
-            // Desbloquear logro si corresponde
-            if (data.streak >= 7) tryUnlockAchievement('joya');
+            if (data.streak_count >= 7) tryUnlockAchievement('joya');
         }
     } catch (e) {
         console.error('Error en streak:', e);
@@ -621,7 +618,6 @@ window.onload = async () => {
         if (_event === 'PASSWORD_RECOVERY') { document.getElementById('recoveryModal').style.display = 'flex'; return; }
         if (session2) {
             await cargarPerfil(session2.user.id);
-            // Al iniciar sesión, comprobar racha
             await checkStreakAndReward();
         } else {
             currentUser = null;
@@ -629,7 +625,6 @@ window.onload = async () => {
         actualizarInterfazUsuario();
     });
 
-    // --- MEJORA RECUPERACIÓN: detectar token en URL ---
     const urlParams = new URLSearchParams(window.location.search);
     const recoveryToken = urlParams.get('token');
     const recoveryType = urlParams.get('type');
@@ -640,7 +635,6 @@ window.onload = async () => {
     if (sessionStorage.getItem('abrozon_recovery_pending') === 'true') {
         document.getElementById('recoveryModal').style.display = 'flex';
     }
-    // ------------------------------------------------
 
     await cargarSubastas();
     await cargarCategorias();
@@ -717,9 +711,6 @@ function mostrarToast(msg) {
     }, 4000); 
 }
 
-// Reemplazo de alert() por toast en funciones clave (se mantienen algunos críticos por seguridad)
-// Ahora usamos mostrarToast en lugar de alert en la mayoría de casos.
-
 async function addXp(cantidad) { if (!currentUser) return; const { data, error } = await db.rpc('add_xp', { p_xp: cantidad }); if (error) { console.error("Error sumando XP:", error.message); return; } await cargarPerfil(currentUser.id); actualizarInterfazUsuario(); mostrarToast(`✨ +${cantidad} XP`); }
 
 function updateXpUI() {
@@ -779,7 +770,6 @@ function renderizarImagenProducto(v) { v=(v||'').trim(); if(/^https?:\/\//i.test
 async function subirFotoAdmin(e) { 
     const files = Array.from(e.target.files||[]); 
     if(!files.length) return; 
-    // Validar tipo y tamaño
     for (const f of files) {
         if (!f.type.startsWith('image/')) {
             mostrarToast('⚠️ Solo se permiten imágenes.');
@@ -844,7 +834,6 @@ function renderizarCatalogo() {
     }
     if (terminoBusqueda) lista = lista.filter(p => (p.title||'').toLowerCase().includes(terminoBusqueda) || (p.description||'').toLowerCase().includes(terminoBusqueda));
     
-    // Ordenar según criterio
     switch (ordenCatalogoActual) {
         case 'fecha':
             lista.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
@@ -968,7 +957,6 @@ async function ejecutarPuja(total) {
     if (productoSeleccionado.status === 'closed') { mostrarToast('⚠️ Subasta finalizada.'); return; }
     if (accionEnCurso) return; 
     accionEnCurso = true; 
-    // Deshabilitar botones
     document.getElementById('btnMinBid').disabled = true;
     document.getElementById('btnCustomBid').disabled = true;
     try { 
@@ -1024,7 +1012,6 @@ async function verAnuncio(tipo) {
     if (!currentUser) return abrirModalAuth('register');
     if (accionEnCurso) return;
     
-    // Mostrar el modal simulador
     const modal = document.getElementById('adModal');
     const mensaje = document.getElementById('adMessage');
     const contador = document.getElementById('adCountdown');
@@ -1034,7 +1021,6 @@ async function verAnuncio(tipo) {
     mensaje.innerText = esGoat ? '📺 Anuncio premium GOAT...' : '📺 Viendo anuncio...';
     modal.style.display = 'flex';
     
-    // Contador de 3 segundos
     let segundos = 3;
     contador.innerText = segundos;
     
@@ -1049,10 +1035,8 @@ async function verAnuncio(tipo) {
         }, 1000);
     });
     
-    // Cerrar modal
     modal.style.display = 'none';
     
-    // Deshabilitar botón mientras se procesa
     const btnAd = document.getElementById('btnAd');
     btnAd.disabled = true;
     btnAd.innerText = '⏳ Procesando...';
@@ -1061,19 +1045,14 @@ async function verAnuncio(tipo) {
     try {
         const antes = currentUser.saldo;
         marcarCambioPropio();
-        
-        // Llamar a la RPC con el tipo de anuncio
         const { data, error } = await db.rpc('add_ad_reward', { p_tipo: tipo });
         if (error) {
             mostrarToast('⚠️ ' + error.message);
             return;
         }
-        
         currentUser.saldo = data;
         actualizarInterfazUsuario();
         mostrarToast(`💰 +${recompensa.toLocaleString('es-ES')} € por ver anuncio.`);
-        
-        // Incrementar misión de anuncios
         const { data: ca } = await db.rpc('increment_ad_mission');
         if (ca === 2) {
             marcarCambioPropio();
@@ -1168,13 +1147,23 @@ async function cargarMisPujas() {
         .eq('user_id', currentUser.id)
         .order('created_at', { ascending: false });
     if (error) { container.innerHTML = `<p>Error: ${error.message}</p>`; return; }
-    misPujasData = bids || [];
+    
+    // --- NUEVO: Agrupar por auction_id y quedarse con la más reciente ---
+    const latestBids = {};
+    (bids || []).forEach(b => {
+        const auctionId = b.auction_id;
+        if (!latestBids[auctionId] || new Date(b.created_at) > new Date(latestBids[auctionId].created_at)) {
+            latestBids[auctionId] = b;
+        }
+    });
+    misPujasData = Object.values(latestBids);
+    // --- FIN NUEVO ---
+    
     ordenarMisPujas(ordenActual);
 }
 
 function ordenarMisPujas(criterio) {
     ordenActual = criterio;
-    // Actualizar botones activos
     document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
     const botones = document.querySelectorAll('.sort-btn');
     if (criterio === 'fecha') botones[0].classList.add('active');
@@ -1304,7 +1293,7 @@ function renderizarListaAdminCategorias() { const box = document.getElementById(
 // ===== AUTENTICACIÓN =====
 function toggleAuthForm(mode) { document.getElementById('formLogin').style.display = mode==='login'?'block':'none'; document.getElementById('formRegister').style.display = mode==='register'?'block':'none'; }
 async function registrarUsuario() { const email = document.getElementById('regEmail').value.trim(), alias = document.getElementById('regUsername').value.trim().startsWith('@')? document.getElementById('regUsername').value.trim() : '@'+document.getElementById('regUsername').value.trim(), pass = document.getElementById('regPassword').value.trim(); if (!email||!alias||!pass) return mostrarToast("⚠️ Completa todos los campos."); const { data: libre } = await db.rpc('username_disponible',{p_username:alias}); if (!libre) return mostrarToast("⚠️ Alias en uso."); const { data, error } = await db.auth.signUp({ email, password: pass, options: { data: { username: alias } } }); if (error) return mostrarToast('⚠️ ' + error.message); if (!data.session) { mostrarToast("📧 Confirma tu correo."); cerrarModalAuth(); return; } await cargarPerfil(data.user.id); cerrarModalAuth(); actualizarInterfazUsuario(); mostrarToast("¡Bienvenido! 1.000 €."); }
-async function iniciarSesion() { const email = document.getElementById('loginEmail').value.trim(), pass = document.getElementById('loginPassword').value.trim(); if (!email||!pass) return mostrarToast("⚠️ Completa campos."); const { data, error } = await db.auth.signInWithPassword({ email, password: pass }); if (error) return mostrarToast('⚠️ ' + error.message); await cargarPerfil(data.user.id); cerrarModalAuth(); actualizarInterfazUsuario(); // Comprobar racha al iniciar sesión
+async function iniciarSesion() { const email = document.getElementById('loginEmail').value.trim(), pass = document.getElementById('loginPassword').value.trim(); if (!email||!pass) return mostrarToast("⚠️ Completa campos."); const { data, error } = await db.auth.signInWithPassword({ email, password: pass }); if (error) return mostrarToast('⚠️ ' + error.message); await cargarPerfil(data.user.id); cerrarModalAuth(); actualizarInterfazUsuario();
     await checkStreakAndReward();
 }
 async function solicitarRecuperacion() { const email = prompt("Email:"); if (!email) return; const { error } = await db.auth.resetPasswordForEmail(email, { redirectTo: window.location.href.split('#')[0] }); if (error) return mostrarToast('⚠️ ' + error.message); mostrarToast('📧 Correo enviado.'); }
@@ -1324,6 +1313,7 @@ async function actualizarFormularioPerfil() { if (!currentUser) return; document
 async function guardarNuevoAlias() { let nuevo = document.getElementById('perfilNuevoAlias').value.trim(); if (!nuevo) return mostrarToast("⚠️ Escribe un alias."); if (!nuevo.startsWith('@')) nuevo = '@'+nuevo; if (nuevo === currentUser.username) return mostrarToast("⚠️ Ya tienes ese alias."); const { data: libre } = await db.rpc('username_disponible',{p_username:nuevo}); if (!libre) return mostrarToast("⚠️ Alias en uso."); const { error } = await db.rpc('actualizar_mi_alias',{p_nuevo_alias:nuevo}); if (error) return mostrarToast('⚠️ ' + error.message); currentUser.username = nuevo; actualizarInterfazUsuario(); document.getElementById('perfilNuevoAlias').value = ''; mostrarToast('✅ Alias actualizado.'); }
 async function guardarNuevaPasswordPerfil() { const p = document.getElementById('perfilNuevaPassword').value.trim(); if (p.length < 6) return mostrarToast("⚠️ Mínimo 6 caracteres."); const { error } = await db.auth.updateUser({ password: p }); if (error) return mostrarToast('⚠️ ' + error.message); document.getElementById('perfilNuevaPassword').value = ''; mostrarToast('✅ Contraseña actualizada.'); }
 function solicitarBajaCuenta() { mostrarToast('📧 Escribe a abrozonsubastas@gmail.com para eliminar tu cuenta.'); }
+// ===== VITRINA =====
 async function mostrarVitrina() {
     if (!currentUser) return abrirModalAuth('register');
     ocultarTodasVistas();
@@ -1336,11 +1326,12 @@ async function cargarVitrina() {
     const grid = document.getElementById('vitrinaGrid');
     grid.innerHTML = 'Cargando...';
     const { data: misItems, error: errorItems } = await db.from('user_items')
-        .select('auction_id')
+        .select('auction_id, id')
         .eq('user_id', currentUser.id)
         .eq('en_venta', false);
     if (errorItems) { grid.innerHTML = '<div style="color:var(--text-muted);">Error al cargar inventario.</div>'; return; }
     const idsPoseidos = new Set(misItems ? misItems.map(i => i.auction_id) : []);
+    const userItemIds = misItems ? misItems.reduce((acc, i) => { acc[i.auction_id] = i.id; return acc; }, {}) : {};
     const ganados = subastasLocales.filter(p =>
         p.status === 'closed' &&
         p.winner === currentUser.username &&
@@ -1356,20 +1347,47 @@ async function cargarVitrina() {
             const card = document.createElement('div');
             card.className = 'certificate-card';
             const fecha = item.ends_at ? new Date(item.ends_at).toLocaleDateString('es-ES') : '';
+            const userItemId = userItemIds[item.id] || '';
+
+            // Determinar si se puede reciclar (solo Común y Poco común)
+            const rareza = item.rareza || 'Común';
+            const reciclable = (rareza === 'Común' || rareza === 'Poco común');
+            const valorReciclaje = rareza === 'Común' ? '100€' : '250€';
+            const rarezaClase = 'chip-rareza-' + rareza.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-');
+
             card.innerHTML = `
                 <div style="width:100%;height:120px;display:flex;align-items:center;justify-content:center;font-size:3rem;background:var(--bg-subtle);">${renderizarImagenProducto(item.image_url)}</div>
                 <h3>${item.title}</h3>
                 <p style="font-size:0.8rem;color:var(--text-muted);">${item.description}</p>
                 <div style="color:var(--accent-green);font-weight:bold;">${Number(item.current_price).toLocaleString('es-ES')} €</div>
+                <div style="margin-top:6px;"><span class="chip-rareza ${rarezaClase}" style="position:static;display:inline-block;">${rareza}</span></div>
                 <div style="margin-top:10px;font-size:0.7rem;background:rgba(234,179,8,0.1);padding:6px;border-radius:4px;color:#eab308;font-weight:bold;">
                     📜 CERTIFICADO OFICIAL ABROZON<br>Nº ${item.certificado_codigo || 'PENDIENTE'}<br>${fecha}
                 </div>
                 <button onclick="event.stopPropagation(); venderItem('${item.id}')" style="margin-top:10px; background:#f97316; color:white; border:none; padding:6px 12px; border-radius:6px; font-weight:bold; cursor:pointer; width:100%;">💰 Vender en Mercado</button>
+                ${reciclable && userItemId ? `<button onclick="event.stopPropagation(); reciclarObjeto('${userItemId}')" style="margin-top:6px; background:#64748b; color:white; border:none; padding:6px 12px; border-radius:6px; font-weight:bold; cursor:pointer; width:100%; font-size:0.8rem;">♻️ Reciclar (${valorReciclaje})</button>` : ''}
             `;
             grid.appendChild(card);
         });
     }
 }
+
+// ===== RECICLAJE / DESGUACE =====
+async function reciclarObjeto(userItemId) {
+    if (!currentUser) return abrirModalAuth('register');
+    if (!confirm('¿Seguro que quieres reciclar este objeto a cambio de monedas? ¡No podrás recuperarlo!')) return;
+    const { data, error } = await db.rpc('desguazar_objeto', { p_user_item_id: userItemId });
+    if (error) {
+        mostrarToast('⚠️ ' + error.message);
+        return;
+    }
+    await cargarPerfil(currentUser.id);
+    actualizarInterfazUsuario();
+    await cargarVitrina();
+    mostrarToast(`♻️ Objeto reciclado por +${data.toLocaleString('es-ES')} €.`);
+}
+// ===== FIN RECICLAJE =====
+
 // ===== MERCADO C2C =====
 function mostrarMercado() {
     mostrandoFinalizadas = false;
@@ -1413,7 +1431,7 @@ async function venderItem(auctionId) {
     await cargarPerfil(currentUser.id);
     actualizarInterfazUsuario();
     await cargarSubastas();
-    await cargarVitrina(); // Actualizar vitrina automáticamente
+    await cargarVitrina();
     mostrarToast('✅ Objeto publicado en el mercado.');
 }
 
