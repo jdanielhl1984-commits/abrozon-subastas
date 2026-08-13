@@ -235,7 +235,19 @@
     </style>
 </head>
 <body>
-
+/* Mejora de la barra de experiencia */
+.xp-bar {
+    background: var(--bg-subtle);
+    border-radius: 4px;
+    overflow: hidden;
+    height: 8px;
+}
+.xp-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #f97316, #eab308);
+    border-radius: 4px;
+    transition: width 0.3s ease;
+}
 <!-- BANNER BETA PRIVADA -->
 <div class="beta-banner">
     🚧 BETA PRIVADA · Envíanos tu feedback en <a href="https://forms.gle/4S2s5q2oZtttsjzr8" target="_blank">este formulario</a>.
@@ -360,10 +372,20 @@
             </div>
         </div>
         <div class="user-balance" id="boxBalance" style="display:none;">
-            <div style="font-size:0.7rem; margin-bottom:2px;">Nivel <span id="userLevel">1</span> · <span id="userTitle">Lurker</span></div>
-            Saldo: <span class="balance-amount" id="userBalance">0 €</span>
-            <div class="xp-bar"><div class="xp-fill" id="xpFill" style="width:0%"></div></div>
+    <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+        <div style="display:flex; align-items:center; gap:4px; font-size:1.1rem; font-weight:bold; color:var(--accent-green);">
+            💰 <span id="userBalance">0</span> €
         </div>
+        <div style="display:flex; align-items:center; gap:4px; font-size:0.9rem; background:var(--bg-subtle); padding:2px 10px; border-radius:12px;">
+            ⭐ Nivel <span id="userLevel">1</span> · <span id="userTitle">Lurker</span>
+        </div>
+        <div style="flex:1; min-width:100px; max-width:200px;">
+            <div class="xp-bar" style="height:8px; border-radius:4px; overflow:hidden; background:var(--bg-subtle);">
+                <div class="xp-fill" id="xpFill" style="width:0%; height:100%; background:linear-gradient(90deg, #f97316, #eab308); border-radius:4px; transition:width 0.3s;"></div>
+            </div>
+        </div>
+    </div>
+</div>
         <button class="btn-login" id="btnLoginHeader" onclick="abrirModalAuth('login')">🔑 Entrar</button>
         <div class="user-menu-wrapper" id="userMenuWrapper" style="display:none;">
             <button class="btn-header" onclick="toggleUserMenu()">👤 Menú ▾</button>
