@@ -39,13 +39,14 @@
         .header-right { display: flex; align-items: center; gap: 8px; }
         .user-balance { background-color: var(--bg-subtle); padding: 8px 14px; border-radius: 20px; font-weight: bold; border: 1px solid var(--border-color); font-size: 0.85rem; }
         .balance-amount { color: var(--accent-green); }
-        .btn-header { background: var(--bg-subtle); color: var(--text-main); border: 1px solid var(--border-color); padding: 8px 12px; border-radius: 20px; font-weight: bold; cursor: pointer; font-size: 0.85rem; transition: opacity 0.2s; }
+        .btn-header { background: var(--bg-subtle); color: var(--text-main); border: 1px solid var(--border-color); padding: 8px 12px; border-radius: 20px; font-weight: bold; cursor: pointer; font-size: 0.85rem; transition: opacity 0.2s; position: relative; }
         .btn-header:disabled { opacity: 0.5; cursor: not-allowed; }
         .btn-goat { background: linear-gradient(135deg, #eab308, #ca8a04); color: #0f172a; border: none; padding: 8px 14px; border-radius: 20px; font-weight: 900; cursor: pointer; font-size: 0.85rem; opacity: 0.5; transition: opacity 0.2s; }
         .btn-goat.active { opacity: 1; box-shadow: 0 0 10px #eab308; }
         .btn-goat:disabled { opacity: 0.3; cursor: not-allowed; }
         .btn-login { background: var(--accent-blue); color: white; border: none; padding: 8px 16px; border-radius: 20px; font-weight: bold; cursor: pointer; font-size: 0.85rem; transition: opacity 0.2s; }
         .btn-login:disabled { opacity: 0.5; cursor: not-allowed; }
+        .notif-badge { position: absolute; top: -5px; right: -5px; background: #ef4444; color: white; border-radius: 50%; padding: 2px 6px; font-size: 0.6rem; display: none; min-width: 18px; text-align: center; }
         .primary-nav { background-color: var(--bg-header); padding: 0 5%; display: flex; gap: 4px; border-bottom: 1px solid var(--border-color); overflow-x: auto; align-items: center; -webkit-overflow-scrolling: touch; }
         .nav-tab { position: relative; color: var(--text-muted); text-decoration: none; font-size: 0.85rem; font-weight: 600; padding: 13px 14px; cursor: pointer; white-space: nowrap; }
         .nav-tab:hover { color: var(--text-main); }
@@ -120,8 +121,18 @@
         .xp-bar { width: 100%; height: 10px; background: var(--bg-subtle); border-radius: 5px; overflow: hidden; margin-top: 8px; }
         .xp-fill { height: 100%; background: #f97316; border-radius: 5px; }
         .vitrina-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
-        .certificate-card { background: var(--bg-card); border: 2px solid #eab308; border-radius: 16px; padding: 20px; box-shadow: var(--shadow-card); text-align: center; position: relative; }
+        .certificate-card { background: var(--bg-card); border-radius: 16px; padding: 20px; box-shadow: var(--shadow-card); text-align: center; position: relative; transition: all 0.3s ease; }
         .certificate-card h3 { color: var(--accent-blue); font-size: 1.1rem; margin-bottom: 6px; }
+        /* Efectos visuales para la vitrina según rareza */
+        .certificate-card.vitrina-comun { border: 2px solid #94a3b8; }
+        .certificate-card.vitrina-poco-comun { border: 2px solid #22c55e; box-shadow: 0 0 15px rgba(34,197,94,0.2); }
+        .certificate-card.vitrina-rara { border: 2px solid #3b82f6; box-shadow: 0 0 20px rgba(59,130,246,0.3); }
+        .certificate-card.vitrina-epica { border: 2px solid #8b5cf6; box-shadow: 0 0 25px rgba(139,92,246,0.4); animation: pulse-epica 2s infinite; }
+        .certificate-card.vitrina-legendaria { border: 2px solid #f97316; box-shadow: 0 0 30px rgba(249,115,22,0.5); animation: pulse-legendaria 1.5s infinite; }
+        .certificate-card.vitrina-mitica { border: 2px solid #ef4444; box-shadow: 0 0 40px rgba(239,68,68,0.6); animation: pulse-mitica 1s infinite; }
+        @keyframes pulse-epica { 0% { box-shadow: 0 0 20px rgba(139,92,246,0.3); } 50% { box-shadow: 0 0 40px rgba(139,92,246,0.6); } 100% { box-shadow: 0 0 20px rgba(139,92,246,0.3); } }
+        @keyframes pulse-legendaria { 0% { box-shadow: 0 0 30px rgba(249,115,22,0.4); } 50% { box-shadow: 0 0 60px rgba(249,115,22,0.8); } 100% { box-shadow: 0 0 30px rgba(249,115,22,0.4); } }
+        @keyframes pulse-mitica { 0% { box-shadow: 0 0 40px rgba(239,68,68,0.5); transform: scale(1); } 50% { box-shadow: 0 0 80px rgba(239,68,68,0.9); transform: scale(1.02); } 100% { box-shadow: 0 0 40px rgba(239,68,68,0.5); transform: scale(1); } }
         .auth-modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15,23,42,0.8); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; z-index: 999; }
         .auth-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 30px; width: 100%; max-width: 380px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); position: relative; }
         .auth-card h2 { font-size: 1.4rem; color: var(--text-main); margin-bottom: 8px; text-align: center; }
@@ -166,6 +177,19 @@
         #goatDropdown { right: auto; left: 0; }
         .dropdown-item { padding: 11px 14px; font-size: 0.85rem; color: var(--text-main); cursor: pointer; border-bottom: 1px solid var(--border-color); }
         .dropdown-item:last-child { border-bottom: none; } .dropdown-item:hover { background: var(--bg-subtle); }
+        /* Notificaciones */
+        #notifPanel { display: none; position: absolute; top: 100%; right: 0; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 10px; min-width: 300px; max-height: 350px; overflow-y: auto; padding: 10px; z-index: 1000; box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
+        #notifPanel::-webkit-scrollbar { width: 6px; }
+        #notifPanel::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 3px; }
+        .notif-item { padding: 8px 12px; border-bottom: 1px solid var(--border-color); cursor: pointer; transition: background 0.2s; }
+        .notif-item:hover { background: var(--bg-subtle); }
+        .notif-item.unread { border-left: 3px solid var(--accent-blue); }
+        .notif-item .notif-tipo { font-weight: bold; font-size: 0.85rem; }
+        .notif-item .notif-mensaje { font-size: 0.85rem; color: var(--text-muted); }
+        .notif-item .notif-fecha { font-size: 0.7rem; color: var(--text-muted); margin-top: 2px; }
+        .filter-btn { background: var(--bg-subtle); border: 1px solid var(--border-color); padding: 6px 14px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 0.8rem; color: var(--text-muted); transition: all 0.2s; }
+        .filter-btn.active { background: var(--accent-blue); color: white; border-color: var(--accent-blue); }
+        .filter-btn:hover { color: var(--text-main); }
         /* Estilos para Mis pujas */
         .mis-pujas-table { width: 100%; border-collapse: collapse; }
         .mis-pujas-table th { text-align: left; padding: 10px; background: var(--bg-subtle); font-size: 0.8rem; color: var(--text-muted); border-bottom: 1px solid var(--border-color); }
@@ -221,6 +245,7 @@
             .achievement-icon { font-size: 1.8rem; width: auto; }
             .mis-pujas-table { font-size: 0.75rem; }
             .ayuda-grid { grid-template-columns: 1fr; }
+            #notifPanel { min-width: 200px; right: -60px; }
         }
     </style>
 </head>
@@ -327,6 +352,15 @@
         <input type="text" id="searchInput" placeholder="Buscar subastas..." oninput="buscarEnCatalogo(this.value)">
     </div>
     <div class="header-right">
+        <button class="btn-header" id="btnNotif" onclick="toggleNotificaciones()" style="position:relative;">
+            🔔
+            <span class="notif-badge" id="notifCount">0</span>
+        </button>
+        <div class="user-menu-wrapper" style="position:relative; display:inline-block;">
+            <div id="notifPanel">
+                <div id="notifList" style="font-size:0.85rem; color:var(--text-muted);">No hay notificaciones.</div>
+            </div>
+        </div>
         <button class="btn-header" id="btnAd" onclick="verAnuncio('normal')">🎬 +500 €</button>
         <div class="user-menu-wrapper" id="goatMenuWrapper" style="display:none;">
             <button class="btn-goat" id="btnGoat" onclick="toggleGoatMenu()">🐐 GOAT ▾</button>
@@ -380,7 +414,21 @@
         <div class="auction-grid" id="catalogGrid">Cargando...</div>
     </div>
     <div id="viewDetail" class="view"><button class="btn-back" onclick="mostrarCatalogo()">← Volver al Catálogo</button><div class="detail-layout"><div class="product-card-detail"><div class="main-image-detail" id="detailImage">📦</div><div id="detailGallery" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:15px;"></div><span class="card-category" id="detailCategory">Categoría</span><h1 id="detailTitle" style="margin:8px 0;font-size:1.4rem;">Título</h1><div id="detailRarezaChip" style="display:none;"></div><p id="detailDescription" style="color:var(--text-muted);line-height:1.6;">Descripción...</p><div id="mercadoInfoBox" style="display:none;margin-top:14px;padding:12px;background:rgba(234,179,8,0.1);border:1px solid #eab308;border-radius:8px;font-size:0.85rem;color:var(--text-main);"></div></div><div class="auction-panel-detail"><div class="time-box" id="detailTime">⏳ Cierra en: Calculando...</div><div style="margin-bottom:15px;"><div style="font-size:0.8rem;color:var(--text-muted);">Última puja</div><div style="font-size:2.1rem;font-weight:900;" id="detailBid">0 €</div></div><div id="biddingControlsContainer"><div id="goatCommentContainer" style="display:none;margin-bottom:12px;"><input type="text" id="goatCommentInput" placeholder="💬 Mensaje épico GOAT..." style="width:100%;padding:10px;border-radius:8px;border:1px solid #eab308;background:var(--bg-subtle);color:var(--text-main);font-weight:bold;outline:none;font-size:0.85rem;"></div><button id="btnCompraDirecta" class="btn-compra-directa" onclick="comprarDirecto()">💎 COMPRA DIRECTA (30% comisión)</button><button id="btnCancelarVenta" onclick="cancelarVentaMercado()" style="display:none;width:100%;background:#ef4444;color:white;border:none;padding:10px;border-radius:8px;font-weight:bold;cursor:pointer;margin-bottom:10px;">🚫 Cancelar venta (pierdes la fianza)</button><button class="btn-bid" id="btnMinBid" onclick="hacerPujaMínima()">¡PUJAR MÍNIMO (+50 €)!</button><div style="display:flex;gap:8px;margin-top:10px;"><input type="number" id="customBidInput" placeholder="Cantidad exacta €" style="flex:1;padding:10px;border-radius:8px;border:1px solid var(--border-color);background:var(--bg-subtle);color:var(--text-main);font-weight:bold;outline:none;"><button id="btnCustomBid" onclick="hacerPujaPersonalizada()" style="background:var(--accent-blue);color:white;border:none;padding:10px 14px;border-radius:8px;font-weight:bold;cursor:pointer;">Pujar</button></div></div><!-- Botones de compartir --><div style="margin-top:20px;border-top:1px solid var(--border-color);padding-top:15px;"><h3 style="font-size:0.8rem;color:var(--text-muted);margin-bottom:10px;">📤 Compartir esta subasta</h3><button class="btn-share btn-share-x" onclick="compartirEnX()">𝕏 Compartir en X</button><button class="btn-share btn-share-copy" onclick="copiarEnlace()">🔗 Copiar enlace</button></div><div style="margin-top:20px;border-top:1px solid var(--border-color);padding-top:15px;"><h3 style="font-size:0.8rem;color:var(--text-muted);margin-bottom:10px;">Historial de Pujas</h3><div id="historyList" style="max-height:220px;overflow-y:auto;"></div></div></div></div></div>
-    <div id="viewMisPujas" class="view"><button class="btn-back" onclick="mostrarCatalogo()">← Volver al Catálogo</button><h2 style="margin-bottom:20px;">📋 Mis Pujas</h2><div style="margin-bottom:15px;"><button class="sort-btn active" onclick="ordenarMisPujas('fecha')">📅 Más recientes</button> <button class="sort-btn" onclick="ordenarMisPujas('duracion')">⏳ Por finalización</button> <button class="sort-btn" onclick="ordenarMisPujas('rareza')">🏷️ Por rareza</button> <button class="sort-btn" onclick="ordenarMisPujas('cantidad')">💰 Por cantidad</button></div><div id="misPujasContainer">Cargando...</div></div>
+    <div id="viewMisPujas" class="view"><button class="btn-back" onclick="mostrarCatalogo()">← Volver al Catálogo</button><h2 style="margin-bottom:20px;">📋 Mis Pujas</h2>
+        <div style="margin-bottom:15px; display:flex; gap:8px; flex-wrap:wrap;">
+            <button class="filter-btn active" onclick="filtrarMisPujas('todas')">📋 Todas</button>
+            <button class="filter-btn" onclick="filtrarMisPujas('activas')">🟢 Activas</button>
+            <button class="filter-btn" onclick="filtrarMisPujas('ganadas')">🏆 Ganadas</button>
+            <button class="filter-btn" onclick="filtrarMisPujas('perdidas')">❌ Perdidas</button>
+        </div>
+        <div style="margin-bottom:15px;">
+            <button class="sort-btn active" onclick="ordenarMisPujas('fecha')">📅 Más recientes</button>
+            <button class="sort-btn" onclick="ordenarMisPujas('duracion')">⏳ Por finalización</button>
+            <button class="sort-btn" onclick="ordenarMisPujas('rareza')">🏷️ Por rareza</button>
+            <button class="sort-btn" onclick="ordenarMisPujas('cantidad')">💰 Por cantidad</button>
+        </div>
+        <div id="misPujasContainer">Cargando...</div>
+    </div>
     <div id="viewVitrina" class="view"><div class="profile-header"><div class="user-info"><h2 id="profileUserName">👑 Usuario</h2><span class="user-badge" id="profileBadge">Coleccionista</span></div></div><div class="grid-title">📜 Mis Certificados</div><div class="vitrina-grid" id="vitrinaGrid"></div></div>
     <div id="viewPerfil" class="view"><button class="btn-back" onclick="mostrarCatalogo()">← Volver al Catálogo</button><div class="profile-header"><div class="user-info"><h2 id="perfilNombre">👤 Usuario</h2><span class="user-badge" id="perfilEmail">correo@ejemplo.com</span></div></div>
         <div class="product-card-detail" style="margin-bottom:20px;">
@@ -388,6 +436,11 @@
             <p>Nivel <strong id="perfilNivel">1</strong> · <span id="perfilTitulo">Lurker</span></p>
             <div class="xp-bar"><div class="xp-fill" id="perfilXpFill" style="width:0%"></div></div>
             <p style="font-size:0.8rem; color:var(--text-muted);">XP: <span id="perfilXp">0</span></p>
+        </div>
+        <div class="product-card-detail" style="margin-bottom:20px;">
+            <h2 style="font-size:1.1rem;">🎲 Botín Diario</h2>
+            <p style="color:var(--text-muted);font-size:0.9rem;">¡Recoge tu recompensa diaria! Puedes ganar hasta 1000 €.</p>
+            <button onclick="reclamarBotinDiario()" id="btnBotin" style="width:100%;padding:12px;background:linear-gradient(135deg,#f97316,#eab308);color:white;border:none;border-radius:8px;font-weight:bold;font-size:1rem;cursor:pointer;transition:opacity 0.2s;">🎲 ¡Reclamar Botín!</button>
         </div>
         <div class="product-card-detail" style="margin-bottom:20px;">
             <h2 style="font-size:1.1rem; margin-bottom:12px;">🏅 Insignias</h2>
@@ -484,6 +537,7 @@
                     <li>🎯 <strong>Misiones:</strong> Completa las 4 misiones diarias y reclama <strong>+1.000 €</strong>.</li>
                     <li>🏆 <strong>Subastas ganadas:</strong> Te llevas el objeto y, si quieres, lo puedes revender en el mercado.</li>
                     <li>📅 <strong>Racha diaria:</strong> Entra varios días seguidos y consigue recompensas crecientes, ¡hasta 1.000 € el día 7!</li>
+                    <li>🎲 <strong>Botín Diario:</strong> ¡Reclama tu recompensa diaria! Puedes ganar hasta 1.000 €.</li>
                 </ul>
             </div>
             <div class="ayuda-card">
@@ -554,12 +608,18 @@ const SUPABASE_URL = 'https://lthzzgpbwfiylgaipgix.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx0aHp6Z3Bid2ZpeWxnYWlwZ2l4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODUxNjcyMTksImV4cCI6MjEwMDc0MzIxOX0.zAJJEiQpor0xQY5fTDlLzJxd62ffps3XNnpeS06iTXg';
 const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+// ===== VARIABLES =====
 let currentUser = null, productoSeleccionado = null, subastasLocales = [], timerInterval = null,
     profileChannel = null, profileChannelUserId = null, saldoCambioPropio = false, accionEnCurso = false,
     mostrandoFinalizadas = false, categoriaActiva = 'Todas', terminoBusqueda = '', fotosAdicionalesAdmin = [],
     ultimaAccionPropiaTs = 0, categorias = [], hallOfFameInterval = null,
-    ordenCatalogoActual = 'fecha', toastTimeout = null;
+    ordenCatalogoActual = 'fecha', toastTimeout = null, ultimoToastSuperado = 0;
+let misPujasFiltro = 'todas';
 
+// ===== NOTIFICACIONES =====
+let notificaciones = JSON.parse(localStorage.getItem('abrozon_notificaciones') || '[]');
+
+// ===== ACHIEVEMENTS =====
 const ALL_ACHIEVEMENTS = [
     { key: 'first_bid', name: 'Primer Clic', icon: '🖱️', desc: 'Realiza tu primera puja' },
     { key: 'sniper', name: 'Snipe', icon: '🎯', desc: 'Puja en los últimos 30 segundos' },
@@ -583,6 +643,57 @@ function getTitleForLevel(level) { let title = 'Lurker / NPC'; for (const [lvl, 
 
 function marcarCambioPropio() { saldoCambioPropio = true; ultimaAccionPropiaTs = Date.now(); setTimeout(() => { saldoCambioPropio = false; }, 5000); }
 
+// ===== NOTIFICACIONES FUNCIONES =====
+function agregarNotificacion(tipo, mensaje, link = null) {
+    const notif = { id: Date.now(), tipo, mensaje, link, leida: false, fecha: new Date().toISOString() };
+    notificaciones.unshift(notif);
+    if (notificaciones.length > 50) notificaciones.pop();
+    localStorage.setItem('abrozon_notificaciones', JSON.stringify(notificaciones));
+    actualizarContadorNotificaciones();
+}
+
+function actualizarContadorNotificaciones() {
+    const noLeidas = notificaciones.filter(n => !n.leida).length;
+    const count = document.getElementById('notifCount');
+    if (noLeidas > 0) { count.style.display = 'inline'; count.innerText = noLeidas; }
+    else { count.style.display = 'none'; }
+}
+
+function toggleNotificaciones() {
+    const panel = document.getElementById('notifPanel');
+    panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
+    if (panel.style.display === 'block') renderizarNotificaciones();
+}
+
+function renderizarNotificaciones() {
+    const list = document.getElementById('notifList');
+    if (!notificaciones.length) { list.innerHTML = 'No hay notificaciones.'; return; }
+    list.innerHTML = notificaciones.map(n => `
+        <div class="notif-item ${n.leida ? '' : 'unread'}" onclick="marcarLeida(${n.id})">
+            <div class="notif-tipo">${n.tipo}</div>
+            <div class="notif-mensaje">${n.mensaje}</div>
+            <div class="notif-fecha">${new Date(n.fecha).toLocaleString()}</div>
+        </div>
+    `).join('');
+}
+
+function marcarLeida(id) {
+    const notif = notificaciones.find(n => n.id === id);
+    if (notif) notif.leida = true;
+    localStorage.setItem('abrozon_notificaciones', JSON.stringify(notificaciones));
+    actualizarContadorNotificaciones();
+    renderizarNotificaciones();
+}
+
+// Cerrar panel al hacer clic fuera
+document.addEventListener('click', (e) => {
+    const panel = document.getElementById('notifPanel');
+    const btn = document.getElementById('btnNotif');
+    if (panel && btn && !panel.contains(e.target) && !btn.contains(e.target)) {
+        panel.style.display = 'none';
+    }
+});
+
 // ===== FUNCIÓN STREAK BONUS =====
 async function checkStreakAndReward() {
     if (!currentUser) return;
@@ -600,6 +711,7 @@ async function checkStreakAndReward() {
                 msg = '🎉 ¡RACHA COMPLETA DE 7 DÍAS! Has ganado el bote de +1000 €. ¡Enhorabuena!';
             }
             mostrarToast(msg);
+            agregarNotificacion('📅 Racha', msg);
             actualizarInterfazUsuario();
             if (data.streak_count >= 7) tryUnlockAchievement('joya');
         }
@@ -607,10 +719,46 @@ async function checkStreakAndReward() {
         console.error('Error en streak:', e);
     }
 }
-// ===== FIN STREAK BONUS =====
 
+// ===== BOTÍN DIARIO =====
+async function reclamarBotinDiario() {
+    if (!currentUser) return abrirModalAuth('register');
+    if (accionEnCurso) return;
+    
+    accionEnCurso = true;
+    const btn = document.getElementById('btnBotin');
+    btn.disabled = true;
+    btn.innerText = '🎰 Girando...';
+    
+    try {
+        const { data, error } = await db.rpc('reclamar_botin_diario');
+        if (error) {
+            mostrarToast('⚠️ ' + error.message);
+            return;
+        }
+        
+        if (data && data.recompensa > 0) {
+            currentUser.saldo += data.recompensa;
+            actualizarInterfazUsuario();
+            mostrarToast(data.mensaje);
+            agregarNotificacion('🎲 Botín', data.mensaje);
+        } else {
+            mostrarToast(data.mensaje || '⚠️ Ya has reclamado hoy.');
+        }
+    } catch (e) {
+        mostrarToast('⚠️ Error al reclamar el botín.');
+        console.error(e);
+    } finally {
+        accionEnCurso = false;
+        btn.disabled = false;
+        btn.innerText = '🎲 ¡Reclamar Botín!';
+    }
+}
+
+// ===== ONLOAD =====
 window.onload = async () => {
     if ('serviceWorker' in navigator) navigator.serviceWorker.register('service-worker.js').catch(() => {});
+    actualizarContadorNotificaciones();
     const { data: { session } } = await db.auth.getSession();
     if (session) await cargarPerfil(session.user.id);
     actualizarInterfazUsuario();
@@ -656,6 +804,7 @@ window.onload = async () => {
       .subscribe();
 };
 
+// ===== CARGA DE PERFIL =====
 async function cargarPerfil(userId) {
     const { data, error } = await db.from('profiles').select('*').eq('id', userId).single();
     if (error || !data) { currentUser = null; return; }
@@ -672,11 +821,18 @@ async function cargarPerfil(userId) {
                 actualizarInterfazUsuario();
                 if (saldoCambioPropio || (Date.now() - ultimaAccionPropiaTs < 5000)) return;
                 const diferencia = payload.new.saldo - saldoAnt;
-                if (diferencia > 0) mostrarToast(`💰 ¡Te han superado una puja! Se te han devuelto ${diferencia.toLocaleString('es-ES')} €.`);
+                if (diferencia > 0) {
+                    const ahora = Date.now();
+                    if (ahora - ultimoToastSuperado > 30000) {
+                        mostrarToast(`💰 ¡Te han superado una puja! Se te han devuelto ${diferencia.toLocaleString('es-ES')} €.`);
+                        ultimoToastSuperado = ahora;
+                    }
+                }
             }).subscribe();
     }
 }
 
+// ===== FUNCIONES BASICAS (mostrarToast, addXp, updateXpUI, etc.) =====
 function actualizarContadorProximaSubasta() {
     const ahora = new Date();
     const minutosRestantes = 59 - ahora.getMinutes();
@@ -746,6 +902,8 @@ function actualizarInterfazUsuario() {
             document.getElementById('goatItemDesactivar').style.display = 'none';
         }
         actualizarFormularioPerfil();
+        // Actualizar contador de notificaciones
+        actualizarContadorNotificaciones();
     } else {
         document.getElementById('boxBalance').style.display = 'none'; document.getElementById('btnLoginHeader').style.display = 'block';
         document.getElementById('userMenuWrapper').style.display = 'none';
@@ -946,11 +1104,13 @@ function copiarEnlace() {
 function cambiarFotoPrincipal(url) { document.getElementById('detailImage').innerHTML = renderizarImagenProducto(url); }
 function iniciarTemporizador(fin) { if (timerInterval) clearInterval(timerInterval); const target = new Date(fin||Date.now()+86400000).getTime(), box = document.getElementById('detailTime'); function actualizar() { if (productoSeleccionado && productoSeleccionado.status === 'closed') return; const diff = target - Date.now(); if (diff <= 0) { box.innerText = "⏳ Subasta Finalizada"; clearInterval(timerInterval); cargarSubastas(); return; } const d = Math.floor(diff/86400000), h = Math.floor((diff%86400000)/3600000), m = Math.floor((diff%3600000)/60000), s = Math.floor((diff%60000)/1000); box.innerText = d>0 ? `⏳ Cierra en: ${d}d ${h}h ${m}m` : `⏳ Cierra en: ${h}h ${m}m ${s}s`; } actualizar(); timerInterval = setInterval(actualizar, 1000); }
 async function cargarHistorialPujas(id) { const history = document.getElementById('historyList'); const { data: bids } = await db.from('bids').select('*').eq('auction_id', id).order('created_at', { ascending: false }); history.innerHTML = bids && bids.length ? '' : '<div style="font-size:0.8rem;color:var(--text-muted);">Sin pujas aún.</div>'; if (bids) bids.forEach(b => { const div = document.createElement('div'); div.className = 'history-item'; div.innerHTML = `<div style="display:flex;justify-content:space-between;"><div><span style="color:var(--accent-blue);font-weight:bold;">${b.user_name||'Anónimo'}</span>${b.comment?`<div style="font-size:0.75rem;color:#eab308;">"${b.comment}"</div>`:''}</div><span style="font-weight:bold;">${Number(b.amount).toLocaleString('es-ES')} €</span></div>`; history.appendChild(div); }); }
+
 // ===== LOGROS =====
-async function tryUnlockAchievement(key) { if (!currentUser) return; const { data, error } = await db.rpc('unlock_achievement', { p_key: key }); if (!error && data === true) { const achievement = ALL_ACHIEVEMENTS.find(a => a.key === key); if (achievement) mostrarToast(`🏅 ¡Nueva insignia: ${achievement.icon} ${achievement.name}!`); if (document.getElementById('viewLogros').classList.contains('active')) cargarLogros(); if (document.getElementById('viewPerfil').classList.contains('active')) cargarInsignias(); } }
+async function tryUnlockAchievement(key) { if (!currentUser) return; const { data, error } = await db.rpc('unlock_achievement', { p_key: key }); if (!error && data === true) { const achievement = ALL_ACHIEVEMENTS.find(a => a.key === key); if (achievement) { const msg = `🏅 ¡Nueva insignia: ${achievement.icon} ${achievement.name}!`; mostrarToast(msg); agregarNotificacion('🏅 Logro', msg); } if (document.getElementById('viewLogros').classList.contains('active')) cargarLogros(); if (document.getElementById('viewPerfil').classList.contains('active')) cargarInsignias(); } }
 async function cargarInsignias() { if (!currentUser) return; const container = document.getElementById('achievementsContainer'); if (!container) return; const { data: unlocked, error } = await db.from('user_achievements').select('achievement_key').eq('user_id', currentUser.id); if (error) { container.innerHTML = '<span>Error</span>'; return; } const unlockedKeys = unlocked.map(u => u.achievement_key); container.innerHTML = ALL_ACHIEVEMENTS.map(a => { const isUnlocked = unlockedKeys.includes(a.key); return `<div class="achievement-badge ${isUnlocked ? '' : 'locked'}" title="${a.desc}"><span>${a.icon}</span> ${a.name}</div>`; }).join(''); }
 async function cargarLogros() { if (!currentUser) return; const container = document.getElementById('logrosContainer'); if (!container) return; const { data: unlocked, error } = await db.from('user_achievements').select('achievement_key').eq('user_id', currentUser.id); if (error) { container.innerHTML = '<span>Error al cargar logros</span>'; return; } const unlockedKeys = unlocked.map(u => u.achievement_key); container.innerHTML = ALL_ACHIEVEMENTS.map(a => { const isUnlocked = unlockedKeys.includes(a.key); return `<div class="achievement-row ${isUnlocked ? 'unlocked' : 'locked'}"><div class="achievement-icon">${a.icon}</div><div class="achievement-info"><div class="achievement-name">${a.name}</div><div class="achievement-desc">${a.desc}</div></div><div class="achievement-status">${isUnlocked ? '✅' : '🔒'}</div></div>`; }).join(''); }
 async function mostrarLogros() { if (!currentUser) return abrirModalAuth('register'); ocultarTodasVistas(); document.getElementById('viewLogros').classList.add('active'); document.querySelectorAll('.primary-nav .nav-tab').forEach(t => t.classList.remove('active')); document.getElementById('tabLogros').classList.add('active'); await cargarLogros(); }
+
 // ===== PUJAS =====
 async function ejecutarPuja(total) { 
     if (!currentUser) return abrirModalAuth('register'); 
@@ -1072,14 +1232,15 @@ async function verAnuncio(tipo) {
         btnAd.innerText = '🎬 +500 €';
     }
 }
-// ===== FIN SIMULADOR DE ANUNCIOS =====
 
-async function activarGoat() { if (!currentUser) return; if (accionEnCurso) return; accionEnCurso = true; try { marcarCambioPropio(); const { data, error } = await db.rpc('toggle_goat'); if (error) { mostrarToast('⚠️ ' + error.message); return; } currentUser.esGoat = data; await cargarPerfil(currentUser.id); actualizarInterfazUsuario(); if (data) { mostrarToast('🐐 Modo GOAT activado. +5.000 €.'); tryUnlockAchievement('goat'); } } finally { accionEnCurso = false; } }
-async function reclamarBonusDiario() { if (!currentUser) return; if (accionEnCurso) return; accionEnCurso = true; try { marcarCambioPropio(); const { data, error } = await db.rpc('reclamar_bonus_diario'); if (error) { mostrarToast('⚠️ ' + error.message); return; } currentUser.saldo = data; actualizarInterfazUsuario(); mostrarToast('🎁 ¡Misiones completadas! Has recibido +1.000 € de bono diario.'); } finally { accionEnCurso = false; } }
+async function activarGoat() { if (!currentUser) return; if (accionEnCurso) return; accionEnCurso = true; try { marcarCambioPropio(); const { data, error } = await db.rpc('toggle_goat'); if (error) { mostrarToast('⚠️ ' + error.message); return; } currentUser.esGoat = data; await cargarPerfil(currentUser.id); actualizarInterfazUsuario(); if (data) { const msg = '🐐 Modo GOAT activado. +5.000 €.'; mostrarToast(msg); agregarNotificacion('🐐 GOAT', msg); tryUnlockAchievement('goat'); } } finally { accionEnCurso = false; } }
+async function reclamarBonusDiario() { if (!currentUser) return; if (accionEnCurso) return; accionEnCurso = true; try { marcarCambioPropio(); const { data, error } = await db.rpc('reclamar_bonus_diario'); if (error) { mostrarToast('⚠️ ' + error.message); return; } currentUser.saldo = data; actualizarInterfazUsuario(); const msg = '🎁 ¡Misiones completadas! Has recibido +1.000 € de bono diario.'; mostrarToast(msg); agregarNotificacion('🎁 Bono', msg); } finally { accionEnCurso = false; } }
+
 // ===== MISIONES =====
 async function mostrarMisiones() { if (!currentUser) return abrirModalAuth('register'); ocultarTodasVistas(); document.getElementById('viewMisiones').classList.add('active'); document.querySelectorAll('.primary-nav .nav-tab').forEach(t => t.classList.remove('active')); document.getElementById('tabMisiones').classList.add('active'); await cargarMisiones(); }
 async function cargarMisiones() { const container = document.getElementById('misionesContainer'); container.innerHTML = 'Cargando...'; const { data, error } = await db.rpc('get_daily_missions'); if (error) { container.innerHTML = `<p>Error: ${error.message}</p>`; return; } const m = data; let html = ''; const todasMisionesCompletadas = m.min_bids >= 3 && m.custom_bid >= 1 && m.ad_views >= 2 && m.category_bid >= 1; html += `<div class="mission-card"><div class="mission-title">🎁 Bono Diario</div><div class="mission-desc">Completa todas las misiones diarias y reclama 1.000 €.</div>${m.bonus ? (todasMisionesCompletadas ? `<button onclick="reclamarBonusDiarioDesdeMisiones()" style="background:var(--accent-green);color:white;border:none;padding:6px 12px;border-radius:6px;cursor:pointer;font-weight:bold;">💰 Reclamar +1.000 €</button>` : `<span style="font-size:0.8rem;color:var(--text-muted);">🔒 Completa todas las misiones</span>`) : `<span class="mission-completed">✅ Reclamado hoy</span>`}</div>`; html += `<div class="mission-card"><div class="mission-title">🔫 Gatillo Fácil</div><div class="mission-desc">3 pujas mínimas. ${m.min_bids}/3</div><div class="progress-bar"><div class="progress-fill" style="width:${Math.min(m.min_bids/3*100,100)}%"></div></div>${m.min_bids>=3?'<div class="mission-completed">✅</div>':''}</div>`; html += `<div class="mission-card"><div class="mission-title">💼 El Inversor</div><div class="mission-desc">1 puja personalizada. ${m.custom_bid>=1?'✅':'Pendiente'}</div>${m.custom_bid>=1?'<div class="mission-completed">✅</div>':''}</div>`; html += `<div class="mission-card"><div class="mission-title">📺 Patrocinador</div><div class="mission-desc">2 anuncios. ${m.ad_views}/2</div><div class="progress-bar"><div class="progress-fill" style="width:${Math.min(m.ad_views/2*100,100)}%"></div></div>${m.ad_views>=2?'<div class="mission-completed">✅</div>':''}</div>`; html += `<div class="mission-card"><div class="mission-title">🧭 Explorador</div><div class="mission-desc">Puja en categoría especial. ${m.category_bid>=1?'✅':'Pendiente'}</div>${m.category_bid>=1?'<div class="mission-completed">✅</div>':''}</div>`; container.innerHTML = html; }
 async function reclamarBonusDiarioDesdeMisiones() { await reclamarBonusDiario(); cargarMisiones(); }
+
 // ===== HALL OF FAME =====
 async function mostrarHallOfFame() { if (!currentUser) return abrirModalAuth('register'); ocultarTodasVistas(); document.getElementById('viewHallOfFame').classList.add('active'); document.querySelectorAll('.primary-nav .nav-tab').forEach(t => t.classList.remove('active')); document.getElementById('tabHallOfFame').classList.add('active'); await cargarHallOfFame(); if (hallOfFameInterval) clearInterval(hallOfFameInterval); hallOfFameInterval = setInterval(cargarHallOfFame, 30000); }
 async function cargarHallOfFame() {
@@ -1126,6 +1287,7 @@ function construirPodioYLista(lista, tipo) {
     }
     return html;
 }
+
 // ===== MIS PUJAS =====
 let misPujasData = [];
 let ordenActual = 'fecha';
@@ -1148,7 +1310,6 @@ async function cargarMisPujas() {
         .order('created_at', { ascending: false });
     if (error) { container.innerHTML = `<p>Error: ${error.message}</p>`; return; }
     
-    // --- NUEVO: Agrupar por auction_id y quedarse con la más reciente ---
     const latestBids = {};
     (bids || []).forEach(b => {
         const auctionId = b.auction_id;
@@ -1157,7 +1318,6 @@ async function cargarMisPujas() {
         }
     });
     misPujasData = Object.values(latestBids);
-    // --- FIN NUEVO ---
     
     ordenarMisPujas(ordenActual);
 }
@@ -1198,11 +1358,36 @@ function ordenarMisPujas(criterio) {
     renderizarMisPujas(data);
 }
 
+function filtrarMisPujas(filtro) {
+    misPujasFiltro = filtro;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    const botones = document.querySelectorAll('.filter-btn');
+    const index = ['todas', 'activas', 'ganadas', 'perdidas'].indexOf(filtro);
+    if (botones[index]) botones[index].classList.add('active');
+    renderizarMisPujas(misPujasData);
+}
+
 function renderizarMisPujas(data) {
     const container = document.getElementById('misPujasContainer');
     if (!data.length) { container.innerHTML = '<p>Aún no has hecho ninguna puja.</p>'; return; }
+    
+    // Filtrar según estado
+    let datosFiltrados = data;
+    if (misPujasFiltro === 'activas') {
+        datosFiltrados = data.filter(b => b.auctions && b.auctions.status !== 'closed');
+    } else if (misPujasFiltro === 'ganadas') {
+        datosFiltrados = data.filter(b => b.auctions && b.auctions.status === 'closed' && b.auctions.winner === currentUser.username);
+    } else if (misPujasFiltro === 'perdidas') {
+        datosFiltrados = data.filter(b => b.auctions && b.auctions.status === 'closed' && b.auctions.winner !== currentUser.username);
+    }
+    
+    if (!datosFiltrados.length) {
+        container.innerHTML = '<p>No hay pujas en esta categoría.</p>';
+        return;
+    }
+    
     let html = '<table class="mis-pujas-table"><tr><th>Subasta</th><th>Rareza</th><th>Tu puja</th><th>Estado</th><th>Fin</th></tr>';
-    data.forEach(b => {
+    datosFiltrados.forEach(b => {
         const auction = b.auctions;
         if (!auction) return;
         const title = auction.title || 'Sin título';
@@ -1290,6 +1475,7 @@ async function adminListarUsuarios() { const box = document.getElementById('admi
 async function adminAddCategoria() { const name = document.getElementById('newCatName').value.trim(); const icon = document.getElementById('newCatIcon').value.trim() || '📦'; if (!name) { mostrarToast('⚠️ Nombre requerido.'); return; } const { error } = await db.rpc('admin_add_category', { p_name: name, p_icon: icon }); if (error) { mostrarToast('⚠️ ' + error.message); return; } document.getElementById('newCatName').value = ''; document.getElementById('newCatIcon').value = ''; await cargarCategorias(); renderizarListaAdminCategorias(); actualizarSelectorCategoriasAdmin(); mostrarToast('✅ Categoría añadida.'); }
 async function adminDeleteCategoria(id) { if (!confirm("¿Eliminar categoría?")) return; const { error } = await db.rpc('admin_delete_category', { p_id: id }); if (error) { mostrarToast('⚠️ ' + error.message); return; } await cargarCategorias(); renderizarListaAdminCategorias(); actualizarSelectorCategoriasAdmin(); mostrarToast('🗑️ Categoría eliminada.'); }
 function renderizarListaAdminCategorias() { const box = document.getElementById('adminCatList'); if (!box) return; box.innerHTML = categorias.map(c => `<div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0;font-size:0.85rem;"><span>${c.icon} ${c.name}</span><button onclick="adminDeleteCategoria(${c.id})" style="background:#ef4444;color:white;border:none;padding:2px 8px;border-radius:4px;font-size:0.7rem;">Eliminar</button></div>`).join(''); }
+
 // ===== AUTENTICACIÓN =====
 function toggleAuthForm(mode) { document.getElementById('formLogin').style.display = mode==='login'?'block':'none'; document.getElementById('formRegister').style.display = mode==='register'?'block':'none'; }
 async function registrarUsuario() { const email = document.getElementById('regEmail').value.trim(), alias = document.getElementById('regUsername').value.trim().startsWith('@')? document.getElementById('regUsername').value.trim() : '@'+document.getElementById('regUsername').value.trim(), pass = document.getElementById('regPassword').value.trim(); if (!email||!alias||!pass) return mostrarToast("⚠️ Completa todos los campos."); const { data: libre } = await db.rpc('username_disponible',{p_username:alias}); if (!libre) return mostrarToast("⚠️ Alias en uso."); const { data, error } = await db.auth.signUp({ email, password: pass, options: { data: { username: alias } } }); if (error) return mostrarToast('⚠️ ' + error.message); if (!data.session) { mostrarToast("📧 Confirma tu correo."); cerrarModalAuth(); return; } await cargarPerfil(data.user.id); cerrarModalAuth(); actualizarInterfazUsuario(); mostrarToast("¡Bienvenido! 1.000 €."); }
@@ -1307,12 +1493,14 @@ async function guardarNuevaPassword() {
     mostrarToast('✅ Contraseña actualizada.');
 }
 async function cerrarSesion() { await db.auth.signOut(); if (profileChannel) { await db.removeChannel(profileChannel); profileChannel = null; profileChannelUserId = null; } currentUser = null; actualizarInterfazUsuario(); mostrarCatalogo(); }
+
 // ===== PERFIL =====
 function mostrarPerfil() { if(!currentUser) return abrirModalAuth('register'); ocultarTodasVistas(); actualizarFormularioPerfil(); document.getElementById('viewPerfil').classList.add('active'); cargarInsignias(); }
 async function actualizarFormularioPerfil() { if (!currentUser) return; document.getElementById('perfilNombre').innerText = `👤 ${currentUser.username}`; const { data: { user } } = await db.auth.getUser(); document.getElementById('perfilEmail').innerText = user ? user.email : ''; }
 async function guardarNuevoAlias() { let nuevo = document.getElementById('perfilNuevoAlias').value.trim(); if (!nuevo) return mostrarToast("⚠️ Escribe un alias."); if (!nuevo.startsWith('@')) nuevo = '@'+nuevo; if (nuevo === currentUser.username) return mostrarToast("⚠️ Ya tienes ese alias."); const { data: libre } = await db.rpc('username_disponible',{p_username:nuevo}); if (!libre) return mostrarToast("⚠️ Alias en uso."); const { error } = await db.rpc('actualizar_mi_alias',{p_nuevo_alias:nuevo}); if (error) return mostrarToast('⚠️ ' + error.message); currentUser.username = nuevo; actualizarInterfazUsuario(); document.getElementById('perfilNuevoAlias').value = ''; mostrarToast('✅ Alias actualizado.'); }
 async function guardarNuevaPasswordPerfil() { const p = document.getElementById('perfilNuevaPassword').value.trim(); if (p.length < 6) return mostrarToast("⚠️ Mínimo 6 caracteres."); const { error } = await db.auth.updateUser({ password: p }); if (error) return mostrarToast('⚠️ ' + error.message); document.getElementById('perfilNuevaPassword').value = ''; mostrarToast('✅ Contraseña actualizada.'); }
 function solicitarBajaCuenta() { mostrarToast('📧 Escribe a abrozonsubastas@gmail.com para eliminar tu cuenta.'); }
+
 // ===== VITRINA =====
 async function mostrarVitrina() {
     if (!currentUser) return abrirModalAuth('register');
@@ -1345,26 +1533,25 @@ async function cargarVitrina() {
     } else {
         ganados.forEach(item => {
             const card = document.createElement('div');
-            card.className = 'certificate-card';
+            const rareza = item.rareza || 'Común';
+            const rarezaClaseVitrina = 'vitrina-' + rareza.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-');
+            card.className = 'certificate-card ' + rarezaClaseVitrina;
             const fecha = item.ends_at ? new Date(item.ends_at).toLocaleDateString('es-ES') : '';
             const userItemId = userItemIds[item.id] || '';
 
-            // Determinar si se puede reciclar (solo Común y Poco común)
-            const rareza = item.rareza || 'Común';
             const reciclable = (rareza === 'Común' || rareza === 'Poco común' || rareza === 'Rara' || rareza === 'Épica');
 
-// Calcular valor de reciclaje (20% del precio, con mín/máx)
-let valorReciclajeNum = Math.round(item.starting_price * 0.20);
-if (rareza === 'Común') {
-    valorReciclajeNum = Math.min(Math.max(valorReciclajeNum, 50), 300);
-} else if (rareza === 'Poco común') {
-    valorReciclajeNum = Math.min(Math.max(valorReciclajeNum, 100), 600);
-} else if (rareza === 'Rara') {
-    valorReciclajeNum = Math.min(Math.max(valorReciclajeNum, 200), 1000);
-} else if (rareza === 'Épica') {
-    valorReciclajeNum = Math.min(Math.max(valorReciclajeNum, 500), 2000);
-}
-const valorReciclajeTexto = valorReciclajeNum.toLocaleString('es-ES') + ' €';
+            let valorReciclajeNum = Math.round(item.starting_price * 0.20);
+            if (rareza === 'Común') {
+                valorReciclajeNum = Math.min(Math.max(valorReciclajeNum, 50), 300);
+            } else if (rareza === 'Poco común') {
+                valorReciclajeNum = Math.min(Math.max(valorReciclajeNum, 100), 600);
+            } else if (rareza === 'Rara') {
+                valorReciclajeNum = Math.min(Math.max(valorReciclajeNum, 200), 1000);
+            } else if (rareza === 'Épica') {
+                valorReciclajeNum = Math.min(Math.max(valorReciclajeNum, 500), 2000);
+            }
+            const valorReciclajeTexto = valorReciclajeNum.toLocaleString('es-ES') + ' €';
             const rarezaClase = 'chip-rareza-' + rareza.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-');
 
             card.innerHTML = `
@@ -1396,9 +1583,10 @@ async function reciclarObjeto(userItemId) {
     await cargarPerfil(currentUser.id);
     actualizarInterfazUsuario();
     await cargarVitrina();
-    mostrarToast(`♻️ Objeto reciclado por +${data.toLocaleString('es-ES')} €.`);
+    const msg = `♻️ Objeto reciclado por +${data.toLocaleString('es-ES')} €.`;
+    mostrarToast(msg);
+    agregarNotificacion('♻️ Reciclaje', msg);
 }
-// ===== FIN RECICLAJE =====
 
 // ===== MERCADO C2C =====
 function mostrarMercado() {
@@ -1470,8 +1658,11 @@ async function comprarDirecto() {
     await cargarSubastas();
     await cargarVitrina();
     mostrarCatalogo();
-    mostrarToast('✅ Compra realizada con éxito.');
+    const msg = '✅ Compra realizada con éxito.';
+    mostrarToast(msg);
+    agregarNotificacion('🛒 Compra', msg);
 }
+
 // ===== CREAR SUBASTA =====
 async function crearNuevaSubasta() {
     const title = document.getElementById('adminTitle').value.trim(),
@@ -1505,12 +1696,21 @@ async function crearNuevaSubasta() {
     mostrarToast('✅ Subasta creada con éxito.');
 }
 function toggleTema() { document.body.classList.toggle('dark-mode'); document.getElementById('dropdownTheme').innerText = document.body.classList.contains('dark-mode') ? "☀️ Modo Día" : "🌙 Modo Noche"; cerrarUserMenu(); }
+
 // ===== MENÚS =====
 function toggleUserMenu() { const d = document.getElementById('userDropdown'); d.style.display = d.style.display === 'block' ? 'none' : 'block'; }
 function cerrarUserMenu() { document.getElementById('userDropdown').style.display = 'none'; }
 function toggleGoatMenu() { const d = document.getElementById('goatDropdown'); d.style.display = d.style.display === 'block' ? 'none' : 'block'; }
 function cerrarGoatMenu() { document.getElementById('goatDropdown').style.display = 'none'; }
-document.addEventListener('click', (e) => { const w = document.getElementById('userMenuWrapper'); if (w && w.style.display !== 'none' && !w.contains(e.target)) cerrarUserMenu(); const g = document.getElementById('goatMenuWrapper'); if (g && g.style.display !== 'none' && !g.contains(e.target)) cerrarGoatMenu(); });
+document.addEventListener('click', (e) => { 
+    const w = document.getElementById('userMenuWrapper'); if (w && w.style.display !== 'none' && !w.contains(e.target)) cerrarUserMenu(); 
+    const g = document.getElementById('goatMenuWrapper'); if (g && g.style.display !== 'none' && !g.contains(e.target)) cerrarGoatMenu(); 
+    const panel = document.getElementById('notifPanel');
+    const btn = document.getElementById('btnNotif');
+    if (panel && btn && panel.style.display === 'block' && !panel.contains(e.target) && !btn.contains(e.target)) {
+        panel.style.display = 'none';
+    }
+});
 </script>
 </body>
 </html>
