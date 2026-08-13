@@ -202,7 +202,29 @@
 * **Dominio:** `abrozon.com` — **Comprado y conectado a GitHub Pages**. La web ya está disponible en [https://abrozon.com](https://abrozon.com).
 * **Redirección:** La URL antigua de GitHub Pages redirige automáticamente al nuevo dominio.
 * **HTTPS:** Activado (certificado SSL gestionado por GitHub).
+---
 
+## 🚀 Plan de acción para la Beta Privada (adicional al roadmap)
+
+Basándonos en el estado actual del proyecto, se han identificado las siguientes tareas **críticas** para poder lanzar una beta privada estable y segura:
+
+### 🔴 Seguridad (prioridad máxima)
+- **Proteger todas las RPCs de administrador** (`admin_*`) añadiendo una verificación de `is_admin` al inicio de cada función. Esto evita que usuarios normales puedan ejecutarlas desde la consola.
+- **Validar el tipo de archivo** en la subida de imágenes (solo imágenes, tamaño máximo 5 MB).
+- **Sanitizar el campo `metadata`** en la creación de subastas (usar `try/catch` al parsear JSON).
+
+### 🟡 Experiencia de usuario (engagement)
+- **Crear la página de Ayuda / Tutorial / FAQ** (sección con 4-5 pasos, guía de rarezas, cómo ganar monedas y preguntas frecuentes). Esencial para que los nuevos usuarios no reboten.
+- **Implementar la Racha de inicio de sesión (Streak Bonus de 7 días)** con recompensa creciente y bote final.
+- **Reemplazar todos los `alert()` por el sistema de toasts** ya implementado, para una experiencia más fluida.
+- **Añadir feedback visual** (spinners o botones deshabilitados) durante la ejecución de acciones como pujar, anuncios, etc.
+
+### 🟢 Pulido final
+- **Actualizar automáticamente la vitrina** después de vender o comprar en el mercado.
+- **Optimizar el catálogo** para que no se recargue entero con cada cambio Realtime (se hará una actualización diferencial).
+- **Añadir un banner visible de "Beta Privada"** con un enlace a un formulario de feedback (Google Forms o similar).
+
+**Nota:** Estas tareas son complementarias a las ya planificadas en el roadmap y se consideran imprescindibles antes de abrir la beta a usuarios externos.
 ## ⚠️ Notas para la IA
 
 * **Soy un programador novato.** Necesito explicaciones paso a paso, sin tecnicismos innecesarios. Si algún concepto es complejo, por favor, tradúcemelo a un lenguaje sencillo.
