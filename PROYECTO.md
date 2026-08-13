@@ -138,17 +138,43 @@
 5. **Subastas inversas** ⬜ Pendiente — El precio baja hasta que alguien compra.
 6. **Pases de temporada** ⬜ Pendiente — Progresión con recompensas exclusivas (gratis y GOAT).
 
-### Fase 5: Comunidad, Eventos y PVE
+### Fase 5: Comunidad, Eventos, PVE y Equipamiento
 
 1. **Eventos y desafíos temporales** ⬜ Pendiente — Misiones especiales con recompensas únicas.
 2. **Votaciones comunitarias** ⬜ Pendiente — La comunidad decide la temática de subastas especiales.
 3. **Sorteos comunitarios** ⬜ Pendiente — Sorteos periódicos entre miembros activos.
 4. **Donaciones comunitarias** ⬜ Pendiente — Donar objetos o fondos a la comunidad.
 5. **Sección FAQ participativo** ⬜ Pendiente — Usuarios responden dudas de novatos.
-6. **Arena PVE "Subasta contra Bots" (Farmeo de XP)** ⬜ Pendiente — Sección exclusiva de entrenamiento para usuarios de Nivel 1-4 donde practicar contra bots con personalidades paródicas, ganar XP y monedas sin presión, y aprender la mecánica de subastas antes del PVP. Incluye modo Raid (Nivel 5+) con dificultad alta y recompensas multiplicadas.
-7. **Colección Temática "Jägger Lore"** ⬜ Pendiente — *La Plota, La Caca de Viruzz, Tatuaje Aspiradora Roomba, Guantes de la Velada, El Saltpeper.*
-8. **Foro / Tablón de anuncios comunitario** ⬜ Pendiente — Espacio donde los usuarios pueden dejar anuncios de intercambio, peticiones de objetos, compartir noticias de streamers, salseo o simplemente socializar.
-9. **Sistema de trueque entre usuarios** ⬜ Pendiente — Intercambio directo de objetos del inventario entre dos usuarios (con o sin comisión).
+6. **Arena PVE "Subasta contra Bots" (Farmeo de XP)** ⬜ Pendiente — Sección exclusiva de entrenamiento para usuarios de Nivel 1-4 donde practicar contra bots con personalidades paródicas, ganar XP y monedas sin presión, y aprender la mecánica de subastas antes del PVP.
+7. **⚔️ Zona Raid PVE (Farmeo Hardcore de XP)** ⬜ Pendiente — Subastas PVE de alta dificultad (Nivel 5+) con bots ultra agresivos, mayor límite de repujas, multiplicador de XP 3x y objetos de rareza Rara/Épica/Legendaria.
+8. **Colección Temática "Jägger Lore"** ⬜ Pendiente — *La Plota, La Caca de Viruzz, Tatuaje Aspiradora Roomba, Guantes de la Velada, El Saltpeper.*
+9. **Foro / Tablón de anuncios comunitario** ⬜ Pendiente — Espacio donde los usuarios pueden dejar anuncios de intercambio, peticiones de objetos, compartir noticias de streamers, salseo o simplemente socializar.
+10. **Sistema de trueque entre usuarios** ⬜ Pendiente — Intercambio directo de objetos del inventario entre dos usuarios (con o sin comisión).
+
+### Fase 6: Expansión Técnica y API
+
+1. **API REST de datos públicos** ⬜ Pendiente — Endpoint de lectura (`/api/v1/user/:username`) para exponer estadísticas públicas del jugador (nivel, subastas ganadas, título equipado y avatar).
+2. **Firmas dinámicas y Widgets** ⬜ Pendiente — Generador de imágenes o snippets HTML para que los usuarios puedan incrustar su tarjeta de perfil de aBROzon en firmas de foros, canales de Discord o webs personales.
+3. **Integraciones con terceros** ⬜ Pendiente — Base técnica para que la comunidad desarrolle bots de estado, extensiones o herramientas analíticas.
+4. **Estrategia SEO y Posicionamiento** ⬜ Pendiente — Páginas dinámicas indexables con URLs amigables (`/subastas/casco-de-roro`) y metadatos Open Graph para previsualizaciones atractivas al compartir.
+
+### Fase 7: Análisis de Audiencia y Publicidad
+
+1. **Perfilado demográfico voluntario (Progressive Profiling)** ⬜ Pendiente — Encuestas opcionales recompensadas con monedas del juego.
+2. **Media Kit de Anunciantes** ⬜ Pendiente — Informes agregados y anonimizados de audiencia para vender patrocinios, banners y acuerdos de afiliación.
+3. **Misiones de patrocinadores y afiliación (Opt-in)** ⬜ Pendiente — Recompensas por registro voluntario en ofertas de terceros (marcas, casas de apuestas, juegos) con cumplimiento RGPD.
+4. **Protección de datos** ⬜ Pendiente — Comercialización exclusivamente mediante analítica agregada, sin ceder registros individuales ni datos identificables a terceros.
+
+### Fase 8: Equipamiento de Avatar y Stats (Loot Freak)
+
+1. **Sistema de inventario y equipamiento** ⬜ Pendiente — Ranuras de equipo para el avatar (Cabeza, Objeto/Arma en mano, Calzado, Anillo/Accesorio) con bonificaciones pasivas para PVE y Raid.
+2. **Catálogo de objetos paródicos** ⬜ Pendiente — "Espada del Rey Liche", "Botas del Bicho", "El Anillo Único del Chino", etc. (evitando conflictos de licencias).
+3. **Escalado de Stats** ⬜ Pendiente — Descuentos de monedas (-5%/-7%/-10%), multiplicadores de XP, control de tiempo (Chronos Freeze, Prediction Gauge, Sniper Extension).
+4. **Manipulación de Bots** ⬜ Pendiente — Stun/Latencia, Stealth Bidding, Intimidación.
+5. **Economía y Cashbacks** ⬜ Pendiente — Seguro de Derrota, Staking Pasivo, Bonus de Snipe.
+6. **Suerte y Progresión** ⬜ Pendiente — Magic Find, Objetos Evolutivos, Duplicador de Recompensa.
+7. **Efectos Sociales y Cosméticos** ⬜ Pendiente — Auras animadas, Taunts de Chat, Sonido de Entrada.
+8. **Interfaz de Inventario estilo ARPG/Diablo** ⬜ Pendiente — Silueta de personaje (Paperdoll), cuadrícula de inventario (mochila), Drag & Drop en escritorio, pestañas en móvil, inspección de perfil público.
 
 ### Ideas lejanas (post-MVP)
 * Categoría Legacy / Rage Comics (memes antiguos).
@@ -161,6 +187,8 @@
 * **F2P (Gratis):** Usuarios ven anuncios limitados para conseguir moneda virtual.
 * **Modo GOAT (Suscripción 3.99 €/mes):** Sin límites de anuncios, posibilidad de escribir comentarios en pujas, insignia exclusiva, y otras ventajas.
 * **Tienda de monedas:** Compra directa de saldo virtual con Stripe.
+* **Media Kit de Anunciantes:** Informes agregados de audiencia para vender patrocinios y acuerdos de afiliación.
+* **Misiones de afiliación (Opt-in):** Recompensas por registro voluntario en ofertas de terceros.
 
 ## 📢 Redes Sociales y Estrategia de Lanzamiento
 
