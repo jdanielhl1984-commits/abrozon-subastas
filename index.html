@@ -346,7 +346,10 @@
                 <div id="notifList" style="font-size:0.85rem; color:var(--text-muted);">No hay notificaciones.</div>
             </div>
         </div>
-        <button class="btn-header" id="btnAd" onclick="verAnuncio('normal')">🎬 +500 €</button>
+        <button class="btn-header" id="btnAd" onclick="verAnuncio('normal')" style="position:relative;">
+    🎬 +500 €
+    <span id="anunciosRestantes" style="font-size:0.6rem;opacity:0.7;display:block;font-weight:normal;">(10/10 hoy)</span>
+</button>
         <button class="btn-ruleta" id="btnRuleta" onclick="reclamarBotinDiario()">🎲 Ruleta</button>
         <div class="user-menu-wrapper" id="goatMenuWrapper" style="display:none;">
             <button class="btn-goat" id="btnGoat" onclick="toggleGoatMenu()">🐐 GOAT ▾</button>
@@ -906,6 +909,7 @@ function actualizarInterfazUsuario() {
         }
         actualizarFormularioPerfil();
         actualizarContadorNotificaciones();
+        actualizarContadorAnuncios();
     } else {
         document.getElementById('boxBalance').style.display = 'none'; document.getElementById('btnLoginHeader').style.display = 'block';
         document.getElementById('userMenuWrapper').style.display = 'none';
@@ -1237,7 +1241,27 @@ async function verAnuncio(tipo) {
 
 async function activarGoat() { if (!currentUser) return; if (accionEnCurso) return; accionEnCurso = true; try { marcarCambioPropio(); const { data, error } = await db.rpc('toggle_goat'); if (error) { mostrarToast('⚠️ ' + error.message); return; } currentUser.esGoat = data; await cargarPerfil(currentUser.id); actualizarInterfazUsuario(); if (data) { const msg = '🐐 Modo GOAT activado. +5.000 €.'; mostrarToast(msg); agregarNotificacion('🐐 GOAT', msg); tryUnlockAchievement('goat'); } } finally { accionEnCurso = false; } }
 async function reclamarBonusDiario() { if (!currentUser) return; if (accionEnCurso) return; accionEnCurso = true; try { marcarCambioPropio(); const { data, error } = await db.rpc('reclamar_bonus_diario'); if (error) { mostrarToast('⚠️ ' + error.message); return; } currentUser.saldo = data; actualizarInterfazUsuario(); const msg = '🎁 ¡Misiones completadas! Has recibido +1.000 € de bono diario.'; mostrarToast(msg); agregarNotificacion('🎁 Bono', msg); } finally { accionEnCurso = false; } }
-
+// ===== CONTADOR DE ANUNCIOS =====
+async function actualizarContadorAnuncios() {
+    if (!currentUser) return;
+    try {
+        const { data, error } = await db.from('profiles')
+            .select('ad_views_today, last_ad_date')
+            .eq('id', currentUser.id)
+            .single();
+        if (error) return;
+        
+        const hoy = new Date().toISOString().split('T')[0];
+        const esHoy = data.last_ad_date === hoy;
+        const usados = esHoy ? data.ad_views_today : 0;
+        const restantes = Math.max(0, 10 - usados);
+        
+        const span = document.getElementById('anunciosRestantes');
+        if (span) span.innerText = `(${restantes}/10 hoy)`;
+    } catch (e) {
+        console.error('Error al actualizar contador de anuncios:', e);
+    }
+}
 // ===== MISIONES =====
 async function mostrarMisiones() { if (!currentUser) return abrirModalAuth('register'); ocultarTodasVistas(); document.getElementById('viewMisiones').classList.add('active'); document.querySelectorAll('.primary-nav .nav-tab').forEach(t => t.classList.remove('active')); document.getElementById('tabMisiones').classList.add('active'); await cargarMisiones(); }
 async function cargarMisiones() { const container = document.getElementById('misionesContainer'); container.innerHTML = 'Cargando...'; const { data, error } = await db.rpc('get_daily_missions'); if (error) { container.innerHTML = `<p>Error: ${error.message}</p>`; return; } const m = data; let html = ''; const todasMisionesCompletadas = m.min_bids >= 3 && m.custom_bid >= 1 && m.ad_views >= 2 && m.category_bid >= 1; html += `<div class="mission-card"><div class="mission-title">🎁 Bono Diario</div><div class="mission-desc">Completa todas las misiones diarias y reclama 1.000 €.</div>${m.bonus ? (todasMisionesCompletadas ? `<button onclick="reclamarBonusDiarioDesdeMisiones()" style="background:var(--accent-green);color:white;border:none;padding:6px 12px;border-radius:6px;cursor:pointer;font-weight:bold;">💰 Reclamar +1.000 €</button>` : `<span style="font-size:0.8rem;color:var(--text-muted);">🔒 Completa todas las misiones</span>`) : `<span class="mission-completed">✅ Reclamado hoy</span>`}</div>`; html += `<div class="mission-card"><div class="mission-title">🔫 Gatillo Fácil</div><div class="mission-desc">3 pujas mínimas. ${m.min_bids}/3</div><div class="progress-bar"><div class="progress-fill" style="width:${Math.min(m.min_bids/3*100,100)}%"></div></div>${m.min_bids>=3?'<div class="mission-completed">✅</div>':''}</div>`; html += `<div class="mission-card"><div class="mission-title">💼 El Inversor</div><div class="mission-desc">1 puja personalizada. ${m.custom_bid>=1?'✅':'Pendiente'}</div>${m.custom_bid>=1?'<div class="mission-completed">✅</div>':''}</div>`; html += `<div class="mission-card"><div class="mission-title">📺 Patrocinador</div><div class="mission-desc">2 anuncios. ${m.ad_views}/2</div><div class="progress-bar"><div class="progress-fill" style="width:${Math.min(m.ad_views/2*100,100)}%"></div></div>${m.ad_views>=2?'<div class="mission-completed">✅</div>':''}</div>`; html += `<div class="mission-card"><div class="mission-title">🧭 Explorador</div><div class="mission-desc">Puja en categoría especial. ${m.category_bid>=1?'✅':'Pendiente'}</div>${m.category_bid>=1?'<div class="mission-completed">✅</div>':''}</div>`; container.innerHTML = html; }
