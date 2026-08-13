@@ -1351,8 +1351,20 @@ async function cargarVitrina() {
 
             // Determinar si se puede reciclar (solo Común y Poco común)
             const rareza = item.rareza || 'Común';
-            const reciclable = (rareza === 'Común' || rareza === 'Poco común');
-            const valorReciclaje = rareza === 'Común' ? '100€' : '250€';
+            const reciclable = (rareza === 'Común' || rareza === 'Poco común' || rareza === 'Rara' || rareza === 'Épica');
+
+// Calcular valor de reciclaje (20% del precio, con mín/máx)
+let valorReciclajeNum = Math.round(item.starting_price * 0.20);
+if (rareza === 'Común') {
+    valorReciclajeNum = Math.min(Math.max(valorReciclajeNum, 50), 300);
+} else if (rareza === 'Poco común') {
+    valorReciclajeNum = Math.min(Math.max(valorReciclajeNum, 100), 600);
+} else if (rareza === 'Rara') {
+    valorReciclajeNum = Math.min(Math.max(valorReciclajeNum, 200), 1000);
+} else if (rareza === 'Épica') {
+    valorReciclajeNum = Math.min(Math.max(valorReciclajeNum, 500), 2000);
+}
+const valorReciclajeTexto = valorReciclajeNum.toLocaleString('es-ES') + ' €';
             const rarezaClase = 'chip-rareza-' + rareza.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-');
 
             card.innerHTML = `
@@ -1365,7 +1377,7 @@ async function cargarVitrina() {
                     📜 CERTIFICADO OFICIAL ABROZON<br>Nº ${item.certificado_codigo || 'PENDIENTE'}<br>${fecha}
                 </div>
                 <button onclick="event.stopPropagation(); venderItem('${item.id}')" style="margin-top:10px; background:#f97316; color:white; border:none; padding:6px 12px; border-radius:6px; font-weight:bold; cursor:pointer; width:100%;">💰 Vender en Mercado</button>
-                ${reciclable && userItemId ? `<button onclick="event.stopPropagation(); reciclarObjeto('${userItemId}')" style="margin-top:6px; background:#64748b; color:white; border:none; padding:6px 12px; border-radius:6px; font-weight:bold; cursor:pointer; width:100%; font-size:0.8rem;">♻️ Reciclar (${valorReciclaje})</button>` : ''}
+                ${reciclable && userItemId ? `<button onclick="event.stopPropagation(); reciclarObjeto('${userItemId}')" style="margin-top:6px; background:#64748b; color:white; border:none; padding:6px 12px; border-radius:6px; font-weight:bold; cursor:pointer; width:100%; font-size:0.8rem;">♻️ Reciclar (${valorReciclajeTexto})</button>` : ''}
             `;
             grid.appendChild(card);
         });
