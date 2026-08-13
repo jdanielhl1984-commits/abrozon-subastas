@@ -132,6 +132,7 @@
 - ✅ Reemplazo de `alert()` por toasts (notificaciones emergentes)
 - ✅ Feedback visual (spinners y botones deshabilitados durante acciones)
 - ✅ **Evitar spam de toasts** (limitado a 1 cada 30 segundos)
+- ✅ **Header reorganizado para móvil**: saldo, nivel y barra XP en línea, botones compactos
 
 ### 🛠️ Administración
 - ✅ Panel de administración completo:
@@ -146,6 +147,7 @@
 - ✅ Contador de próxima subasta sincronizado
 - ✅ Sistema de reliquidación (subastas sin pujas se re-publican con 10% de descuento)
 - ✅ Metadata flexible (JSONB) para efectos visuales
+- ✅ **Categoría "Velada de Boxeo"** con 10 objetos de la Velada del Año 6
 
 ### 📜 Legal y compliance
 - ✅ Textos legales completos (Aviso Legal, Política de Privacidad, Política de Cookies)
@@ -171,36 +173,19 @@
 11. ✅ Reciclaje / Desguace de objetos
 12. ✅ Sistema de recompensas por anuncios voluntarios (simulados)
 13. ✅ Controles Anti-Pay-to-Win básicos (ajustes finos pendientes)
+14. ✅ Botín Diario (Ruleta)
+15. ✅ Sistema de notificaciones
 
 ---
 
 ### ⬜ Fase 3: Gamificación y Retención (PENDIENTE)
 
 1. **Ajuste de la economía (control de inflación)** ⬜ Pendiente
-   - Revisar precios de reciclaje (objetos Épica y superiores)
-   - Ajustar recompensas de misiones y anuncios
-   - Limitar la cantidad de anuncios diarios
-
 2. **Sistema de referidos** ⬜ Pendiente
-   - Enlace único por usuario
-   - Recompensa por invitar amigos (ej: 500€ por referido)
-
 3. **Personalización de avatar** ⬜ Pendiente
-   - Subir foto de perfil
-   - Equipar objetos coleccionables en el avatar
-
 4. **Personalización de perfil** ⬜ Pendiente
-   - Fondos y banners exclusivos equipables
-   - Frase personalizada
-
 5. **Beneficios por antigüedad** ⬜ Pendiente
-   - Insignias por meses de antigüedad
-   - Ventajas para usuarios veteranos
-
 6. **Vitrina Espectacular y Compartible** ⬜ Pendiente
-   - Mejores efectos CSS en vitrina
-   - Numeración de serie en objetos Legendarios
-   - Botón para compartir vitrina
 
 ---
 
@@ -308,6 +293,7 @@ Todas las tareas críticas para la beta privada han sido completadas:
 - ✅ **Efectos visuales en vitrina** según rareza.
 - ✅ **Filtros en "Mis pujas"** (Todas, Activas, Ganadas, Perdidas).
 - ✅ **30 logros** con verificación retroactiva.
+- ✅ **Header reorganizado para móvil** (saldo, nivel y XP en una línea).
 - ⬜ **Optimizar el catálogo** (mejora futura, no crítica).
 - ✅ **Añadir un banner visible de "Beta Privada"** con enlace a formulario de feedback.
 
