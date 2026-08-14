@@ -82,12 +82,7 @@
         .auction-card.rareza-epica, .product-card-detail.rareza-epica { border: 2px solid #8b5cf6; }
         .auction-card.rareza-legendaria, .product-card-detail.rareza-legendaria { border: 2px solid #f97316; box-shadow: 0 0 8px rgba(249,115,22,0.3); }
         .auction-card.rareza-mitica, .product-card-detail.rareza-mitica { border: 2px solid #ef4444; box-shadow: 0 0 12px rgba(239,68,68,0.4); }
-        .chip-rareza {
-            display: inline-block;
-            font-size: 0.5rem; font-weight: bold; padding: 2px 6px;
-            border-radius: 6px; text-transform: uppercase; color: white;
-            margin-bottom: 4px;
-        }
+        .chip-rareza { display: inline-block; font-size: 0.5rem; font-weight: bold; padding: 2px 6px; border-radius: 6px; text-transform: uppercase; color: white; margin-bottom: 4px; }
         .chip-rareza-comun { background: #94a3b8; }
         .chip-rareza-poco-comun { background: #22c55e; }
         .chip-rareza-rara { background: #3b82f6; }
@@ -97,23 +92,7 @@
         .card-image { width: 100%; height: 140px; background-color: var(--bg-subtle); display: flex; align-items: center; justify-content: center; font-size: 3.5rem; position: relative; border-bottom: 1px solid var(--border-color); overflow: hidden; }
         .badge-closed { position: absolute; top: 6px; left: 6px; background: #ef4444; color: white; font-size: 0.55rem; font-weight: bold; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; }
         .card-timer { position: absolute; top: 6px; right: 6px; background: rgba(239,68,68,0.15); color: #ef4444; font-size: 0.6rem; font-weight: bold; padding: 2px 6px; border-radius: 4px; font-family: monospace; }
-        .fav-btn { 
-            position: absolute; 
-            top: 6px; 
-            left: 6px; 
-            background: rgba(255,255,255,0.9); 
-            border: none; 
-            border-radius: 50%; 
-            width: 24px; 
-            height: 24px; 
-            cursor: pointer; 
-            font-size: 0.8rem; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            z-index: 10; 
-            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-        }
+        .fav-btn { position: absolute; top: 6px; left: 6px; background: rgba(255,255,255,0.9); border: none; border-radius: 50%; width: 24px; height: 24px; cursor: pointer; font-size: 0.8rem; display: flex; align-items: center; justify-content: center; z-index: 10; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
         .card-content { padding: 10px; }
         .card-category { font-size: 0.6rem; color: var(--accent-blue); text-transform: uppercase; font-weight: bold; margin-bottom: 2px; }
         .card-title { font-size: 0.8rem; font-weight: bold; color: var(--text-main); margin-bottom: 8px; line-height: 1.3; height: 32px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
@@ -139,10 +118,7 @@
         .btn-share-copy { background: var(--bg-subtle); color: var(--text-main); border: 1px solid var(--border-color); }
         .btn-share-copy:hover { background: var(--border-color); }
         .history-item { font-size: 0.8rem; padding: 8px 0; border-bottom: 1px dashed var(--border-color); line-height: 1.3; animation: slideIn 0.3s ease; }
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .profile-header { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 16px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; box-shadow: var(--shadow-card); }
         .user-info h2 { font-size: 1.2rem; color: var(--text-main); }
         .user-badge { display: inline-block; background: rgba(56,189,248,0.15); color: var(--accent-blue); padding: 2px 8px; border-radius: 8px; font-size: 0.7rem; font-weight: bold; margin-top: 2px; }
@@ -862,7 +838,7 @@ async function reclamarBotinDiario() {
             mostrarToast('⚠️ ' + error.message);
             return;
         }
-                if (data && data.recompensa > 0) {
+        if (data && data.recompensa > 0) {
             currentUser.saldo += data.recompensa;
             actualizarInterfazUsuario();
             mostrarToast(`🎉 ¡Has ganado ${data.recompensa.toLocaleString('es-ES')} €! Vuelve mañana.`);
@@ -875,7 +851,7 @@ async function reclamarBotinDiario() {
     } catch (e) {
         mostrarToast('⚠️ Error al reclamar el botín.');
         console.error(e);
-        } finally {
+    } finally {
         accionEnCurso = false;
         await actualizarEstadoRuleta();
     }
@@ -892,7 +868,6 @@ window.onload = async () => {
         initGuest();
     }
     actualizarInterfazUsuario();
-        await     actualizarInterfazUsuario();
     actualizarEstadoRuleta();
     db.auth.onAuthStateChange(async (_event, session2) => {
         if (_event === 'PASSWORD_RECOVERY') { document.getElementById('recoveryModal').style.display = 'flex'; return; }
@@ -904,6 +879,7 @@ window.onload = async () => {
             initGuest();
         }
         actualizarInterfazUsuario();
+        actualizarEstadoRuleta();
     });
     const urlParams = new URLSearchParams(window.location.search);
     const recoveryToken = urlParams.get('token');
@@ -1597,41 +1573,23 @@ async function ejecutarPuja(total) {
 // Puja de invitado
 async function ejecutarPujaInvitado(total, tipo = 'minima') {
     if (!guestData.id) return;
-    
     if (accionEnCurso) return;
     accionEnCurso = true;
-    
     const btnMin = document.getElementById('btnMinBid');
     const btnCustom = document.getElementById('btnCustomBid');
     if (btnMin) { btnMin.disabled = true; btnMin.innerText = '⏳ Procesando...'; }
     if (btnCustom) { btnCustom.disabled = true; btnCustom.innerText = '⏳ Procesando...'; }
-    
     try {
-        const { data, error } = await db.rpc('place_guest_bid', {
-            p_auction_id: productoSeleccionado.id,
-            p_amount: total,
-            p_guest_name: guestData.id
-        });
-        
-        if (error) {
-            mostrarToast('⚠️ ' + error.message);
-            return;
-        }
-        
-        // Actualizar datos locales del invitado
+        const { data, error } = await db.rpc('place_guest_bid', { p_auction_id: productoSeleccionado.id, p_amount: total, p_guest_name: guestData.id });
+        if (error) { mostrarToast('⚠️ ' + error.message); return; }
         guestData.balance -= total;
         guestData.bidsCount += 1;
         localStorage.setItem('abrozon_guest', JSON.stringify(guestData));
-        
-        // Actualizar UI
         productoSeleccionado.current_price = total;
         productoSeleccionado.last_bidder = guestData.id;
         actualizarVistaDetalleDatoVivo();
         actualizarInterfazUsuario();
-        
-        // Recargar historial para que salga la puja
         await cargarHistorialPujas(productoSeleccionado.id);
-        
         mostrarToast('¡Puja realizada como invitado! Te quedan ' + (3 - guestData.bidsCount) + ' pujas.');
     } catch (err) {
         console.error('Error en puja de invitado:', err);
@@ -1647,16 +1605,9 @@ async function hacerPujaMínima() {
     if (!productoSeleccionado) return; 
     if (productoSeleccionado.status === 'closed') { mostrarToast('⚠️ Subasta finalizada.'); return; }
     if (!currentUser) {
-        // Es invitado
-        if (guestData.bidsCount >= 3) {
-            abrirModalAuth('register', '¡Has alcanzado el límite de pujas de invitado! Crea tu cuenta para seguir pujando.');
-            return;
-        }
+        if (guestData.bidsCount >= 3) { abrirModalAuth('register', '¡Has alcanzado el límite de pujas de invitado! Crea tu cuenta para seguir pujando.'); return; }
         const pujaMinima = Number(productoSeleccionado.current_price) + 50;
-        if (guestData.balance < pujaMinima) {
-            abrirModalAuth('register', '¡Te has quedado sin saldo de invitado! Crea tu cuenta para recibir 1.000 € y seguir pujando.');
-            return;
-        }
+        if (guestData.balance < pujaMinima) { abrirModalAuth('register', '¡Te has quedado sin saldo de invitado! Crea tu cuenta para recibir 1.000 € y seguir pujando.'); return; }
         await ejecutarPujaInvitado(pujaMinima, 'minima');
         return;
     }
@@ -1665,12 +1616,7 @@ async function hacerPujaMínima() {
     if (cuenta === 3) { 
         marcarCambioPropio(); 
         const { data: ns } = await db.rpc('add_mission_reward', { p_amount: 150 }); 
-        if (ns) { 
-            currentUser.saldo = ns; 
-            actualizarInterfazUsuario(); 
-            mostrarToast("🎯 ¡Gatillo Fácil! +150 €."); 
-            addXp(50); 
-        } 
+        if (ns) { currentUser.saldo = ns; actualizarInterfazUsuario(); mostrarToast("🎯 ¡Gatillo Fácil! +150 €."); addXp(50); } 
     } else if (cuenta === 1) mostrarToast("🔫 Primera puja mínima. ¡A por las 3!"); 
     else if (cuenta === 2) mostrarToast("🔫🔫 Segunda puja mínima. ¡Una más!"); 
 }
@@ -1678,20 +1624,10 @@ async function hacerPujaMínima() {
 function hacerPujaPersonalizada() { 
     if (!productoSeleccionado) return; 
     const input = document.getElementById('customBidInput'), valor = parseInt(input.value); 
-    if (isNaN(valor) || valor <= productoSeleccionado.current_price) { 
-        mostrarToast("⚠️ Puja inválida."); 
-        return; 
-    }
+    if (isNaN(valor) || valor <= productoSeleccionado.current_price) { mostrarToast("⚠️ Puja inválida."); return; }
     if (!currentUser) {
-        // Invitado
-        if (guestData.bidsCount >= 3) {
-            abrirModalAuth('register', '¡Has alcanzado el límite de pujas de invitado! Crea tu cuenta para seguir pujando.');
-            return;
-        }
-        if (guestData.balance < valor) {
-            abrirModalAuth('register', '¡Te has quedado sin saldo de invitado! Crea tu cuenta para recibir 1.000 € y seguir pujando.');
-            return;
-        }
+        if (guestData.bidsCount >= 3) { abrirModalAuth('register', '¡Has alcanzado el límite de pujas de invitado! Crea tu cuenta para seguir pujando.'); return; }
+        if (guestData.balance < valor) { abrirModalAuth('register', '¡Te has quedado sin saldo de invitado! Crea tu cuenta para recibir 1.000 € y seguir pujando.'); return; }
         ejecutarPujaInvitado(valor, 'personalizada');
         input.value = '';
         return;
@@ -1701,12 +1637,7 @@ function hacerPujaPersonalizada() {
         if (cuenta === 1) { 
             marcarCambioPropio(); 
             const { data: ns } = await db.rpc('add_mission_reward', { p_amount: 200 }); 
-            if (ns) { 
-                currentUser.saldo = ns; 
-                actualizarInterfazUsuario(); 
-                mostrarToast("💼 ¡El Inversor! +200 €."); 
-                addXp(50); 
-            } 
+            if (ns) { currentUser.saldo = ns; actualizarInterfazUsuario(); mostrarToast("💼 ¡El Inversor! +200 €."); addXp(50); } 
         } 
     }); 
     input.value = ''; 
@@ -1714,10 +1645,7 @@ function hacerPujaPersonalizada() {
 
 // ===== SIMULADOR DE ANUNCIOS =====
 async function verAnuncio(tipo) {
-    if (!currentUser) {
-        abrirModalAuth('register', '¡Crea tu cuenta para ganar monedas viendo anuncios!');
-        return;
-    }
+    if (!currentUser) { abrirModalAuth('register', '¡Crea tu cuenta para ganar monedas viendo anuncios!'); return; }
     if (accionEnCurso) return;
     const modal = document.getElementById('adModal');
     const mensaje = document.getElementById('adMessage');
@@ -1732,10 +1660,7 @@ async function verAnuncio(tipo) {
         const intervalo = setInterval(() => {
             segundos--;
             contador.innerText = segundos;
-            if (segundos <= 0) {
-                clearInterval(intervalo);
-                resolve();
-            }
+            if (segundos <= 0) { clearInterval(intervalo); resolve(); }
         }, 1000);
     });
     modal.style.display = 'none';
@@ -1746,10 +1671,7 @@ async function verAnuncio(tipo) {
     try {
         marcarCambioPropio();
         const { data, error } = await db.rpc('add_ad_reward', { p_tipo: tipo });
-        if (error) {
-            mostrarToast('⚠️ ' + error.message);
-            return;
-        }
+        if (error) { mostrarToast('⚠️ ' + error.message); return; }
         currentUser.saldo = data;
         actualizarInterfazUsuario();
         mostrarToast(`💰 +${recompensa.toLocaleString('es-ES')} € por ver anuncio.`);
@@ -1757,12 +1679,7 @@ async function verAnuncio(tipo) {
         if (ca === 2) {
             marcarCambioPropio();
             const { data: ns } = await db.rpc('add_mission_reward', { p_amount: 300 });
-            if (ns) {
-                currentUser.saldo = ns;
-                actualizarInterfazUsuario();
-                mostrarToast("📺 ¡Patrocinador! +300 €.");
-                addXp(50);
-            }
+            if (ns) { currentUser.saldo = ns; actualizarInterfazUsuario(); mostrarToast("📺 ¡Patrocinador! +300 €."); addXp(50); }
         } else if (ca === 1) {
             mostrarToast("📺 Primer anuncio del día. ¡Uno más!");
         }
@@ -1774,10 +1691,7 @@ async function verAnuncio(tipo) {
 }
 
 async function activarGoat() { 
-    if (!currentUser) {
-        abrirModalAuth('register', '¡Crea tu cuenta para activar el Modo GOAT!');
-        return;
-    }
+    if (!currentUser) { abrirModalAuth('register', '¡Crea tu cuenta para activar el Modo GOAT!'); return; }
     if (accionEnCurso) return; 
     accionEnCurso = true; 
     try { 
@@ -1793,9 +1707,7 @@ async function activarGoat() {
             agregarNotificacion('🐐 GOAT', msg); 
             tryUnlockAchievement('goat'); 
         } 
-    } finally { 
-        accionEnCurso = false; 
-    } 
+    } finally { accionEnCurso = false; } 
 }
 
 async function reclamarBonusDiario() { 
@@ -1811,19 +1723,14 @@ async function reclamarBonusDiario() {
         const msg = '🎁 ¡Misiones completadas! Has recibido +1.000 € de bono diario.'; 
         mostrarToast(msg); 
         agregarNotificacion('🎁 Bono', msg); 
-    } finally { 
-        accionEnCurso = false; 
-    } 
+    } finally { accionEnCurso = false; } 
 }
 
 // ===== CONTADOR DE ANUNCIOS =====
 async function actualizarContadorAnuncios() {
     if (!currentUser) return;
     try {
-        const { data, error } = await db.from('profiles')
-            .select('ad_views_today, last_ad_date')
-            .eq('id', currentUser.id)
-            .single();
+        const { data, error } = await db.from('profiles').select('ad_views_today, last_ad_date').eq('id', currentUser.id).single();
         if (error) return;
         const hoy = new Date().toISOString().split('T')[0];
         const esHoy = data.last_ad_date === hoy;
@@ -1831,40 +1738,23 @@ async function actualizarContadorAnuncios() {
         const restantes = Math.max(0, 10 - usados);
         const span = document.getElementById('anunciosRestantes');
         if (span) span.innerText = `(${restantes}/10 hoy)`;
-    } catch (e) {
-        console.error('Error al actualizar contador de anuncios:', e);
-    }
+    } catch (e) { console.error('Error al actualizar contador de anuncios:', e); }
 }
+
 async function actualizarEstadoRuleta() {
     const btn = document.getElementById('btnRuleta');
     const span = document.getElementById('ruletaEstado');
     if (!btn || !span) return;
-    
-    if (!currentUser) {
-        // Invitado
-        btn.disabled = false;
-        span.innerText = 'Regístrate';
-        return;
-    }
-    
+    if (!currentUser) { btn.disabled = false; span.innerText = 'Regístrate'; return; }
     try {
-        const { data, error } = await db.from('profiles')
-            .select('last_daily_loot')
-            .eq('id', currentUser.id)
-            .single();
-            
+        const { data, error } = await db.from('profiles').select('last_daily_loot').eq('id', currentUser.id).single();
         if (error) return;
-        
         const hoy = new Date().toISOString().split('T')[0];
         const ultimoLoot = data.last_daily_loot ? new Date(data.last_daily_loot).toISOString().split('T')[0] : null;
-        
         if (ultimoLoot === hoy) {
-            // Ya reclamó hoy
             btn.disabled = true;
             btn.style.opacity = '0.5';
             btn.style.cursor = 'not-allowed';
-            
-            // Calcular tiempo restante
             const manana = new Date();
             manana.setDate(manana.getDate() + 1);
             manana.setHours(0, 0, 0, 0);
@@ -1873,16 +1763,14 @@ async function actualizarEstadoRuleta() {
             const minutos = Math.floor((diff % 3600000) / 60000);
             span.innerText = `⏳ ${horas}h ${minutos}min`;
         } else {
-            // Puede reclamar
             btn.disabled = false;
             btn.style.opacity = '1';
             btn.style.cursor = 'pointer';
             span.innerText = 'Reclamar';
         }
-     } catch (e) {
-        console.error('Error al verificar ruleta:', e);
-    }
+    } catch (e) { console.error('Error al verificar ruleta:', e); }
 }
+
 // ===== MISIONES =====
 async function mostrarMisiones() { 
     if (!currentUser) return abrirModalAuth('register'); 
@@ -1909,10 +1797,7 @@ async function cargarMisiones() {
     container.innerHTML = html; 
 }
 
-async function reclamarBonusDiarioDesdeMisiones() { 
-    await reclamarBonusDiario(); 
-    cargarMisiones(); 
-}
+async function reclamarBonusDiarioDesdeMisiones() { await reclamarBonusDiario(); cargarMisiones(); }
 
 // ===== HALL OF FAME =====
 async function mostrarHallOfFame() { 
@@ -1987,10 +1872,7 @@ async function mostrarMisPujas() {
 async function cargarMisPujas() {
     const container = document.getElementById('misPujasContainer');
     container.innerHTML = 'Cargando...';
-    const { data: bids, error } = await db.from('bids')
-        .select('*, auctions(*)')
-        .eq('user_id', currentUser.id)
-        .order('created_at', { ascending: false });
+    const { data: bids, error } = await db.from('bids').select('*, auctions(*)').eq('user_id', currentUser.id).order('created_at', { ascending: false });
     if (error) { container.innerHTML = `<p>Error: ${error.message}</p>`; return; }
     const latestBids = {};
     (bids || []).forEach(b => {
@@ -2013,27 +1895,10 @@ function ordenarMisPujas(criterio) {
     else if (criterio === 'cantidad') botones[3].classList.add('active');
     let data = [...misPujasData];
     switch (criterio) {
-        case 'fecha':
-            data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-            break;
-        case 'duracion':
-            data.sort((a, b) => {
-                const aEnd = a.auctions ? new Date(a.auctions.ends_at) : new Date(0);
-                const bEnd = b.auctions ? new Date(b.auctions.ends_at) : new Date(0);
-                return aEnd - bEnd;
-            });
-            break;
-        case 'rareza':
-            const rarezaOrder = ['Común','Poco común','Rara','Épica','Legendaria','Mítica'];
-            data.sort((a, b) => {
-                const aR = a.auctions?.rareza || 'Común';
-                const bR = b.auctions?.rareza || 'Común';
-                return rarezaOrder.indexOf(aR) - rarezaOrder.indexOf(bR);
-            });
-            break;
-        case 'cantidad':
-            data.sort((a, b) => b.amount - a.amount);
-            break;
+        case 'fecha': data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)); break;
+        case 'duracion': data.sort((a, b) => { const aEnd = a.auctions ? new Date(a.auctions.ends_at) : new Date(0); const bEnd = b.auctions ? new Date(b.auctions.ends_at) : new Date(0); return aEnd - bEnd; }); break;
+        case 'rareza': const rarezaOrder = ['Común','Poco común','Rara','Épica','Legendaria','Mítica']; data.sort((a, b) => { const aR = a.auctions?.rareza || 'Común'; const bR = b.auctions?.rareza || 'Común'; return rarezaOrder.indexOf(aR) - rarezaOrder.indexOf(bR); }); break;
+        case 'cantidad': data.sort((a, b) => b.amount - a.amount); break;
     }
     renderizarMisPujas(data);
 }
@@ -2054,17 +1919,10 @@ function renderizarMisPujas(data) {
         return; 
     }
     let datosFiltrados = data;
-    if (misPujasFiltro === 'activas') {
-        datosFiltrados = data.filter(b => b.auctions && b.auctions.status !== 'closed');
-    } else if (misPujasFiltro === 'ganadas') {
-        datosFiltrados = data.filter(b => b.auctions && b.auctions.status === 'closed' && b.auctions.winner === currentUser.username);
-    } else if (misPujasFiltro === 'perdidas') {
-        datosFiltrados = data.filter(b => b.auctions && b.auctions.status === 'closed' && b.auctions.winner !== currentUser.username);
-    }
-    if (!datosFiltrados.length) {
-        container.innerHTML = '<p>No hay pujas en esta categoría.</p>';
-        return;
-    }
+    if (misPujasFiltro === 'activas') datosFiltrados = data.filter(b => b.auctions && b.auctions.status !== 'closed');
+    else if (misPujasFiltro === 'ganadas') datosFiltrados = data.filter(b => b.auctions && b.auctions.status === 'closed' && b.auctions.winner === currentUser.username);
+    else if (misPujasFiltro === 'perdidas') datosFiltrados = data.filter(b => b.auctions && b.auctions.status === 'closed' && b.auctions.winner !== currentUser.username);
+    if (!datosFiltrados.length) { container.innerHTML = '<p>No hay pujas en esta categoría.</p>'; return; }
     let html = '<table class="mis-pujas-table"><tr><th>Subasta</th><th>Rareza</th><th>Tu puja</th><th>Estado</th><th>Fin</th></tr>';
     datosFiltrados.forEach(b => {
         const auction = b.auctions;
@@ -2078,26 +1936,12 @@ function renderizarMisPujas(data) {
         const now = new Date();
         const timeLeft = isClosed ? 'Cerrada' : (endDate > now ? formatTimeLeft(endDate - now) : 'Cerrando...');
         let estado = '';
-        if (isClosed) {
-            estado = auction.winner === currentUser.username ? '🏆 Ganada' : '❌ Perdida';
-        } else {
-            const highestBid = auction.current_price;
-            const isWinning = highestBid === b.amount && auction.last_bidder === currentUser.username;
-            if (isWinning) {
-                estado = '🟢 Vas ganando';
-            } else if (auction.last_bidder === currentUser.username) {
-                estado = '🔁 Superado por ti';
-            } else {
-                estado = '🔴 Superado';
-            }
+        if (isClosed) estado = auction.winner === currentUser.username ? '🏆 Ganada' : '❌ Perdida';
+        else {
+            const isWinning = auction.current_price === b.amount && auction.last_bidder === currentUser.username;
+            estado = isWinning ? '🟢 Vas ganando' : (auction.last_bidder === currentUser.username ? '🔁 Superado por ti' : '🔴 Superado');
         }
-        html += `<tr onclick="abrirDetalle('${auction.id}')" style="cursor:pointer;">
-            <td>${title}</td>
-            <td><span class="chip-rareza chip-rareza-${rarezaClase}" style="position:static;display:inline-block;">${rareza}</span></td>
-            <td>${amount}</td>
-            <td>${estado}</td>
-            <td>${timeLeft}</td>
-        </tr>`;
+        html += `<tr onclick="abrirDetalle('${auction.id}')" style="cursor:pointer;"><td>${title}</td><td><span class="chip-rareza chip-rareza-${rarezaClase}" style="position:static;display:inline-block;">${rareza}</span></td><td>${amount}</td><td>${estado}</td><td>${timeLeft}</td></tr>`;
     });
     html += '</table>';
     container.innerHTML = html;
@@ -2120,13 +1964,8 @@ function mostrarCatalogo() { mostrandoFinalizadas = false; categoriaActiva = 'To
 
 function abrirModalAuth(mode = 'register', mensaje = '') { 
     toggleAuthForm(mode); 
-    if (mensaje) {
-        document.getElementById('authModalMessageLogin').innerText = mensaje;
-        document.getElementById('authModalMessageRegister').innerText = mensaje;
-    } else {
-        document.getElementById('authModalMessageLogin').innerText = 'Identifícate para pujar.';
-        document.getElementById('authModalMessageRegister').innerText = '¡Únete y recibe 1.000 €!';
-    }
+    if (mensaje) { document.getElementById('authModalMessageLogin').innerText = mensaje; document.getElementById('authModalMessageRegister').innerText = mensaje; }
+    else { document.getElementById('authModalMessageLogin').innerText = 'Identifícate para pujar.'; document.getElementById('authModalMessageRegister').innerText = '¡Únete y recibe 1.000 €!'; }
     document.getElementById('authModal').style.display = 'flex'; 
 }
 
@@ -2143,18 +1982,8 @@ async function adminBuscarUsuario() {
     box.innerHTML = `<div style="background:var(--bg-subtle);padding:12px;border-radius:10px;font-size:0.85rem;"><div><strong>${u.username}</strong> ${u.is_admin?'🛠️':''} ${u.es_goat?'🐐':''} ${u.is_banned?'🚫':''}</div><div>Saldo: ${Number(u.saldo).toLocaleString('es-ES')} €</div><div style="display:flex;gap:6px;margin:8px 0;"><input type="number" id="adminNuevoSaldo" placeholder="Nuevo saldo" style="flex:1;padding:8px;border-radius:6px;border:1px solid var(--border-color);"><button onclick="adminActualizarSaldo('${u.username}')" style="background:var(--accent-green);color:white;border:none;padding:8px 12px;border-radius:6px;font-weight:bold;">Fijar</button></div><button onclick="adminToggleBan('${u.username}')" style="width:100%;background:${u.is_banned?'#16a34a':'#ef4444'};color:white;border:none;padding:8px;border-radius:6px;font-weight:bold;">${u.is_banned?'Quitar baneo':'Banear'}</button></div>`; 
 }
 
-async function adminActualizarSaldo(alias) { 
-    const v = parseInt(document.getElementById('adminNuevoSaldo').value); 
-    if (isNaN(v)) { mostrarToast('⚠️ Saldo inválido.'); return; } 
-    await db.rpc('admin_set_saldo',{p_alias:alias,p_nuevo_saldo:v}); 
-    mostrarToast('✅ Saldo actualizado.'); 
-    adminBuscarUsuario(); 
-}
-
-async function adminToggleBan(alias) { 
-    await db.rpc('admin_toggle_ban',{p_alias:alias}); 
-    adminBuscarUsuario(); 
-}
+async function adminActualizarSaldo(alias) { const v = parseInt(document.getElementById('adminNuevoSaldo').value); if (isNaN(v)) { mostrarToast('⚠️ Saldo inválido.'); return; } await db.rpc('admin_set_saldo',{p_alias:alias,p_nuevo_saldo:v}); mostrarToast('✅ Saldo actualizado.'); adminBuscarUsuario(); }
+async function adminToggleBan(alias) { await db.rpc('admin_toggle_ban',{p_alias:alias}); adminBuscarUsuario(); }
 
 function renderizarListaAdminSubastas() {
     const box = document.getElementById('adminAuctionList');
@@ -2163,268 +1992,84 @@ function renderizarListaAdminSubastas() {
     subastasLocales.forEach(p => {
         const row = document.createElement('div');
         row.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px dashed var(--border-color);font-size:0.85rem;';
-        row.innerHTML = `
-            <span>[${p.category||'General'}] ${p.title} ${p.status==='closed'?'(cerrada)':''}</span>
-            <div style="display:flex; align-items:center;">
-                ${p.status === 'active' ? `<button onclick="adminForzarCierre('${p.id}')" style="background:#16a34a; color:white; border:none; padding:5px 10px; border-radius:6px; font-weight:bold; cursor:pointer; font-size:0.75rem; margin-right:4px;">✅ Adjudicar</button>` : ''}
-                <button onclick="adminEliminarSubasta('${p.id}')" style="background:#ef4444;color:white;border:none;padding:5px 10px;border-radius:6px;font-weight:bold;cursor:pointer;font-size:0.75rem;">Eliminar</button>
-            </div>
-        `;
+        row.innerHTML = `<span>[${p.category||'General'}] ${p.title} ${p.status==='closed'?'(cerrada)':''}</span><div style="display:flex; align-items:center;">${p.status === 'active' ? `<button onclick="adminForzarCierre('${p.id}')" style="background:#16a34a; color:white; border:none; padding:5px 10px; border-radius:6px; font-weight:bold; cursor:pointer; font-size:0.75rem; margin-right:4px;">✅ Adjudicar</button>` : ''}<button onclick="adminEliminarSubasta('${p.id}')" style="background:#ef4444;color:white;border:none;padding:5px 10px;border-radius:6px;font-weight:bold;cursor:pointer;font-size:0.75rem;">Eliminar</button></div>`;
         box.appendChild(row);
     });
 }
 
-async function adminEliminarSubasta(id) { 
-    if (!confirm("¿Seguro que quieres eliminar esta subasta?")) return; 
-    await db.rpc('admin_delete_auction',{p_auction_id:id}); 
-    await cargarSubastas(); 
-    renderizarListaAdminSubastas(); 
-    mostrarToast('🗑️ Subasta eliminada.'); 
-}
+async function adminEliminarSubasta(id) { if (!confirm("¿Seguro que quieres eliminar esta subasta?")) return; await db.rpc('admin_delete_auction',{p_auction_id:id}); await cargarSubastas(); renderizarListaAdminSubastas(); mostrarToast('🗑️ Subasta eliminada.'); }
 
-async function adminForzarCierre(id) {
-    if (!confirm("¿Forzar cierre y adjudicarte esta subasta? Se añadirá a tu inventario.")) return;
-    const { error } = await db.rpc('admin_forzar_cierre_y_adjudicar', { p_auction_id: id });
-    if (error) { mostrarToast('⚠️ ' + error.message); return; }
-    await cargarSubastas();
-    renderizarListaAdminSubastas();
-    mostrarToast('✅ Subasta adjudicada a tu usuario. Revisa tu vitrina.');
-}
+async function adminForzarCierre(id) { if (!confirm("¿Forzar cierre y adjudicarte esta subasta? Se añadirá a tu inventario.")) return; const { error } = await db.rpc('admin_forzar_cierre_y_adjudicar', { p_auction_id: id }); if (error) { mostrarToast('⚠️ ' + error.message); return; } await cargarSubastas(); renderizarListaAdminSubastas(); mostrarToast('✅ Subasta adjudicada a tu usuario. Revisa tu vitrina.'); }
 
-async function adminListarUsuarios() { 
-    const box = document.getElementById('adminUserList'); 
-    box.innerHTML = 'Cargando...'; 
-    const { data, error } = await db.rpc('admin_listar_usuarios'); 
-    if (error) { box.innerHTML = `<p style="color:#ef4444;">Error: ${error.message}</p>`; return; } 
-    if (!data || data.length === 0) { box.innerHTML = '<p>No hay usuarios registrados.</p>'; return; } 
-    let html = ''; 
-    data.forEach(u => { 
-        html += `<div style="background: var(--bg-subtle); border-radius: 8px; padding: 8px 10px; margin-bottom: 6px; font-size: 0.8rem; display: flex; justify-content: space-between; align-items: center;"><span><strong>${u.username}</strong> ${u.is_admin?'🛠️':''} ${u.es_goat?'🐐':''} ${u.is_banned?'🚫':''}</span><span style="color: var(--accent-green);">${Number(u.saldo).toLocaleString('es-ES')} €</span><div><button onclick="adminActualizarSaldo('${u.username}')" style="background: var(--accent-green); color:white; border:none; padding: 4px 8px; border-radius: 4px; font-size: 0.7rem; cursor:pointer;">💰</button><button onclick="adminToggleBan('${u.username}')" style="background: ${u.is_banned ? '#16a34a' : '#ef4444'}; color:white; border:none; padding: 4px 8px; border-radius: 4px; font-size: 0.7rem; cursor:pointer;">${u.is_banned ? '✅' : '🚫'}</button></div></div>`; 
-    }); 
-    box.innerHTML = html; 
-}
+async function adminListarUsuarios() { const box = document.getElementById('adminUserList'); box.innerHTML = 'Cargando...'; const { data, error } = await db.rpc('admin_listar_usuarios'); if (error) { box.innerHTML = `<p style="color:#ef4444;">Error: ${error.message}</p>`; return; } if (!data || data.length === 0) { box.innerHTML = '<p>No hay usuarios registrados.</p>'; return; } let html = ''; data.forEach(u => { html += `<div style="background: var(--bg-subtle); border-radius: 8px; padding: 8px 10px; margin-bottom: 6px; font-size: 0.8rem; display: flex; justify-content: space-between; align-items: center;"><span><strong>${u.username}</strong> ${u.is_admin?'🛠️':''} ${u.es_goat?'🐐':''} ${u.is_banned?'🚫':''}</span><span style="color: var(--accent-green);">${Number(u.saldo).toLocaleString('es-ES')} €</span><div><button onclick="adminActualizarSaldo('${u.username}')" style="background: var(--accent-green); color:white; border:none; padding: 4px 8px; border-radius: 4px; font-size: 0.7rem; cursor:pointer;">💰</button><button onclick="adminToggleBan('${u.username}')" style="background: ${u.is_banned ? '#16a34a' : '#ef4444'}; color:white; border:none; padding: 4px 8px; border-radius: 4px; font-size: 0.7rem; cursor:pointer;">${u.is_banned ? '✅' : '🚫'}</button></div></div>`; }); box.innerHTML = html; }
 
-async function adminAddCategoria() { 
-    const name = document.getElementById('newCatName').value.trim(); 
-    const icon = document.getElementById('newCatIcon').value.trim() || '📦'; 
-    if (!name) { mostrarToast('⚠️ Nombre requerido.'); return; } 
-    const { error } = await db.rpc('admin_add_category', { p_name: name, p_icon: icon }); 
-    if (error) { mostrarToast('⚠️ ' + error.message); return; } 
-    document.getElementById('newCatName').value = ''; 
-    document.getElementById('newCatIcon').value = ''; 
-    await cargarCategorias(); 
-    renderizarListaAdminCategorias(); 
-    actualizarSelectorCategoriasAdmin(); 
-    mostrarToast('✅ Categoría añadida.'); 
-}
+async function adminAddCategoria() { const name = document.getElementById('newCatName').value.trim(); const icon = document.getElementById('newCatIcon').value.trim() || '📦'; if (!name) { mostrarToast('⚠️ Nombre requerido.'); return; } const { error } = await db.rpc('admin_add_category', { p_name: name, p_icon: icon }); if (error) { mostrarToast('⚠️ ' + error.message); return; } document.getElementById('newCatName').value = ''; document.getElementById('newCatIcon').value = ''; await cargarCategorias(); renderizarListaAdminCategorias(); actualizarSelectorCategoriasAdmin(); mostrarToast('✅ Categoría añadida.'); }
 
-async function adminDeleteCategoria(id) { 
-    if (!confirm("¿Eliminar categoría?")) return; 
-    const { error } = await db.rpc('admin_delete_category', { p_id: id }); 
-    if (error) { mostrarToast('⚠️ ' + error.message); return; } 
-    await cargarCategorias(); 
-    renderizarListaAdminCategorias(); 
-    actualizarSelectorCategoriasAdmin(); 
-    mostrarToast('🗑️ Categoría eliminada.'); 
-}
+async function adminDeleteCategoria(id) { if (!confirm("¿Eliminar categoría?")) return; const { error } = await db.rpc('admin_delete_category', { p_id: id }); if (error) { mostrarToast('⚠️ ' + error.message); return; } await cargarCategorias(); renderizarListaAdminCategorias(); actualizarSelectorCategoriasAdmin(); mostrarToast('🗑️ Categoría eliminada.'); }
 
-function renderizarListaAdminCategorias() { 
-    const box = document.getElementById('adminCatList'); 
-    if (!box) return; 
-    box.innerHTML = categorias.map(c => `<div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0;font-size:0.85rem;"><span>${c.icon} ${c.name}</span><button onclick="adminDeleteCategoria(${c.id})" style="background:#ef4444;color:white;border:none;padding:2px 8px;border-radius:4px;font-size:0.7rem;">Eliminar</button></div>`).join(''); 
-}
+function renderizarListaAdminCategorias() { const box = document.getElementById('adminCatList'); if (!box) return; box.innerHTML = categorias.map(c => `<div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0;font-size:0.85rem;"><span>${c.icon} ${c.name}</span><button onclick="adminDeleteCategoria(${c.id})" style="background:#ef4444;color:white;border:none;padding:2px 8px;border-radius:4px;font-size:0.7rem;">Eliminar</button></div>`).join(''); }
 
 // ===== AUTENTICACIÓN =====
-function toggleAuthForm(mode) { 
-    document.getElementById('formLogin').style.display = mode==='login'?'block':'none'; 
-    document.getElementById('formRegister').style.display = mode==='register'?'block':'none'; 
-}
+function toggleAuthForm(mode) { document.getElementById('formLogin').style.display = mode==='login'?'block':'none'; document.getElementById('formRegister').style.display = mode==='register'?'block':'none'; }
 
 async function registrarUsuario() { 
-    const email = document.getElementById('regEmail').value.trim(), 
-          alias = document.getElementById('regUsername').value.trim().startsWith('@')? document.getElementById('regUsername').value.trim() : '@'+document.getElementById('regUsername').value.trim(), 
-          pass = document.getElementById('regPassword').value.trim(); 
+    const email = document.getElementById('regEmail').value.trim(), alias = document.getElementById('regUsername').value.trim().startsWith('@')? document.getElementById('regUsername').value.trim() : '@'+document.getElementById('regUsername').value.trim(), pass = document.getElementById('regPassword').value.trim(); 
     if (!email||!alias||!pass) return mostrarToast("⚠️ Completa todos los campos."); 
     const { data: libre } = await db.rpc('username_disponible',{p_username:alias}); 
     if (!libre) return mostrarToast("⚠️ Alias en uso."); 
     const { data, error } = await db.auth.signUp({ email, password: pass, options: { data: { username: alias } } }); 
     if (error) return mostrarToast('⚠️ ' + error.message); 
-    if (!data.session) { 
-        mostrarToast("📧 Confirma tu correo."); 
-        cerrarModalAuth(); 
-        return; 
-    } 
+    if (!data.session) { mostrarToast("📧 Confirma tu correo."); cerrarModalAuth(); return; } 
     await cargarPerfil(data.user.id); 
-    // Transferir saldo de invitado
     const guest = JSON.parse(localStorage.getItem('abrozon_guest') || 'null');
-    if (guest && guest.balance > 0) {
-        const { data: updatedProfile, error: errSaldo } = await db.from('profiles')
-            .update({ saldo: currentUser.saldo + guest.balance })
-            .eq('id', currentUser.id)
-            .select()
-            .single();
-        if (!errSaldo && updatedProfile) {
-            currentUser.saldo = updatedProfile.saldo;
-            localStorage.removeItem('abrozon_guest');
-            guestData = { id: null, balance: 1000, bidsCount: 0 };
-            mostrarToast('¡Saldo de invitado transferido! +' + guest.balance.toLocaleString('es-ES') + ' € extra.');
-        }
-    }
-    // Migrar pujas de invitado
+    if (guest && guest.balance > 0) { const { data: updatedProfile, error: errSaldo } = await db.from('profiles').update({ saldo: currentUser.saldo + guest.balance }).eq('id', currentUser.id).select().single(); if (!errSaldo && updatedProfile) { currentUser.saldo = updatedProfile.saldo; localStorage.removeItem('abrozon_guest'); guestData = { id: null, balance: 1000, bidsCount: 0 }; mostrarToast('¡Saldo de invitado transferido! +' + guest.balance.toLocaleString('es-ES') + ' € extra.'); } }
     const guestMigrar = JSON.parse(localStorage.getItem('abrozon_guest') || 'null');
-    if (guestMigrar && guestMigrar.id) {
-        await db.rpc('migrate_guest_bids', {
-            p_guest_name: guestMigrar.id,
-            p_user_id: currentUser.id,
-            p_username: currentUser.username
-        });
-    }
-    cerrarModalAuth(); 
-    actualizarInterfazUsuario(); 
-    mostrarToast("¡Bienvenido! 1.000 €."); 
+    if (guestMigrar && guestMigrar.id) { await db.rpc('migrate_guest_bids', { p_guest_name: guestMigrar.id, p_user_id: currentUser.id, p_username: currentUser.username }); }
+    cerrarModalAuth(); actualizarInterfazUsuario(); mostrarToast("¡Bienvenido! 1.000 €."); 
 }
 
 async function iniciarSesion() { 
-    const email = document.getElementById('loginEmail').value.trim(), 
-          pass = document.getElementById('loginPassword').value.trim(); 
+    const email = document.getElementById('loginEmail').value.trim(), pass = document.getElementById('loginPassword').value.trim(); 
     if (!email||!pass) return mostrarToast("⚠️ Completa campos."); 
     const { data, error } = await db.auth.signInWithPassword({ email, password: pass }); 
     if (error) return mostrarToast('⚠️ ' + error.message); 
     await cargarPerfil(data.user.id); 
-    // Transferir saldo de invitado
     const guest = JSON.parse(localStorage.getItem('abrozon_guest') || 'null');
-    if (guest && guest.balance > 0) {
-        const { data: updatedProfile, error: errSaldo } = await db.from('profiles')
-            .update({ saldo: currentUser.saldo + guest.balance })
-            .eq('id', currentUser.id)
-            .select()
-            .single();
-        if (!errSaldo && updatedProfile) {
-            currentUser.saldo = updatedProfile.saldo;
-            localStorage.removeItem('abrozon_guest');
-            guestData = { id: null, balance: 1000, bidsCount: 0 };
-            mostrarToast('¡Saldo de invitado transferido! +' + guest.balance.toLocaleString('es-ES') + ' € extra.');
-        }
-    }
-    // Migrar pujas de invitado
+    if (guest && guest.balance > 0) { const { data: updatedProfile, error: errSaldo } = await db.from('profiles').update({ saldo: currentUser.saldo + guest.balance }).eq('id', currentUser.id).select().single(); if (!errSaldo && updatedProfile) { currentUser.saldo = updatedProfile.saldo; localStorage.removeItem('abrozon_guest'); guestData = { id: null, balance: 1000, bidsCount: 0 }; mostrarToast('¡Saldo de invitado transferido! +' + guest.balance.toLocaleString('es-ES') + ' € extra.'); } }
     const guestMigrar = JSON.parse(localStorage.getItem('abrozon_guest') || 'null');
-    if (guestMigrar && guestMigrar.id) {
-        await db.rpc('migrate_guest_bids', {
-            p_guest_name: guestMigrar.id,
-            p_user_id: currentUser.id,
-            p_username: currentUser.username
-        });
-    }
-    cerrarModalAuth(); 
-    actualizarInterfazUsuario(); 
-    actualizarEstadoRuleta();
-    await checkStreakAndReward(); 
+    if (guestMigrar && guestMigrar.id) { await db.rpc('migrate_guest_bids', { p_guest_name: guestMigrar.id, p_user_id: currentUser.id, p_username: currentUser.username }); }
+    cerrarModalAuth(); actualizarInterfazUsuario(); actualizarEstadoRuleta(); await checkStreakAndReward(); 
 }
 
-async function solicitarRecuperacion() { 
-    const email = prompt("Email:"); 
-    if (!email) return; 
-    const { error } = await db.auth.resetPasswordForEmail(email, { redirectTo: window.location.href.split('#')[0] }); 
-    if (error) return mostrarToast('⚠️ ' + error.message); 
-    mostrarToast('📧 Correo enviado.'); 
-}
+async function solicitarRecuperacion() { const email = prompt("Email:"); if (!email) return; const { error } = await db.auth.resetPasswordForEmail(email, { redirectTo: window.location.href.split('#')[0] }); if (error) return mostrarToast('⚠️ ' + error.message); mostrarToast('📧 Correo enviado.'); }
 
-async function guardarNuevaPassword() {
-    const p = document.getElementById('newPasswordInput').value.trim();
-    if (p.length < 6) return mostrarToast("⚠️ Mínimo 6 caracteres.");
-    const { error } = await db.auth.updateUser({ password: p });
-    if (error) return mostrarToast('⚠️ ' + error.message);
-    document.getElementById('recoveryModal').style.display = 'none';
-    sessionStorage.removeItem('abrozon_recovery_pending');
-    mostrarToast('✅ Contraseña actualizada.');
-}
+async function guardarNuevaPassword() { const p = document.getElementById('newPasswordInput').value.trim(); if (p.length < 6) return mostrarToast("⚠️ Mínimo 6 caracteres."); const { error } = await db.auth.updateUser({ password: p }); if (error) return mostrarToast('⚠️ ' + error.message); document.getElementById('recoveryModal').style.display = 'none'; sessionStorage.removeItem('abrozon_recovery_pending'); mostrarToast('✅ Contraseña actualizada.'); }
 
-async function cerrarSesion() { 
-    await db.auth.signOut(); 
-    if (profileChannel) { await db.removeChannel(profileChannel); profileChannel = null; profileChannelUserId = null; } 
-    currentUser = null; 
-    initGuest();
-    actualizarInterfazUsuario(); 
-    mostrarCatalogo(); 
-}
+async function cerrarSesion() { await db.auth.signOut(); if (profileChannel) { await db.removeChannel(profileChannel); profileChannel = null; profileChannelUserId = null; } currentUser = null; initGuest(); actualizarInterfazUsuario(); mostrarCatalogo(); }
 
 // ===== PERFIL =====
-function mostrarPerfil() { 
-    if(!currentUser) return abrirModalAuth('register'); 
-    ocultarTodasVistas(); 
-    actualizarFormularioPerfil(); 
-    document.getElementById('viewPerfil').classList.add('active'); 
-    cargarInsignias(); 
-}
-
-async function actualizarFormularioPerfil() { 
-    if (!currentUser) return; 
-    document.getElementById('perfilNombre').innerText = `👤 ${currentUser.username}`; 
-    const { data: { user } } = await db.auth.getUser(); 
-    document.getElementById('perfilEmail').innerText = user ? user.email : ''; 
-}
-
-async function guardarNuevoAlias() { 
-    let nuevo = document.getElementById('perfilNuevoAlias').value.trim(); 
-    if (!nuevo) return mostrarToast("⚠️ Escribe un alias."); 
-    if (!nuevo.startsWith('@')) nuevo = '@'+nuevo; 
-    if (nuevo === currentUser.username) return mostrarToast("⚠️ Ya tienes ese alias."); 
-    const { data: libre } = await db.rpc('username_disponible',{p_username:nuevo}); 
-    if (!libre) return mostrarToast("⚠️ Alias en uso."); 
-    const { error } = await db.rpc('actualizar_mi_alias',{p_nuevo_alias:nuevo}); 
-    if (error) return mostrarToast('⚠️ ' + error.message); 
-    currentUser.username = nuevo; 
-    actualizarInterfazUsuario(); 
-    document.getElementById('perfilNuevoAlias').value = ''; 
-    mostrarToast('✅ Alias actualizado.'); 
-}
-
-async function guardarNuevaPasswordPerfil() { 
-    const p = document.getElementById('perfilNuevaPassword').value.trim(); 
-    if (p.length < 6) return mostrarToast("⚠️ Mínimo 6 caracteres."); 
-    const { error } = await db.auth.updateUser({ password: p }); 
-    if (error) return mostrarToast('⚠️ ' + error.message); 
-    document.getElementById('perfilNuevaPassword').value = ''; 
-    mostrarToast('✅ Contraseña actualizada.'); 
-}
-
-function solicitarBajaCuenta() { 
-    mostrarToast('📧 Escribe a abrozonsubastas@gmail.com para eliminar tu cuenta.'); 
-}
+function mostrarPerfil() { if(!currentUser) return abrirModalAuth('register'); ocultarTodasVistas(); actualizarFormularioPerfil(); document.getElementById('viewPerfil').classList.add('active'); cargarInsignias(); }
+async function actualizarFormularioPerfil() { if (!currentUser) return; document.getElementById('perfilNombre').innerText = `👤 ${currentUser.username}`; const { data: { user } } = await db.auth.getUser(); document.getElementById('perfilEmail').innerText = user ? user.email : ''; }
+async function guardarNuevoAlias() { let nuevo = document.getElementById('perfilNuevoAlias').value.trim(); if (!nuevo) return mostrarToast("⚠️ Escribe un alias."); if (!nuevo.startsWith('@')) nuevo = '@'+nuevo; if (nuevo === currentUser.username) return mostrarToast("⚠️ Ya tienes ese alias."); const { data: libre } = await db.rpc('username_disponible',{p_username:nuevo}); if (!libre) return mostrarToast("⚠️ Alias en uso."); const { error } = await db.rpc('actualizar_mi_alias',{p_nuevo_alias:nuevo}); if (error) return mostrarToast('⚠️ ' + error.message); currentUser.username = nuevo; actualizarInterfazUsuario(); document.getElementById('perfilNuevoAlias').value = ''; mostrarToast('✅ Alias actualizado.'); }
+async function guardarNuevaPasswordPerfil() { const p = document.getElementById('perfilNuevaPassword').value.trim(); if (p.length < 6) return mostrarToast("⚠️ Mínimo 6 caracteres."); const { error } = await db.auth.updateUser({ password: p }); if (error) return mostrarToast('⚠️ ' + error.message); document.getElementById('perfilNuevaPassword').value = ''; mostrarToast('✅ Contraseña actualizada.'); }
+function solicitarBajaCuenta() { mostrarToast('📧 Escribe a abrozonsubastas@gmail.com para eliminar tu cuenta.'); }
 
 // ===== VITRINA =====
-async function mostrarVitrina() {
-    if (!currentUser) return abrirModalAuth('register');
-    ocultarTodasVistas();
-    document.querySelectorAll('.primary-nav .nav-tab').forEach(t => t.classList.remove('active'));
-    document.getElementById('tabVitrina').classList.add('active');
-    await cargarVitrina();
-    document.getElementById('viewVitrina').classList.add('active');
-}
-
+async function mostrarVitrina() { if (!currentUser) return abrirModalAuth('register'); ocultarTodasVistas(); document.querySelectorAll('.primary-nav .nav-tab').forEach(t => t.classList.remove('active')); document.getElementById('tabVitrina').classList.add('active'); await cargarVitrina(); document.getElementById('viewVitrina').classList.add('active'); }
 async function cargarVitrina() {
-    const grid = document.getElementById('vitrinaGrid');
-    grid.innerHTML = 'Cargando...';
-    const { data: misItems, error: errorItems } = await db.from('user_items')
-        .select('auction_id, id')
-        .eq('user_id', currentUser.id)
-        .eq('en_venta', false);
+    const grid = document.getElementById('vitrinaGrid'); grid.innerHTML = 'Cargando...';
+    const { data: misItems, error: errorItems } = await db.from('user_items').select('auction_id, id').eq('user_id', currentUser.id).eq('en_venta', false);
     if (errorItems) { grid.innerHTML = '<div style="color:var(--text-muted);">Error al cargar inventario.</div>'; return; }
     const idsPoseidos = new Set(misItems ? misItems.map(i => i.auction_id) : []);
     const userItemIds = misItems ? misItems.reduce((acc, i) => { acc[i.auction_id] = i.id; return acc; }, {}) : {};
-    const ganados = subastasLocales.filter(p =>
-        p.status === 'closed' &&
-        p.winner === currentUser.username &&
-        idsPoseidos.has(p.id)
-    );
+    const ganados = subastasLocales.filter(p => p.status === 'closed' && p.winner === currentUser.username && idsPoseidos.has(p.id));
     if (ganados.length >= 5) tryUnlockAchievement('win_5');
     if (ganados.length >= 10) tryUnlockAchievement('win_10');
     if (ganados.length >= 25) tryUnlockAchievement('win_25');
     if (ganados.length >= 50) tryUnlockAchievement('win_50');
     grid.innerHTML = '';
-    if (ganados.length === 0) {
-        grid.innerHTML = '<div style="color:var(--text-muted);">Aún no tienes objetos en tu vitrina. ¡Gana subastas o compra en el mercado!</div>';
-    } else {
+    if (ganados.length === 0) { grid.innerHTML = '<div style="color:var(--text-muted);">Aún no tienes objetos en tu vitrina. ¡Gana subastas o compra en el mercado!</div>'; }
+    else {
         ganados.forEach(item => {
             const card = document.createElement('div');
             const rareza = item.rareza || 'Común';
@@ -2434,29 +2079,13 @@ async function cargarVitrina() {
             const userItemId = userItemIds[item.id] || '';
             const reciclable = (rareza === 'Común' || rareza === 'Poco común' || rareza === 'Rara' || rareza === 'Épica');
             let valorReciclajeNum = Math.round(item.starting_price * 0.20);
-            if (rareza === 'Común') {
-                valorReciclajeNum = Math.min(Math.max(valorReciclajeNum, 50), 300);
-            } else if (rareza === 'Poco común') {
-                valorReciclajeNum = Math.min(Math.max(valorReciclajeNum, 100), 600);
-            } else if (rareza === 'Rara') {
-                valorReciclajeNum = Math.min(Math.max(valorReciclajeNum, 200), 1000);
-            } else if (rareza === 'Épica') {
-                valorReciclajeNum = Math.min(Math.max(valorReciclajeNum, 500), 2000);
-            }
+            if (rareza === 'Común') valorReciclajeNum = Math.min(Math.max(valorReciclajeNum, 50), 300);
+            else if (rareza === 'Poco común') valorReciclajeNum = Math.min(Math.max(valorReciclajeNum, 100), 600);
+            else if (rareza === 'Rara') valorReciclajeNum = Math.min(Math.max(valorReciclajeNum, 200), 1000);
+            else if (rareza === 'Épica') valorReciclajeNum = Math.min(Math.max(valorReciclajeNum, 500), 2000);
             const valorReciclajeTexto = valorReciclajeNum.toLocaleString('es-ES') + ' €';
             const rarezaClase = 'chip-rareza-' + rareza.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-');
-            card.innerHTML = `
-                <div style="width:100%;height:120px;display:flex;align-items:center;justify-content:center;font-size:3rem;background:var(--bg-subtle);">${renderizarImagenProducto(item.image_url)}</div>
-                <h3>${item.title}</h3>
-                <p style="font-size:0.8rem;color:var(--text-muted);">${item.description}</p>
-                <div style="color:var(--accent-green);font-weight:bold;">${Number(item.current_price).toLocaleString('es-ES')} €</div>
-                <div style="margin-top:6px;"><span class="chip-rareza ${rarezaClase}" style="position:static;display:inline-block;">${rareza}</span></div>
-                <div style="margin-top:10px;font-size:0.7rem;background:rgba(234,179,8,0.1);padding:6px;border-radius:4px;color:#eab308;font-weight:bold;">
-                    📜 CERTIFICADO OFICIAL ABROZON<br>Nº ${item.certificado_codigo || 'PENDIENTE'}<br>${fecha}
-                </div>
-                <button onclick="event.stopPropagation(); venderItem('${item.id}')" style="margin-top:10px; background:#f97316; color:white; border:none; padding:6px 12px; border-radius:6px; font-weight:bold; cursor:pointer; width:100%;">💰 Vender en Mercado</button>
-                ${reciclable && userItemId ? `<button onclick="event.stopPropagation(); reciclarObjeto('${userItemId}')" style="margin-top:6px; background:#64748b; color:white; border:none; padding:6px 12px; border-radius:6px; font-weight:bold; cursor:pointer; width:100%; font-size:0.8rem;">♻️ Reciclar (${valorReciclajeTexto})</button>` : ''}
-            `;
+            card.innerHTML = `<div style="width:100%;height:120px;display:flex;align-items:center;justify-content:center;font-size:3rem;background:var(--bg-subtle);">${renderizarImagenProducto(item.image_url)}</div><h3>${item.title}</h3><p style="font-size:0.8rem;color:var(--text-muted);">${item.description}</p><div style="color:var(--accent-green);font-weight:bold;">${Number(item.current_price).toLocaleString('es-ES')} €</div><div style="margin-top:6px;"><span class="chip-rareza ${rarezaClase}" style="position:static;display:inline-block;">${rareza}</span></div><div style="margin-top:10px;font-size:0.7rem;background:rgba(234,179,8,0.1);padding:6px;border-radius:4px;color:#eab308;font-weight:bold;">📜 CERTIFICADO OFICIAL ABROZON<br>Nº ${item.certificado_codigo || 'PENDIENTE'}<br>${fecha}</div><button onclick="event.stopPropagation(); venderItem('${item.id}')" style="margin-top:10px; background:#f97316; color:white; border:none; padding:6px 12px; border-radius:6px; font-weight:bold; cursor:pointer; width:100%;">💰 Vender en Mercado</button>${reciclable && userItemId ? `<button onclick="event.stopPropagation(); reciclarObjeto('${userItemId}')" style="margin-top:6px; background:#64748b; color:white; border:none; padding:6px 12px; border-radius:6px; font-weight:bold; cursor:pointer; width:100%; font-size:0.8rem;">♻️ Reciclar (${valorReciclajeTexto})</button>` : ''}`;
             grid.appendChild(card);
         });
     }
@@ -2465,162 +2094,51 @@ async function cargarVitrina() {
 // ===== RECICLAJE / DESGUACE =====
 async function reciclarObjeto(userItemId) {
     if (!currentUser) return abrirModalAuth('register');
-    if (!confirm('⚠️ ¿Seguro que quieres reciclar este objeto?\n\nRecibirás monedas a cambio, pero el objeto será destruido permanentemente.\n\nEsta acción NO se puede deshacer.')) {
-        return;
-    }
+    if (!confirm('⚠️ ¿Seguro que quieres reciclar este objeto?\n\nRecibirás monedas a cambio, pero el objeto será destruido permanentemente.\n\nEsta acción NO se puede deshacer.')) return;
     const { data, error } = await db.rpc('desguazar_objeto', { p_user_item_id: userItemId });
-    if (error) {
-        mostrarToast('⚠️ ' + error.message);
-        return;
-    }
-    await cargarPerfil(currentUser.id);
-    actualizarInterfazUsuario();
-    await cargarVitrina();
+    if (error) { mostrarToast('⚠️ ' + error.message); return; }
+    await cargarPerfil(currentUser.id); actualizarInterfazUsuario(); await cargarVitrina();
     const msg = `♻️ Objeto reciclado por +${data.toLocaleString('es-ES')} €.`;
-    mostrarToast(msg);
-    agregarNotificacion('♻️ Reciclaje', msg);
+    mostrarToast(msg); agregarNotificacion('♻️ Reciclaje', msg);
 }
 
 // ===== MERCADO C2C =====
-function mostrarMercado() {
-    mostrandoFinalizadas = false;
-    categoriaActiva = 'Mercado';
-    document.querySelectorAll('.primary-nav .nav-tab').forEach(t => t.classList.remove('active'));
-    document.getElementById('tabMercado').classList.add('active');
-    ocultarTodasVistas();
-    document.getElementById('viewCatalog').classList.add('active');
-    renderizarCatalogo();
-    renderizarCategoryChips();
-}
-
+function mostrarMercado() { mostrandoFinalizadas = false; categoriaActiva = 'Mercado'; document.querySelectorAll('.primary-nav .nav-tab').forEach(t => t.classList.remove('active')); document.getElementById('tabMercado').classList.add('active'); ocultarTodasVistas(); document.getElementById('viewCatalog').classList.add('active'); renderizarCatalogo(); renderizarCategoryChips(); }
 async function venderItem(auctionId) {
     if (!currentUser) return abrirModalAuth('register');
-    const precio = prompt("¿Precio de salida para la subasta? (€)");
-    if (!precio || isNaN(precio) || Number(precio) <= 0) { mostrarToast("⚠️ Precio inválido."); return; }
-    const duracion = prompt("¿Duración de la subasta?\n1 → 24 horas\n3 → 3 días\n7 → 7 días\n(Escribe 1, 3 o 7)", "3");
-    const horas = parseInt(duracion);
-    if (horas !== 1 && horas !== 3 && horas !== 7) { mostrarToast("⚠️ Duración inválida. Elige 1, 3 o 7."); return; }
+    const precio = prompt("¿Precio de salida para la subasta? (€)"); if (!precio || isNaN(precio) || Number(precio) <= 0) { mostrarToast("⚠️ Precio inválido."); return; }
+    const duracion = prompt("¿Duración de la subasta?\n1 → 24 horas\n3 → 3 días\n7 → 7 días\n(Escribe 1, 3 o 7)", "3"); const horas = parseInt(duracion); if (horas !== 1 && horas !== 3 && horas !== 7) { mostrarToast("⚠️ Duración inválida. Elige 1, 3 o 7."); return; }
     const horasReales = horas === 1 ? 24 : horas * 24;
-    const compraDirectaInput = prompt("¿Precio de COMPRA DIRECTA? (deja vacío si no quieres)\nSi pones un precio, cualquier usuario podrá comprarlo instantáneamente por ese importe (con un 30% de comisión).", "");
-    let compraDirecta = null;
-    if (compraDirectaInput && !isNaN(compraDirectaInput) && Number(compraDirectaInput) > 0) {
-        compraDirecta = Math.round(Number(compraDirectaInput));
-    }
+    const compraDirectaInput = prompt("¿Precio de COMPRA DIRECTA? (deja vacío si no quieres)\nSi pones un precio, cualquier usuario podrá comprarlo instantáneamente por ese importe (con un 30% de comisión).", ""); let compraDirecta = null; if (compraDirectaInput && !isNaN(compraDirectaInput) && Number(compraDirectaInput) > 0) compraDirecta = Math.round(Number(compraDirectaInput));
     const fianza = Math.round(Number(precio) * 0.10);
-    let mensaje = `Fianza: ${fianza} € (10% del precio de salida).\n`;
-    mensaje += `Si se vende, recuperas la fianza y recibes el precio final -20% comisión.\n`;
-    mensaje += `Si no se vende, pierdes la fianza.\n`;
-    if (compraDirecta) mensaje += `Precio de compra directa: ${compraDirecta} € (+30% comisión).\n`;
-    mensaje += `¿Publicar?`;
-    if (!confirm(mensaje)) return;
-    const { data: items, error: errorItems } = await db.from('user_items').select('id').eq('auction_id', auctionId).eq('user_id', currentUser.id).single();
-    if (errorItems || !items) { mostrarToast("⚠️ No se encontró el objeto en tu inventario."); return; }
-    const { error } = await db.rpc('vender_en_mercado', { 
-        p_user_item_id: items.id, 
-        p_precio_salida: Number(precio),
-        p_duracion_horas: horasReales,
-        p_compra_directa: compraDirecta
-    });
-    if (error) { mostrarToast('⚠️ ' + error.message); return; }
-    await cargarPerfil(currentUser.id);
-    actualizarInterfazUsuario();
-    await cargarSubastas();
-    await cargarVitrina();
-    mostrarToast('✅ Objeto publicado en el mercado.');
+    let mensaje = `Fianza: ${fianza} € (10% del precio de salida).\n`; mensaje += `Si se vende, recuperas la fianza y recibes el precio final -20% comisión.\n`; mensaje += `Si no se vende, pierdes la fianza.\n`; if (compraDirecta) mensaje += `Precio de compra directa: ${compraDirecta} € (+30% comisión).\n`; mensaje += `¿Publicar?`; if (!confirm(mensaje)) return;
+    const { data: items, error: errorItems } = await db.from('user_items').select('id').eq('auction_id', auctionId).eq('user_id', currentUser.id).single(); if (errorItems || !items) { mostrarToast("⚠️ No se encontró el objeto en tu inventario."); return; }
+    const { error } = await db.rpc('vender_en_mercado', { p_user_item_id: items.id, p_precio_salida: Number(precio), p_duracion_horas: horasReales, p_compra_directa: compraDirecta }); if (error) { mostrarToast('⚠️ ' + error.message); return; }
+    await cargarPerfil(currentUser.id); actualizarInterfazUsuario(); await cargarSubastas(); await cargarVitrina(); mostrarToast('✅ Objeto publicado en el mercado.');
 }
-
-async function cancelarVentaMercado() {
-    if (!currentUser) return abrirModalAuth('register');
-    if (!productoSeleccionado) return;
-    if (!confirm("¿Seguro que quieres cancelar esta venta?\n\nPerderás la fianza que pagaste al publicarla (no se devuelve). El objeto volverá a tu vitrina.")) return;
-    const { error } = await db.rpc('cancelar_venta_mercado', { p_auction_id: productoSeleccionado.id });
-    if (error) { mostrarToast('⚠️ ' + error.message); return; }
-    mostrarToast('✅ Venta cancelada. Objeto devuelto a tu vitrina.');
-    await cargarSubastas();
-    await cargarVitrina();
-}
-
-async function comprarDirecto() {
-    if (!currentUser) return abrirModalAuth('register');
-    if (!productoSeleccionado) return;
-    const precioCompra = productoSeleccionado.compra_directa_price;
-    if (!precioCompra) { mostrarToast("⚠️ Esta subasta no tiene opción de compra directa."); return; }
-    if (!confirm(`¿Comprar directamente por ${Number(precioCompra).toLocaleString('es-ES')} €? Se aplicará un 30% de comisión.`)) return;
-    const { error } = await db.rpc('comprar_directo', { p_auction_id: productoSeleccionado.id });
-    if (error) { mostrarToast('⚠️ ' + error.message); return; }
-    await cargarPerfil(currentUser.id);
-    actualizarInterfazUsuario();
-    await cargarSubastas();
-    await cargarVitrina();
-    mostrarCatalogo();
-    const msg = '✅ Compra realizada con éxito.';
-    mostrarToast(msg);
-    agregarNotificacion('🛒 Compra', msg);
-}
+async function cancelarVentaMercado() { if (!currentUser) return abrirModalAuth('register'); if (!productoSeleccionado) return; if (!confirm("¿Seguro que quieres cancelar esta venta?\n\nPerderás la fianza que pagaste al publicarla (no se devuelve). El objeto volverá a tu vitrina.")) return; const { error } = await db.rpc('cancelar_venta_mercado', { p_auction_id: productoSeleccionado.id }); if (error) { mostrarToast('⚠️ ' + error.message); return; } mostrarToast('✅ Venta cancelada. Objeto devuelto a tu vitrina.'); await cargarSubastas(); await cargarVitrina(); }
+async function comprarDirecto() { if (!currentUser) return abrirModalAuth('register'); if (!productoSeleccionado) return; const precioCompra = productoSeleccionado.compra_directa_price; if (!precioCompra) { mostrarToast("⚠️ Esta subasta no tiene opción de compra directa."); return; } if (!confirm(`¿Comprar directamente por ${Number(precioCompra).toLocaleString('es-ES')} €? Se aplicará un 30% de comisión.`)) return; const { error } = await db.rpc('comprar_directo', { p_auction_id: productoSeleccionado.id }); if (error) { mostrarToast('⚠️ ' + error.message); return; } await cargarPerfil(currentUser.id); actualizarInterfazUsuario(); await cargarSubastas(); await cargarVitrina(); mostrarCatalogo(); const msg = '✅ Compra realizada con éxito.'; mostrarToast(msg); agregarNotificacion('🛒 Compra', msg); }
 
 // ===== CREAR SUBASTA =====
 async function crearNuevaSubasta() {
-    const title = document.getElementById('adminTitle').value.trim(),
-          desc = document.getElementById('adminDesc').value.trim(),
-          price = parseInt(document.getElementById('adminPrice').value),
-          horas = parseInt(document.getElementById('adminDuracion').value),
-          categoria = document.getElementById('adminCategoria').value,
-          rareza = document.getElementById('adminRareza').value,
-          stock = parseInt(document.getElementById('adminStock').value) || 0,
-          metadataRaw = document.getElementById('adminMetadata').value.trim(),
-          img = document.getElementById('adminImage').value.trim() || '📦';
+    const title = document.getElementById('adminTitle').value.trim(), desc = document.getElementById('adminDesc').value.trim(), price = parseInt(document.getElementById('adminPrice').value), horas = parseInt(document.getElementById('adminDuracion').value), categoria = document.getElementById('adminCategoria').value, rareza = document.getElementById('adminRareza').value, stock = parseInt(document.getElementById('adminStock').value) || 0, metadataRaw = document.getElementById('adminMetadata').value.trim(), img = document.getElementById('adminImage').value.trim() || '📦';
     if (!title || isNaN(price)) { mostrarToast("⚠️ Rellena los campos obligatorios."); return; }
     let metadata = {};
-    if (metadataRaw) {
-        try { metadata = JSON.parse(metadataRaw); } catch (e) { mostrarToast("⚠️ El campo Metadata no es un JSON válido."); return; }
-    }
+    if (metadataRaw) { try { metadata = JSON.parse(metadataRaw); } catch (e) { mostrarToast("⚠️ El campo Metadata no es un JSON válido."); return; } }
     const tituloConRareza = '[' + rareza + '] ' + title;     const { error } = await db.rpc('create_auction', { p_title: tituloConRareza, p_description: desc, p_price: price, p_image: img, p_hours: horas, p_category: categoria, p_rareza: rareza, p_stock_maximo: stock, p_metadata: metadata, p_images: fotosAdicionalesAdmin });
     if (error) { mostrarToast('⚠️ ' + error.message); return; }
-    cerrarModalAdmin();
-    document.getElementById('adminTitle').value = '';
-    document.getElementById('adminDesc').value = '';
-    document.getElementById('adminPrice').value = '';
-    document.getElementById('adminImage').value = '';
-    document.getElementById('adminImageFile').value = '';
-    document.getElementById('adminImagePreview').innerHTML = '';
-    document.getElementById('adminRareza').value = 'Común';
-    document.getElementById('adminStock').value = 0;
-    document.getElementById('adminMetadata').value = '';
-    fotosAdicionalesAdmin = [];
-    await cargarSubastas();
-    mostrarToast('✅ Subasta creada con éxito.');
+    cerrarModalAdmin(); document.getElementById('adminTitle').value = ''; document.getElementById('adminDesc').value = ''; document.getElementById('adminPrice').value = ''; document.getElementById('adminImage').value = ''; document.getElementById('adminImageFile').value = ''; document.getElementById('adminImagePreview').innerHTML = ''; document.getElementById('adminRareza').value = 'Común'; document.getElementById('adminStock').value = 0; document.getElementById('adminMetadata').value = ''; fotosAdicionalesAdmin = []; await cargarSubastas(); mostrarToast('✅ Subasta creada con éxito.');
 }
 
-function toggleTema() { 
-    document.body.classList.toggle('dark-mode'); 
-    document.getElementById('dropdownTheme').innerText = document.body.classList.contains('dark-mode') ? "☀️ Modo Día" : "🌙 Modo Noche"; 
-    cerrarUserMenu(); 
-}
+function toggleTema() { document.body.classList.toggle('dark-mode'); document.getElementById('dropdownTheme').innerText = document.body.classList.contains('dark-mode') ? "☀️ Modo Día" : "🌙 Modo Noche"; cerrarUserMenu(); }
 
 // ===== MENÚS =====
 function toggleUserMenu() { const d = document.getElementById('userDropdown'); d.style.display = d.style.display === 'block' ? 'none' : 'block'; }
 function cerrarUserMenu() { document.getElementById('userDropdown').style.display = 'none'; }
 function toggleGoatMenu() { const d = document.getElementById('goatDropdown'); d.style.display = d.style.display === 'block' ? 'none' : 'block'; }
 function cerrarGoatMenu() { document.getElementById('goatDropdown').style.display = 'none'; }
-
-document.addEventListener('click', (e) => { 
-    const w = document.getElementById('userMenuWrapper'); if (w && w.style.display !== 'none' && !w.contains(e.target)) cerrarUserMenu(); 
-    const g = document.getElementById('goatMenuWrapper'); if (g && g.style.display !== 'none' && !g.contains(e.target)) cerrarGoatMenu(); 
-    const panel = document.getElementById('notifPanel');
-    const btn = document.getElementById('btnNotif');
-    if (panel && btn && panel.style.display === 'block' && !panel.contains(e.target) && !btn.contains(e.target)) {
-        panel.style.display = 'none';
-    }
-});
-
-// Contador de caracteres para mensaje GOAT
-document.addEventListener('input', function(e) {
-    if (e.target && e.target.id === 'goatCommentInput') {
-        const count = e.target.value.length;
-        const counter = document.getElementById('charCount');
-        if (counter) counter.innerText = count;
-    }
-});
+document.addEventListener('click', (e) => { const w = document.getElementById('userMenuWrapper'); if (w && w.style.display !== 'none' && !w.contains(e.target)) cerrarUserMenu(); const g = document.getElementById('goatMenuWrapper'); if (g && g.style.display !== 'none' && !g.contains(e.target)) cerrarGoatMenu(); const panel = document.getElementById('notifPanel'); const btn = document.getElementById('btnNotif'); if (panel && btn && panel.style.display === 'block' && !panel.contains(e.target) && !btn.contains(e.target)) { panel.style.display = 'none'; } });
+document.addEventListener('input', function(e) { if (e.target && e.target.id === 'goatCommentInput') { const count = e.target.value.length; const counter = document.getElementById('charCount'); if (counter) counter.innerText = count; } });
 </script>
 </body>
 </html>
