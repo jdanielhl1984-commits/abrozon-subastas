@@ -130,7 +130,7 @@
 - ✅ Verificación retroactiva de logros
 - ✅ Racha de inicio de sesión (Streak Bonus de 7 días: 100€ → 1000€)
 - ✅ Misiones diarias (4 misiones + bono de 1.000€ al completarlas todas)
-- ✅ Botín Diario (Ruleta) con contador visual de tiempo restante 🆕
+- ✅ Botín Diario (Ruleta) con contador visual de tiempo restante
 - ✅ Modo GOAT (activación, recargas premium de 1000€, comentarios en pujas)
 
 ### 🛒 Mercado C2C e inventario
@@ -145,7 +145,7 @@
 
 ### 🏆 Rankings y comunidad
 - ✅ Hall of Fame renovado (6 rankings con podios)
-- ✅ Corrección del ranking "Broker" (antes mostraba NaN €) 🆕
+- ✅ Corrección del ranking "Broker" (antes mostraba NaN €)
 - ✅ Pestaña "Mis pujas" (solo muestra la última puja por subasta)
 - ✅ Filtros por estado en "Mis pujas"
 - ✅ Botones de compartir en X y copiar enlace
@@ -162,7 +162,7 @@
 - ✅ Corrección doble símbolo €
 - ✅ Scrollbars personalizados
 - ✅ Tooltips en botones de cabecera
-- ✅ **Header compacto rediseñado**: todos los botones unificados a 38px, buscador integrado, mejor responsive móvil 🆕
+- ✅ **Header compacto rediseñado**: todos los botones unificados a 38px, buscador integrado, mejor responsive móvil
 - ✅ Consola sin errores
 
 ### 🛠️ Administración
@@ -172,7 +172,7 @@
   - Ver lista completa de usuarios
   - Añadir/eliminar categorías dinámicas
   - Adjudicar subastas al admin
-- ✅ **Corrección de error al eliminar categorías** (función SQL duplicada eliminada) 🆕
+- ✅ **Corrección de error al eliminar categorías** (función SQL duplicada eliminada)
 
 ### 🤖 Automatización
 - ✅ Generación automática de subastas (cron job cada 1 hora con `pg_cron`)
@@ -245,6 +245,53 @@
 5. **Beneficios por antigüedad** ⬜ Pendiente
 6. **Vitrina Espectacular y Compartible** ⬜ Pendiente
 7. **Notificaciones push/email** ⬜ Pendiente
+
+### 💡 Nuevas ideas priorizadas para Fase 3
+
+#### 🎰 Ruleta de Objetos (Loot Box Paródica)
+- **Objetivo:** Gastar monedas ficticias a cambio de objetos aleatorios.
+- **Mecánica:** 1 giro gratis diario + giros extra con monedas.
+- **Probabilidades:** Común 60%, Poco común 25%, Rara 10%, Épica 4%, Legendaria 1%.
+- **Modo Dorado:** Aparece aleatoriamente y mejora las probabilidades.
+- **Sumidero de monedas:** Ayuda a controlar la inflación.
+- **Aviso legal:** Es parodia, los objetos no tienen valor real.
+
+#### 📦 Colecciones de Rarezas (Sets)
+- **Objetivo:** Agrupar objetos con el mismo nombre base en cajas de colección.
+- **Mecánica:** Cada rareza del objeto ocupa un hueco en la caja.
+- **Recompensa al completar:** Monedas + XP + insignia especial.
+- **Insignias de coleccionista:**
+  - Completista (1 colección completa)
+  - Obsesivo (5 colecciones completas)
+  - Enfermo (10 colecciones completas)
+- **Balance:** La recompensa no debe romper la economía.
+- **Sinergia con mercado C2C:** Los usuarios podrán comprar rarezas faltantes.
+
+#### ⚡ Subastas Relámpago
+- Subastas que duran **5 minutos**.
+- Aparecen aleatoriamente.
+- Perfectas para generar urgencia y FOMO.
+
+#### 🎯 Pujas de Último Segundo
+- Si alguien puja en los últimos 10 segundos, la subasta se **extiende 30 segundos**.
+- Evita el "sniping" y alarga la emoción.
+
+#### 👻 Modo Fantasma
+- El último pujador no se muestra hasta que la subasta termina.
+- Añade misterio y estrategia.
+
+#### 🌍 Retos Diarios de Comunidad
+- "Entre todos, pujad 100 veces hoy".
+- Si se cumple, todos reciben 200 €.
+- Fomenta la actividad colectiva.
+
+#### 🖼️ Títulos y Marcos de Perfil
+- Desbloquea títulos ("El Tiburón", "El Fantasma") y marcos para el avatar.
+- Pura cosmética, pero la gente los ama.
+
+#### 🍀 Modo Duende
+- Una vez al día, una subasta aleatoria tiene **precio secreto reducido**.
+- Solo el primero que puje se entera.
 
 ---
 
@@ -321,6 +368,12 @@
 * **Beta con Micro-streamers:** Invitar a streamers pequeños para medir retención.
 * **Contenido viral:** Crear clips de subastas absurdas para TikTok/X.
 * **Estrategia de confianza:** Publicar vídeos mostrando la web antes de pedir clics.
+* **Ideas de distribución orgánica:**
+  - Publicar clips en TikTok/Reels/Shorts.
+  - Compartir en comunidades de streamers (Discord, Reddit, Telegram).
+  - Invitar a micro-streamers (50-500 viewers).
+  - Crear polémica sana con objetos absurdos.
+  - Ser constante: 1 vídeo o tweet al día durante 2 semanas.
 
 ---
 
