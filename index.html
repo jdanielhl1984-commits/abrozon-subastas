@@ -1897,7 +1897,7 @@ function construirPodioYLista(lista, tipo) {
     orden.forEach(i => {
         if (top3[i]) {
             let val;
-            if (tipo === 'gastado') val = Number(top3[i].total_gastado).toLocaleString('es-ES') + ' €';
+            if (tipo === 'gastado') val = Number(top3[i].total_gastado || top3[i].total || 0).toLocaleString('es-ES') + ' €';
             else if (tipo === 'fecha') val = new Date(top3[i].total).toLocaleDateString('es-ES');
             else if (tipo === 'oculto') val = '🔒';
             else val = top3[i].total;
@@ -1909,7 +1909,7 @@ function construirPodioYLista(lista, tipo) {
         html += '<div class="hof-list">';
         for (let i = 3; i < lista.length; i++) {
             let val;
-            if (tipo === 'gastado') val = Number(lista[i].total_gastado).toLocaleString('es-ES') + ' €';
+            if (tipo === 'gastado') val = Number(lista[i].total_gastado || lista[i].total || 0).toLocaleString('es-ES') + ' €';
             else if (tipo === 'fecha') val = new Date(lista[i].total).toLocaleDateString('es-ES');
             else if (tipo === 'oculto') val = '🔒';
             else val = lista[i].total;
