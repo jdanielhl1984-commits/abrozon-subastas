@@ -30,12 +30,50 @@
         .beta-banner { background: linear-gradient(90deg, #f97316, #ef4444); color: white; text-align: center; padding: 8px 12px; font-size: 0.9rem; font-weight: bold; border-bottom: 2px solid #eab308; }
         .beta-banner a { color: #fff; text-decoration: underline; font-weight: bold; }
         .disclaimer { background-color: var(--bg-subtle); color: var(--text-muted); text-align: center; padding: 8px; font-size: 0.8rem; border-bottom: 1px solid var(--border-color); }
-        header { background-color: var(--bg-header); padding: 8px 4%; display: flex; flex-direction: column; gap: 8px; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 200; }
-        .header-row { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
-        .logo { font-size: 1.4rem; font-weight: 900; color: var(--accent-blue); letter-spacing: -1px; cursor: pointer; flex-shrink: 0; } .logo span { color: #f97316; }
-        .search-bar { flex: 1; min-width: 120px; max-width: 300px; display: flex; align-items: center; background: var(--bg-subtle); border-radius: 999px; border: 1px solid var(--border-color); overflow: hidden; padding-left: 10px; transition: border-color 0.2s, box-shadow 0.2s; }
-        .search-bar:focus-within { border-color: var(--accent-blue); box-shadow: 0 0 0 3px rgba(2,132,199,0.15); }
-        .search-bar .search-icon { color: var(--text-muted); font-size: 0.8rem; cursor: pointer; flex-shrink: 0; }
+        header {   background-color: var(--bg-header);   padding: 8px 4%;   border-bottom: 1px solid var(--border-color);   position: sticky;   top: 0;   z-index: 200; }
+        .header-row {   display: flex;   align-items: center;   gap: 12px;   flex-wrap: nowrap; }
+        .logo {   font-size: 1.4rem;   font-weight: 900;   color: var(--accent-blue);   letter-spacing: -1px;   cursor: pointer;   flex-shrink: 0;   line-height: 38px; } .logo span { color: #f97316; }
+        .search-bar {
+  flex: 0 1 300px;
+  min-width: 120px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  background: var(--bg-subtle);
+  border-radius: 999px;
+  border: 1px solid var(--border-color);
+  overflow: hidden;
+  padding: 0 12px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.search-bar:focus-within {
+  border-color: var(--accent-blue);
+  box-shadow: 0 0 0 3px rgba(2,132,199,0.15);
+}
+.search-bar .search-icon {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  cursor: pointer;
+  flex-shrink: 0;
+  margin-right: 6px;
+}
+.search-bar input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  padding: 0;
+  height: 100%;
+  color: var(--text-main);
+  outline: none;
+  font-size: 0.85rem;
+}
+        .header-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+  flex-shrink: 0;
+}
         .search-bar input { width: 100%; background: transparent; border: none; padding: 6px 10px; color: var(--text-main); outline: none; font-size: 0.85rem; }
         .header-right { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; justify-content: flex-end; }
         .header-right .btn-header, .header-right .btn-ruleta, .header-right .btn-goat, .header-right .btn-login { font-size: 0.72rem; padding: 4px 8px; border-radius: 16px; }
@@ -44,15 +82,55 @@
         .user-balance .level-badge { display: flex; align-items: center; gap: 3px; background: var(--bg-subtle); padding: 1px 8px; border-radius: 10px; font-size: 0.7rem; }
         .user-balance .xp-bar-mobile { flex: 1; min-width: 50px; max-width: 100px; height: 4px; background: var(--bg-subtle); border-radius: 2px; overflow: hidden; }
         .user-balance .xp-fill-mobile { height: 100%; background: linear-gradient(90deg, #f97316, #eab308); border-radius: 2px; transition: width 0.3s; }
-        .btn-header { background: var(--bg-subtle); color: var(--text-main); border: 1px solid var(--border-color); padding: 8px 12px; border-radius: 20px; font-weight: bold; cursor: pointer; font-size: 0.85rem; transition: opacity 0.2s; position: relative; }
-        .btn-header:disabled { opacity: 0.5; cursor: not-allowed; }
-        .btn-ruleta { background: linear-gradient(135deg, #f97316, #eab308); color: white; border: none; padding: 8px 14px; border-radius: 20px; font-weight: bold; cursor: pointer; font-size: 0.85rem; transition: opacity 0.2s; }
-        .btn-ruleta:disabled { opacity: 0.5; cursor: not-allowed; }
-        .btn-goat { background: linear-gradient(135deg, #eab308, #ca8a04); color: #0f172a; border: none; padding: 8px 14px; border-radius: 20px; font-weight: 900; cursor: pointer; font-size: 0.85rem; opacity: 0.5; transition: opacity 0.2s; }
-        .btn-goat.active { opacity: 1; box-shadow: 0 0 10px #eab308; }
-        .btn-goat:disabled { opacity: 0.3; cursor: not-allowed; }
-        .btn-login { background: var(--accent-blue); color: white; border: none; padding: 8px 16px; border-radius: 20px; font-weight: bold; cursor: pointer; font-size: 0.85rem; transition: opacity 0.2s; }
-        .btn-login:disabled { opacity: 0.5; cursor: not-allowed; }
+        /* Estilo unificado para todos los botones */
+.btn-header,
+.btn-ruleta,
+.btn-goat,
+.btn-login {
+  height: 38px;
+  padding: 0 14px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: bold;
+  border: 1px solid var(--border-color);
+  background: var(--bg-subtle);
+  color: var(--text-main);
+  cursor: pointer;
+  transition: opacity 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+.btn-header:disabled,
+.btn-ruleta:disabled,
+.btn-goat:disabled,
+.btn-login:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Colores específicos */
+.btn-ruleta {
+  background: linear-gradient(135deg, #f97316, #eab308);
+  color: white;
+  border: none;
+}
+.btn-goat {
+  background: linear-gradient(135deg, #eab308, #ca8a04);
+  color: #0f172a;
+  border: none;
+  opacity: 0.5;
+}
+.btn-goat.active {
+  opacity: 1;
+  box-shadow: 0 0 10px #eab308;
+}
+.btn-login {
+  background: var(--accent-blue);
+  color: white;
+  border: none;
+}
         .notif-badge { position: absolute; top: -5px; right: -5px; background: #ef4444; color: white; border-radius: 50%; padding: 2px 6px; font-size: 0.55rem; display: none; min-width: 16px; text-align: center; }
         .primary-nav { background-color: var(--bg-header); padding: 0 4%; display: flex; gap: 2px; border-bottom: 1px solid var(--border-color); overflow-x: auto; align-items: center; -webkit-overflow-scrolling: touch; }
         .nav-tab { position: relative; color: var(--text-muted); text-decoration: none; font-size: 0.75rem; font-weight: 600; padding: 10px 10px; cursor: pointer; white-space: nowrap; }
