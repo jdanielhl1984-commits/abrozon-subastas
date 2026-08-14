@@ -1229,10 +1229,10 @@ async function agregarBotonFavoritoTarjeta(auctionId, cardElement) {
     if (!currentUser) return;
     try {
         const { data, error } = await db.from('favorites')
-            .select('id')
-            .eq('user_id', currentUser.id)
-            .eq('auction_id', auctionId)
-            .single();
+    .select('id')
+    .eq('user_id', currentUser.id)
+    .eq('auction_id', auctionId)
+    .maybeSingle();
         
         if (error && error.code !== 'PGRST116') return;
         
@@ -1286,7 +1286,7 @@ function actualizarBotonFavorito() {
         btn.innerHTML = '🤍 Añadir a favoritos';
         return;
     }
-    db.from('favorites').select('id').eq('user_id', currentUser.id).eq('auction_id', productoSeleccionado.id).single().then(({ data }) => {
+    db.from('favorites').select('id').eq('user_id', currentUser.id).eq('auction_id', productoSeleccionado.id).maybeSingle().then(({ data }) => {
         if (data) {
             btn.innerHTML = '❤️ Quitar de favoritos';
         } else {
@@ -1362,7 +1362,7 @@ async function toggleFavorito(auctionId) {
         abrirModalAuth('register', 'Crea una cuenta para guardar tus subastas favoritas.');
         return;
     }
-    const { data: existing } = await db.from('favorites').select('id').eq('user_id', currentUser.id).eq('auction_id', auctionId).single();
+    const { data: existing } = await db.from('favorites').select('id').eq('user_id', currentUser.id).eq('auction_id', auctionId).maybeSingle();
     if (existing) {
         await db.from('favorites').delete().eq('id', existing.id);
         mostrarToast('Eliminado de favoritos.');
