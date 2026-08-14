@@ -97,7 +97,23 @@
         .card-image { width: 100%; height: 140px; background-color: var(--bg-subtle); display: flex; align-items: center; justify-content: center; font-size: 3.5rem; position: relative; border-bottom: 1px solid var(--border-color); overflow: hidden; }
         .badge-closed { position: absolute; top: 6px; left: 6px; background: #ef4444; color: white; font-size: 0.55rem; font-weight: bold; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; }
         .card-timer { position: absolute; top: 6px; right: 6px; background: rgba(239,68,68,0.15); color: #ef4444; font-size: 0.6rem; font-weight: bold; padding: 2px 6px; border-radius: 4px; font-family: monospace; }
-        .fav-btn {      position: absolute;      top: 6px;      left: 6px;      background: rgba(255,255,255,0.9);      border: none;      border-radius: 50%;      width: 24px;      height: 24px;      cursor: pointer;      font-size: 0.8rem;      display: flex;      align-items: center;      justify-content: center;      z-index: 10;      box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
+        .fav-btn { 
+            position: absolute; 
+            top: 6px; 
+            left: 6px; 
+            background: rgba(255,255,255,0.9); 
+            border: none; 
+            border-radius: 50%; 
+            width: 24px; 
+            height: 24px; 
+            cursor: pointer; 
+            font-size: 0.8rem; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            z-index: 10; 
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
         .card-content { padding: 10px; }
         .card-category { font-size: 0.6rem; color: var(--accent-blue); text-transform: uppercase; font-weight: bold; margin-bottom: 2px; }
         .card-title { font-size: 0.8rem; font-weight: bold; color: var(--text-main); margin-bottom: 8px; line-height: 1.3; height: 32px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
@@ -681,7 +697,7 @@ let misPujasFiltro = 'todas';
 // Datos del invitado
 let guestData = {
     id: null,
-    balance: 500,
+    balance: 1000,
     bidsCount: 0
 };
 
@@ -738,7 +754,7 @@ function initGuest() {
     if (!guest) {
         guest = {
             id: 'Invitado_' + Math.floor(1000 + Math.random() * 9000),
-            balance: 500,
+            balance: 1000,
             bidsCount: 0
         };
         localStorage.setItem('abrozon_guest', JSON.stringify(guest));
@@ -1200,14 +1216,48 @@ function renderizarCatalogo() {
         const card = document.createElement('div'); card.className = 'auction-card ' + rarezaClase; card.onclick = () => abrirDetalle(p.id);
         const cerrada = p.status === 'closed';
         const rarezaChip = p.rareza ? `<div class="chip-rareza chip-rareza-${p.rareza.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-')}" style="position:absolute;bottom:8px;left:8px;">${p.rareza}</div>` : '';
-       
         card.innerHTML = `<div class="card-image">${renderizarImagenProducto(p.image_url)}${cerrada ? '<div class="badge-closed">FINALIZADA</div>' : `<div class="card-timer" id="cardTimer-${p.id}">⏳ ...</div>`}${rarezaChip}</div><div class="card-content"><div class="card-category">${p.category||'General'}${p.seller_id ? ' (Vendedor: ' + (p.seller_username || 'Usuario') + ')' : ''}${cerrada?' · Adjudicado':''}</div><div class="card-title">${p.title}</div>${!cerrada && p.last_bidder ? `<div style="font-size:0.7rem;color:var(--text-muted);margin-bottom:6px;">👤 Último pujador: <strong>${p.last_bidder}</strong></div>` : ''}<div class="card-footer"><div><div class="bid-label-sm">${cerrada?'Precio Final':'Puja Actual'}</div><div class="bid-amount-sm">${Number(p.current_price).toLocaleString('es-ES')} €</div></div></div></div>`;
         grid.appendChild(card);
+        // Añadir botón de favorito si el usuario está registrado
         if (currentUser) {
-    agregarBotonFavoritoTarjeta(p.id, card);
-}
+            agregarBotonFavoritoTarjeta(p.id, card);
+        }
     });
     actualizarTemporizadoresCatalogo();
+}
+
+// Función para añadir botón de favorito a una tarjeta
+async function agregarBotonFavoritoTarjeta(auctionId, cardElement) {
+    if (!currentUser) return;
+    try {
+        const { data, error } = await db.from('favorites')
+            .select('id')
+            .eq('user_id', currentUser.id)
+            .eq('auction_id', auctionId)
+            .single();
+        
+        if (error && error.code !== 'PGRST116') return;
+        
+        const isFav = data ? true : false;
+        const btn = document.createElement('button');
+        btn.className = 'fav-btn';
+        btn.setAttribute('title', isFav ? 'Quitar de favoritos' : 'Añadir a favoritos');
+        btn.innerHTML = isFav ? '❤️' : '🤍';
+        btn.onclick = async (e) => {
+            e.stopPropagation();
+            await toggleFavorito(auctionId);
+            const isNowFav = btn.innerHTML === '🤍';
+            btn.innerHTML = isNowFav ? '❤️' : '🤍';
+            btn.setAttribute('title', isNowFav ? 'Quitar de favoritos' : 'Añadir a favoritos');
+        };
+        
+        const imageContainer = cardElement.querySelector('.card-image');
+        if (imageContainer) {
+            imageContainer.appendChild(btn);
+        }
+    } catch (err) {
+        console.error('Error al cargar favorito:', err);
+    }
 }
 
 function actualizarTemporizadoresCatalogo() { 
@@ -1326,6 +1376,7 @@ async function toggleFavorito(auctionId) {
     if (productoSeleccionado && productoSeleccionado.id === auctionId) {
         actualizarBotonFavorito();
     }
+    renderizarCatalogo();
 }
 
 async function toggleFavoritoDetalle() {
@@ -1417,7 +1468,8 @@ async function cargarHistorialPujas(id) {
     if (bids) bids.forEach(b => { 
         const div = document.createElement('div'); 
         div.className = 'history-item'; 
-        div.innerHTML = `<div style="display:flex;justify-content:space-between;"><div><span style="color:var(--accent-blue);font-weight:bold;">${b.user_name||'Anónimo'}</span>${b.comment?`<div style="font-size:0.75rem;color:#eab308;background:rgba(234,179,8,0.1);padding:4px 8px;border-radius:6px;margin-top:2px;">"${b.comment}"</div>`:''}</div><span style="font-weight:bold;">${Number(b.amount).toLocaleString('es-ES')} €</span></div>`; 
+        const esInvitado = b.is_guest ? ' 🎭' : '';
+        div.innerHTML = `<div style="display:flex;justify-content:space-between;"><div><span style="color:var(--accent-blue);font-weight:bold;">${b.user_name||'Anónimo'}${esInvitado}</span>${b.comment?`<div style="font-size:0.75rem;color:#eab308;background:rgba(234,179,8,0.1);padding:4px 8px;border-radius:6px;margin-top:2px;">"${b.comment}"</div>`:''}</div><span style="font-weight:bold;">${Number(b.amount).toLocaleString('es-ES')} €</span></div>`; 
         history.appendChild(div); 
     }); 
     history.scrollTop = history.scrollHeight;
@@ -1571,6 +1623,7 @@ async function hacerPujaMínima() {
             comment: null,
             is_guest: true
         });
+        await cargarHistorialPujas(productoSeleccionado.id);
         mostrarToast('¡Puja realizada como invitado! Te quedan ' + (3 - guestData.bidsCount) + ' pujas.');
         return;
     }
@@ -2092,6 +2145,7 @@ async function adminAddCategoria() {
     const name = document.getElementById('newCatName').value.trim(); 
     const icon = document.getElementById('newCatIcon').value.trim() || '📦'; 
     if (!name) { mostrarToast('⚠️ Nombre requerido.'); return; } 
+    
     const { error } = await db.rpc('admin_add_category', { p_name: name, p_icon: icon }); 
     if (error) { mostrarToast('⚠️ ' + error.message); return; } 
     document.getElementById('newCatName').value = ''; 
