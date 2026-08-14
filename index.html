@@ -891,7 +891,8 @@ window.onload = async () => {
         initGuest();
     }
     actualizarInterfazUsuario();
-        await actualizarEstadoRuleta();
+        await     actualizarInterfazUsuario();
+    actualizarEstadoRuleta();
     db.auth.onAuthStateChange(async (_event, session2) => {
         if (_event === 'PASSWORD_RECOVERY') { document.getElementById('recoveryModal').style.display = 'flex'; return; }
         if (session2) {
