@@ -697,7 +697,7 @@ let misPujasFiltro = 'todas';
 // Datos del invitado
 let guestData = {
     id: null,
-    balance: 500,
+    balance: 1000,
     bidsCount: 0
 };
 
@@ -754,7 +754,7 @@ function initGuest() {
     if (!guest) {
         guest = {
             id: 'Invitado_' + Math.floor(1000 + Math.random() * 9000),
-            balance: 500,
+            balance: 1000,
             bidsCount: 0
         };
         localStorage.setItem('abrozon_guest', JSON.stringify(guest));
@@ -2215,7 +2215,7 @@ async function registrarUsuario() {
         if (!errSaldo && updatedProfile) {
             currentUser.saldo = updatedProfile.saldo;
             localStorage.removeItem('abrozon_guest');
-            guestData = { id: null, balance: 500, bidsCount: 0 };
+            guestData = { id: null, balance: 1000, bidsCount: 0 };
             mostrarToast('¡Saldo de invitado transferido! +' + guest.balance.toLocaleString('es-ES') + ' € extra.');
         }
     }
@@ -2251,7 +2251,7 @@ async function iniciarSesion() {
         if (!errSaldo && updatedProfile) {
             currentUser.saldo = updatedProfile.saldo;
             localStorage.removeItem('abrozon_guest');
-            guestData = { id: null, balance: 500, bidsCount: 0 };
+            guestData = { id: null, balance: 1000, bidsCount: 0 };
             mostrarToast('¡Saldo de invitado transferido! +' + guest.balance.toLocaleString('es-ES') + ' € extra.');
         }
     }
