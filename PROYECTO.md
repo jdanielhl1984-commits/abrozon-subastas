@@ -24,8 +24,9 @@
 
 * `profiles` (usuarios con saldo, XP, nivel, racha, etc.)
 * `auctions` (subastas activas/finalizadas)
-* `bids` (historial de pujas)
+* `bids` (historial de pujas, incluye pujas de invitados con `is_guest`)
 * `user_achievements` (logros desbloqueados)
+* `favorites` (subastas favoritas de cada usuario) 🆕
 * `daily_bid_counts`, `daily_custom_bids`, `daily_ad_views_mission`, `daily_category_bids` (misiones diarias)
 * `categories` (categorías dinámicas desde admin)
 * `user_items` (inventario de objetos de cada usuario)
@@ -73,6 +74,7 @@
 * **Row Level Security (RLS):** Activo en todas las tablas.
   * `profiles`: `(auth.uid() = id)` — Cada usuario solo ve su propia fila.
   * `auctions` y `bids`: Lectura pública (catálogo visible).
+  * `favorites`: Solo el propio usuario puede ver/crear/eliminar sus favoritos.
 * **Funciones RPC:** Usan `SECURITY DEFINER` para ejecutar lógica financiera en el servidor.
 * **Prevención de Race Conditions:** `place_bid` usa `FOR UPDATE` para evitar duplicados.
 * **RPCs de administrador protegidas:** Todas las funciones `admin_*` verifican `is_admin = true` antes de ejecutarse.
@@ -83,6 +85,9 @@
 
 ### 🔐 Autenticación y usuarios
 - ✅ Registro/login con email (Supabase Auth + recuperación de contraseña)
+- ✅ **Modo Invitado** (sin registro): saldo temporal de 500 € y hasta 3 pujas 🆕
+- ✅ **Registro diferido**: el modal solo aparece al agotar pujas o intentar acciones restringidas 🆕
+- ✅ **Migración de datos**: el saldo del invitado se transfiere al crear la cuenta 🆕
 - ✅ Modal de registro solo al intentar pujar (no al entrar)
 - ✅ Cambio de alias y contraseña desde perfil
 - ✅ Zona de baja de cuenta (contacto por email)
@@ -94,9 +99,24 @@
 - ✅ Último pujador visible en cada tarjeta
 - ✅ Filtro "Novedades" (últimas 24 horas)
 - ✅ Barra de ordenación (fecha, duración, rareza, precio)
-- ✅ Buscador de subastas
+- ✅ **Buscador sin acentos** (normalización de texto) 🆕
 - ✅ Pestaña "Finalizadas" para ver subastas cerradas
 - ✅ Certificados automáticos con código único al ganar una subasta
+
+### ❤️ Favoritos (Watchlist) 🆕
+- ✅ Botón de corazón en cada tarjeta (arriba a la izquierda, no tapa el temporizador)
+- ✅ Solo visible para usuarios registrados
+- ✅ Corazón rojo si ya es favorito, blanco si no
+- ✅ Pestaña "Mis Favoritos" en el menú de usuario
+- ✅ Actualización dinámica sin recargar la página
+
+### 💬 Historial de Pujas (Live Feed) 🆕
+- ✅ Reubicado justo debajo del botón de puja (visible sin scroll)
+- ✅ Altura máxima con scroll interno (250px)
+- ✅ Animación de entrada para nuevas pujas
+- ✅ Auto-scroll al final al recibir nueva actividad
+- ✅ Mensajes GOAT en formato "burbuja" destacada
+- ✅ **Límite de 80 caracteres** para mensajes GOAT 🆕
 
 ### 🎮 Gamificación y progreso
 - ✅ Sistema de XP y niveles (Lurker → Final Boss/Admin)
@@ -114,6 +134,7 @@
 - ✅ Compra directa con 30% de comisión
 - ✅ Cancelar venta (no devuelve fianza)
 - ✅ **Reciclaje/Desguace de objetos:** Comunes, Poco comunes, Raras y Épicas (20% del precio con mín/máx)
+- ✅ Confirmación antes de reciclar (evita clics accidentales) 🆕
 - ✅ Actualización automática de la vitrina tras vender/comprar/reciclar
 - ✅ **Efectos visuales en vitrina** (brillos y animaciones según rareza)
 
@@ -132,6 +153,9 @@
 - ✅ Reemplazo de `alert()` por toasts (notificaciones emergentes)
 - ✅ Feedback visual (spinners y botones deshabilitados durante acciones)
 - ✅ **Evitar spam de toasts** (limitado a 1 cada 30 segundos)
+- ✅ **Corrección doble símbolo €** en saldo 🆕
+- ✅ **Scrollbars personalizados** 🆕
+- ✅ **Tooltips en botones de cabecera** 🆕
 - ✅ **Header reorganizado para móvil**: saldo, nivel y barra XP en línea, botones compactos
 
 ### 🛠️ Administración
@@ -156,10 +180,12 @@
 
 ---
 
-## 🚧 Próximos pasos (Roadmap)
+## 🚧 Roadmap actualizado
+
+### ✅ Fase 1: MVP (COMPLETADA)
+- Autenticación, subastas, pujas, mercado básico, panel admin.
 
 ### ✅ Fase 2: Pulido UX/UI y Engagement Temprano (COMPLETADA)
-
 1. ✅ Modal de registro oportuno
 2. ✅ Contador de próxima subasta
 3. ✅ Marcos y chips de rareza en detalle
@@ -172,9 +198,20 @@
 10. ✅ Recompensa por subir de nivel
 11. ✅ Reciclaje / Desguace de objetos
 12. ✅ Sistema de recompensas por anuncios voluntarios (simulados)
-13. ✅ Controles Anti-Pay-to-Win básicos (ajustes finos pendientes)
+13. ✅ Controles Anti-Pay-to-Win básicos
 14. ✅ Botín Diario (Ruleta)
 15. ✅ Sistema de notificaciones
+
+### ✅ Fase 2.5: Correcciones Beta (COMPLETADA) 🆕
+1. ✅ Modo Invitado y Registro Diferido (Lazy Registration)
+2. ✅ Buscador sin acentos
+3. ✅ Corrección doble símbolo €
+4. ✅ Historial de pujas reubicado (Live Feed)
+5. ✅ Límite de 80 caracteres en mensajes GOAT
+6. ✅ Sistema de Favoritos (Watchlist)
+7. ✅ Scrollbars personalizados
+8. ✅ Tooltips en botones de cabecera
+9. ✅ Confirmación para reciclar objetos
 
 ---
 
@@ -271,31 +308,28 @@
 
 ---
 
-## 🚀 Plan de acción para la Beta Privada (✅ COMPLETADO)
+## 📊 Resultados de la Beta Privada (14/08/2026) 🆕
 
-Todas las tareas críticas para la beta privada han sido completadas:
+### Métricas clave
+- **Usuarios invitados:** 10 personas
+- **Registros completados:** 1 persona (10% conversión)
+- **Detección de fricción:** El registro obligatorio al pujar frenaba al 90% de los visitantes
 
-### 🔴 Seguridad
-- ✅ **Proteger todas las RPCs de administrador** (`admin_*`) añadiendo verificación de `is_admin`.
-- ✅ **Validar el tipo de archivo** en la subida de imágenes (solo imágenes, tamaño máximo 5 MB).
-- ✅ **Sanitizar el campo `metadata`** en la creación de subastas (usar `try/catch` al parsear JSON).
+### Problemas detectados y soluciones aplicadas
+| Problema | Solución | Estado |
+|----------|----------|--------|
+| Registro obligatorio para pujar | Modo Invitado con saldo temporal y registro diferido | ✅ Implementado |
+| Doble símbolo € en el saldo | Eliminado del HTML, solo lo gestiona JS | ✅ Corregido |
+| Buscador sensible a acentos | Función `normalizarTexto()` | ✅ Implementado |
+| Historial de pujas invisible | Reubicado junto al botón de puja, con animaciones | ✅ Implementado |
+| Mensajes GOAT sin límite | Límite de 80 caracteres con contador | ✅ Implementado |
+| Sin seguimiento de subastas | Sistema de Favoritos con Watchlist | ✅ Implementado |
+| Sin avisos externos | Pendiente para Fase 3 (notificaciones push/email) | ⬜ Pendiente |
 
-### 🟡 Experiencia de usuario
-- ✅ **Crear la página de Ayuda / Tutorial / FAQ** (pestaña "❓ Ayuda").
-- ✅ **Implementar la Racha de inicio de sesión (Streak Bonus de 7 días)**.
-- ✅ **Reemplazar todos los `alert()` por el sistema de toasts**.
-- ✅ **Añadir feedback visual** (spinners o botones deshabilitados).
-- ✅ **Botín Diario (Ruleta)** en la cabecera.
-- ✅ **Sistema de notificaciones** (campanita).
-
-### 🟢 Pulido final
-- ✅ **Actualizar automáticamente la vitrina** después de vender o comprar.
-- ✅ **Efectos visuales en vitrina** según rareza.
-- ✅ **Filtros en "Mis pujas"** (Todas, Activas, Ganadas, Perdidas).
-- ✅ **30 logros** con verificación retroactiva.
-- ✅ **Header reorganizado para móvil** (saldo, nivel y XP en una línea).
-- ⬜ **Optimizar el catálogo** (mejora futura, no crítica).
-- ✅ **Añadir un banner visible de "Beta Privada"** con enlace a formulario de feedback.
+### Feedback de betatesters
+- **David:** "Mezcla el € con el $ para que sea fake pero realista."
+- **David:** "Que el buscador no tenga presente los acentos siempre es cómodo."
+- **Usuario anónimo:** La gente no se registra en webs desconocidas, pero sí prueba sin fricción.
 
 ---
 
@@ -304,12 +338,36 @@ Todas las tareas críticas para la beta privada han sido completadas:
 * **Soy un programador novato.** Necesito explicaciones paso a paso, sin tecnicismos innecesarios.
 * El código principal está en un único archivo `index.html`.
 * Para cambios pequeños, indicar texto exacto a buscar y reemplazo.
-* Para cambios grandes, pasar archivo completo verificado.
+* Para cambios grandes, preguntar antes de pasar archivo completo.
 * No acortar el código al pasarlo completo.
 * La web se despliega en GitHub Pages. Errores comunes: caché, `.nojekyll`, sintaxis.
+* El sistema de favoritos requiere la tabla `favorites` en Supabase (SQL incluido abajo).
 
 ---
 
-## ✅ Estado actual: ¡LISTO PARA LANZAR LA BETA PRIVADA! 🚀
+## 🗄️ SQL para Supabase (última versión)
 
-**Todo lo esencial está funcionando. La Fase 3 puede ir añadiéndose durante la beta.**
+```sql
+-- Tabla de favoritos (ejecutar en SQL Editor)
+CREATE TABLE public.favorites (
+    id BIGSERIAL PRIMARY KEY,
+    user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+    auction_id UUID NOT NULL REFERENCES auctions(id) ON DELETE CASCADE,
+    created_at TIMESTAMPTZ DEFAULT now(),
+    UNIQUE(user_id, auction_id)
+);
+
+ALTER TABLE public.favorites ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Users can view own favorites" ON public.favorites
+FOR SELECT USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can insert own favorites" ON public.favorites
+FOR INSERT WITH CHECK (auth.uid() = user_id);
+
+CREATE POLICY "Users can delete own favorites" ON public.favorites
+FOR DELETE USING (auth.uid() = user_id);
+
+-- Permitir pujas de invitados
+ALTER TABLE public.bids ADD COLUMN IF NOT EXISTS is_guest BOOLEAN DEFAULT false;
+ALTER TABLE public.bids ALTER COLUMN user_id DROP NOT NULL;
