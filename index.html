@@ -389,7 +389,7 @@
                 🎬 +500
                 <span id="anunciosRestantes" style="font-size:0.5rem;opacity:0.7;display:block;font-weight:normal;">(10/10)</span>
             </button>
-            <button class="btn-ruleta" id="btnRuleta" onclick="reclamarBotinDiario()" title="Botín Diario (Ruleta)">🎲</button>
+            <button class="btn-ruleta" id="btnRuleta" onclick="reclamarBotinDiario()" title="Botín Diario (Ruleta)">     🎲 <span id="ruletaEstado">Botín</span> </button>
             <div class="user-menu-wrapper" id="goatMenuWrapper" style="display:none;">
                 <button class="btn-goat" id="btnGoat" onclick="toggleGoatMenu()" title="Modo GOAT">🐐</button>
                 <div class="user-dropdown" id="goatDropdown">
@@ -862,22 +862,23 @@ async function reclamarBotinDiario() {
             mostrarToast('⚠️ ' + error.message);
             return;
         }
-        if (data && data.recompensa > 0) {
+                if (data && data.recompensa > 0) {
             currentUser.saldo += data.recompensa;
             actualizarInterfazUsuario();
-            mostrarToast(data.mensaje);
-            agregarNotificacion('🎲 Botín', data.mensaje);
+            mostrarToast(`🎉 ¡Has ganado ${data.recompensa.toLocaleString('es-ES')} €! Vuelve mañana.`);
+            agregarNotificacion('🎲 Botín', `Has ganado ${data.recompensa.toLocaleString('es-ES')} € en la ruleta diaria.`);
+            await actualizarEstadoRuleta();
         } else {
-            mostrarToast(data.mensaje || '⚠️ Ya has reclamado hoy.');
+            mostrarToast(data.mensaje || '⚠️ Ya has reclamado hoy. Vuelve mañana.');
+            await actualizarEstadoRuleta();
         }
     } catch (e) {
         mostrarToast('⚠️ Error al reclamar el botín.');
         console.error(e);
     } finally {
         accionEnCurso = false;
-        if (btn) { btn.disabled = false; btn.innerText = '🎲 Ruleta'; }
+        await actualizarEstadoRuleta();
     }
-}
 
 // ===== ONLOAD =====
 window.onload = async () => {
@@ -1831,7 +1832,54 @@ async function actualizarContadorAnuncios() {
         console.error('Error al actualizar contador de anuncios:', e);
     }
 }
-
+async function actualizarEstadoRuleta() {
+    const btn = document.getElementById('btnRuleta');
+    const span = document.getElementById('ruletaEstado');
+    if (!btn || !span) return;
+    
+    if (!currentUser) {
+        // Invitado
+        btn.disabled = false;
+        span.innerText = 'Regístrate';
+        return;
+    }
+    
+    try {
+        const { data, error } = await db.from('profiles')
+            .select('last_daily_loot')
+            .eq('id', currentUser.id)
+            .single();
+            
+        if (error) return;
+        
+        const hoy = new Date().toISOString().split('T')[0];
+        const ultimoLoot = data.last_daily_loot ? new Date(data.last_daily_loot).toISOString().split('T')[0] : null;
+        
+        if (ultimoLoot === hoy) {
+            // Ya reclamó hoy
+            btn.disabled = true;
+            btn.style.opacity = '0.5';
+            btn.style.cursor = 'not-allowed';
+            
+            // Calcular tiempo restante
+            const manana = new Date();
+            manana.setDate(manana.getDate() + 1);
+            manana.setHours(0, 0, 0, 0);
+            const diff = manana - new Date();
+            const horas = Math.floor(diff / 3600000);
+            const minutos = Math.floor((diff % 3600000) / 60000);
+            span.innerText = `⏳ ${horas}h ${minutos}min`;
+        } else {
+            // Puede reclamar
+            btn.disabled = false;
+            btn.style.opacity = '1';
+            btn.style.cursor = 'pointer';
+            span.innerText = 'Reclamar';
+        }
+    } catch (e) {
+        console.error('Error al verificar ruleta:', e);
+    }
+}
 // ===== MISIONES =====
 async function mostrarMisiones() { 
     if (!currentUser) return abrirModalAuth('register'); 
@@ -2266,6 +2314,7 @@ async function iniciarSesion() {
     }
     cerrarModalAuth(); 
     actualizarInterfazUsuario(); 
+    actualizarEstadoRuleta();
     await checkStreakAndReward(); 
 }
 
