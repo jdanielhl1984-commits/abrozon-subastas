@@ -77,11 +77,44 @@
         .search-bar input { width: 100%; background: transparent; border: none; padding: 6px 10px; color: var(--text-main); outline: none; font-size: 0.85rem; }
         .header-right { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; justify-content: flex-end; }
         .header-right .btn-header, .header-right .btn-ruleta, .header-right .btn-goat, .header-right .btn-login { font-size: 0.72rem; padding: 4px 8px; border-radius: 16px; }
-        .user-balance { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; padding: 2px 8px; background: var(--bg-subtle); border-radius: 16px; border: 1px solid var(--border-color); font-size: 0.75rem; }
-        .user-balance .balance-amount { color: var(--accent-green); font-weight: bold; }
-        .user-balance .level-badge { display: flex; align-items: center; gap: 3px; background: var(--bg-subtle); padding: 1px 8px; border-radius: 10px; font-size: 0.7rem; }
-        .user-balance .xp-bar-mobile { flex: 1; min-width: 50px; max-width: 100px; height: 4px; background: var(--bg-subtle); border-radius: 2px; overflow: hidden; }
-        .user-balance .xp-fill-mobile { height: 100%; background: linear-gradient(90deg, #f97316, #eab308); border-radius: 2px; transition: width 0.3s; }
+        .user-balance {
+  height: 38px;
+  padding: 0 12px;
+  background: var(--bg-subtle);
+  border-radius: 20px;
+  border: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+.user-balance .balance-amount {
+  color: var(--accent-green);
+  font-weight: bold;
+}
+.user-balance .level-badge {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--bg-subtle);
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 0.7rem;
+}
+.user-balance .xp-bar-mobile {
+  width: 60px;
+  height: 4px;
+  background: var(--bg-subtle);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.user-balance .xp-fill-mobile {
+  height: 100%;
+  background: linear-gradient(90deg, #f97316, #eab308);
+  border-radius: 2px;
+  transition: width 0.3s;
+}
         /* Estilo unificado para todos los botones */
 .btn-header,
 .btn-ruleta,
@@ -297,14 +330,44 @@
         ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
         * { scrollbar-width: thin; scrollbar-color: var(--border-color) transparent; }
         @media (max-width: 680px) {
-            .header-row { flex-wrap: wrap; }
-            .search-bar { min-width: 100px; max-width: 200px; }
-            .header-right { gap: 4px; }
-            .header-right .btn-header, .header-right .btn-ruleta, .header-right .btn-goat, .header-right .btn-login { font-size: 0.65rem; padding: 3px 6px; border-radius: 12px; }
-            .user-balance { font-size: 0.65rem; padding: 2px 6px; gap: 4px; }
-            .user-balance .level-badge { font-size: 0.6rem; padding: 1px 6px; }
-            .user-balance .xp-bar-mobile { min-width: 40px; max-width: 70px; }
-            .logo { font-size: 1.2rem; }
+            .header-row {
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.search-bar {
+  flex: 0 1 180px;
+  min-width: 100px;
+  height: 32px;
+}
+.search-bar input {
+  font-size: 0.75rem;
+}
+.btn-header,
+.btn-ruleta,
+.btn-goat,
+.btn-login {
+  height: 32px;
+  padding: 0 10px;
+  font-size: 0.7rem;
+  border-radius: 16px;
+}
+.user-balance {
+  height: 32px;
+  padding: 0 8px;
+  font-size: 0.7rem;
+  gap: 4px;
+}
+.user-balance .level-badge {
+  font-size: 0.6rem;
+  padding: 1px 6px;
+}
+.user-balance .xp-bar-mobile {
+  width: 40px;
+}
+.logo {
+  font-size: 1.2rem;
+  line-height: 32px;
+}
             .primary-nav { padding: 0 2%; gap: 1px; }
             .nav-tab { font-size: 0.65rem; padding: 8px 6px; }
             .container { padding: 0 8px; margin: 10px auto; }
