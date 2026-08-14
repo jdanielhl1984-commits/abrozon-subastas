@@ -697,7 +697,7 @@ let misPujasFiltro = 'todas';
 // Datos del invitado
 let guestData = {
     id: null,
-    balance: 1000,
+    balance: 500,
     bidsCount: 0
 };
 
@@ -754,7 +754,7 @@ function initGuest() {
     if (!guest) {
         guest = {
             id: 'Invitado_' + Math.floor(1000 + Math.random() * 9000),
-            balance: 1000,
+            balance: 500,
             bidsCount: 0
         };
         localStorage.setItem('abrozon_guest', JSON.stringify(guest));
@@ -1218,7 +1218,6 @@ function renderizarCatalogo() {
         const rarezaChip = p.rareza ? `<div class="chip-rareza chip-rareza-${p.rareza.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-')}" style="position:absolute;bottom:8px;left:8px;">${p.rareza}</div>` : '';
         card.innerHTML = `<div class="card-image">${renderizarImagenProducto(p.image_url)}${cerrada ? '<div class="badge-closed">FINALIZADA</div>' : `<div class="card-timer" id="cardTimer-${p.id}">⏳ ...</div>`}${rarezaChip}</div><div class="card-content"><div class="card-category">${p.category||'General'}${p.seller_id ? ' (Vendedor: ' + (p.seller_username || 'Usuario') + ')' : ''}${cerrada?' · Adjudicado':''}</div><div class="card-title">${p.title}</div>${!cerrada && p.last_bidder ? `<div style="font-size:0.7rem;color:var(--text-muted);margin-bottom:6px;">👤 Último pujador: <strong>${p.last_bidder}</strong></div>` : ''}<div class="card-footer"><div><div class="bid-label-sm">${cerrada?'Precio Final':'Puja Actual'}</div><div class="bid-amount-sm">${Number(p.current_price).toLocaleString('es-ES')} €</div></div></div></div>`;
         grid.appendChild(card);
-        // Añadir botón de favorito si el usuario está registrado
         if (currentUser) {
             agregarBotonFavoritoTarjeta(p.id, card);
         }
@@ -1226,7 +1225,6 @@ function renderizarCatalogo() {
     actualizarTemporizadoresCatalogo();
 }
 
-// Función para añadir botón de favorito a una tarjeta
 async function agregarBotonFavoritoTarjeta(auctionId, cardElement) {
     if (!currentUser) return;
     try {
@@ -1246,9 +1244,8 @@ async function agregarBotonFavoritoTarjeta(auctionId, cardElement) {
         btn.onclick = async (e) => {
             e.stopPropagation();
             await toggleFavorito(auctionId);
-            const isNowFav = btn.innerHTML === '🤍';
-            btn.innerHTML = isNowFav ? '❤️' : '🤍';
-            btn.setAttribute('title', isNowFav ? 'Quitar de favoritos' : 'Añadir a favoritos');
+            btn.innerHTML = btn.innerHTML === '🤍' ? '❤️' : '🤍';
+            btn.setAttribute('title', btn.innerHTML === '❤️' ? 'Quitar de favoritos' : 'Añadir a favoritos');
         };
         
         const imageContainer = cardElement.querySelector('.card-image');
@@ -1468,8 +1465,7 @@ async function cargarHistorialPujas(id) {
     if (bids) bids.forEach(b => { 
         const div = document.createElement('div'); 
         div.className = 'history-item'; 
-        const esInvitado = b.is_guest ? ' 🎭' : '';
-        div.innerHTML = `<div style="display:flex;justify-content:space-between;"><div><span style="color:var(--accent-blue);font-weight:bold;">${b.user_name||'Anónimo'}${esInvitado}</span>${b.comment?`<div style="font-size:0.75rem;color:#eab308;background:rgba(234,179,8,0.1);padding:4px 8px;border-radius:6px;margin-top:2px;">"${b.comment}"</div>`:''}</div><span style="font-weight:bold;">${Number(b.amount).toLocaleString('es-ES')} €</span></div>`; 
+        div.innerHTML = `<div style="display:flex;justify-content:space-between;"><div><span style="color:var(--accent-blue);font-weight:bold;">${b.user_name||'Anónimo'}</span>${b.comment?`<div style="font-size:0.75rem;color:#eab308;background:rgba(234,179,8,0.1);padding:4px 8px;border-radius:6px;margin-top:2px;">"${b.comment}"</div>`:''}</div><span style="font-weight:bold;">${Number(b.amount).toLocaleString('es-ES')} €</span></div>`; 
         history.appendChild(div); 
     }); 
     history.scrollTop = history.scrollHeight;
@@ -1594,6 +1590,55 @@ async function ejecutarPuja(total) {
     } 
 }
 
+// Puja de invitado
+async function ejecutarPujaInvitado(total, tipo = 'minima') {
+    if (!guestData.id) return;
+    
+    if (accionEnCurso) return;
+    accionEnCurso = true;
+    
+    const btnMin = document.getElementById('btnMinBid');
+    const btnCustom = document.getElementById('btnCustomBid');
+    if (btnMin) { btnMin.disabled = true; btnMin.innerText = '⏳ Procesando...'; }
+    if (btnCustom) { btnCustom.disabled = true; btnCustom.innerText = '⏳ Procesando...'; }
+    
+    try {
+        const { data, error } = await db.rpc('place_guest_bid', {
+            p_auction_id: productoSeleccionado.id,
+            p_amount: total,
+            p_guest_name: guestData.id
+        });
+        
+        if (error) {
+            mostrarToast('⚠️ ' + error.message);
+            return;
+        }
+        
+        // Actualizar datos locales del invitado
+        guestData.balance -= total;
+        guestData.bidsCount += 1;
+        localStorage.setItem('abrozon_guest', JSON.stringify(guestData));
+        
+        // Actualizar UI
+        productoSeleccionado.current_price = total;
+        productoSeleccionado.last_bidder = guestData.id;
+        actualizarVistaDetalleDatoVivo();
+        actualizarInterfazUsuario();
+        
+        // Recargar historial para que salga la puja
+        await cargarHistorialPujas(productoSeleccionado.id);
+        
+        mostrarToast('¡Puja realizada como invitado! Te quedan ' + (3 - guestData.bidsCount) + ' pujas.');
+    } catch (err) {
+        console.error('Error en puja de invitado:', err);
+        mostrarToast('⚠️ Error al pujar.');
+    } finally {
+        accionEnCurso = false;
+        if (btnMin) { btnMin.disabled = false; btnMin.innerText = '¡PUJAR MÍNIMO (+50 €)!'; }
+        if (btnCustom) { btnCustom.disabled = false; btnCustom.innerText = 'Pujar'; }
+    }
+}
+
 async function hacerPujaMínima() { 
     if (!productoSeleccionado) return; 
     if (productoSeleccionado.status === 'closed') { mostrarToast('⚠️ Subasta finalizada.'); return; }
@@ -1608,23 +1653,7 @@ async function hacerPujaMínima() {
             abrirModalAuth('register', '¡Te has quedado sin saldo de invitado! Crea tu cuenta para recibir 1.000 € y seguir pujando.');
             return;
         }
-        guestData.balance -= pujaMinima;
-        guestData.bidsCount += 1;
-        localStorage.setItem('abrozon_guest', JSON.stringify(guestData));
-        actualizarInterfazUsuario();
-        productoSeleccionado.current_price = pujaMinima;
-        productoSeleccionado.last_bidder = guestData.id;
-        actualizarVistaDetalleDatoVivo();
-        await db.from('bids').insert({
-            auction_id: productoSeleccionado.id,
-            user_id: null,
-            user_name: guestData.id,
-            amount: pujaMinima,
-            comment: null,
-            is_guest: true
-        });
-        await cargarHistorialPujas(productoSeleccionado.id);
-        mostrarToast('¡Puja realizada como invitado! Te quedan ' + (3 - guestData.bidsCount) + ' pujas.');
+        await ejecutarPujaInvitado(pujaMinima, 'minima');
         return;
     }
     await ejecutarPuja(Number(productoSeleccionado.current_price) + 50); 
@@ -1659,24 +1688,7 @@ function hacerPujaPersonalizada() {
             abrirModalAuth('register', '¡Te has quedado sin saldo de invitado! Crea tu cuenta para recibir 1.000 € y seguir pujando.');
             return;
         }
-        guestData.balance -= valor;
-        guestData.bidsCount += 1;
-        localStorage.setItem('abrozon_guest', JSON.stringify(guestData));
-        actualizarInterfazUsuario();
-        productoSeleccionado.current_price = valor;
-        productoSeleccionado.last_bidder = guestData.id;
-        actualizarVistaDetalleDatoVivo();
-        db.from('bids').insert({
-            auction_id: productoSeleccionado.id,
-            user_id: null,
-            user_name: guestData.id,
-            amount: valor,
-            comment: null,
-            is_guest: true
-        }).then(() => {
-            cargarHistorialPujas(productoSeleccionado.id);
-        });
-        mostrarToast('¡Puja realizada como invitado! Te quedan ' + (3 - guestData.bidsCount) + ' pujas.');
+        ejecutarPujaInvitado(valor, 'personalizada');
         input.value = '';
         return;
     }
@@ -2145,7 +2157,6 @@ async function adminAddCategoria() {
     const name = document.getElementById('newCatName').value.trim(); 
     const icon = document.getElementById('newCatIcon').value.trim() || '📦'; 
     if (!name) { mostrarToast('⚠️ Nombre requerido.'); return; } 
-    
     const { error } = await db.rpc('admin_add_category', { p_name: name, p_icon: icon }); 
     if (error) { mostrarToast('⚠️ ' + error.message); return; } 
     document.getElementById('newCatName').value = ''; 
@@ -2208,6 +2219,15 @@ async function registrarUsuario() {
             mostrarToast('¡Saldo de invitado transferido! +' + guest.balance.toLocaleString('es-ES') + ' € extra.');
         }
     }
+    // Migrar pujas de invitado
+    const guestMigrar = JSON.parse(localStorage.getItem('abrozon_guest') || 'null');
+    if (guestMigrar && guestMigrar.id) {
+        await db.rpc('migrate_guest_bids', {
+            p_guest_name: guestMigrar.id,
+            p_user_id: currentUser.id,
+            p_username: currentUser.username
+        });
+    }
     cerrarModalAuth(); 
     actualizarInterfazUsuario(); 
     mostrarToast("¡Bienvenido! 1.000 €."); 
@@ -2234,6 +2254,15 @@ async function iniciarSesion() {
             guestData = { id: null, balance: 500, bidsCount: 0 };
             mostrarToast('¡Saldo de invitado transferido! +' + guest.balance.toLocaleString('es-ES') + ' € extra.');
         }
+    }
+    // Migrar pujas de invitado
+    const guestMigrar = JSON.parse(localStorage.getItem('abrozon_guest') || 'null');
+    if (guestMigrar && guestMigrar.id) {
+        await db.rpc('migrate_guest_bids', {
+            p_guest_name: guestMigrar.id,
+            p_user_id: currentUser.id,
+            p_username: currentUser.username
+        });
     }
     cerrarModalAuth(); 
     actualizarInterfazUsuario(); 
