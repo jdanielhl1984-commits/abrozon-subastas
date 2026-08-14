@@ -875,10 +875,11 @@ async function reclamarBotinDiario() {
     } catch (e) {
         mostrarToast('⚠️ Error al reclamar el botín.');
         console.error(e);
-    } finally {
+        } finally {
         accionEnCurso = false;
         await actualizarEstadoRuleta();
     }
+}
 
 // ===== ONLOAD =====
 window.onload = async () => {
