@@ -97,6 +97,7 @@
         .card-image { width: 100%; height: 140px; background-color: var(--bg-subtle); display: flex; align-items: center; justify-content: center; font-size: 3.5rem; position: relative; border-bottom: 1px solid var(--border-color); overflow: hidden; }
         .badge-closed { position: absolute; top: 6px; left: 6px; background: #ef4444; color: white; font-size: 0.55rem; font-weight: bold; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; }
         .card-timer { position: absolute; top: 6px; right: 6px; background: rgba(239,68,68,0.15); color: #ef4444; font-size: 0.6rem; font-weight: bold; padding: 2px 6px; border-radius: 4px; font-family: monospace; }
+        .fav-btn { position: absolute; top: 6px; right: 6px; background: rgba(255,255,255,0.8); border: none; border-radius: 50%; width: 24px; height: 24px; cursor: pointer; font-size: 0.8rem; display: flex; align-items: center; justify-content: center; z-index: 10; }
         .card-content { padding: 10px; }
         .card-category { font-size: 0.6rem; color: var(--accent-blue); text-transform: uppercase; font-weight: bold; margin-bottom: 2px; }
         .card-title { font-size: 0.8rem; font-weight: bold; color: var(--text-main); margin-bottom: 8px; line-height: 1.3; height: 32px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
@@ -121,7 +122,11 @@
         .btn-share-x:hover { background: #0d8bd9; }
         .btn-share-copy { background: var(--bg-subtle); color: var(--text-main); border: 1px solid var(--border-color); }
         .btn-share-copy:hover { background: var(--border-color); }
-        .history-item { font-size: 0.8rem; padding: 8px 0; border-bottom: 1px dashed var(--border-color); line-height: 1.3; }
+        .history-item { font-size: 0.8rem; padding: 8px 0; border-bottom: 1px dashed var(--border-color); line-height: 1.3; animation: slideIn 0.3s ease; }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
         .profile-header { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 16px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; box-shadow: var(--shadow-card); }
         .user-info h2 { font-size: 1.2rem; color: var(--text-main); }
         .user-badge { display: inline-block; background: rgba(56,189,248,0.15); color: var(--accent-blue); padding: 2px 8px; border-radius: 8px; font-size: 0.7rem; font-weight: bold; margin-top: 2px; }
@@ -183,7 +188,6 @@
         #goatDropdown { right: auto; left: 0; }
         .dropdown-item { padding: 10px 14px; font-size: 0.8rem; color: var(--text-main); cursor: pointer; border-bottom: 1px solid var(--border-color); }
         .dropdown-item:last-child { border-bottom: none; } .dropdown-item:hover { background: var(--bg-subtle); }
-        /* NOTIFICACIONES */
         .notif-wrapper { position: relative; display: inline-block; }
         #notifPanel { display: none; position: absolute; top: 100%; right: 0; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; min-width: 260px; max-height: 300px; overflow-y: auto; padding: 8px; z-index: 1000; box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
         #notifPanel::-webkit-scrollbar { width: 4px; }
@@ -217,7 +221,11 @@
         #adCountdown { font-size: 3rem; font-weight: 900; color: var(--accent-blue); }
         .spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: #fff; animation: spin 1s ease-in-out infinite; vertical-align: middle; margin-right: 6px; }
         @keyframes spin { to { transform: rotate(360deg); } }
-        /* MEDIA QUERIES */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+        * { scrollbar-width: thin; scrollbar-color: var(--border-color) transparent; }
         @media (max-width: 680px) {
             .header-row { flex-wrap: wrap; }
             .search-bar { min-width: 100px; max-width: 200px; }
@@ -247,7 +255,6 @@
 </head>
 <body>
 
-<!-- BANNER BETA PRIVADA -->
 <div class="beta-banner">
     🚧 BETA PRIVADA · Envíanos tu feedback en <a href="https://forms.gle/4S2s5q2oZtttsjzr8" target="_blank">este formulario</a>.
 </div>
@@ -257,23 +264,25 @@
         <button class="btn-close-modal" onclick="cerrarModalAuth()">✕</button>
         <div class="logo" style="text-align:center;margin-bottom:15px;">aBROzon<span>.subastas</span></div>
         <div id="formLogin" class="auth-form">
-            <h2>Iniciar Sesión</h2><p>Identifícate para pujar.</p>
+            <h2>Iniciar Sesión</h2><p id="authModalMessageLogin">Identifícate para pujar.</p>
             <input type="email" id="loginEmail" placeholder="Tu correo"><input type="password" id="loginPassword" placeholder="Contraseña">
             <button onclick="iniciarSesion()">Acceder</button>
             <div class="auth-toggle"><span onclick="solicitarRecuperacion()">¿Olvidaste tu contraseña?</span></div>
             <div class="auth-toggle">¿No tienes cuenta? <span onclick="toggleAuthForm('register')">Regístrate gratis</span></div>
         </div>
         <div id="formRegister" class="auth-form" style="display:none;">
-            <h2>Crear Perfil</h2><p>¡Únete y recibe 1.000 €!</p>
+            <h2>Crear Perfil</h2><p id="authModalMessageRegister">¡Únete y recibe 1.000 €!</p>
             <input type="email" id="regEmail" placeholder="Tu correo"><input type="text" id="regUsername" placeholder="Alias"><input type="password" id="regPassword" placeholder="Contraseña">
             <button onclick="registrarUsuario()" style="background:var(--accent-green);">Crear Cuenta</button>
             <div class="auth-toggle">¿Ya tienes cuenta? <span onclick="toggleAuthForm('login')">Iniciar sesión</span></div>
         </div>
     </div>
 </div>
+
 <div id="recoveryModal" class="auth-modal-overlay" style="display:none;">
     <div class="auth-card"><h2>Crear nueva contraseña</h2><div class="auth-form"><input type="password" id="newPasswordInput" placeholder="Nueva contraseña"><button onclick="guardarNuevaPassword()">Guardar</button></div></div>
 </div>
+
 <div id="adminModal" class="auth-modal-overlay" style="display:none;">
     <div class="auth-card" style="max-width:550px;max-height:85vh;overflow-y:auto;">
         <button class="btn-close-modal" onclick="cerrarModalAdmin()">✕</button>
@@ -331,7 +340,7 @@
         </div>
     </div>
 </div>
-<!-- Modal simulador de anuncio -->
+
 <div id="adModal" class="auth-modal-overlay" style="display:none;">
     <div class="auth-card" style="max-width:380px; text-align:center;">
         <h2 style="color:var(--accent-blue);">📺 Anuncio en progreso</h2>
@@ -340,6 +349,7 @@
         <p style="color:var(--text-muted); font-size:0.8rem; margin-top:10px;">(Simulación beta)</p>
     </div>
 </div>
+
 <div class="disclaimer">🚧 FASE BETA · PRUEBAS EN CURSO 🚧</div>
 
 <header>
@@ -351,7 +361,7 @@
         </div>
         <div class="header-right">
             <div class="notif-wrapper">
-                <button class="btn-header" id="btnNotif" onclick="toggleNotificaciones()" style="position:relative;">
+                <button class="btn-header" id="btnNotif" onclick="toggleNotificaciones()" style="position:relative;" title="Notificaciones">
                     🔔
                     <span class="notif-badge" id="notifCount">0</span>
                 </button>
@@ -359,13 +369,13 @@
                     <div id="notifList" style="font-size:0.8rem; color:var(--text-muted);">No hay notificaciones.</div>
                 </div>
             </div>
-            <button class="btn-header" id="btnAd" onclick="verAnuncio('normal')" style="position:relative;">
+            <button class="btn-header" id="btnAd" onclick="verAnuncio('normal')" style="position:relative;" title="Ver anuncio para ganar 500 €">
                 🎬 +500
                 <span id="anunciosRestantes" style="font-size:0.5rem;opacity:0.7;display:block;font-weight:normal;">(10/10)</span>
             </button>
-            <button class="btn-ruleta" id="btnRuleta" onclick="reclamarBotinDiario()">🎲</button>
+            <button class="btn-ruleta" id="btnRuleta" onclick="reclamarBotinDiario()" title="Botín Diario (Ruleta)">🎲</button>
             <div class="user-menu-wrapper" id="goatMenuWrapper" style="display:none;">
-                <button class="btn-goat" id="btnGoat" onclick="toggleGoatMenu()">🐐</button>
+                <button class="btn-goat" id="btnGoat" onclick="toggleGoatMenu()" title="Modo GOAT">🐐</button>
                 <div class="user-dropdown" id="goatDropdown">
                     <div class="dropdown-item" id="goatItemActivar" onclick="activarGoat()">🐐 Activar</div>
                     <div class="dropdown-item" id="goatItemRecargar" onclick="verAnuncio('goat')" style="display:none;">⚡ Recargar</div>
@@ -373,15 +383,16 @@
                 </div>
             </div>
             <div class="user-balance" id="boxBalance" style="display:none;">
-                <span style="font-weight:bold; color:var(--accent-green);">💰 <span id="userBalance">0</span>€</span>
+                <span style="font-weight:bold; color:var(--accent-green);">💰 <span id="userBalance">0 €</span></span>
                 <span class="level-badge">⭐ Nv.<span id="userLevel">1</span> <span id="userTitle">Lurker</span></span>
                 <div class="xp-bar-mobile"><div class="xp-fill-mobile" id="xpFill" style="width:0%;"></div></div>
             </div>
-            <button class="btn-login" id="btnLoginHeader" onclick="abrirModalAuth('login')">🔑</button>
+            <button class="btn-login" id="btnLoginHeader" onclick="abrirModalAuth('login')" title="Iniciar sesión o registrarse">🔑</button>
             <div class="user-menu-wrapper" id="userMenuWrapper" style="display:none;">
                 <button class="btn-header" onclick="toggleUserMenu()">👤 ▾</button>
                 <div class="user-dropdown" id="userDropdown">
                     <div class="dropdown-item" onclick="mostrarPerfil()">👤 Mi Perfil</div>
+                    <div class="dropdown-item" onclick="mostrarFavoritos()">❤️ Mis Favoritos</div>
                     <div class="dropdown-item" id="dropdownTheme" onclick="toggleTema()">🌙 Modo Noche</div>
                     <div class="dropdown-item" id="dropdownAdmin" onclick="abrirModalAdmin()" style="display:none;">🛠️ Panel Admin</div>
                     <div class="dropdown-item" onclick="mostrarLegal()">📄 Legal</div>
@@ -418,8 +429,53 @@
         </div>
         <div class="auction-grid" id="catalogGrid">Cargando...</div>
     </div>
-    <div id="viewDetail" class="view"><button class="btn-back" onclick="mostrarCatalogo()">← Volver al Catálogo</button><div class="detail-layout"><div class="product-card-detail"><div class="main-image-detail" id="detailImage">📦</div><div id="detailGallery" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:15px;"></div><span class="card-category" id="detailCategory">Categoría</span><h1 id="detailTitle" style="margin:8px 0;font-size:1.4rem;">Título</h1><div id="detailRarezaChip" style="display:none;"></div><p id="detailDescription" style="color:var(--text-muted);line-height:1.6;">Descripción...</p><div id="mercadoInfoBox" style="display:none;margin-top:14px;padding:12px;background:rgba(234,179,8,0.1);border:1px solid #eab308;border-radius:8px;font-size:0.85rem;color:var(--text-main);"></div></div><div class="auction-panel-detail"><div class="time-box" id="detailTime">⏳ Cierra en: Calculando...</div><div style="margin-bottom:15px;"><div style="font-size:0.8rem;color:var(--text-muted);">Última puja</div><div style="font-size:2.1rem;font-weight:900;" id="detailBid">0 €</div></div><div id="biddingControlsContainer"><div id="goatCommentContainer" style="display:none;margin-bottom:12px;"><input type="text" id="goatCommentInput" placeholder="💬 Mensaje épico GOAT..." style="width:100%;padding:10px;border-radius:8px;border:1px solid #eab308;background:var(--bg-subtle);color:var(--text-main);font-weight:bold;outline:none;font-size:0.85rem;"></div><button id="btnCompraDirecta" class="btn-compra-directa" onclick="comprarDirecto()">💎 COMPRA DIRECTA (30% comisión)</button><button id="btnCancelarVenta" onclick="cancelarVentaMercado()" style="display:none;width:100%;background:#ef4444;color:white;border:none;padding:10px;border-radius:8px;font-weight:bold;cursor:pointer;margin-bottom:10px;">🚫 Cancelar venta (pierdes la fianza)</button><button class="btn-bid" id="btnMinBid" onclick="hacerPujaMínima()">¡PUJAR MÍNIMO (+50 €)!</button><div style="display:flex;gap:8px;margin-top:10px;"><input type="number" id="customBidInput" placeholder="Cantidad exacta €" style="flex:1;padding:10px;border-radius:8px;border:1px solid var(--border-color);background:var(--bg-subtle);color:var(--text-main);font-weight:bold;outline:none;"><button id="btnCustomBid" onclick="hacerPujaPersonalizada()" style="background:var(--accent-blue);color:white;border:none;padding:10px 14px;border-radius:8px;font-weight:bold;cursor:pointer;">Pujar</button></div></div><!-- Botones de compartir --><div style="margin-top:20px;border-top:1px solid var(--border-color);padding-top:15px;"><h3 style="font-size:0.8rem;color:var(--text-muted);margin-bottom:10px;">📤 Compartir esta subasta</h3><button class="btn-share btn-share-x" onclick="compartirEnX()">𝕏 Compartir en X</button><button class="btn-share btn-share-copy" onclick="copiarEnlace()">🔗 Copiar enlace</button></div><div style="margin-top:20px;border-top:1px solid var(--border-color);padding-top:15px;"><h3 style="font-size:0.8rem;color:var(--text-muted);margin-bottom:10px;">Historial de Pujas</h3><div id="historyList" style="max-height:220px;overflow-y:auto;"></div></div></div></div></div>
-    <div id="viewMisPujas" class="view"><button class="btn-back" onclick="mostrarCatalogo()">← Volver al Catálogo</button><h2 style="margin-bottom:20px;">📋 Mis Pujas</h2>
+    <div id="viewDetail" class="view">
+        <button class="btn-back" onclick="mostrarCatalogo()">← Volver al Catálogo</button>
+        <div class="detail-layout">
+            <div class="product-card-detail">
+                <div class="main-image-detail" id="detailImage">📦</div>
+                <div id="detailGallery" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:15px;"></div>
+                <span class="card-category" id="detailCategory">Categoría</span>
+                <h1 id="detailTitle" style="margin:8px 0;font-size:1.4rem;">Título</h1>
+                <div id="detailRarezaChip" style="display:none;"></div>
+                <p id="detailDescription" style="color:var(--text-muted);line-height:1.6;">Descripción...</p>
+                <div id="mercadoInfoBox" style="display:none;margin-top:14px;padding:12px;background:rgba(234,179,8,0.1);border:1px solid #eab308;border-radius:8px;font-size:0.85rem;color:var(--text-main);"></div>
+            </div>
+            <div class="auction-panel-detail">
+                <div class="time-box" id="detailTime">⏳ Cierra en: Calculando...</div>
+                <div style="margin-bottom:15px;">
+                    <div style="font-size:0.8rem;color:var(--text-muted);">Última puja</div>
+                    <div style="font-size:2.1rem;font-weight:900;" id="detailBid">0 €</div>
+                    <button id="btnFavorito" onclick="toggleFavoritoDetalle()" style="background:var(--bg-subtle);border:1px solid var(--border-color);border-radius:6px;padding:4px 10px;margin-top:8px;cursor:pointer;font-size:0.75rem;">🤍 Añadir a favoritos</button>
+                </div>
+                <div id="biddingControlsContainer">
+                    <div id="goatCommentContainer" style="display:none;margin-bottom:12px;">
+                        <input type="text" id="goatCommentInput" placeholder="💬 Mensaje épico GOAT..." maxlength="80" style="width:100%;padding:10px;border-radius:8px;border:1px solid #eab308;background:var(--bg-subtle);color:var(--text-main);font-weight:bold;outline:none;font-size:0.85rem;">
+                        <small style="display:block;text-align:right;color:var(--text-muted);font-size:0.65rem;"><span id="charCount">0</span>/80</small>
+                    </div>
+                    <button id="btnCompraDirecta" class="btn-compra-directa" onclick="comprarDirecto()">💎 COMPRA DIRECTA (30% comisión)</button>
+                    <button id="btnCancelarVenta" onclick="cancelarVentaMercado()" style="display:none;width:100%;background:#ef4444;color:white;border:none;padding:10px;border-radius:8px;font-weight:bold;cursor:pointer;margin-bottom:10px;">🚫 Cancelar venta (pierdes la fianza)</button>
+                    <button class="btn-bid" id="btnMinBid" onclick="hacerPujaMínima()">¡PUJAR MÍNIMO (+50 €)!</button>
+                    <div style="display:flex;gap:8px;margin-top:10px;">
+                        <input type="number" id="customBidInput" placeholder="Cantidad exacta €" style="flex:1;padding:10px;border-radius:8px;border:1px solid var(--border-color);background:var(--bg-subtle);color:var(--text-main);font-weight:bold;outline:none;">
+                        <button id="btnCustomBid" onclick="hacerPujaPersonalizada()" style="background:var(--accent-blue);color:white;border:none;padding:10px 14px;border-radius:8px;font-weight:bold;cursor:pointer;">Pujar</button>
+                    </div>
+                </div>
+                <div style="margin-top:20px;border-top:1px solid var(--border-color);padding-top:15px;">
+                    <h3 style="font-size:0.8rem;color:var(--text-muted);margin-bottom:10px;">💬 Pujas en vivo</h3>
+                    <div id="historyList" style="max-height:250px;overflow-y:auto;"></div>
+                </div>
+                <div style="margin-top:20px;border-top:1px solid var(--border-color);padding-top:15px;">
+                    <h3 style="font-size:0.8rem;color:var(--text-muted);margin-bottom:10px;">📤 Compartir esta subasta</h3>
+                    <button class="btn-share btn-share-x" onclick="compartirEnX()">𝕏 Compartir en X</button>
+                    <button class="btn-share btn-share-copy" onclick="copiarEnlace()">🔗 Copiar enlace</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="viewMisPujas" class="view">
+        <button class="btn-back" onclick="mostrarCatalogo()">← Volver al Catálogo</button>
+        <h2 style="margin-bottom:20px;">📋 Mis Pujas</h2>
         <div style="margin-bottom:15px; display:flex; gap:8px; flex-wrap:wrap;">
             <button class="filter-btn active" onclick="filtrarMisPujas('todas')">📋 Todas</button>
             <button class="filter-btn" onclick="filtrarMisPujas('activas')">🟢 Activas</button>
@@ -434,8 +490,24 @@
         </div>
         <div id="misPujasContainer">Cargando...</div>
     </div>
-    <div id="viewVitrina" class="view"><div class="profile-header"><div class="user-info"><h2 id="profileUserName">👑 Usuario</h2><span class="user-badge" id="profileBadge">Coleccionista</span></div></div><div class="grid-title">📜 Mis Certificados</div><div class="vitrina-grid" id="vitrinaGrid"></div></div>
-    <div id="viewPerfil" class="view"><button class="btn-back" onclick="mostrarCatalogo()">← Volver al Catálogo</button><div class="profile-header"><div class="user-info"><h2 id="perfilNombre">👤 Usuario</h2><span class="user-badge" id="perfilEmail">correo@ejemplo.com</span></div></div>
+    <div id="viewVitrina" class="view">
+        <div class="profile-header">
+            <div class="user-info">
+                <h2 id="profileUserName">👑 Usuario</h2>
+                <span class="user-badge" id="profileBadge">Coleccionista</span>
+            </div>
+        </div>
+        <div class="grid-title">📜 Mis Certificados</div>
+        <div class="vitrina-grid" id="vitrinaGrid"></div>
+    </div>
+    <div id="viewPerfil" class="view">
+        <button class="btn-back" onclick="mostrarCatalogo()">← Volver al Catálogo</button>
+        <div class="profile-header">
+            <div class="user-info">
+                <h2 id="perfilNombre">👤 Usuario</h2>
+                <span class="user-badge" id="perfilEmail">correo@ejemplo.com</span>
+            </div>
+        </div>
         <div class="product-card-detail" style="margin-bottom:20px;">
             <h2 style="font-size:1.1rem;">📊 Progreso</h2>
             <p>Nivel <strong id="perfilNivel">1</strong> · <span id="perfilTitulo">Lurker</span></p>
@@ -446,58 +518,85 @@
             <h2 style="font-size:1.1rem; margin-bottom:12px;">🏅 Insignias</h2>
             <div id="achievementsContainer" class="achievement-grid">Cargando...</div>
         </div>
-        <div class="product-card-detail" style="margin-bottom:20px;"><h2 style="font-size:1.1rem;">✏️ Cambiar alias</h2><div class="auth-form"><input type="text" id="perfilNuevoAlias" placeholder="Nuevo alias"><button onclick="guardarNuevoAlias()">Guardar</button></div></div>
-        <div class="product-card-detail" style="margin-bottom:20px;"><h2 style="font-size:1.1rem;">🔒 Cambiar contraseña</h2><div class="auth-form"><input type="password" id="perfilNuevaPassword" placeholder="Nueva contraseña"><button onclick="guardarNuevaPasswordPerfil()">Guardar</button></div></div>
-        <div class="product-card-detail"><h2 style="font-size:1.1rem;color:#ef4444;">⚠️ Zona de baja</h2><p style="color:var(--text-muted);">Contacta para eliminar tu cuenta.</p><button onclick="solicitarBajaCuenta()" style="background:#ef4444;color:white;border:none;padding:10px;border-radius:8px;font-weight:bold;cursor:pointer;width:100%;">Solicitar baja</button></div>
+        <div class="product-card-detail" style="margin-bottom:20px;">
+            <h2 style="font-size:1.1rem;">✏️ Cambiar alias</h2>
+            <div class="auth-form"><input type="text" id="perfilNuevoAlias" placeholder="Nuevo alias"><button onclick="guardarNuevoAlias()">Guardar</button></div>
+        </div>
+        <div class="product-card-detail" style="margin-bottom:20px;">
+            <h2 style="font-size:1.1rem;">🔒 Cambiar contraseña</h2>
+            <div class="auth-form"><input type="password" id="perfilNuevaPassword" placeholder="Nueva contraseña"><button onclick="guardarNuevaPasswordPerfil()">Guardar</button></div>
+        </div>
+        <div class="product-card-detail">
+            <h2 style="font-size:1.1rem;color:#ef4444;">⚠️ Zona de baja</h2>
+            <p style="color:var(--text-muted);">Contacta para eliminar tu cuenta.</p>
+            <button onclick="solicitarBajaCuenta()" style="background:#ef4444;color:white;border:none;padding:10px;border-radius:8px;font-weight:bold;cursor:pointer;width:100%;">Solicitar baja</button>
+        </div>
     </div>
-    <div id="viewMisiones" class="view"><button class="btn-back" onclick="mostrarCatalogo()">← Volver al Catálogo</button><h2 style="margin-bottom:20px;">🎯 Misiones</h2><div id="misionesContainer"></div></div>
-    <div id="viewLogros" class="view"><button class="btn-back" onclick="mostrarCatalogo()">← Volver al Catálogo</button><h2 style="margin-bottom:20px;">🏅 Todos los Logros</h2><div id="logrosContainer" class="achievement-list">Cargando...</div></div>
-    <div id="viewHallOfFame" class="view"><button class="btn-back" onclick="mostrarCatalogo()">← Volver al Catálogo</button><h2 style="margin-bottom:20px;">🌟 Hall of Fame</h2><div id="hofContainer">Cargando rankings...</div></div>
+    <div id="viewFavoritos" class="view">
+        <button class="btn-back" onclick="mostrarCatalogo()">← Volver al Catálogo</button>
+        <h2 style="margin-bottom:20px;">❤️ Mis Favoritos</h2>
+        <div id="favoritosContainer">Cargando...</div>
+    </div>
+    <div id="viewMisiones" class="view">
+        <button class="btn-back" onclick="mostrarCatalogo()">← Volver al Catálogo</button>
+        <h2 style="margin-bottom:20px;">🎯 Misiones</h2>
+        <div id="misionesContainer"></div>
+    </div>
+    <div id="viewLogros" class="view">
+        <button class="btn-back" onclick="mostrarCatalogo()">← Volver al Catálogo</button>
+        <h2 style="margin-bottom:20px;">🏅 Todos los Logros</h2>
+        <div id="logrosContainer" class="achievement-list">Cargando...</div>
+    </div>
+    <div id="viewHallOfFame" class="view">
+        <button class="btn-back" onclick="mostrarCatalogo()">← Volver al Catálogo</button>
+        <h2 style="margin-bottom:20px;">🌟 Hall of Fame</h2>
+        <div id="hofContainer">Cargando rankings...</div>
+    </div>
     <div id="viewLegal" class="view">
-    <button class="btn-back" onclick="mostrarCatalogo()">← Volver al Catálogo</button>
-    <div class="product-card-detail" style="margin-bottom:20px;">
-        <h2 style="color:var(--accent-blue);">Aviso Legal</h2>
-        <p style="color:var(--text-muted);line-height:1.7;font-size:0.9rem;">
-            <strong>1. Datos identificativos</strong><br>
-            En cumplimiento del artículo 10 de la Ley 34/2002, de 11 de julio, de Servicios de la Sociedad de la Información y Comercio Electrónico (LSSI-CE), se exponen a continuación los datos identificativos del titular de la web:<br><br>
-            <strong>Titular:</strong> Daniel Hernandez<br>
-            <strong>Ubicación:</strong> Granollers (Barcelona, España)<br>
-            <strong>Contacto:</strong> abrozonsubastas@gmail.com<br><br>
-            <strong>2. Naturaleza de la plataforma y exención de responsabilidad</strong><br>
-            aBROzon.subastas es una plataforma de entretenimiento y parodia. Todos los productos, subastas, saldos y cantidades mostradas son estrictamente ficticios, no tienen valor monetario real y en ningún caso son canjeables por dinero de curso legal.<br><br>
-            Cualquier referencia a personas públicas, creadores de contenido, marcas o entidades es una parodia realizada exclusivamente con fines humorísticos, sin que exista ninguna relación, patrocinio ni respaldo por parte de dichas personas o entidades.<br><br>
-            El titular no se hace responsable del uso indebido que los usuarios puedan hacer de la plataforma, ni de la veracidad, exactitud o legalidad de los comentarios, pujas o contenidos publicados por terceros en la misma (artículo 16 de la LSSI-CE).<br><br>
-            <strong>Contenido de usuarios:</strong> Los usuarios pueden publicar comentarios y subir imágenes. Cada usuario es responsable del contenido que publique y garantiza tener los derechos necesarios sobre el mismo. Al publicar en aBROzon.subastas, cedes a la plataforma una licencia no exclusiva, gratuita y mundial para mostrar dicho contenido dentro de la web.<br><br>
-            <strong>Disponibilidad:</strong> aBROzon.subastas se esfuerza por mantener el servicio disponible de forma continua, pero no garantiza la disponibilidad 24/7. No nos hacemos responsables de pérdidas de datos, saldos ficticios o interrupciones del servicio causadas por fallos de los proveedores externos (Supabase, GitHub Pages) o por mantenimiento técnico.
-        </p>
+        <button class="btn-back" onclick="mostrarCatalogo()">← Volver al Catálogo</button>
+        <div class="product-card-detail" style="margin-bottom:20px;">
+            <h2 style="color:var(--accent-blue);">Aviso Legal</h2>
+            <p style="color:var(--text-muted);line-height:1.7;font-size:0.9rem;">
+                <strong>1. Datos identificativos</strong><br>
+                En cumplimiento del artículo 10 de la Ley 34/2002, de 11 de julio, de Servicios de la Sociedad de la Información y Comercio Electrónico (LSSI-CE), se exponen a continuación los datos identificativos del titular de la web:<br><br>
+                <strong>Titular:</strong> Daniel Hernandez<br>
+                <strong>Ubicación:</strong> Granollers (Barcelona, España)<br>
+                <strong>Contacto:</strong> abrozonsubastas@gmail.com<br><br>
+                <strong>2. Naturaleza de la plataforma y exención de responsabilidad</strong><br>
+                aBROzon.subastas es una plataforma de entretenimiento y parodia. Todos los productos, subastas, saldos y cantidades mostradas son estrictamente ficticios, no tienen valor monetario real y en ningún caso son canjeables por dinero de curso legal.<br><br>
+                Cualquier referencia a personas públicas, creadores de contenido, marcas o entidades es una parodia realizada exclusivamente con fines humorísticos, sin que exista ninguna relación, patrocinio ni respaldo por parte de dichas personas o entidades.<br><br>
+                El titular no se hace responsable del uso indebido que los usuarios puedan hacer de la plataforma, ni de la veracidad, exactitud o legalidad de los comentarios, pujas o contenidos publicados por terceros en la misma (artículo 16 de la LSSI-CE).<br><br>
+                <strong>Contenido de usuarios:</strong> Los usuarios pueden publicar comentarios y subir imágenes. Cada usuario es responsable del contenido que publique y garantiza tener los derechos necesarios sobre el mismo. Al publicar en aBROzon.subastas, cedes a la plataforma una licencia no exclusiva, gratuita y mundial para mostrar dicho contenido dentro de la web.<br><br>
+                <strong>Disponibilidad:</strong> aBROzon.subastas se esfuerza por mantener el servicio disponible de forma continua, pero no garantiza la disponibilidad 24/7. No nos hacemos responsables de pérdidas de datos, saldos ficticios o interrupciones del servicio causadas por fallos de los proveedores externos (Supabase, GitHub Pages) o por mantenimiento técnico.
+            </p>
+        </div>
+        <div class="product-card-detail" style="margin-bottom:20px;">
+            <h2 style="color:var(--accent-blue);">Política de Privacidad</h2>
+            <p style="color:var(--text-muted);line-height:1.7;font-size:0.9rem;">
+                <strong>1. Responsable del tratamiento</strong><br>
+                Daniel Hernandez — abrozonsubastas@gmail.com<br><br>
+                <strong>2. Datos que recogemos y finalidad</strong><br>
+                Datos: Dirección de correo electrónico, el alias (nombre de usuario) que elijas, saldo ficticio e historial de pujas y actividad en la plataforma.<br>
+                Finalidad: Gestionar la creación y mantenimiento de tu cuenta, mostrar el historial de subastas, permitir tu participación en el juego y prevenir el fraude o abuso del sistema.<br><br>
+                <strong>3. Base legal y conservación</strong><br>
+                El tratamiento de tus datos se basa en tu consentimiento expreso otorgado al momento de registrarte en la plataforma. Los datos se conservarán mientras tu cuenta permanezca activa. Puedes solicitar su eliminación en cualquier momento, lo que conllevará la pérdida de tu progreso y saldo ficticio.<br><br>
+                <strong>4. Terceros y alojamiento de datos (Transferencias Internacionales)</strong><br>
+                Los datos de los usuarios se almacenan en los servidores de Supabase (proveedor de base de datos e infraestructura). Supabase procesa los datos garantizando las medidas de seguridad adecuadas y operando bajo acuerdos de procesamiento de datos compatibles con el RGPD.<br><br>
+                <strong>5. Tus derechos</strong><br>
+                Como usuario, tienes derecho a solicitar el acceso, rectificación, limitación y supresión de tus datos. Para ejercer estos derechos, puedes enviar un correo electrónico a abrozonsubastas@gmail.com indicando tu petición.<br><br>
+                <strong>6. Menores de edad</strong><br>
+                Esta plataforma no está dirigida a menores de 14 años.<br><br>
+                <strong>Cambios en esta política:</strong> se notificarán mediante aviso en la web.
+            </p>
+        </div>
+        <div class="product-card-detail">
+            <h2 style="color:var(--accent-blue);">Política de Cookies</h2>
+            <p style="color:var(--text-muted);line-height:1.7;font-size:0.9rem;">
+                Esta web utiliza únicamente cookies técnicas y de sesión, necesarias para el funcionamiento de la plataforma.<br><br>
+                Al ser cookies técnicas imprescindibles, están exentas de la obligación de recabar el consentimiento según el artículo 22.2 de la LSSI.
+            </p>
+        </div>
     </div>
-    <div class="product-card-detail" style="margin-bottom:20px;">
-        <h2 style="color:var(--accent-blue);">Política de Privacidad</h2>
-        <p style="color:var(--text-muted);line-height:1.7;font-size:0.9rem;">
-            <strong>1. Responsable del tratamiento</strong><br>
-            Daniel Hernandez — abrozonsubastas@gmail.com<br><br>
-            <strong>2. Datos que recogemos y finalidad</strong><br>
-            Datos: Dirección de correo electrónico, el alias (nombre de usuario) que elijas, saldo ficticio e historial de pujas y actividad en la plataforma.<br>
-            Finalidad: Gestionar la creación y mantenimiento de tu cuenta, mostrar el historial de subastas, permitir tu participación en el juego y prevenir el fraude o abuso del sistema.<br><br>
-            <strong>3. Base legal y conservación</strong><br>
-            El tratamiento de tus datos se basa en tu consentimiento expreso otorgado al momento de registrarte en la plataforma. Los datos se conservarán mientras tu cuenta permanezca activa. Puedes solicitar su eliminación en cualquier momento, lo que conllevará la pérdida de tu progreso y saldo ficticio.<br><br>
-            <strong>4. Terceros y alojamiento de datos (Transferencias Internacionales)</strong><br>
-            Los datos de los usuarios se almacenan en los servidores de Supabase (proveedor de base de datos e infraestructura). Supabase procesa los datos garantizando las medidas de seguridad adecuadas y operando bajo acuerdos de procesamiento de datos compatibles con el RGPD.<br><br>
-            <strong>5. Tus derechos</strong><br>
-            Como usuario, tienes derecho a solicitar el acceso, rectificación, limitación y supresión de tus datos. Para ejercer estos derechos, puedes enviar un correo electrónico a abrozonsubastas@gmail.com indicando tu petición.<br><br>
-            <strong>6. Menores de edad</strong><br>
-            Esta plataforma no está dirigida a menores de 14 años.<br><br>
-            <strong>Cambios en esta política:</strong> se notificarán mediante aviso en la web.
-        </p>
-    </div>
-    <div class="product-card-detail">
-        <h2 style="color:var(--accent-blue);">Política de Cookies</h2>
-        <p style="color:var(--text-muted);line-height:1.7;font-size:0.9rem;">
-            Esta web utiliza únicamente cookies técnicas y de sesión, necesarias para el funcionamiento de la plataforma.<br><br>
-            Al ser cookies técnicas imprescindibles, están exentas de la obligación de recabar el consentimiento según el artículo 22.2 de la LSSI.
-        </p>
-    </div>
-</div>
     <div id="viewAyuda" class="view">
         <button class="btn-back" onclick="mostrarCatalogo()">← Volver al Catálogo</button>
         <h2 style="color:var(--accent-blue);">❓ Ayuda y Tutorial</h2>
@@ -579,6 +678,13 @@ let currentUser = null, productoSeleccionado = null, subastasLocales = [], timer
     ordenCatalogoActual = 'fecha', toastTimeout = null, ultimoToastSuperado = 0;
 let misPujasFiltro = 'todas';
 
+// Datos del invitado
+let guestData = {
+    id: null,
+    balance: 500,
+    bidsCount: 0
+};
+
 // ===== NOTIFICACIONES =====
 let notificaciones = JSON.parse(localStorage.getItem('abrozon_notificaciones') || '[]');
 
@@ -620,6 +726,33 @@ const TITLES = { 1: 'Lurker / NPC', 5: 'Regular', 15: 'Curador', 30: 'Broker / M
 function getTitleForLevel(level) { let title = 'Lurker / NPC'; for (const [lvl, t] of Object.entries(TITLES)) { if (level >= parseInt(lvl)) title = t; } return title; }
 
 function marcarCambioPropio() { saldoCambioPropio = true; ultimaAccionPropiaTs = Date.now(); setTimeout(() => { saldoCambioPropio = false; }, 5000); }
+
+// Función para normalizar texto (quitar acentos y minúsculas)
+function normalizarTexto(texto) {
+    return (texto || '').toString().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+}
+
+// Inicializar invitado
+function initGuest() {
+    let guest = JSON.parse(localStorage.getItem('abrozon_guest') || 'null');
+    if (!guest) {
+        guest = {
+            id: 'Invitado_' + Math.floor(1000 + Math.random() * 9000),
+            balance: 500,
+            bidsCount: 0
+        };
+        localStorage.setItem('abrozon_guest', JSON.stringify(guest));
+    }
+    guestData = guest;
+    document.getElementById('boxBalance').style.display = 'block';
+    document.getElementById('btnLoginHeader').style.display = 'block';
+    document.getElementById('userMenuWrapper').style.display = 'none';
+    document.getElementById('goatMenuWrapper').style.display = 'none';
+    document.getElementById('userBalance').innerText = guest.balance.toLocaleString('es-ES') + ' €';
+    document.getElementById('userLevel').innerText = '—';
+    document.getElementById('userTitle').innerText = 'Invitado';
+    document.getElementById('xpFill').style.width = '0%';
+}
 
 // ===== NOTIFICACIONES FUNCIONES =====
 function agregarNotificacion(tipo, mensaje, link = null) {
@@ -699,7 +832,10 @@ async function checkStreakAndReward() {
 
 // ===== BOTÍN DIARIO (RULETA) =====
 async function reclamarBotinDiario() {
-    if (!currentUser) return abrirModalAuth('register');
+    if (!currentUser) {
+        abrirModalAuth('register', '¡Crea tu cuenta para reclamar el Botín Diario! Recibe 1.000 € de regalo.');
+        return;
+    }
     if (accionEnCurso) return;
     accionEnCurso = true;
     const btn = document.getElementById('btnRuleta');
@@ -732,7 +868,11 @@ window.onload = async () => {
     if ('serviceWorker' in navigator) navigator.serviceWorker.register('service-worker.js').catch(() => {});
     actualizarContadorNotificaciones();
     const { data: { session } } = await db.auth.getSession();
-    if (session) await cargarPerfil(session.user.id);
+    if (session) {
+        await cargarPerfil(session.user.id);
+    } else {
+        initGuest();
+    }
     actualizarInterfazUsuario();
     db.auth.onAuthStateChange(async (_event, session2) => {
         if (_event === 'PASSWORD_RECOVERY') { document.getElementById('recoveryModal').style.display = 'flex'; return; }
@@ -741,6 +881,7 @@ window.onload = async () => {
             await checkStreakAndReward();
         } else {
             currentUser = null;
+            initGuest();
         }
         actualizarInterfazUsuario();
     });
@@ -875,14 +1016,28 @@ function actualizarInterfazUsuario() {
         actualizarContadorNotificaciones();
         actualizarContadorAnuncios();
     } else {
-        document.getElementById('boxBalance').style.display = 'none'; document.getElementById('btnLoginHeader').style.display = 'block';
+        document.getElementById('boxBalance').style.display = 'block';
+        document.getElementById('btnLoginHeader').style.display = 'block';
         document.getElementById('userMenuWrapper').style.display = 'none';
         document.getElementById('goatMenuWrapper').style.display = 'none';
+        if (guestData.id) {
+            document.getElementById('userBalance').innerText = guestData.balance.toLocaleString('es-ES') + ' €';
+            document.getElementById('userLevel').innerText = '—';
+            document.getElementById('userTitle').innerText = 'Invitado';
+            document.getElementById('xpFill').style.width = '0%';
+        }
     }
 }
 
 // ===== CATEGORÍAS =====
-async function cargarCategorias() { const { data, error } = await db.from('categories').select('*').order('name'); if (!error) categorias = data || []; renderizarCategoryChips(); actualizarSelectorCategoriasAdmin(); }
+async function cargarCategorias() { 
+    const { data, error } = await db.from('categories').select('*').order('name'); 
+    if (error) { console.error("Error al cargar categorías:", error.message); categorias = []; } 
+    else { categorias = data || []; } 
+    renderizarCategoryChips(); 
+    actualizarSelectorCategoriasAdmin(); 
+}
+
 function renderizarCategoryChips() {
     const box = document.getElementById('categoryChips'); if (!box) return;
     if (mostrandoFinalizadas || categoriaActiva === 'Mercado') { box.style.display = 'none'; return; }
@@ -890,11 +1045,37 @@ function renderizarCategoryChips() {
     const chips = [{ name: 'Todas', icon: '🗂️' }, { name: 'Novedades', icon: '🆕' }, ...categorias];
     box.innerHTML = chips.map(c => `<span class="chip ${categoriaActiva === c.name ? 'active' : ''}" onclick="filtrarCategoria('${c.name}')">${c.icon} ${c.name}</span>`).join('');
 }
-function actualizarSelectorCategoriasAdmin() { const select = document.getElementById('adminCategoria'); if (!select) return; select.innerHTML = categorias.map(c => `<option value="${c.name}">${c.icon} ${c.name}</option>`).join(''); }
+
+function actualizarSelectorCategoriasAdmin() { 
+    const select = document.getElementById('adminCategoria'); 
+    if (!select) return; 
+    select.innerHTML = categorias.map(c => `<option value="${c.name}">${c.icon} ${c.name}</option>`).join(''); 
+}
 
 // ===== CATÁLOGO =====
-async function cargarSubastas() { let { data: auctions } = await db.from('auctions').select('*').order('ends_at', { ascending: true }); subastasLocales = auctions || []; let cierres = false; for (let p of subastasLocales) if (p.status !== 'closed' && new Date(p.ends_at) <= Date.now()) { await db.rpc('check_and_close_auction',{p_auction_id:p.id}); cierres = true; } if (cierres) { let { data: a2 } = await db.from('auctions').select('*').order('ends_at', { ascending: true }); subastasLocales = a2 || []; } renderizarCatalogo(); }
-function renderizarImagenProducto(v) { v=(v||'').trim(); if(/^https?:\/\//i.test(v)) return `<img src="${v}" style="display:block;width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML='<span>🖼️</span>';">`; return `<span>${v||'📦'}</span>`; }
+async function cargarSubastas() { 
+    let { data: auctions } = await db.from('auctions').select('*').order('ends_at', { ascending: true }); 
+    subastasLocales = auctions || []; 
+    let cierres = false; 
+    for (let p of subastasLocales) {
+        if (p.status !== 'closed' && new Date(p.ends_at) <= Date.now()) { 
+            await db.rpc('check_and_close_auction',{p_auction_id:p.id}); 
+            cierres = true; 
+        } 
+    }
+    if (cierres) { 
+        let { data: a2 } = await db.from('auctions').select('*').order('ends_at', { ascending: true }); 
+        subastasLocales = a2 || []; 
+    } 
+    renderizarCatalogo(); 
+}
+
+function renderizarImagenProducto(v) { 
+    v=(v||'').trim(); 
+    if(/^https?:\/\//i.test(v)) return `<img src="${v}" style="display:block;width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML='<span>🖼️</span>';">`; 
+    return `<span>${v||'📦'}</span>`; 
+}
+
 async function subirFotoAdmin(e) { 
     const files = Array.from(e.target.files||[]); 
     if(!files.length) return; 
@@ -928,9 +1109,36 @@ async function subirFotoAdmin(e) {
     fotosAdicionalesAdmin = urls.slice(1); 
     preview.innerHTML = `✅ ${urls.length} foto(s) subida(s):<br>` + urls.map(u => `<img src="${u}" style="width:70px;height:70px;object-fit:cover;border-radius:6px;margin:4px;">`).join(''); 
 }
-function filtrarCategoria(cat) { mostrandoFinalizadas = false; categoriaActiva = cat; document.querySelectorAll('.primary-nav .nav-tab').forEach(t => t.classList.remove('active')); document.getElementById('tabTodas').classList.add('active'); ocultarTodasVistas(); document.getElementById('viewCatalog').classList.add('active'); renderizarCatalogo(); renderizarCategoryChips(); }
-function mostrarFinalizadas() { mostrandoFinalizadas = true; document.querySelectorAll('.primary-nav .nav-tab').forEach(t => t.classList.remove('active')); document.getElementById('tabFinalizadas').classList.add('active'); ocultarTodasVistas(); document.getElementById('viewCatalog').classList.add('active'); document.getElementById('searchInput').value = ''; terminoBusqueda = ''; renderizarCatalogo(); renderizarCategoryChips(); }
-function buscarEnCatalogo(texto) { terminoBusqueda = (texto||'').trim().toLowerCase(); ocultarTodasVistas(); document.getElementById('viewCatalog').classList.add('active'); renderizarCatalogo(); }
+
+function filtrarCategoria(cat) { 
+    mostrandoFinalizadas = false; 
+    categoriaActiva = cat; 
+    document.querySelectorAll('.primary-nav .nav-tab').forEach(t => t.classList.remove('active')); 
+    document.getElementById('tabTodas').classList.add('active'); 
+    ocultarTodasVistas(); 
+    document.getElementById('viewCatalog').classList.add('active'); 
+    renderizarCatalogo(); 
+    renderizarCategoryChips(); 
+}
+
+function mostrarFinalizadas() { 
+    mostrandoFinalizadas = true; 
+    document.querySelectorAll('.primary-nav .nav-tab').forEach(t => t.classList.remove('active')); 
+    document.getElementById('tabFinalizadas').classList.add('active'); 
+    ocultarTodasVistas(); 
+    document.getElementById('viewCatalog').classList.add('active'); 
+    document.getElementById('searchInput').value = ''; 
+    terminoBusqueda = ''; 
+    renderizarCatalogo(); 
+    renderizarCategoryChips(); 
+}
+
+function buscarEnCatalogo(texto) { 
+    terminoBusqueda = normalizarTexto(texto); 
+    ocultarTodasVistas(); 
+    document.getElementById('viewCatalog').classList.add('active'); 
+    renderizarCatalogo(); 
+}
 
 function ordenarCatalogo(criterio) {
     ordenCatalogoActual = criterio;
@@ -960,7 +1168,10 @@ function renderizarCatalogo() {
             lista = lista.filter(p => p.category === categoriaActiva);
         }
     }
-    if (terminoBusqueda) lista = lista.filter(p => (p.title||'').toLowerCase().includes(terminoBusqueda) || (p.description||'').toLowerCase().includes(terminoBusqueda));
+    if (terminoBusqueda) {
+        const terminoNormalizado = normalizarTexto(terminoBusqueda);
+        lista = lista.filter(p => normalizarTexto(p.title).includes(terminoNormalizado) || normalizarTexto(p.description).includes(terminoNormalizado));
+    }
     switch (ordenCatalogoActual) {
         case 'fecha':
             lista.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
@@ -989,13 +1200,51 @@ function renderizarCatalogo() {
         const card = document.createElement('div'); card.className = 'auction-card ' + rarezaClase; card.onclick = () => abrirDetalle(p.id);
         const cerrada = p.status === 'closed';
         const rarezaChip = p.rareza ? `<div class="chip-rareza chip-rareza-${p.rareza.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-')}" style="position:absolute;bottom:8px;left:8px;">${p.rareza}</div>` : '';
-        card.innerHTML = `<div class="card-image">${renderizarImagenProducto(p.image_url)}${cerrada ? '<div class="badge-closed">FINALIZADA</div>' : `<div class="card-timer" id="cardTimer-${p.id}">⏳ ...</div>`}${rarezaChip}</div><div class="card-content"><div class="card-category">${p.category||'General'}${p.seller_id ? ' (Vendedor: ' + (p.seller_username || 'Usuario') + ')' : ''}${cerrada?' · Adjudicado':''}</div><div class="card-title">${p.title}</div>${!cerrada && p.last_bidder ? `<div style="font-size:0.7rem;color:var(--text-muted);margin-bottom:6px;">👤 Último pujador: <strong>${p.last_bidder}</strong></div>` : ''}<div class="card-footer"><div><div class="bid-label-sm">${cerrada?'Precio Final':'Puja Actual'}</div><div class="bid-amount-sm">${Number(p.current_price).toLocaleString('es-ES')} €</div></div></div></div>`;
+        const favIcon = currentUser ? '❤️' : '🤍';
+        card.innerHTML = `<div class="card-image">${renderizarImagenProducto(p.image_url)}${cerrada ? '<div class="badge-closed">FINALIZADA</div>' : `<div class="card-timer" id="cardTimer-${p.id}">⏳ ...</div>`}<button onclick="event.stopPropagation(); toggleFavorito('${p.id}')" class="fav-btn" title="Añadir a favoritos">${favIcon}</button>${rarezaChip}</div><div class="card-content"><div class="card-category">${p.category||'General'}${p.seller_id ? ' (Vendedor: ' + (p.seller_username || 'Usuario') + ')' : ''}${cerrada?' · Adjudicado':''}</div><div class="card-title">${p.title}</div>${!cerrada && p.last_bidder ? `<div style="font-size:0.7rem;color:var(--text-muted);margin-bottom:6px;">👤 Último pujador: <strong>${p.last_bidder}</strong></div>` : ''}<div class="card-footer"><div><div class="bid-label-sm">${cerrada?'Precio Final':'Puja Actual'}</div><div class="bid-amount-sm">${Number(p.current_price).toLocaleString('es-ES')} €</div></div></div></div>`;
         grid.appendChild(card);
     });
     actualizarTemporizadoresCatalogo();
 }
-function actualizarTemporizadoresCatalogo() { subastasLocales.forEach(p => { if (p.status === 'closed') return; const el = document.getElementById('cardTimer-'+p.id); if (!el) return; const diff = new Date(p.ends_at)-Date.now(); if (diff <= 0) { el.innerText = '⏳ Cerrando...'; return; } const d = Math.floor(diff/86400000), h = Math.floor((diff%86400000)/3600000), m = Math.floor((diff%3600000)/60000), s = Math.floor((diff%60000)/1000); el.innerText = d>0 ? `⏳ ${d}d ${h}h` : `⏳ ${h}h ${m}m ${s}s`; }); }
-async function abrirDetalle(id) { productoSeleccionado = subastasLocales.find(p => p.id === id); actualizarVistaDetalleDatoVivo(); iniciarTemporizador(productoSeleccionado.ends_at); await cargarHistorialPujas(id); ocultarTodasVistas(); document.getElementById('viewDetail').classList.add('active'); }
+
+function actualizarTemporizadoresCatalogo() { 
+    subastasLocales.forEach(p => { 
+        if (p.status === 'closed') return; 
+        const el = document.getElementById('cardTimer-'+p.id); 
+        if (!el) return; 
+        const diff = new Date(p.ends_at)-Date.now(); 
+        if (diff <= 0) { el.innerText = '⏳ Cerrando...'; return; } 
+        const d = Math.floor(diff/86400000), h = Math.floor((diff%86400000)/3600000), m = Math.floor((diff%3600000)/60000), s = Math.floor((diff%60000)/1000); 
+        el.innerText = d>0 ? `⏳ ${d}d ${h}h` : `⏳ ${h}h ${m}m ${s}s`; 
+    }); 
+}
+
+async function abrirDetalle(id) { 
+    productoSeleccionado = subastasLocales.find(p => p.id === id); 
+    actualizarVistaDetalleDatoVivo(); 
+    iniciarTemporizador(productoSeleccionado.ends_at); 
+    await cargarHistorialPujas(id); 
+    actualizarBotonFavorito();
+    ocultarTodasVistas(); 
+    document.getElementById('viewDetail').classList.add('active'); 
+}
+
+function actualizarBotonFavorito() {
+    const btn = document.getElementById('btnFavorito');
+    if (!btn) return;
+    if (!currentUser) {
+        btn.innerHTML = '🤍 Añadir a favoritos';
+        return;
+    }
+    db.from('favorites').select('id').eq('user_id', currentUser.id).eq('auction_id', productoSeleccionado.id).single().then(({ data }) => {
+        if (data) {
+            btn.innerHTML = '❤️ Quitar de favoritos';
+        } else {
+            btn.innerHTML = '🤍 Añadir a favoritos';
+        }
+    });
+}
+
 function actualizarVistaDetalleDatoVivo() {
     if (!productoSeleccionado) return;
     document.getElementById('detailImage').innerHTML = renderizarImagenProducto(productoSeleccionado.image_url);
@@ -1030,7 +1279,19 @@ function actualizarVistaDetalleDatoVivo() {
         infoBox.style.display = 'none';
     }
     document.getElementById('biddingControlsContainer').style.display = productoSeleccionado.status === 'closed' ? 'none' : 'block';
-    if (productoSeleccionado.status === 'closed') document.getElementById('detailTime').innerText = `🏆 Finalizada. Ganador: ${productoSeleccionado.winner||'Nadie'}`;
+    if (productoSeleccionado.status === 'closed') {
+        const timeBox = document.getElementById('detailTime');
+        timeBox.innerText = `🏆 SUBASTA FINALIZADA · Ganador: ${productoSeleccionado.winner||'Nadie'}`;
+        timeBox.style.background = 'rgba(22,163,74,0.15)';
+        timeBox.style.border = '2px solid #16a34a';
+        timeBox.style.color = '#16a34a';
+        timeBox.style.fontWeight = 'bold';
+    } else {
+        const timeBox = document.getElementById('detailTime');
+        timeBox.style.background = 'rgba(249,115,22,0.1)';
+        timeBox.style.border = '1px solid #f97316';
+        timeBox.style.color = '#f97316';
+    }
     const btnCancelar = document.getElementById('btnCancelarVenta');
     if (btnCancelar) {
         btnCancelar.style.display = (productoSeleccionado.category === 'Mercado' && currentUser && currentUser.id === productoSeleccionado.seller_id && productoSeleccionado.status !== 'closed') ? 'block' : 'none';
@@ -1043,6 +1304,66 @@ function actualizarVistaDetalleDatoVivo() {
             btnCompraDirecta.innerText = `💎 COMPRA DIRECTA (${Number(productoSeleccionado.compra_directa_price).toLocaleString('es-ES')} € + 30% comisión)`;
         }
     }
+}
+
+// ===== FAVORITOS =====
+async function toggleFavorito(auctionId) {
+    if (!currentUser) {
+        abrirModalAuth('register', 'Crea una cuenta para guardar tus subastas favoritas.');
+        return;
+    }
+    const { data: existing } = await db.from('favorites').select('id').eq('user_id', currentUser.id).eq('auction_id', auctionId).single();
+    if (existing) {
+        await db.from('favorites').delete().eq('id', existing.id);
+        mostrarToast('Eliminado de favoritos.');
+    } else {
+        await db.from('favorites').insert({ user_id: currentUser.id, auction_id: auctionId });
+        mostrarToast('❤️ Añadido a favoritos.');
+    }
+    if (productoSeleccionado && productoSeleccionado.id === auctionId) {
+        actualizarBotonFavorito();
+    }
+}
+
+async function toggleFavoritoDetalle() {
+    if (!currentUser) {
+        abrirModalAuth('register', 'Crea una cuenta para guardar tus subastas favoritas.');
+        return;
+    }
+    await toggleFavorito(productoSeleccionado.id);
+}
+
+async function mostrarFavoritos() {
+    if (!currentUser) return abrirModalAuth('register');
+    ocultarTodasVistas();
+    document.getElementById('viewFavoritos').classList.add('active');
+    await cargarFavoritos();
+}
+
+async function cargarFavoritos() {
+    const container = document.getElementById('favoritosContainer');
+    container.innerHTML = 'Cargando...';
+    const { data: favs, error } = await db.from('favorites').select('auction_id').eq('user_id', currentUser.id);
+    if (error) { container.innerHTML = 'Error.'; return; }
+    if (!favs || !favs.length) { 
+        container.innerHTML = '<div style="text-align:center;padding:40px 20px;color:var(--text-muted);"><span style="font-size:3rem;display:block;margin-bottom:16px;">💔</span><p style="font-size:1.1rem;font-weight:bold;margin-bottom:8px;">No tienes favoritos</p><p style="font-size:0.85rem;">Marca subastas con el corazón para seguirlas.</p></div>'; 
+        return; 
+    }
+    const ids = favs.map(f => f.auction_id);
+    const subastasFav = subastasLocales.filter(a => ids.includes(a.id));
+    if (!subastasFav.length) { container.innerHTML = '<p>No se encontraron las subastas.</p>'; return; }
+    container.innerHTML = '<div class="auction-grid">' + subastasFav.map(p => {
+        const rarezaClase = p.rareza ? 'rareza-' + p.rareza.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-') : 'rareza-comun';
+        const cerrada = p.status === 'closed';
+        return `<div class="auction-card ${rarezaClase}" onclick="abrirDetalle('${p.id}')">
+            <div class="card-image">${renderizarImagenProducto(p.image_url)}${cerrada ? '<div class="badge-closed">FINALIZADA</div>' : ''}</div>
+            <div class="card-content">
+                <div class="card-category">${p.category||'General'}</div>
+                <div class="card-title">${p.title}</div>
+                <div class="card-footer"><div><div class="bid-label-sm">${cerrada?'Precio Final':'Puja Actual'}</div><div class="bid-amount-sm">${Number(p.current_price).toLocaleString('es-ES')} €</div></div></div>
+            </div>
+        </div>`;
+    }).join('') + '</div>';
 }
 
 // ===== COMPARTIR EN REDES =====
@@ -1063,24 +1384,108 @@ function copiarEnlace() {
     });
 }
 
-function cambiarFotoPrincipal(url) { document.getElementById('detailImage').innerHTML = renderizarImagenProducto(url); }
-function iniciarTemporizador(fin) { if (timerInterval) clearInterval(timerInterval); const target = new Date(fin||Date.now()+86400000).getTime(), box = document.getElementById('detailTime'); function actualizar() { if (productoSeleccionado && productoSeleccionado.status === 'closed') return; const diff = target - Date.now(); if (diff <= 0) { box.innerText = "⏳ Subasta Finalizada"; clearInterval(timerInterval); cargarSubastas(); return; } const d = Math.floor(diff/86400000), h = Math.floor((diff%86400000)/3600000), m = Math.floor((diff%3600000)/60000), s = Math.floor((diff%60000)/1000); box.innerText = d>0 ? `⏳ Cierra en: ${d}d ${h}h ${m}m` : `⏳ Cierra en: ${h}h ${m}m ${s}s`; } actualizar(); timerInterval = setInterval(actualizar, 1000); }
-async function cargarHistorialPujas(id) { const history = document.getElementById('historyList'); const { data: bids } = await db.from('bids').select('*').eq('auction_id', id).order('created_at', { ascending: false }); history.innerHTML = bids && bids.length ? '' : '<div style="font-size:0.8rem;color:var(--text-muted);">Sin pujas aún.</div>'; if (bids) bids.forEach(b => { const div = document.createElement('div'); div.className = 'history-item'; div.innerHTML = `<div style="display:flex;justify-content:space-between;"><div><span style="color:var(--accent-blue);font-weight:bold;">${b.user_name||'Anónimo'}</span>${b.comment?`<div style="font-size:0.75rem;color:#eab308;">"${b.comment}"</div>`:''}</div><span style="font-weight:bold;">${Number(b.amount).toLocaleString('es-ES')} €</span></div>`; history.appendChild(div); }); }
+function cambiarFotoPrincipal(url) { 
+    document.getElementById('detailImage').innerHTML = renderizarImagenProducto(url); 
+}
+
+function iniciarTemporizador(fin) { 
+    if (timerInterval) clearInterval(timerInterval); 
+    const target = new Date(fin||Date.now()+86400000).getTime(), box = document.getElementById('detailTime'); 
+    function actualizar() { 
+        if (productoSeleccionado && productoSeleccionado.status === 'closed') return; 
+        const diff = target - Date.now(); 
+        if (diff <= 0) { 
+            box.innerText = "⏳ Subasta Finalizada"; 
+            clearInterval(timerInterval); 
+            cargarSubastas(); 
+            return; 
+        } 
+        const d = Math.floor(diff/86400000), h = Math.floor((diff%86400000)/3600000), m = Math.floor((diff%3600000)/60000), s = Math.floor((diff%60000)/1000); 
+        box.innerText = d>0 ? `⏳ Cierra en: ${d}d ${h}h ${m}m` : `⏳ Cierra en: ${h}h ${m}m ${s}s`; 
+    } 
+    actualizar(); 
+    timerInterval = setInterval(actualizar, 1000); 
+}
+
+async function cargarHistorialPujas(id) { 
+    const history = document.getElementById('historyList'); 
+    const { data: bids } = await db.from('bids').select('*').eq('auction_id', id).order('created_at', { ascending: false }); 
+    history.innerHTML = bids && bids.length ? '' : '<div style="font-size:0.8rem;color:var(--text-muted);">Sin pujas aún. ¡Sé el primero!</div>'; 
+    if (bids) bids.forEach(b => { 
+        const div = document.createElement('div'); 
+        div.className = 'history-item'; 
+        div.innerHTML = `<div style="display:flex;justify-content:space-between;"><div><span style="color:var(--accent-blue);font-weight:bold;">${b.user_name||'Anónimo'}</span>${b.comment?`<div style="font-size:0.75rem;color:#eab308;background:rgba(234,179,8,0.1);padding:4px 8px;border-radius:6px;margin-top:2px;">"${b.comment}"</div>`:''}</div><span style="font-weight:bold;">${Number(b.amount).toLocaleString('es-ES')} €</span></div>`; 
+        history.appendChild(div); 
+    }); 
+    history.scrollTop = history.scrollHeight;
+}
 
 // ===== LOGROS =====
-async function tryUnlockAchievement(key) { if (!currentUser) return; const { data, error } = await db.rpc('unlock_achievement', { p_key: key }); if (!error && data === true) { const achievement = ALL_ACHIEVEMENTS.find(a => a.key === key); if (achievement) { const msg = `🏅 ¡Nueva insignia: ${achievement.icon} ${achievement.name}!`; mostrarToast(msg); agregarNotificacion('🏅 Logro', msg); } if (document.getElementById('viewLogros').classList.contains('active')) cargarLogros(); if (document.getElementById('viewPerfil').classList.contains('active')) cargarInsignias(); } }
-async function cargarInsignias() { if (!currentUser) return; const container = document.getElementById('achievementsContainer'); if (!container) return; const { data: unlocked, error } = await db.from('user_achievements').select('achievement_key').eq('user_id', currentUser.id); if (error) { container.innerHTML = '<span>Error</span>'; return; } const unlockedKeys = unlocked.map(u => u.achievement_key); container.innerHTML = ALL_ACHIEVEMENTS.map(a => { const isUnlocked = unlockedKeys.includes(a.key); return `<div class="achievement-badge ${isUnlocked ? '' : 'locked'}" title="${a.desc}"><span>${a.icon}</span> ${a.name}</div>`; }).join(''); }
-async function cargarLogros() { if (!currentUser) return; const container = document.getElementById('logrosContainer'); if (!container) return; const { data: unlocked, error } = await db.from('user_achievements').select('achievement_key').eq('user_id', currentUser.id); if (error) { container.innerHTML = '<span>Error al cargar logros</span>'; return; } const unlockedKeys = unlocked.map(u => u.achievement_key); container.innerHTML = ALL_ACHIEVEMENTS.map(a => { const isUnlocked = unlockedKeys.includes(a.key); return `<div class="achievement-row ${isUnlocked ? 'unlocked' : 'locked'}"><div class="achievement-icon">${a.icon}</div><div class="achievement-info"><div class="achievement-name">${a.name}</div><div class="achievement-desc">${a.desc}</div></div><div class="achievement-status">${isUnlocked ? '✅' : '🔒'}</div></div>`; }).join(''); }
-async function mostrarLogros() { if (!currentUser) return abrirModalAuth('register'); ocultarTodasVistas(); document.getElementById('viewLogros').classList.add('active'); document.querySelectorAll('.primary-nav .nav-tab').forEach(t => t.classList.remove('active')); document.getElementById('tabLogros').classList.add('active'); await cargarLogros(); }
+async function tryUnlockAchievement(key) { 
+    if (!currentUser) return; 
+    const { data, error } = await db.rpc('unlock_achievement', { p_key: key }); 
+    if (!error && data === true) { 
+        const achievement = ALL_ACHIEVEMENTS.find(a => a.key === key); 
+        if (achievement) { 
+            const msg = `🏅 ¡Nueva insignia: ${achievement.icon} ${achievement.name}!`; 
+            mostrarToast(msg); 
+            agregarNotificacion('🏅 Logro', msg); 
+        } 
+        if (document.getElementById('viewLogros').classList.contains('active')) cargarLogros(); 
+        if (document.getElementById('viewPerfil').classList.contains('active')) cargarInsignias(); 
+    } 
+}
+
+async function cargarInsignias() { 
+    if (!currentUser) return; 
+    const container = document.getElementById('achievementsContainer'); 
+    if (!container) return; 
+    const { data: unlocked, error } = await db.from('user_achievements').select('achievement_key').eq('user_id', currentUser.id); 
+    if (error) { container.innerHTML = '<span>Error</span>'; return; } 
+    const unlockedKeys = unlocked.map(u => u.achievement_key); 
+    container.innerHTML = ALL_ACHIEVEMENTS.map(a => { 
+        const isUnlocked = unlockedKeys.includes(a.key); 
+        return `<div class="achievement-badge ${isUnlocked ? '' : 'locked'}" title="${a.desc}"><span>${a.icon}</span> ${a.name}</div>`; 
+    }).join(''); 
+}
+
+async function cargarLogros() { 
+    if (!currentUser) return; 
+    const container = document.getElementById('logrosContainer'); 
+    if (!container) return; 
+    const { data: unlocked, error } = await db.from('user_achievements').select('achievement_key').eq('user_id', currentUser.id); 
+    if (error) { container.innerHTML = '<span>Error al cargar logros</span>'; return; } 
+    const unlockedKeys = unlocked.map(u => u.achievement_key); 
+    container.innerHTML = ALL_ACHIEVEMENTS.map(a => { 
+        const isUnlocked = unlockedKeys.includes(a.key); 
+        return `<div class="achievement-row ${isUnlocked ? 'unlocked' : 'locked'}"><div class="achievement-icon">${a.icon}</div><div class="achievement-info"><div class="achievement-name">${a.name}</div><div class="achievement-desc">${a.desc}</div></div><div class="achievement-status">${isUnlocked ? '✅' : '🔒'}</div></div>`; 
+    }).join(''); 
+}
+
+async function mostrarLogros() { 
+    if (!currentUser) return abrirModalAuth('register'); 
+    ocultarTodasVistas(); 
+    document.getElementById('viewLogros').classList.add('active'); 
+    document.querySelectorAll('.primary-nav .nav-tab').forEach(t => t.classList.remove('active')); 
+    document.getElementById('tabLogros').classList.add('active'); 
+    await cargarLogros(); 
+}
 
 // ===== PUJAS =====
 async function ejecutarPuja(total) { 
-    if (!currentUser) return abrirModalAuth('register'); 
+    if (!currentUser) {
+        abrirModalAuth('register', '¡Crea tu cuenta para pujar! Recibe 1.000 € de regalo.');
+        return;
+    }
     if (productoSeleccionado.status === 'closed') { mostrarToast('⚠️ Subasta finalizada.'); return; }
     if (accionEnCurso) return; 
     accionEnCurso = true; 
-    document.getElementById('btnMinBid').disabled = true;
-    document.getElementById('btnCustomBid').disabled = true;
+    const btnMin = document.getElementById('btnMinBid');
+    const btnCustom = document.getElementById('btnCustomBid');
+    if (btnMin) btnMin.disabled = true;
+    if (btnCustom) btnCustom.disabled = true;
+    if (btnMin) btnMin.innerText = '⏳ Procesando...';
+    if (btnCustom) btnCustom.innerText = '⏳ Procesando...';
     try { 
         let comment = null; 
         if (currentUser.esGoat) { 
@@ -1088,6 +1493,10 @@ async function ejecutarPuja(total) {
             comment = ci ? ci.value.trim() : ''; 
             if (ci) ci.value = ''; 
         } 
+        if (comment && comment.length > 80) {
+            mostrarToast('⚠️ El mensaje no puede superar 80 caracteres.');
+            return;
+        }
         marcarCambioPropio(); 
         const { error } = await db.rpc('place_bid', { p_auction_id: productoSeleccionado.id, p_amount: total, p_comment: comment }); 
         if (error) { 
@@ -1097,6 +1506,8 @@ async function ejecutarPuja(total) {
         } 
         await cargarPerfil(currentUser.id); 
         productoSeleccionado.current_price = total; 
+        productoSeleccionado.last_bidder = currentUser.username;
+        actualizarVistaDetalleDatoVivo();
         actualizarInterfazUsuario(); 
         addXp(10); 
         tryUnlockAchievement('first_bid'); 
@@ -1106,7 +1517,6 @@ async function ejecutarPuja(total) {
         if (currentUser.saldo >= 1000000) tryUnlockAchievement('liquidez'); 
         if (currentUser.saldo === 0) tryUnlockAchievement('bancarrota'); 
         if (total >= 50000) tryUnlockAchievement('devoraste'); 
-        if (total >= productoSeleccionado.current_price * 10) tryUnlockAchievement('basado'); 
         if (productoSeleccionado.category && productoSeleccionado.category !== 'General') tryUnlockAchievement('skibidi'); 
         if (productoSeleccionado.category && productoSeleccionado.category !== 'General') { 
             const { data: c } = await db.rpc('increment_category_bid'); 
@@ -1122,16 +1532,120 @@ async function ejecutarPuja(total) {
         } 
     } finally { 
         accionEnCurso = false; 
-        document.getElementById('btnMinBid').disabled = false;
-        document.getElementById('btnCustomBid').disabled = false;
+        const btnMinFinal = document.getElementById('btnMinBid');
+        const btnCustomFinal = document.getElementById('btnCustomBid');
+        if (btnMinFinal) { btnMinFinal.disabled = false; btnMinFinal.innerText = '¡PUJAR MÍNIMO (+50 €)!'; }
+        if (btnCustomFinal) { btnCustomFinal.disabled = false; btnCustomFinal.innerText = 'Pujar'; }
     } 
 }
-async function hacerPujaMínima() { if (!currentUser) return abrirModalAuth('register'); if (!productoSeleccionado || !currentUser) return; if (productoSeleccionado.status === 'closed') { mostrarToast('⚠️ Subasta finalizada.'); return; } await ejecutarPuja(Number(productoSeleccionado.current_price) + 50); const { data: cuenta } = await db.rpc('increment_min_bid'); if (cuenta === 3) { marcarCambioPropio(); const { data: ns } = await db.rpc('add_mission_reward', { p_amount: 150 }); if (ns) { currentUser.saldo = ns; actualizarInterfazUsuario(); mostrarToast("🎯 ¡Gatillo Fácil! +150 €."); addXp(50); } } else if (cuenta === 1) mostrarToast("🔫 Primera puja mínima. ¡A por las 3!"); else if (cuenta === 2) mostrarToast("🔫🔫 Segunda puja mínima. ¡Una más!"); }
-function hacerPujaPersonalizada() { if (!currentUser) return abrirModalAuth('register'); if (!productoSeleccionado || !currentUser) return; const input = document.getElementById('customBidInput'), valor = parseInt(input.value); if (isNaN(valor) || valor <= productoSeleccionado.current_price) { mostrarToast("⚠️ Puja inválida."); return; } ejecutarPuja(valor).then(async () => { const { data: cuenta } = await db.rpc('increment_custom_bid'); if (cuenta === 1) { marcarCambioPropio(); const { data: ns } = await db.rpc('add_mission_reward', { p_amount: 200 }); if (ns) { currentUser.saldo = ns; actualizarInterfazUsuario(); mostrarToast("💼 ¡El Inversor! +200 €."); addXp(50); } } }); input.value = ''; }
+
+async function hacerPujaMínima() { 
+    if (!productoSeleccionado) return; 
+    if (productoSeleccionado.status === 'closed') { mostrarToast('⚠️ Subasta finalizada.'); return; }
+    if (!currentUser) {
+        // Es invitado
+        if (guestData.bidsCount >= 3) {
+            abrirModalAuth('register', '¡Has alcanzado el límite de pujas de invitado! Crea tu cuenta para seguir pujando.');
+            return;
+        }
+        const pujaMinima = Number(productoSeleccionado.current_price) + 50;
+        if (guestData.balance < pujaMinima) {
+            abrirModalAuth('register', '¡Te has quedado sin saldo de invitado! Crea tu cuenta para recibir 1.000 € y seguir pujando.');
+            return;
+        }
+        guestData.balance -= pujaMinima;
+        guestData.bidsCount += 1;
+        localStorage.setItem('abrozon_guest', JSON.stringify(guestData));
+        actualizarInterfazUsuario();
+        productoSeleccionado.current_price = pujaMinima;
+        productoSeleccionado.last_bidder = guestData.id;
+        actualizarVistaDetalleDatoVivo();
+        await db.from('bids').insert({
+            auction_id: productoSeleccionado.id,
+            user_id: null,
+            user_name: guestData.id,
+            amount: pujaMinima,
+            comment: null,
+            is_guest: true
+        });
+        mostrarToast('¡Puja realizada como invitado! Te quedan ' + (3 - guestData.bidsCount) + ' pujas.');
+        return;
+    }
+    await ejecutarPuja(Number(productoSeleccionado.current_price) + 50); 
+    const { data: cuenta } = await db.rpc('increment_min_bid'); 
+    if (cuenta === 3) { 
+        marcarCambioPropio(); 
+        const { data: ns } = await db.rpc('add_mission_reward', { p_amount: 150 }); 
+        if (ns) { 
+            currentUser.saldo = ns; 
+            actualizarInterfazUsuario(); 
+            mostrarToast("🎯 ¡Gatillo Fácil! +150 €."); 
+            addXp(50); 
+        } 
+    } else if (cuenta === 1) mostrarToast("🔫 Primera puja mínima. ¡A por las 3!"); 
+    else if (cuenta === 2) mostrarToast("🔫🔫 Segunda puja mínima. ¡Una más!"); 
+}
+
+function hacerPujaPersonalizada() { 
+    if (!productoSeleccionado) return; 
+    const input = document.getElementById('customBidInput'), valor = parseInt(input.value); 
+    if (isNaN(valor) || valor <= productoSeleccionado.current_price) { 
+        mostrarToast("⚠️ Puja inválida."); 
+        return; 
+    }
+    if (!currentUser) {
+        // Invitado
+        if (guestData.bidsCount >= 3) {
+            abrirModalAuth('register', '¡Has alcanzado el límite de pujas de invitado! Crea tu cuenta para seguir pujando.');
+            return;
+        }
+        if (guestData.balance < valor) {
+            abrirModalAuth('register', '¡Te has quedado sin saldo de invitado! Crea tu cuenta para recibir 1.000 € y seguir pujando.');
+            return;
+        }
+        guestData.balance -= valor;
+        guestData.bidsCount += 1;
+        localStorage.setItem('abrozon_guest', JSON.stringify(guestData));
+        actualizarInterfazUsuario();
+        productoSeleccionado.current_price = valor;
+        productoSeleccionado.last_bidder = guestData.id;
+        actualizarVistaDetalleDatoVivo();
+        db.from('bids').insert({
+            auction_id: productoSeleccionado.id,
+            user_id: null,
+            user_name: guestData.id,
+            amount: valor,
+            comment: null,
+            is_guest: true
+        }).then(() => {
+            cargarHistorialPujas(productoSeleccionado.id);
+        });
+        mostrarToast('¡Puja realizada como invitado! Te quedan ' + (3 - guestData.bidsCount) + ' pujas.');
+        input.value = '';
+        return;
+    }
+    ejecutarPuja(valor).then(async () => { 
+        const { data: cuenta } = await db.rpc('increment_custom_bid'); 
+        if (cuenta === 1) { 
+            marcarCambioPropio(); 
+            const { data: ns } = await db.rpc('add_mission_reward', { p_amount: 200 }); 
+            if (ns) { 
+                currentUser.saldo = ns; 
+                actualizarInterfazUsuario(); 
+                mostrarToast("💼 ¡El Inversor! +200 €."); 
+                addXp(50); 
+            } 
+        } 
+    }); 
+    input.value = ''; 
+}
 
 // ===== SIMULADOR DE ANUNCIOS =====
 async function verAnuncio(tipo) {
-    if (!currentUser) return abrirModalAuth('register');
+    if (!currentUser) {
+        abrirModalAuth('register', '¡Crea tu cuenta para ganar monedas viendo anuncios!');
+        return;
+    }
     if (accionEnCurso) return;
     const modal = document.getElementById('adModal');
     const mensaje = document.getElementById('adMessage');
@@ -1158,7 +1672,6 @@ async function verAnuncio(tipo) {
     btnAd.innerText = '⏳ Procesando...';
     accionEnCurso = true;
     try {
-        const antes = currentUser.saldo;
         marcarCambioPropio();
         const { data, error } = await db.rpc('add_ad_reward', { p_tipo: tipo });
         if (error) {
@@ -1188,8 +1701,49 @@ async function verAnuncio(tipo) {
     }
 }
 
-async function activarGoat() { if (!currentUser) return; if (accionEnCurso) return; accionEnCurso = true; try { marcarCambioPropio(); const { data, error } = await db.rpc('toggle_goat'); if (error) { mostrarToast('⚠️ ' + error.message); return; } currentUser.esGoat = data; await cargarPerfil(currentUser.id); actualizarInterfazUsuario(); if (data) { const msg = '🐐 Modo GOAT activado. +5.000 €.'; mostrarToast(msg); agregarNotificacion('🐐 GOAT', msg); tryUnlockAchievement('goat'); } } finally { accionEnCurso = false; } }
-async function reclamarBonusDiario() { if (!currentUser) return; if (accionEnCurso) return; accionEnCurso = true; try { marcarCambioPropio(); const { data, error } = await db.rpc('reclamar_bonus_diario'); if (error) { mostrarToast('⚠️ ' + error.message); return; } currentUser.saldo = data; actualizarInterfazUsuario(); const msg = '🎁 ¡Misiones completadas! Has recibido +1.000 € de bono diario.'; mostrarToast(msg); agregarNotificacion('🎁 Bono', msg); } finally { accionEnCurso = false; } }
+async function activarGoat() { 
+    if (!currentUser) {
+        abrirModalAuth('register', '¡Crea tu cuenta para activar el Modo GOAT!');
+        return;
+    }
+    if (accionEnCurso) return; 
+    accionEnCurso = true; 
+    try { 
+        marcarCambioPropio(); 
+        const { data, error } = await db.rpc('toggle_goat'); 
+        if (error) { mostrarToast('⚠️ ' + error.message); return; } 
+        currentUser.esGoat = data; 
+        await cargarPerfil(currentUser.id); 
+        actualizarInterfazUsuario(); 
+        if (data) { 
+            const msg = '🐐 Modo GOAT activado. +5.000 €.'; 
+            mostrarToast(msg); 
+            agregarNotificacion('🐐 GOAT', msg); 
+            tryUnlockAchievement('goat'); 
+        } 
+    } finally { 
+        accionEnCurso = false; 
+    } 
+}
+
+async function reclamarBonusDiario() { 
+    if (!currentUser) return; 
+    if (accionEnCurso) return; 
+    accionEnCurso = true; 
+    try { 
+        marcarCambioPropio(); 
+        const { data, error } = await db.rpc('reclamar_bonus_diario'); 
+        if (error) { mostrarToast('⚠️ ' + error.message); return; } 
+        currentUser.saldo = data; 
+        actualizarInterfazUsuario(); 
+        const msg = '🎁 ¡Misiones completadas! Has recibido +1.000 € de bono diario.'; 
+        mostrarToast(msg); 
+        agregarNotificacion('🎁 Bono', msg); 
+    } finally { 
+        accionEnCurso = false; 
+    } 
+}
+
 // ===== CONTADOR DE ANUNCIOS =====
 async function actualizarContadorAnuncios() {
     if (!currentUser) return;
@@ -1209,13 +1763,50 @@ async function actualizarContadorAnuncios() {
         console.error('Error al actualizar contador de anuncios:', e);
     }
 }
+
 // ===== MISIONES =====
-async function mostrarMisiones() { if (!currentUser) return abrirModalAuth('register'); ocultarTodasVistas(); document.getElementById('viewMisiones').classList.add('active'); document.querySelectorAll('.primary-nav .nav-tab').forEach(t => t.classList.remove('active')); document.getElementById('tabMisiones').classList.add('active'); await cargarMisiones(); }
-async function cargarMisiones() { const container = document.getElementById('misionesContainer'); container.innerHTML = 'Cargando...'; const { data, error } = await db.rpc('get_daily_missions'); if (error) { container.innerHTML = `<p>Error: ${error.message}</p>`; return; } const m = data; let html = ''; const todasMisionesCompletadas = m.min_bids >= 3 && m.custom_bid >= 1 && m.ad_views >= 2 && m.category_bid >= 1; html += `<div class="mission-card"><div class="mission-title">🎁 Bono Diario</div><div class="mission-desc">Completa todas las misiones diarias y reclama 1.000 €.</div>${m.bonus ? (todasMisionesCompletadas ? `<button onclick="reclamarBonusDiarioDesdeMisiones()" style="background:var(--accent-green);color:white;border:none;padding:6px 12px;border-radius:6px;cursor:pointer;font-weight:bold;">💰 Reclamar +1.000 €</button>` : `<span style="font-size:0.8rem;color:var(--text-muted);">🔒 Completa todas las misiones</span>`) : `<span class="mission-completed">✅ Reclamado hoy</span>`}</div>`; html += `<div class="mission-card"><div class="mission-title">🔫 Gatillo Fácil</div><div class="mission-desc">3 pujas mínimas. ${m.min_bids}/3</div><div class="progress-bar"><div class="progress-fill" style="width:${Math.min(m.min_bids/3*100,100)}%"></div></div>${m.min_bids>=3?'<div class="mission-completed">✅</div>':''}</div>`; html += `<div class="mission-card"><div class="mission-title">💼 El Inversor</div><div class="mission-desc">1 puja personalizada. ${m.custom_bid>=1?'✅':'Pendiente'}</div>${m.custom_bid>=1?'<div class="mission-completed">✅</div>':''}</div>`; html += `<div class="mission-card"><div class="mission-title">📺 Patrocinador</div><div class="mission-desc">2 anuncios. ${m.ad_views}/2</div><div class="progress-bar"><div class="progress-fill" style="width:${Math.min(m.ad_views/2*100,100)}%"></div></div>${m.ad_views>=2?'<div class="mission-completed">✅</div>':''}</div>`; html += `<div class="mission-card"><div class="mission-title">🧭 Explorador</div><div class="mission-desc">Puja en categoría especial. ${m.category_bid>=1?'✅':'Pendiente'}</div>${m.category_bid>=1?'<div class="mission-completed">✅</div>':''}</div>`; container.innerHTML = html; }
-async function reclamarBonusDiarioDesdeMisiones() { await reclamarBonusDiario(); cargarMisiones(); }
+async function mostrarMisiones() { 
+    if (!currentUser) return abrirModalAuth('register'); 
+    ocultarTodasVistas(); 
+    document.getElementById('viewMisiones').classList.add('active'); 
+    document.querySelectorAll('.primary-nav .nav-tab').forEach(t => t.classList.remove('active')); 
+    document.getElementById('tabMisiones').classList.add('active'); 
+    await cargarMisiones(); 
+}
+
+async function cargarMisiones() { 
+    const container = document.getElementById('misionesContainer'); 
+    container.innerHTML = 'Cargando...'; 
+    const { data, error } = await db.rpc('get_daily_missions'); 
+    if (error) { container.innerHTML = `<p>Error: ${error.message}</p>`; return; } 
+    const m = data; 
+    let html = ''; 
+    const todasMisionesCompletadas = m.min_bids >= 3 && m.custom_bid >= 1 && m.ad_views >= 2 && m.category_bid >= 1; 
+    html += `<div class="mission-card"><div class="mission-title">🎁 Bono Diario</div><div class="mission-desc">Completa todas las misiones diarias y reclama 1.000 €.</div>${m.bonus ? (todasMisionesCompletadas ? `<button onclick="reclamarBonusDiarioDesdeMisiones()" style="background:var(--accent-green);color:white;border:none;padding:6px 12px;border-radius:6px;cursor:pointer;font-weight:bold;">💰 Reclamar +1.000 €</button>` : `<span style="font-size:0.8rem;color:var(--text-muted);">🔒 Completa todas las misiones</span>`) : `<span class="mission-completed">✅ Reclamado hoy</span>`}</div>`; 
+    html += `<div class="mission-card"><div class="mission-title">🔫 Gatillo Fácil</div><div class="mission-desc">3 pujas mínimas. ${m.min_bids}/3</div><div class="progress-bar"><div class="progress-fill" style="width:${Math.min(m.min_bids/3*100,100)}%"></div></div>${m.min_bids>=3?'<div class="mission-completed">✅</div>':''}</div>`; 
+    html += `<div class="mission-card"><div class="mission-title">💼 El Inversor</div><div class="mission-desc">1 puja personalizada. ${m.custom_bid>=1?'✅':'Pendiente'}</div>${m.custom_bid>=1?'<div class="mission-completed">✅</div>':''}</div>`; 
+    html += `<div class="mission-card"><div class="mission-title">📺 Patrocinador</div><div class="mission-desc">2 anuncios. ${m.ad_views}/2</div><div class="progress-bar"><div class="progress-fill" style="width:${Math.min(m.ad_views/2*100,100)}%"></div></div>${m.ad_views>=2?'<div class="mission-completed">✅</div>':''}</div>`; 
+    html += `<div class="mission-card"><div class="mission-title">🧭 Explorador</div><div class="mission-desc">Puja en categoría especial. ${m.category_bid>=1?'✅':'Pendiente'}</div>${m.category_bid>=1?'<div class="mission-completed">✅</div>':''}</div>`; 
+    container.innerHTML = html; 
+}
+
+async function reclamarBonusDiarioDesdeMisiones() { 
+    await reclamarBonusDiario(); 
+    cargarMisiones(); 
+}
 
 // ===== HALL OF FAME =====
-async function mostrarHallOfFame() { if (!currentUser) return abrirModalAuth('register'); ocultarTodasVistas(); document.getElementById('viewHallOfFame').classList.add('active'); document.querySelectorAll('.primary-nav .nav-tab').forEach(t => t.classList.remove('active')); document.getElementById('tabHallOfFame').classList.add('active'); await cargarHallOfFame(); if (hallOfFameInterval) clearInterval(hallOfFameInterval); hallOfFameInterval = setInterval(cargarHallOfFame, 30000); }
+async function mostrarHallOfFame() { 
+    if (!currentUser) return abrirModalAuth('register'); 
+    ocultarTodasVistas(); 
+    document.getElementById('viewHallOfFame').classList.add('active'); 
+    document.querySelectorAll('.primary-nav .nav-tab').forEach(t => t.classList.remove('active')); 
+    document.getElementById('tabHallOfFame').classList.add('active'); 
+    await cargarHallOfFame(); 
+    if (hallOfFameInterval) clearInterval(hallOfFameInterval); 
+    hallOfFameInterval = setInterval(cargarHallOfFame, 30000); 
+}
+
 async function cargarHallOfFame() {
     const container = document.getElementById('hofContainer');
     container.innerHTML = 'Cargando...';
@@ -1230,6 +1821,7 @@ async function cargarHallOfFame() {
     html += '<div class="hof-section"><h3>🤝 El Más Broker</h3><p style="color:var(--text-muted);font-size:0.8rem;margin-bottom:10px;">Más ganancias vendiendo en el mercado</p>' + construirPodioYLista(data.brokers, 'gastado') + '</div>';
     container.innerHTML = html;
 }
+
 function construirPodioYLista(lista, tipo) {
     if (!lista || !lista.length) return '<p>No hay datos.</p>';
     let html = '<div class="hof-podium">';
@@ -1338,7 +1930,10 @@ function filtrarMisPujas(filtro) {
 
 function renderizarMisPujas(data) {
     const container = document.getElementById('misPujasContainer');
-    if (!data.length) { container.innerHTML = '<p>Aún no has hecho ninguna puja.</p>'; return; }
+    if (!data.length) { 
+        container.innerHTML = '<div style="text-align:center;padding:40px 20px;color:var(--text-muted);"><span style="font-size:3rem;display:block;margin-bottom:16px;">🔨</span><p style="font-size:1.1rem;font-weight:bold;margin-bottom:8px;">Aún no has hecho ninguna puja</p><p style="font-size:0.85rem;">Explora el catálogo y encuentra tu primera subasta.</p><button onclick="mostrarCatalogo()" style="margin-top:16px;background:var(--accent-blue);color:white;border:none;padding:10px 20px;border-radius:8px;font-weight:bold;cursor:pointer;">Ver Catálogo</button></div>'; 
+        return; 
+    }
     let datosFiltrados = data;
     if (misPujasFiltro === 'activas') {
         datosFiltrados = data.filter(b => b.auctions && b.auctions.status !== 'closed');
@@ -1403,13 +1998,45 @@ function mostrarLegal() { ocultarTodasVistas(); document.getElementById('viewLeg
 function mostrarAyuda() { ocultarTodasVistas(); document.getElementById('viewAyuda').classList.add('active'); document.querySelectorAll('.primary-nav .nav-tab').forEach(t => t.classList.remove('active')); document.getElementById('tabAyuda').classList.add('active'); }
 function ocultarTodasVistas() { document.querySelectorAll('.view').forEach(v => v.classList.remove('active')); if (hallOfFameInterval) { clearInterval(hallOfFameInterval); hallOfFameInterval = null; } }
 function mostrarCatalogo() { mostrandoFinalizadas = false; categoriaActiva = 'Todas'; ocultarTodasVistas(); cargarSubastas(); document.getElementById('viewCatalog').classList.add('active'); document.querySelectorAll('.primary-nav .nav-tab').forEach(t => t.classList.remove('active')); document.getElementById('tabTodas').classList.add('active'); renderizarCategoryChips(); }
-function abrirModalAuth(mode = 'register') { toggleAuthForm(mode); document.getElementById('authModal').style.display = 'flex'; }
+
+function abrirModalAuth(mode = 'register', mensaje = '') { 
+    toggleAuthForm(mode); 
+    if (mensaje) {
+        document.getElementById('authModalMessageLogin').innerText = mensaje;
+        document.getElementById('authModalMessageRegister').innerText = mensaje;
+    } else {
+        document.getElementById('authModalMessageLogin').innerText = 'Identifícate para pujar.';
+        document.getElementById('authModalMessageRegister').innerText = '¡Únete y recibe 1.000 €!';
+    }
+    document.getElementById('authModal').style.display = 'flex'; 
+}
+
 function cerrarModalAuth() { document.getElementById('authModal').style.display = 'none'; }
 function abrirModalAdmin() { document.getElementById('adminModal').style.display = 'flex'; renderizarListaAdminSubastas(); cargarCategorias().then(() => { actualizarSelectorCategoriasAdmin(); renderizarListaAdminCategorias(); }); }
 function cerrarModalAdmin() { document.getElementById('adminModal').style.display = 'none'; }
-async function adminBuscarUsuario() { const alias = (document.getElementById('adminBuscarAlias').value.trim()||'').startsWith('@') ? document.getElementById('adminBuscarAlias').value.trim() : '@'+document.getElementById('adminBuscarAlias').value.trim(); const { data, error } = await db.rpc('admin_buscar_usuario',{p_alias:alias}); const box = document.getElementById('adminUserResult'); if (error || !data || !data.length) { box.innerHTML = '<p>No encontrado.</p>'; return; } const u = data[0]; box.innerHTML = `<div style="background:var(--bg-subtle);padding:12px;border-radius:10px;font-size:0.85rem;"><div><strong>${u.username}</strong> ${u.is_admin?'🛠️':''} ${u.es_goat?'🐐':''} ${u.is_banned?'🚫':''}</div><div>Saldo: ${Number(u.saldo).toLocaleString('es-ES')} €</div><div style="display:flex;gap:6px;margin:8px 0;"><input type="number" id="adminNuevoSaldo" placeholder="Nuevo saldo" style="flex:1;padding:8px;border-radius:6px;border:1px solid var(--border-color);"><button onclick="adminActualizarSaldo('${u.username}')" style="background:var(--accent-green);color:white;border:none;padding:8px 12px;border-radius:6px;font-weight:bold;">Fijar</button></div><button onclick="adminToggleBan('${u.username}')" style="width:100%;background:${u.is_banned?'#16a34a':'#ef4444'};color:white;border:none;padding:8px;border-radius:6px;font-weight:bold;">${u.is_banned?'Quitar baneo':'Banear'}</button></div>`; }
-async function adminActualizarSaldo(alias) { const v = parseInt(document.getElementById('adminNuevoSaldo').value); if (isNaN(v)) { mostrarToast('⚠️ Saldo inválido.'); return; } await db.rpc('admin_set_saldo',{p_alias:alias,p_nuevo_saldo:v}); mostrarToast('✅ Saldo actualizado.'); adminBuscarUsuario(); }
-async function adminToggleBan(alias) { await db.rpc('admin_toggle_ban',{p_alias:alias}); adminBuscarUsuario(); }
+
+async function adminBuscarUsuario() { 
+    const alias = (document.getElementById('adminBuscarAlias').value.trim()||'').startsWith('@') ? document.getElementById('adminBuscarAlias').value.trim() : '@'+document.getElementById('adminBuscarAlias').value.trim(); 
+    const { data, error } = await db.rpc('admin_buscar_usuario',{p_alias:alias}); 
+    const box = document.getElementById('adminUserResult'); 
+    if (error || !data || !data.length) { box.innerHTML = '<p>No encontrado.</p>'; return; } 
+    const u = data[0]; 
+    box.innerHTML = `<div style="background:var(--bg-subtle);padding:12px;border-radius:10px;font-size:0.85rem;"><div><strong>${u.username}</strong> ${u.is_admin?'🛠️':''} ${u.es_goat?'🐐':''} ${u.is_banned?'🚫':''}</div><div>Saldo: ${Number(u.saldo).toLocaleString('es-ES')} €</div><div style="display:flex;gap:6px;margin:8px 0;"><input type="number" id="adminNuevoSaldo" placeholder="Nuevo saldo" style="flex:1;padding:8px;border-radius:6px;border:1px solid var(--border-color);"><button onclick="adminActualizarSaldo('${u.username}')" style="background:var(--accent-green);color:white;border:none;padding:8px 12px;border-radius:6px;font-weight:bold;">Fijar</button></div><button onclick="adminToggleBan('${u.username}')" style="width:100%;background:${u.is_banned?'#16a34a':'#ef4444'};color:white;border:none;padding:8px;border-radius:6px;font-weight:bold;">${u.is_banned?'Quitar baneo':'Banear'}</button></div>`; 
+}
+
+async function adminActualizarSaldo(alias) { 
+    const v = parseInt(document.getElementById('adminNuevoSaldo').value); 
+    if (isNaN(v)) { mostrarToast('⚠️ Saldo inválido.'); return; } 
+    await db.rpc('admin_set_saldo',{p_alias:alias,p_nuevo_saldo:v}); 
+    mostrarToast('✅ Saldo actualizado.'); 
+    adminBuscarUsuario(); 
+}
+
+async function adminToggleBan(alias) { 
+    await db.rpc('admin_toggle_ban',{p_alias:alias}); 
+    adminBuscarUsuario(); 
+}
+
 function renderizarListaAdminSubastas() {
     const box = document.getElementById('adminAuctionList');
     if (!box) return;
@@ -1427,7 +2054,15 @@ function renderizarListaAdminSubastas() {
         box.appendChild(row);
     });
 }
-async function adminEliminarSubasta(id) { if (!confirm("¿Seguro que quieres eliminar esta subasta?")) return; await db.rpc('admin_delete_auction',{p_auction_id:id}); await cargarSubastas(); renderizarListaAdminSubastas(); mostrarToast('🗑️ Subasta eliminada.'); }
+
+async function adminEliminarSubasta(id) { 
+    if (!confirm("¿Seguro que quieres eliminar esta subasta?")) return; 
+    await db.rpc('admin_delete_auction',{p_auction_id:id}); 
+    await cargarSubastas(); 
+    renderizarListaAdminSubastas(); 
+    mostrarToast('🗑️ Subasta eliminada.'); 
+}
+
 async function adminForzarCierre(id) {
     if (!confirm("¿Forzar cierre y adjudicarte esta subasta? Se añadirá a tu inventario.")) return;
     const { error } = await db.rpc('admin_forzar_cierre_y_adjudicar', { p_auction_id: id });
@@ -1436,16 +2071,126 @@ async function adminForzarCierre(id) {
     renderizarListaAdminSubastas();
     mostrarToast('✅ Subasta adjudicada a tu usuario. Revisa tu vitrina.');
 }
-async function adminListarUsuarios() { const box = document.getElementById('adminUserList'); box.innerHTML = 'Cargando...'; const { data, error } = await db.rpc('admin_listar_usuarios'); if (error) { box.innerHTML = `<p style="color:#ef4444;">Error: ${error.message}</p>`; return; } if (!data || data.length === 0) { box.innerHTML = '<p>No hay usuarios registrados.</p>'; return; } let html = ''; data.forEach(u => { html += `<div style="background: var(--bg-subtle); border-radius: 8px; padding: 8px 10px; margin-bottom: 6px; font-size: 0.8rem; display: flex; justify-content: space-between; align-items: center;"><span><strong>${u.username}</strong> ${u.is_admin?'🛠️':''} ${u.es_goat?'🐐':''} ${u.is_banned?'🚫':''}</span><span style="color: var(--accent-green);">${Number(u.saldo).toLocaleString('es-ES')} €</span><div><button onclick="adminActualizarSaldo('${u.username}')" style="background: var(--accent-green); color:white; border:none; padding: 4px 8px; border-radius: 4px; font-size: 0.7rem; cursor:pointer;">💰</button><button onclick="adminToggleBan('${u.username}')" style="background: ${u.is_banned ? '#16a34a' : '#ef4444'}; color:white; border:none; padding: 4px 8px; border-radius: 4px; font-size: 0.7rem; cursor:pointer;">${u.is_banned ? '✅' : '🚫'}</button></div></div>`; }); box.innerHTML = html; }
-async function adminAddCategoria() { const name = document.getElementById('newCatName').value.trim(); const icon = document.getElementById('newCatIcon').value.trim() || '📦'; if (!name) { mostrarToast('⚠️ Nombre requerido.'); return; } const { error } = await db.rpc('admin_add_category', { p_name: name, p_icon: icon }); if (error) { mostrarToast('⚠️ ' + error.message); return; } document.getElementById('newCatName').value = ''; document.getElementById('newCatIcon').value = ''; await cargarCategorias(); renderizarListaAdminCategorias(); actualizarSelectorCategoriasAdmin(); mostrarToast('✅ Categoría añadida.'); }
-async function adminDeleteCategoria(id) { if (!confirm("¿Eliminar categoría?")) return; const { error } = await db.rpc('admin_delete_category', { p_id: id }); if (error) { mostrarToast('⚠️ ' + error.message); return; } await cargarCategorias(); renderizarListaAdminCategorias(); actualizarSelectorCategoriasAdmin(); mostrarToast('🗑️ Categoría eliminada.'); }
-function renderizarListaAdminCategorias() { const box = document.getElementById('adminCatList'); if (!box) return; box.innerHTML = categorias.map(c => `<div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0;font-size:0.85rem;"><span>${c.icon} ${c.name}</span><button onclick="adminDeleteCategoria(${c.id})" style="background:#ef4444;color:white;border:none;padding:2px 8px;border-radius:4px;font-size:0.7rem;">Eliminar</button></div>`).join(''); }
+
+async function adminListarUsuarios() { 
+    const box = document.getElementById('adminUserList'); 
+    box.innerHTML = 'Cargando...'; 
+    const { data, error } = await db.rpc('admin_listar_usuarios'); 
+    if (error) { box.innerHTML = `<p style="color:#ef4444;">Error: ${error.message}</p>`; return; } 
+    if (!data || data.length === 0) { box.innerHTML = '<p>No hay usuarios registrados.</p>'; return; } 
+    let html = ''; 
+    data.forEach(u => { 
+        html += `<div style="background: var(--bg-subtle); border-radius: 8px; padding: 8px 10px; margin-bottom: 6px; font-size: 0.8rem; display: flex; justify-content: space-between; align-items: center;"><span><strong>${u.username}</strong> ${u.is_admin?'🛠️':''} ${u.es_goat?'🐐':''} ${u.is_banned?'🚫':''}</span><span style="color: var(--accent-green);">${Number(u.saldo).toLocaleString('es-ES')} €</span><div><button onclick="adminActualizarSaldo('${u.username}')" style="background: var(--accent-green); color:white; border:none; padding: 4px 8px; border-radius: 4px; font-size: 0.7rem; cursor:pointer;">💰</button><button onclick="adminToggleBan('${u.username}')" style="background: ${u.is_banned ? '#16a34a' : '#ef4444'}; color:white; border:none; padding: 4px 8px; border-radius: 4px; font-size: 0.7rem; cursor:pointer;">${u.is_banned ? '✅' : '🚫'}</button></div></div>`; 
+    }); 
+    box.innerHTML = html; 
+}
+
+async function adminAddCategoria() { 
+    const name = document.getElementById('newCatName').value.trim(); 
+    const icon = document.getElementById('newCatIcon').value.trim() || '📦'; 
+    if (!name) { mostrarToast('⚠️ Nombre requerido.'); return; } 
+    const { error } = await db.rpc('admin_add_category', { p_name: name, p_icon: icon }); 
+    if (error) { mostrarToast('⚠️ ' + error.message); return; } 
+    document.getElementById('newCatName').value = ''; 
+    document.getElementById('newCatIcon').value = ''; 
+    await cargarCategorias(); 
+    renderizarListaAdminCategorias(); 
+    actualizarSelectorCategoriasAdmin(); 
+    mostrarToast('✅ Categoría añadida.'); 
+}
+
+async function adminDeleteCategoria(id) { 
+    if (!confirm("¿Eliminar categoría?")) return; 
+    const { error } = await db.rpc('admin_delete_category', { p_id: id }); 
+    if (error) { mostrarToast('⚠️ ' + error.message); return; } 
+    await cargarCategorias(); 
+    renderizarListaAdminCategorias(); 
+    actualizarSelectorCategoriasAdmin(); 
+    mostrarToast('🗑️ Categoría eliminada.'); 
+}
+
+function renderizarListaAdminCategorias() { 
+    const box = document.getElementById('adminCatList'); 
+    if (!box) return; 
+    box.innerHTML = categorias.map(c => `<div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0;font-size:0.85rem;"><span>${c.icon} ${c.name}</span><button onclick="adminDeleteCategoria(${c.id})" style="background:#ef4444;color:white;border:none;padding:2px 8px;border-radius:4px;font-size:0.7rem;">Eliminar</button></div>`).join(''); 
+}
 
 // ===== AUTENTICACIÓN =====
-function toggleAuthForm(mode) { document.getElementById('formLogin').style.display = mode==='login'?'block':'none'; document.getElementById('formRegister').style.display = mode==='register'?'block':'none'; }
-async function registrarUsuario() { const email = document.getElementById('regEmail').value.trim(), alias = document.getElementById('regUsername').value.trim().startsWith('@')? document.getElementById('regUsername').value.trim() : '@'+document.getElementById('regUsername').value.trim(), pass = document.getElementById('regPassword').value.trim(); if (!email||!alias||!pass) return mostrarToast("⚠️ Completa todos los campos."); const { data: libre } = await db.rpc('username_disponible',{p_username:alias}); if (!libre) return mostrarToast("⚠️ Alias en uso."); const { data, error } = await db.auth.signUp({ email, password: pass, options: { data: { username: alias } } }); if (error) return mostrarToast('⚠️ ' + error.message); if (!data.session) { mostrarToast("📧 Confirma tu correo."); cerrarModalAuth(); return; } await cargarPerfil(data.user.id); cerrarModalAuth(); actualizarInterfazUsuario(); mostrarToast("¡Bienvenido! 1.000 €."); }
-async function iniciarSesion() { const email = document.getElementById('loginEmail').value.trim(), pass = document.getElementById('loginPassword').value.trim(); if (!email||!pass) return mostrarToast("⚠️ Completa campos."); const { data, error } = await db.auth.signInWithPassword({ email, password: pass }); if (error) return mostrarToast('⚠️ ' + error.message); await cargarPerfil(data.user.id); cerrarModalAuth(); actualizarInterfazUsuario(); await checkStreakAndReward(); }
-async function solicitarRecuperacion() { const email = prompt("Email:"); if (!email) return; const { error } = await db.auth.resetPasswordForEmail(email, { redirectTo: window.location.href.split('#')[0] }); if (error) return mostrarToast('⚠️ ' + error.message); mostrarToast('📧 Correo enviado.'); }
+function toggleAuthForm(mode) { 
+    document.getElementById('formLogin').style.display = mode==='login'?'block':'none'; 
+    document.getElementById('formRegister').style.display = mode==='register'?'block':'none'; 
+}
+
+async function registrarUsuario() { 
+    const email = document.getElementById('regEmail').value.trim(), 
+          alias = document.getElementById('regUsername').value.trim().startsWith('@')? document.getElementById('regUsername').value.trim() : '@'+document.getElementById('regUsername').value.trim(), 
+          pass = document.getElementById('regPassword').value.trim(); 
+    if (!email||!alias||!pass) return mostrarToast("⚠️ Completa todos los campos."); 
+    const { data: libre } = await db.rpc('username_disponible',{p_username:alias}); 
+    if (!libre) return mostrarToast("⚠️ Alias en uso."); 
+    const { data, error } = await db.auth.signUp({ email, password: pass, options: { data: { username: alias } } }); 
+    if (error) return mostrarToast('⚠️ ' + error.message); 
+    if (!data.session) { 
+        mostrarToast("📧 Confirma tu correo."); 
+        cerrarModalAuth(); 
+        return; 
+    } 
+    await cargarPerfil(data.user.id); 
+    // Transferir saldo de invitado
+    const guest = JSON.parse(localStorage.getItem('abrozon_guest') || 'null');
+    if (guest && guest.balance > 0) {
+        const { data: updatedProfile, error: errSaldo } = await db.from('profiles')
+            .update({ saldo: currentUser.saldo + guest.balance })
+            .eq('id', currentUser.id)
+            .select()
+            .single();
+        if (!errSaldo && updatedProfile) {
+            currentUser.saldo = updatedProfile.saldo;
+            localStorage.removeItem('abrozon_guest');
+            guestData = { id: null, balance: 500, bidsCount: 0 };
+            mostrarToast('¡Saldo de invitado transferido! +' + guest.balance.toLocaleString('es-ES') + ' € extra.');
+        }
+    }
+    cerrarModalAuth(); 
+    actualizarInterfazUsuario(); 
+    mostrarToast("¡Bienvenido! 1.000 €."); 
+}
+
+async function iniciarSesion() { 
+    const email = document.getElementById('loginEmail').value.trim(), 
+          pass = document.getElementById('loginPassword').value.trim(); 
+    if (!email||!pass) return mostrarToast("⚠️ Completa campos."); 
+    const { data, error } = await db.auth.signInWithPassword({ email, password: pass }); 
+    if (error) return mostrarToast('⚠️ ' + error.message); 
+    await cargarPerfil(data.user.id); 
+    // Transferir saldo de invitado
+    const guest = JSON.parse(localStorage.getItem('abrozon_guest') || 'null');
+    if (guest && guest.balance > 0) {
+        const { data: updatedProfile, error: errSaldo } = await db.from('profiles')
+            .update({ saldo: currentUser.saldo + guest.balance })
+            .eq('id', currentUser.id)
+            .select()
+            .single();
+        if (!errSaldo && updatedProfile) {
+            currentUser.saldo = updatedProfile.saldo;
+            localStorage.removeItem('abrozon_guest');
+            guestData = { id: null, balance: 500, bidsCount: 0 };
+            mostrarToast('¡Saldo de invitado transferido! +' + guest.balance.toLocaleString('es-ES') + ' € extra.');
+        }
+    }
+    cerrarModalAuth(); 
+    actualizarInterfazUsuario(); 
+    await checkStreakAndReward(); 
+}
+
+async function solicitarRecuperacion() { 
+    const email = prompt("Email:"); 
+    if (!email) return; 
+    const { error } = await db.auth.resetPasswordForEmail(email, { redirectTo: window.location.href.split('#')[0] }); 
+    if (error) return mostrarToast('⚠️ ' + error.message); 
+    mostrarToast('📧 Correo enviado.'); 
+}
+
 async function guardarNuevaPassword() {
     const p = document.getElementById('newPasswordInput').value.trim();
     if (p.length < 6) return mostrarToast("⚠️ Mínimo 6 caracteres.");
@@ -1455,14 +2200,59 @@ async function guardarNuevaPassword() {
     sessionStorage.removeItem('abrozon_recovery_pending');
     mostrarToast('✅ Contraseña actualizada.');
 }
-async function cerrarSesion() { await db.auth.signOut(); if (profileChannel) { await db.removeChannel(profileChannel); profileChannel = null; profileChannelUserId = null; } currentUser = null; actualizarInterfazUsuario(); mostrarCatalogo(); }
+
+async function cerrarSesion() { 
+    await db.auth.signOut(); 
+    if (profileChannel) { await db.removeChannel(profileChannel); profileChannel = null; profileChannelUserId = null; } 
+    currentUser = null; 
+    initGuest();
+    actualizarInterfazUsuario(); 
+    mostrarCatalogo(); 
+}
 
 // ===== PERFIL =====
-function mostrarPerfil() { if(!currentUser) return abrirModalAuth('register'); ocultarTodasVistas(); actualizarFormularioPerfil(); document.getElementById('viewPerfil').classList.add('active'); cargarInsignias(); }
-async function actualizarFormularioPerfil() { if (!currentUser) return; document.getElementById('perfilNombre').innerText = `👤 ${currentUser.username}`; const { data: { user } } = await db.auth.getUser(); document.getElementById('perfilEmail').innerText = user ? user.email : ''; }
-async function guardarNuevoAlias() { let nuevo = document.getElementById('perfilNuevoAlias').value.trim(); if (!nuevo) return mostrarToast("⚠️ Escribe un alias."); if (!nuevo.startsWith('@')) nuevo = '@'+nuevo; if (nuevo === currentUser.username) return mostrarToast("⚠️ Ya tienes ese alias."); const { data: libre } = await db.rpc('username_disponible',{p_username:nuevo}); if (!libre) return mostrarToast("⚠️ Alias en uso."); const { error } = await db.rpc('actualizar_mi_alias',{p_nuevo_alias:nuevo}); if (error) return mostrarToast('⚠️ ' + error.message); currentUser.username = nuevo; actualizarInterfazUsuario(); document.getElementById('perfilNuevoAlias').value = ''; mostrarToast('✅ Alias actualizado.'); }
-async function guardarNuevaPasswordPerfil() { const p = document.getElementById('perfilNuevaPassword').value.trim(); if (p.length < 6) return mostrarToast("⚠️ Mínimo 6 caracteres."); const { error } = await db.auth.updateUser({ password: p }); if (error) return mostrarToast('⚠️ ' + error.message); document.getElementById('perfilNuevaPassword').value = ''; mostrarToast('✅ Contraseña actualizada.'); }
-function solicitarBajaCuenta() { mostrarToast('📧 Escribe a abrozonsubastas@gmail.com para eliminar tu cuenta.'); }
+function mostrarPerfil() { 
+    if(!currentUser) return abrirModalAuth('register'); 
+    ocultarTodasVistas(); 
+    actualizarFormularioPerfil(); 
+    document.getElementById('viewPerfil').classList.add('active'); 
+    cargarInsignias(); 
+}
+
+async function actualizarFormularioPerfil() { 
+    if (!currentUser) return; 
+    document.getElementById('perfilNombre').innerText = `👤 ${currentUser.username}`; 
+    const { data: { user } } = await db.auth.getUser(); 
+    document.getElementById('perfilEmail').innerText = user ? user.email : ''; 
+}
+
+async function guardarNuevoAlias() { 
+    let nuevo = document.getElementById('perfilNuevoAlias').value.trim(); 
+    if (!nuevo) return mostrarToast("⚠️ Escribe un alias."); 
+    if (!nuevo.startsWith('@')) nuevo = '@'+nuevo; 
+    if (nuevo === currentUser.username) return mostrarToast("⚠️ Ya tienes ese alias."); 
+    const { data: libre } = await db.rpc('username_disponible',{p_username:nuevo}); 
+    if (!libre) return mostrarToast("⚠️ Alias en uso."); 
+    const { error } = await db.rpc('actualizar_mi_alias',{p_nuevo_alias:nuevo}); 
+    if (error) return mostrarToast('⚠️ ' + error.message); 
+    currentUser.username = nuevo; 
+    actualizarInterfazUsuario(); 
+    document.getElementById('perfilNuevoAlias').value = ''; 
+    mostrarToast('✅ Alias actualizado.'); 
+}
+
+async function guardarNuevaPasswordPerfil() { 
+    const p = document.getElementById('perfilNuevaPassword').value.trim(); 
+    if (p.length < 6) return mostrarToast("⚠️ Mínimo 6 caracteres."); 
+    const { error } = await db.auth.updateUser({ password: p }); 
+    if (error) return mostrarToast('⚠️ ' + error.message); 
+    document.getElementById('perfilNuevaPassword').value = ''; 
+    mostrarToast('✅ Contraseña actualizada.'); 
+}
+
+function solicitarBajaCuenta() { 
+    mostrarToast('📧 Escribe a abrozonsubastas@gmail.com para eliminar tu cuenta.'); 
+}
 
 // ===== VITRINA =====
 async function mostrarVitrina() {
@@ -1473,6 +2263,7 @@ async function mostrarVitrina() {
     await cargarVitrina();
     document.getElementById('viewVitrina').classList.add('active');
 }
+
 async function cargarVitrina() {
     const grid = document.getElementById('vitrinaGrid');
     grid.innerHTML = 'Cargando...';
@@ -1536,7 +2327,9 @@ async function cargarVitrina() {
 // ===== RECICLAJE / DESGUACE =====
 async function reciclarObjeto(userItemId) {
     if (!currentUser) return abrirModalAuth('register');
-    if (!confirm('¿Seguro que quieres reciclar este objeto a cambio de monedas? ¡No podrás recuperarlo!')) return;
+    if (!confirm('⚠️ ¿Seguro que quieres reciclar este objeto?\n\nRecibirás monedas a cambio, pero el objeto será destruido permanentemente.\n\nEsta acción NO se puede deshacer.')) {
+        return;
+    }
     const { data, error } = await db.rpc('desguazar_objeto', { p_user_item_id: userItemId });
     if (error) {
         mostrarToast('⚠️ ' + error.message);
@@ -1561,6 +2354,7 @@ function mostrarMercado() {
     renderizarCatalogo();
     renderizarCategoryChips();
 }
+
 async function venderItem(auctionId) {
     if (!currentUser) return abrirModalAuth('register');
     const precio = prompt("¿Precio de salida para la subasta? (€)");
@@ -1607,6 +2401,7 @@ async function cancelarVentaMercado() {
     await cargarSubastas();
     await cargarVitrina();
 }
+
 async function comprarDirecto() {
     if (!currentUser) return abrirModalAuth('register');
     if (!productoSeleccionado) return;
@@ -1657,13 +2452,19 @@ async function crearNuevaSubasta() {
     await cargarSubastas();
     mostrarToast('✅ Subasta creada con éxito.');
 }
-function toggleTema() { document.body.classList.toggle('dark-mode'); document.getElementById('dropdownTheme').innerText = document.body.classList.contains('dark-mode') ? "☀️ Modo Día" : "🌙 Modo Noche"; cerrarUserMenu(); }
+
+function toggleTema() { 
+    document.body.classList.toggle('dark-mode'); 
+    document.getElementById('dropdownTheme').innerText = document.body.classList.contains('dark-mode') ? "☀️ Modo Día" : "🌙 Modo Noche"; 
+    cerrarUserMenu(); 
+}
 
 // ===== MENÚS =====
 function toggleUserMenu() { const d = document.getElementById('userDropdown'); d.style.display = d.style.display === 'block' ? 'none' : 'block'; }
 function cerrarUserMenu() { document.getElementById('userDropdown').style.display = 'none'; }
 function toggleGoatMenu() { const d = document.getElementById('goatDropdown'); d.style.display = d.style.display === 'block' ? 'none' : 'block'; }
 function cerrarGoatMenu() { document.getElementById('goatDropdown').style.display = 'none'; }
+
 document.addEventListener('click', (e) => { 
     const w = document.getElementById('userMenuWrapper'); if (w && w.style.display !== 'none' && !w.contains(e.target)) cerrarUserMenu(); 
     const g = document.getElementById('goatMenuWrapper'); if (g && g.style.display !== 'none' && !g.contains(e.target)) cerrarGoatMenu(); 
@@ -1671,6 +2472,15 @@ document.addEventListener('click', (e) => {
     const btn = document.getElementById('btnNotif');
     if (panel && btn && panel.style.display === 'block' && !panel.contains(e.target) && !btn.contains(e.target)) {
         panel.style.display = 'none';
+    }
+});
+
+// Contador de caracteres para mensaje GOAT
+document.addEventListener('input', function(e) {
+    if (e.target && e.target.id === 'goatCommentInput') {
+        const count = e.target.value.length;
+        const counter = document.getElementById('charCount');
+        if (counter) counter.innerText = count;
     }
 });
 </script>
