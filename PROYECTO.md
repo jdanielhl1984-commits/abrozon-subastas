@@ -36,8 +36,8 @@
 
 **Subastas y pujas:**
 - `place_bid` → Realiza una puja con bloqueo atómico (solo usuarios registrados).
-- `place_guest_bid` → Realiza una puja como invitado (sin autenticación). 🆕
-- `migrate_guest_bids` → Migra pujas de invitado a una cuenta real al registrarse. 🆕
+- `place_guest_bid` → Realiza una puja como invitado (sin autenticación).
+- `migrate_guest_bids` → Migra pujas de invitado a una cuenta real al registrarse.
 - `check_and_close_auction` → Cierra subastas expiradas y genera certificados.
 - `create_auction` → Crea una subasta (desde admin).
 - `generar_subasta_automatica` → Genera subastas automáticas cada hora (activado con pg_cron).
@@ -88,9 +88,9 @@
 
 ### 🔐 Autenticación y usuarios
 - ✅ Registro/login con email (Supabase Auth + recuperación de contraseña)
-- ✅ **Modo Invitado** (sin registro): saldo temporal de **1.000 €** y hasta 3 pujas
-- ✅ **Registro diferido**: el modal solo aparece al agotar pujas o intentar acciones restringidas
-- ✅ **Migración de datos**: saldo y pujas del invitado se transfieren al crear la cuenta
+- ✅ Modo Invitado (sin registro): saldo temporal de **1.000 €** y hasta 3 pujas
+- ✅ Registro diferido: el modal solo aparece al agotar pujas o intentar acciones restringidas
+- ✅ Migración de datos: saldo y pujas del invitado se transfieren al crear la cuenta
 - ✅ Modal de registro solo al intentar pujar (no al entrar)
 - ✅ Cambio de alias y contraseña desde perfil
 - ✅ Zona de baja de cuenta (contacto por email)
@@ -102,7 +102,7 @@
 - ✅ Último pujador visible en cada tarjeta
 - ✅ Filtro "Novedades" (últimas 24 horas)
 - ✅ Barra de ordenación (fecha, duración, rareza, precio)
-- ✅ **Buscador sin acentos** (normalización de texto)
+- ✅ Buscador sin acentos (normalización de texto)
 - ✅ Pestaña "Finalizadas" para ver subastas cerradas
 - ✅ Certificados automáticos con código único al ganar una subasta
 
@@ -121,16 +121,16 @@
 - ✅ Auto-scroll al final al recibir nueva actividad
 - ✅ Mensajes GOAT en formato "burbuja" destacada
 - ✅ Límite de 80 caracteres para mensajes GOAT
-- ✅ **Pujas de invitado visibles en el historial** con nombre "Invitado_XXXX"
+- ✅ Pujas de invitado visibles en el historial con nombre "Invitado_XXXX"
 
 ### 🎮 Gamificación y progreso
 - ✅ Sistema de XP y niveles (Lurker → Final Boss/Admin)
 - ✅ Recompensa por subir de nivel (monedas extra al alcanzar niveles clave)
-- ✅ 30 logros/insignias desbloqueables (escalonados por nivel, saldo, subastas, etc.)
-- ✅ Verificación retroactiva de logros (para usuarios con progreso previo)
+- ✅ 30 logros/insignias desbloqueables
+- ✅ Verificación retroactiva de logros
 - ✅ Racha de inicio de sesión (Streak Bonus de 7 días: 100€ → 1000€)
 - ✅ Misiones diarias (4 misiones + bono de 1.000€ al completarlas todas)
-- ✅ Botín Diario (Ruleta) en la cabecera con premios de 50€ a 1000€
+- ✅ Botín Diario (Ruleta) con contador visual de tiempo restante 🆕
 - ✅ Modo GOAT (activación, recargas premium de 1000€, comentarios en pujas)
 
 ### 🛒 Mercado C2C e inventario
@@ -138,39 +138,41 @@
 - ✅ Publicar objetos en el mercado (con fianzas del 10%)
 - ✅ Compra directa con 30% de comisión
 - ✅ Cancelar venta (no devuelve fianza)
-- ✅ Reciclaje/Desguace de objetos: Comunes, Poco comunes, Raras y Épicas (20% del precio con mín/máx)
-- ✅ Confirmación antes de reciclar (evita clics accidentales)
-- ✅ Actualización automática de la vitrina tras vender/comprar/reciclar
-- ✅ Efectos visuales en vitrina (brillos y animaciones según rareza)
+- ✅ Reciclaje/Desguace de objetos (20% del precio con mín/máx)
+- ✅ Confirmación antes de reciclar
+- ✅ Actualización automática de la vitrina
+- ✅ Efectos visuales en vitrina según rareza
 
 ### 🏆 Rankings y comunidad
 - ✅ Hall of Fame renovado (6 rankings con podios)
+- ✅ Corrección del ranking "Broker" (antes mostraba NaN €) 🆕
 - ✅ Pestaña "Mis pujas" (solo muestra la última puja por subasta)
-- ✅ Filtros por estado en "Mis pujas" (Todas, Activas, Ganadas, Perdidas)
+- ✅ Filtros por estado en "Mis pujas"
 - ✅ Botones de compartir en X y copiar enlace
-- ✅ Sistema de notificaciones (campanita con panel de notificaciones)
+- ✅ Sistema de notificaciones
 
 ### 🎨 Interfaz y experiencia
 - ✅ Modo oscuro/claro
 - ✅ PWA instalable (manifest.json + service-worker)
-- ✅ Página de Ayuda/Tutorial/FAQ (pestaña "❓ Ayuda")
+- ✅ Página de Ayuda/Tutorial/FAQ
 - ✅ Banner de beta privada con enlace a formulario de feedback
-- ✅ Reemplazo de `alert()` por toasts (notificaciones emergentes)
-- ✅ Feedback visual (spinners y botones deshabilitados durante acciones)
-- ✅ Evitar spam de toasts (limitado a 1 cada 30 segundos)
-- ✅ Corrección doble símbolo € en saldo
+- ✅ Reemplazo de `alert()` por toasts
+- ✅ Feedback visual (spinners y botones deshabilitados)
+- ✅ Evitar spam de toasts (1 cada 30 segundos)
+- ✅ Corrección doble símbolo €
 - ✅ Scrollbars personalizados
 - ✅ Tooltips en botones de cabecera
-- ✅ Header reorganizado para móvil: saldo, nivel y barra XP en línea, botones compactos
-- ✅ Consola sin errores 406 (favoritos corregidos)
+- ✅ **Header compacto rediseñado**: todos los botones unificados a 38px, buscador integrado, mejor responsive móvil 🆕
+- ✅ Consola sin errores
 
 ### 🛠️ Administración
 - ✅ Panel de administración completo:
-  - Crear/eliminar subastas (con duraciones de 1 min, 1h, 6h, 24h, 3d, 7d, 14d, 30d)
+  - Crear/eliminar subastas (duraciones de 1 min a 30 días)
   - Gestionar usuarios (buscar, fijar saldo, banear)
   - Ver lista completa de usuarios
   - Añadir/eliminar categorías dinámicas
-  - Adjudicar subastas al admin para pruebas
+  - Adjudicar subastas al admin
+- ✅ **Corrección de error al eliminar categorías** (función SQL duplicada eliminada) 🆕
 
 ### 🤖 Automatización
 - ✅ Generación automática de subastas (cron job cada 1 hora con `pg_cron`)
@@ -226,6 +228,11 @@
 13. ✅ Cron job configurado con pg_cron
 14. ✅ Lógica de rarezas corregida
 15. ✅ Saldo de invitado aumentado a 1.000 €
+16. ✅ Corrección ranking "Broker" en HoF (NaN €)
+17. ✅ Ruleta con contador visual de tiempo restante
+18. ✅ Header compacto rediseñado
+19. ✅ Corrección error al eliminar categorías (SQL duplicado)
+20. ✅ Eliminadas categorías vacías (oldmemes, streamers)
 
 ---
 
@@ -344,6 +351,7 @@
 | Errores 406 en consola | Cambio de `.single()` a `.maybeSingle()` | ✅ Corregido |
 | Pujas de invitado no visibles | RPC `place_guest_bid` + historial actualizado | ✅ Corregido |
 | Saldo de invitado insuficiente | Aumentado a 1.000 € | ✅ Corregido |
+| Error al eliminar categorías | Función SQL duplicada eliminada | ✅ Corregido |
 | Sin avisos externos | Pendiente para Fase 3 (notificaciones push/email) | ⬜ Pendiente |
 
 ### Feedback de betatesters
@@ -365,6 +373,7 @@
 * El sistema de favoritos requiere la tabla `favorites` en Supabase.
 * Las pujas de invitado requieren las RPCs `place_guest_bid` y `migrate_guest_bids`.
 * La generación automática requiere `pg_cron` activo y la tabla `objetos_automaticos` con datos.
+* Las categorías vacías no deben mostrarse en el chip de categorías del catálogo.
 
 ---
 
@@ -472,3 +481,28 @@ SELECT cron.schedule(
     '0 * * * *',
     $$SELECT generar_subasta_automatica();$$
 );
+
+-- Corregir función de eliminar categoría (evitar duplicados)
+DROP FUNCTION IF EXISTS public.admin_delete_category(bigint);
+DROP FUNCTION IF EXISTS public.admin_delete_category(integer);
+
+CREATE OR REPLACE FUNCTION public.admin_delete_category(
+    p_id BIGINT
+)
+RETURNS void
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM profiles 
+        WHERE id = auth.uid() AND is_admin = true
+    ) THEN
+        RAISE EXCEPTION 'No tienes permisos de administrador';
+    END IF;
+
+    DELETE FROM categories WHERE id = p_id;
+END;
+$$;
+
+GRANT EXECUTE ON FUNCTION public.admin_delete_category(BIGINT) TO authenticated;
