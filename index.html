@@ -891,6 +891,7 @@ window.onload = async () => {
         initGuest();
     }
     actualizarInterfazUsuario();
+        await actualizarEstadoRuleta();
     db.auth.onAuthStateChange(async (_event, session2) => {
         if (_event === 'PASSWORD_RECOVERY') { document.getElementById('recoveryModal').style.display = 'flex'; return; }
         if (session2) {
@@ -1876,10 +1877,11 @@ async function actualizarEstadoRuleta() {
             btn.style.cursor = 'pointer';
             span.innerText = 'Reclamar';
         }
-    } catch (e) {
+     } catch (e) {
         console.error('Error al verificar ruleta:', e);
     }
 }
+}  
 // ===== MISIONES =====
 async function mostrarMisiones() { 
     if (!currentUser) return abrirModalAuth('register'); 
