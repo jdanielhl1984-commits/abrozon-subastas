@@ -847,15 +847,15 @@ async function reclamarBotinDiario() {
             return;
         }
         if (data && data.recompensa > 0) {
-            currentUser.saldo += data.recompensa;
-            actualizarInterfazUsuario();
-            mostrarToast(`¡Qué suerte! Has recibido ${data.recompensa.toLocaleString('es-ES')} € de la ruleta diaria.`);
-            agregarNotificacion('🎲 Botín', `Has ganado ${data.recompensa.toLocaleString('es-ES')} € en la ruleta diaria.`);
-            await actualizarEstadoRuleta();
-        } else {
-            mostrarToast(data.mensaje || '⚠️ Ya has reclamado hoy. Vuelve mañana.');
-            await actualizarEstadoRuleta();
-        }
+    currentUser.saldo += data.recompensa;
+    actualizarInterfazUsuario();
+    mostrarToast(`¡Qué suerte! Has recibido ${data.recompensa.toLocaleString('es-ES')} € de la ruleta diaria.`);
+    agregarNotificacion('🎲 Botín', `Has ganado ${data.recompensa.toLocaleString('es-ES')} € en la ruleta diaria.`);
+    await actualizarEstadoRuleta();
+} else {
+    mostrarToast('⚠️ Ya has reclamado hoy. Vuelve mañana.');
+    await actualizarEstadoRuleta();
+}
     } catch (e) {
         mostrarToast('⚠️ Error al reclamar el botín.');
         console.error(e);
