@@ -388,6 +388,33 @@
             #btnNotif { position: relative; z-index: 100; }
             .toast-stack { left: 8px; right: 8px; max-width: none; bottom: 8px; }
         }
+        /* Fix overflow horizontal móvil */
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+.header-row {
+    max-width: 100%;
+    flex-wrap: wrap;
+}
+
+.header-right {
+    max-width: 100%;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+.container {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+.card-image img,
+.main-image-detail img {
+    max-width: 100%;
+    height: auto;
+}
     </style>
 </head>
 <body>
