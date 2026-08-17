@@ -52,7 +52,7 @@
         .user-balance .xp-fill-mobile { height: 100%; background: linear-gradient(90deg, #f97316, #eab308); border-radius: 2px; transition: width 0.3s; }
         .notif-badge { position: absolute; top: -5px; right: -5px; background: #ef4444; color: white; border-radius: 50%; padding: 2px 6px; font-size: 0.55rem; display: none; min-width: 16px; text-align: center; }
 
-        /* ===== NUEVO MENÚ ESTILO AMAZON ===== */
+        /* ===== MENÚ PRINCIPAL SIMPLIFICADO ===== */
         .primary-nav {
             background-color: var(--bg-header);
             padding: 0 4%;
@@ -87,70 +87,7 @@
             background: var(--accent-blue);
             border-radius: 2px 2px 0 0;
         }
-
-        /* Megamenú Categorías */
-        .category-menu {
-            position: relative;
-            display: inline-block;
-            flex-shrink: 0;
-        }
-        .category-toggle {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            cursor: pointer;
-        }
-        .category-toggle .arrow {
-            font-size: 0.6rem;
-            transition: transform 0.3s ease;
-        }
-        .category-menu:hover .category-toggle .arrow {
-            transform: rotate(180deg);
-        }
-
-        .mega-menu {
-            display: none;
-            position: absolute;
-            top: 100%;
-            left: 0;
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 0 0 12px 12px;
-            padding: 20px 24px;
-            min-width: 680px;
-            box-shadow: 0 12px 40px rgba(0,0,0,0.15);
-            z-index: 1000;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 16px;
-        }
-        .category-menu:hover .mega-menu {
-            display: grid;
-        }
-
-        .mega-column h4 {
-            color: var(--accent-blue);
-            font-size: 0.75rem;
-            font-weight: 700;
-            margin-bottom: 6px;
-            border-bottom: 2px solid var(--border-color);
-            padding-bottom: 4px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        .mega-column a {
-            display: block;
-            padding: 4px 0;
-            color: var(--text-muted);
-            cursor: pointer;
-            font-size: 0.78rem;
-            transition: color 0.15s;
-            text-decoration: none;
-        }
-        .mega-column a:hover {
-            color: var(--text-main);
-        }
-
-        /* ===== FIN MENÚ ESTILO AMAZON ===== */
+        /* ===== FIN MENÚ SIMPLIFICADO ===== */
 
         .category-chips { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 6px; margin-bottom: 16px; -webkit-overflow-scrolling: touch; }
         .chip { flex-shrink: 0; padding: 6px 12px; border-radius: 999px; background: var(--bg-subtle); border: 1px solid var(--border-color); color: var(--text-muted); font-size: 0.75rem; font-weight: 600; cursor: pointer; white-space: nowrap; }
@@ -329,27 +266,6 @@
             .primary-nav { padding: 4px 2%; gap: 2px; flex-wrap: nowrap; }
             .nav-tab { font-size: 0.6rem; padding: 8px 6px; }
 
-            /* Megamenú en móvil */
-            .mega-menu {
-                position: fixed;
-                top: 55px;
-                left: 0;
-                right: 0;
-                min-width: auto;
-                padding: 16px;
-                grid-template-columns: 1fr 1fr;
-                gap: 12px;
-                max-height: 60vh;
-                overflow-y: auto;
-                border-radius: 0 0 12px 12px;
-                box-shadow: 0 8px 30px rgba(0,0,0,0.2);
-            }
-            .category-menu:hover .mega-menu {
-                display: grid;
-            }
-            .mega-column h4 { font-size: 0.65rem; }
-            .mega-column a { font-size: 0.7rem; padding: 3px 0; }
-
             .container { padding: 0 8px; margin: 10px auto; }
             .auction-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
             .detail-layout { grid-template-columns: 1fr; }
@@ -503,6 +419,12 @@
                 <div class="user-dropdown" id="userDropdown">
                     <div class="dropdown-item" onclick="mostrarPerfil()">👤 Mi Perfil</div>
                     <div class="dropdown-item" onclick="mostrarFavoritos()">❤️ Mis Favoritos</div>
+                    <div class="dropdown-item" onclick="mostrarMisiones()">🎯 Misiones</div>
+                    <div class="dropdown-item" onclick="mostrarLogros()">🏅 Logros</div>
+                    <div class="dropdown-item" onclick="mostrarHallOfFame()">🌟 Hall of Fame</div>
+                    <div class="dropdown-item" onclick="mostrarFinalizadas()">📜 Finalizadas</div>
+                    <div class="dropdown-item" onclick="mostrarVitrina()">🏆 Vitrina</div>
+                    <div class="dropdown-item" onclick="mostrarAyuda()">❓ Ayuda</div>
                     <div class="dropdown-item" id="dropdownTheme" onclick="toggleTema()">🌙 Modo Noche</div>
                     <div class="dropdown-item" id="dropdownAdmin" onclick="abrirModalAdmin()" style="display:none;">🛠️ Panel Admin</div>
                     <div class="dropdown-item" onclick="mostrarLegal()">📄 Legal</div>
@@ -513,63 +435,13 @@
     </div>
 </header>
 
-<!-- ===== NUEVO MENÚ ESTILO AMAZON ===== -->
+<!-- ===== MENÚ PRINCIPAL SIMPLIFICADO ===== -->
 <nav class="primary-nav">
     <span class="nav-tab active" id="tabTodas" onclick="mostrarCatalogo()">🏠 Catálogo</span>
     <span class="nav-tab" id="tabMercado" onclick="mostrarMercado()">🛒 Mercado</span>
     <span class="nav-tab" id="tabMisPujas" onclick="mostrarMisPujas()">📋 Pujas</span>
-    <span class="nav-tab" id="tabMisiones" onclick="mostrarMisiones()">🎯 Misiones</span>
-    <span class="nav-tab" id="tabLogros" onclick="mostrarLogros()">🏅 Logros</span>
-    <span class="nav-tab" id="tabHallOfFame" onclick="mostrarHallOfFame()">🌟 HoF</span>
-
-    <!-- MEGAMENÚ CATEGORÍAS (estilo Amazon) -->
-    <div class="category-menu">
-        <span class="nav-tab category-toggle">
-            📂 Categorías <span class="arrow">▼</span>
-        </span>
-        <div class="mega-menu" id="megaMenu">
-            <!-- Columna 1: Política -->
-            <div class="mega-column">
-                <h4>🏛️ Política</h4>
-                <a onclick="filtrarCategoria('Política Española')">🇪🇸 Política Española</a>
-                <a onclick="filtrarCategoria('Política Latinoamericana')">🌎 Política Latinoamericana</a>
-            </div>
-            <!-- Columna 2: Deportes -->
-            <div class="mega-column">
-                <h4>⚽ Deportes</h4>
-                <a onclick="filtrarCategoria('Fútbol')">⚽ Fútbol</a>
-                <a onclick="filtrarCategoria('Velada de Boxeo')">🥊 Velada de Boxeo</a>
-            </div>
-            <!-- Columna 3: Memes -->
-            <div class="mega-column">
-                <h4>😂 Memes</h4>
-                <a onclick="filtrarCategoria('Memes de Internet')">🌐 Memes de Internet</a>
-                <a onclick="filtrarCategoria('Memes Autóctonos Españoles')">🇪🇸 Memes Autóctonos</a>
-                <a onclick="filtrarCategoria('Memes Latinoamericanos')">🌎 Memes Latinoamericanos</a>
-            </div>
-            <!-- Columna 4: Cultura -->
-            <div class="mega-column">
-                <h4>🎭 Cultura</h4>
-                <a onclick="filtrarCategoria('Cultura Pop y Gastronomía')">🍔 Cultura Pop</a>
-                <a onclick="filtrarCategoria('Famosos y Televisión')">📺 Famosos y TV</a>
-                <a onclick="filtrarCategoria('Objetos Random y Cultura')">🎲 Objetos Random</a>
-            </div>
-            <!-- Columna 5: Eventos + General -->
-            <div class="mega-column">
-                <h4>🎊 Eventos</h4>
-                <a onclick="filtrarCategoria('Eventos Especiales')">🎊 Eventos Especiales</a>
-                <h4 style="margin-top:8px;">📦 General</h4>
-                <a onclick="filtrarCategoria('General')">📦 General</a>
-            </div>
-        </div>
-    </div>
-    <!-- FIN MEGAMENÚ -->
-
-    <span class="nav-tab" id="tabFinalizadas" onclick="mostrarFinalizadas()">📜 Finalizadas</span>
-    <span class="nav-tab" id="tabVitrina" onclick="mostrarVitrina()">🏆 Vitrina</span>
-    <span class="nav-tab" id="tabAyuda" onclick="mostrarAyuda()">❓ Ayuda</span>
 </nav>
-<!-- ===== FIN MENÚ ESTILO AMAZON ===== -->
+<!-- ===== FIN MENÚ PRINCIPAL ===== -->
 
 <div class="container">
     <div id="viewCatalog" class="view active">
@@ -1256,10 +1128,34 @@ async function cargarCategorias() {
 }
 
 function renderizarCategoryChips() {
-    const box = document.getElementById('categoryChips'); 
+    const box = document.getElementById('categoryChips');
     if (!box) return;
-    // Ocultar los chips - usamos el megamenú en su lugar
-    box.style.display = 'none';
+    // Mostrar el contenedor (estaba oculto)
+    box.style.display = 'flex';
+    box.innerHTML = '';
+
+    // Chip "Todas"
+    const todas = document.createElement('span');
+    todas.className = 'chip' + (categoriaActiva === 'Todas' ? ' active' : '');
+    todas.innerText = '🗂️ Todas';
+    todas.onclick = () => filtrarCategoria('Todas');
+    box.appendChild(todas);
+
+    // Chip "Novedades" (últimas 24h)
+    const novedades = document.createElement('span');
+    novedades.className = 'chip' + (categoriaActiva === 'Novedades' ? ' active' : '');
+    novedades.innerText = '🆕 Novedades';
+    novedades.onclick = () => filtrarCategoria('Novedades');
+    box.appendChild(novedades);
+
+    // Chips dinámicos desde la base de datos (categorías)
+    categorias.forEach(cat => {
+        const chip = document.createElement('span');
+        chip.className = 'chip' + (categoriaActiva === cat.name ? ' active' : '');
+        chip.innerText = cat.icon + ' ' + cat.name;
+        chip.onclick = () => filtrarCategoria(cat.name);
+        box.appendChild(chip);
+    });
 }
 
 function actualizarSelectorCategoriasAdmin() { 
@@ -1340,7 +1236,7 @@ function filtrarCategoria(cat) {
 function mostrarFinalizadas() { 
     mostrandoFinalizadas = true; 
     document.querySelectorAll('.primary-nav .nav-tab').forEach(t => t.classList.remove('active')); 
-    document.getElementById('tabFinalizadas').classList.add('active'); 
+    document.getElementById('tabTodas').classList.add('active'); // No tenemos tab específica, usamos Catálogo
     ocultarTodasVistas(); 
     document.getElementById('viewCatalog').classList.add('active'); 
     document.getElementById('searchInput').value = ''; 
@@ -1718,7 +1614,7 @@ async function mostrarLogros() {
     ocultarTodasVistas(); 
     document.getElementById('viewLogros').classList.add('active'); 
     document.querySelectorAll('.primary-nav .nav-tab').forEach(t => t.classList.remove('active')); 
-    document.getElementById('tabLogros').classList.add('active'); 
+    document.getElementById('tabTodas').classList.remove('active'); // no tenemos tab específica
     await cargarLogros(); 
 }
 
@@ -1998,7 +1894,7 @@ async function mostrarMisiones() {
     ocultarTodasVistas(); 
     document.getElementById('viewMisiones').classList.add('active'); 
     document.querySelectorAll('.primary-nav .nav-tab').forEach(t => t.classList.remove('active')); 
-    document.getElementById('tabMisiones').classList.add('active'); 
+    document.getElementById('tabTodas').classList.remove('active'); 
     await cargarMisiones(); 
 }
 
@@ -2026,7 +1922,7 @@ async function mostrarHallOfFame() {
     ocultarTodasVistas(); 
     document.getElementById('viewHallOfFame').classList.add('active'); 
     document.querySelectorAll('.primary-nav .nav-tab').forEach(t => t.classList.remove('active')); 
-    document.getElementById('tabHallOfFame').classList.add('active'); 
+    document.getElementById('tabTodas').classList.remove('active'); 
     await cargarHallOfFame(); 
     if (hallOfFameInterval) clearInterval(hallOfFameInterval); 
     hallOfFameInterval = setInterval(cargarHallOfFame, 30000); 
@@ -2254,7 +2150,7 @@ function formatTimeLeft(ms) {
 
 // ===== ADMIN =====
 function mostrarLegal() { ocultarTodasVistas(); document.getElementById('viewLegal').classList.add('active'); }
-function mostrarAyuda() { ocultarTodasVistas(); document.getElementById('viewAyuda').classList.add('active'); document.querySelectorAll('.primary-nav .nav-tab').forEach(t => t.classList.remove('active')); document.getElementById('tabAyuda').classList.add('active'); }
+function mostrarAyuda() { ocultarTodasVistas(); document.getElementById('viewAyuda').classList.add('active'); document.querySelectorAll('.primary-nav .nav-tab').forEach(t => t.classList.remove('active')); document.getElementById('tabTodas').classList.remove('active'); }
 function ocultarTodasVistas() { document.querySelectorAll('.view').forEach(v => v.classList.remove('active')); if (hallOfFameInterval) { clearInterval(hallOfFameInterval); hallOfFameInterval = null; } }
 function mostrarCatalogo() { mostrandoFinalizadas = false; categoriaActiva = 'Todas'; ocultarTodasVistas(); cargarSubastas(); document.getElementById('viewCatalog').classList.add('active'); document.querySelectorAll('.primary-nav .nav-tab').forEach(t => t.classList.remove('active')); document.getElementById('tabTodas').classList.add('active'); renderizarCategoryChips(); }
 
@@ -2380,7 +2276,7 @@ async function guardarNuevaPasswordPerfil() { const p = document.getElementById(
 function solicitarBajaCuenta() { mostrarToast('📧 Escribe a abrozonsubastas@gmail.com para eliminar tu cuenta.'); }
 
 // ===== VITRINA =====
-async function mostrarVitrina() { if (!currentUser) return abrirModalAuth('register'); ocultarTodasVistas(); document.querySelectorAll('.primary-nav .nav-tab').forEach(t => t.classList.remove('active')); document.getElementById('tabVitrina').classList.add('active'); await cargarVitrina(); document.getElementById('viewVitrina').classList.add('active'); }
+async function mostrarVitrina() { if (!currentUser) return abrirModalAuth('register'); ocultarTodasVistas(); document.querySelectorAll('.primary-nav .nav-tab').forEach(t => t.classList.remove('active')); document.getElementById('tabTodas').classList.remove('active'); await cargarVitrina(); document.getElementById('viewVitrina').classList.add('active'); }
 async function cargarVitrina() {
     const grid = document.getElementById('vitrinaGrid'); grid.innerHTML = 'Cargando...';
     const { data: misItems, error: errorItems } = await db.from('user_items').select('auction_id, id').eq('user_id', currentUser.id).eq('en_venta', false);
