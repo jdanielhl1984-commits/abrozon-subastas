@@ -888,6 +888,9 @@ async function reclamarBotinDiario() {
 // ===== ONLOAD =====
 window.onload = async () => {
     if ('serviceWorker' in navigator) navigator.serviceWorker.register('service-worker.js').catch(() => {});
+
+    // Cargar notificaciones desde localStorage antes de todo
+    notificaciones = JSON.parse(localStorage.getItem('abrozon_notificaciones') || '[]');
     actualizarContadorNotificaciones();
     const { data: { session } } = await db.auth.getSession();
     if (session) {
