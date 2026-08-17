@@ -754,7 +754,6 @@ function agregarNotificacion(tipo, mensaje, link = null) {
     localStorage.setItem('abrozon_notificaciones', JSON.stringify(notificaciones));
     actualizarContadorNotificaciones();
 
-    // Si la campanita está abierta, refrescar la lista al instante
     const panel = document.getElementById('notifPanel');
     if (panel && panel.style.display === 'block') {
         renderizarNotificaciones();
@@ -806,7 +805,7 @@ document.addEventListener('click', (e) => {
 async function checkStreakAndReward() {
     if (!currentUser) return;
     try {
-        marcarCambioPropio(); // Evitar falso aviso de puja superada
+        marcarCambioPropio();
         const { data, error } = await db.rpc('check_streak_and_reward');
         if (error) {
             console.warn('Streak check error:', error.message);
@@ -815,12 +814,12 @@ async function checkStreakAndReward() {
         if (data && data.reward_amount > 0) {
             currentUser.saldo = data.new_balance;
             const dias = data.streak_count;
-            let msg = `📅 ¡Racha de ${dias} días! Has ganado +${data.reward_amount.toLocaleString('es-ES')} €.`;
+            let msg = `📅 Racha de ${dias} días: +${data.reward_amount.toLocaleString('es-ES')} €.`;
             if (dias === 7) {
-                msg = '🎉 ¡RACHA COMPLETA DE 7 DÍAS! Has ganado el bote de +1000 €. ¡Enhorabuena!';
+                msg = '🎉 ¡Racha completa de 7 días! Bote de +1000 €.';
             }
-            mostrarToast(msg);
             agregarNotificacion('📅 Racha', msg);
+            mostrarToast(msg);
             actualizarInterfazUsuario();
             if (data.streak_count >= 7) tryUnlockAchievement('joya');
         }
@@ -847,15 +846,15 @@ async function reclamarBotinDiario() {
             return;
         }
         if (data && data.recompensa > 0) {
-    currentUser.saldo += data.recompensa;
-    actualizarInterfazUsuario();
-    mostrarToast(`¡Qué suerte! Has recibido ${data.recompensa.toLocaleString('es-ES')} € de la ruleta diaria.`);
-    agregarNotificacion('🎲 Botín', `Has ganado ${data.recompensa.toLocaleString('es-ES')} € en la ruleta diaria.`);
-    await actualizarEstadoRuleta();
-} else {
-    mostrarToast('⚠️ Ya has reclamado hoy. Vuelve mañana.');
-    await actualizarEstadoRuleta();
-}
+            currentUser.saldo += data.recompensa;
+            actualizarInterfazUsuario();
+            mostrarToast(`🎲 Ruleta: +${data.recompensa.toLocaleString('es-ES')} €`);
+            agregarNotificacion('🎲 Botín', `Ruleta: +${data.recompensa.toLocaleString('es-ES')} €`);
+            await actualizarEstadoRuleta();
+        } else {
+            mostrarToast('⚠️ Ya has reclamado hoy. Vuelve mañana.');
+            await actualizarEstadoRuleta();
+        }
     } catch (e) {
         mostrarToast('⚠️ Error al reclamar el botín.');
         console.error(e);
@@ -936,7 +935,6 @@ async function cargarPerfil(userId) {
                 actualizarInterfazUsuario();
                 if (saldoCambioPropio || (Date.now() - ultimaAccionPropiaTs < 5000)) return;
                 const diferencia = payload.new.saldo - saldoAnt;
-                // Mostrar aviso solo si es probable que sea por puja superada: saldo aumentó y hay una subasta en pantalla
                 if (diferencia > 0 && productoSeleccionado && productoSeleccionado.status !== 'closed' && productoSeleccionado.last_bidder !== currentUser.username) {
                     const ahora = Date.now();
                     if (ahora - ultimoToastSuperado > 30000) {
@@ -2049,13 +2047,8 @@ function mostrarCatalogo() { mostrandoFinalizadas = false; categoriaActiva = 'To
 
 function abrirModalAuth(mode = 'register', mensaje = '') { 
     toggleAuthForm(mode); 
-    if (mensaje) {
-        document.getElementById('authModalMessageLogin').innerText = mensaje;
-        document.getElementById('authModalMessageRegister').innerText = mensaje;
-    } else {
-        document.getElementById('authModalMessageLogin').innerText = 'Identifícate para pujar.';
-        document.getElementById('authModalMessageRegister').innerText = '¡Únete y recibe 1.000 €!';
-    }
+    if (mensaje) { document.getElementById('authModalMessageLogin').innerText = mensaje; document.getElementById('authModalMessageRegister').innerText = mensaje; }
+    else { document.getElementById('authModalMessageLogin').innerText = 'Identifícate para pujar.'; document.getElementById('authModalMessageRegister').innerText = '¡Únete y recibe 1.000 €!'; }
     document.getElementById('authModal').style.display = 'flex'; 
 }
 
