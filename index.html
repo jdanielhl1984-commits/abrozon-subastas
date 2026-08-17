@@ -31,25 +31,113 @@
         .beta-banner a { color: #fff; text-decoration: underline; font-weight: bold; }
         .disclaimer { background-color: var(--bg-subtle); color: var(--text-muted); text-align: center; padding: 8px; font-size: 0.8rem; border-bottom: 1px solid var(--border-color); }
         header { background-color: var(--bg-header); padding: 8px 4%; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 200; }
-        .header-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-        .logo { font-size: 1.2rem; font-weight: 900; color: var(--accent-blue); letter-spacing: -1px; cursor: pointer; flex-shrink: 0; line-height: 38px; }
+
+        /* ===== CABECERA REESTRUCTURADA ===== */
+        .header-row {
+            display: flex;
+            flex-wrap: nowrap;
+            align-items: center;
+            gap: 8px;
+        }
+        .header-top {
+            flex: 1 1 auto;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 0;
+        }
+        .logo {
+            font-size: 1.2rem;
+            font-weight: 900;
+            color: var(--accent-blue);
+            letter-spacing: -1px;
+            cursor: pointer;
+            flex-shrink: 0;
+            line-height: 38px;
+        }
         .logo span { color: #f97316; }
-        .search-bar { flex: 0 1 220px; min-width: 100px; height: 38px; display: flex; align-items: center; background: var(--bg-subtle); border-radius: 999px; border: 1px solid var(--border-color); overflow: hidden; padding: 0 10px; transition: border-color 0.2s, box-shadow 0.2s; }
+        .search-bar {
+            flex: 1 1 auto;
+            min-width: 60px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            background: var(--bg-subtle);
+            border-radius: 999px;
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+            padding: 0 10px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
         .search-bar:focus-within { border-color: var(--accent-blue); box-shadow: 0 0 0 3px rgba(2,132,199,0.15); }
         .search-bar .search-icon { color: var(--text-muted); font-size: 0.9rem; cursor: pointer; flex-shrink: 0; margin-right: 6px; }
-        .search-bar input { flex: 1; background: transparent; border: none; padding: 0; height: 100%; color: var(--text-main); outline: none; font-size: 0.85rem; }
-        .header-right { display: flex; align-items: center; gap: 4px; margin-left: auto; flex-shrink: 0; }
-        .btn-header, .btn-ruleta, .btn-goat, .btn-login { height: 38px; padding: 0 10px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; border: 1px solid var(--border-color); background: var(--bg-subtle); color: var(--text-main); cursor: pointer; transition: opacity 0.2s; display: inline-flex; align-items: center; gap: 3px; white-space: nowrap; }
+        .search-bar input { flex: 1; background: transparent; border: none; padding: 0; height: 100%; color: var(--text-main); outline: none; font-size: 0.85rem; min-width: 40px; }
+
+        .header-right {
+            flex: 0 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            flex-shrink: 0;
+        }
+        .btn-header, .btn-ruleta, .btn-goat, .btn-login {
+            height: 38px;
+            padding: 0 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            border: 1px solid var(--border-color);
+            background: var(--bg-subtle);
+            color: var(--text-main);
+            cursor: pointer;
+            transition: opacity 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            white-space: nowrap;
+        }
         .btn-header:disabled, .btn-ruleta:disabled, .btn-goat:disabled, .btn-login:disabled { opacity: 0.5; cursor: not-allowed; }
         .btn-ruleta { background: linear-gradient(135deg, #f97316, #eab308); color: white; border: none; }
         .btn-goat { background: linear-gradient(135deg, #eab308, #ca8a04); color: #0f172a; border: none; opacity: 0.5; }
         .btn-goat.active { opacity: 1; box-shadow: 0 0 10px #eab308; }
         .btn-login { background: var(--accent-blue); color: white; border: none; }
-        .user-balance { height: 38px; padding: 0 8px; background: var(--bg-subtle); border-radius: 20px; border: 1px solid var(--border-color); display: flex; align-items: center; gap: 4px; font-size: 0.7rem; white-space: nowrap; }
-        .user-balance .balance-amount { color: var(--accent-green); font-weight: bold; }
-        .user-balance .level-badge { display: flex; align-items: center; gap: 4px; background: var(--bg-subtle); padding: 2px 8px; border-radius: 10px; font-size: 0.7rem; }
-        .user-balance .xp-bar-mobile { width: 60px; height: 4px; background: var(--bg-subtle); border-radius: 2px; overflow: hidden; }
-        .user-balance .xp-fill-mobile { height: 100%; background: linear-gradient(90deg, #f97316, #eab308); border-radius: 2px; transition: width 0.3s; }
+
+        .user-balance {
+            flex: 0 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            height: 38px;
+            padding: 0 8px;
+            background: var(--bg-subtle);
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            white-space: nowrap;
+        }
+        .user-balance .balance-amount { color: var(--accent-green); font-weight: bold; font-size: 0.7rem; }
+        .user-balance .level-badge {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: var(--bg-subtle);
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.7rem;
+        }
+        .user-balance .xp-bar-mobile {
+            width: 60px;
+            height: 4px;
+            background: var(--bg-subtle);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        .user-balance .xp-fill-mobile {
+            height: 100%;
+            background: linear-gradient(90deg, #f97316, #eab308);
+            border-radius: 2px;
+            transition: width 0.3s;
+        }
+
         .notif-badge { position: absolute; top: -5px; right: -5px; background: #ef4444; color: white; border-radius: 50%; padding: 2px 6px; font-size: 0.55rem; display: none; min-width: 16px; text-align: center; }
 
         /* ===== MENÚ PRINCIPAL SIMPLIFICADO ===== */
@@ -87,12 +175,12 @@
             background: var(--accent-blue);
             border-radius: 2px 2px 0 0;
         }
-        /* ===== FIN MENÚ SIMPLIFICADO ===== */
 
         .category-chips { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 6px; margin-bottom: 16px; -webkit-overflow-scrolling: touch; }
         .chip { flex-shrink: 0; padding: 6px 12px; border-radius: 999px; background: var(--bg-subtle); border: 1px solid var(--border-color); color: var(--text-muted); font-size: 0.75rem; font-weight: 600; cursor: pointer; white-space: nowrap; }
         .chip:hover { color: var(--text-main); }
         .chip.active { background: var(--accent-blue); color: white; border-color: var(--accent-blue); }
+
         .container { max-width: 1200px; margin: 16px auto; padding: 0 12px; }
         .hero-banner { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 16px; margin-bottom: 20px; box-shadow: var(--shadow-card); }
         .hero-text h2 { font-size: 1.2rem; color: var(--accent-blue); margin-bottom: 4px; }
@@ -251,16 +339,81 @@
 
         /* ===== RESPONSIVE MÓVIL ===== */
         @media (max-width: 680px) {
-            .header-row { flex-wrap: wrap; }
-            .search-bar { flex: 0 1 160px; min-width: 80px; height: 32px; }
+            .header-row {
+                flex-wrap: wrap;
+                gap: 4px;
+            }
+            .header-top {
+                flex: 0 0 100%;
+                order: 1;
+                gap: 6px;
+            }
+            .logo {
+                font-size: 1rem;
+                line-height: 32px;
+            }
+            .search-bar {
+                height: 32px;
+                flex: 1 1 auto;
+                min-width: 60px;
+            }
             .search-bar input { font-size: 0.7rem; }
             .search-bar .search-icon { font-size: 0.75rem; margin-right: 4px; }
-            .btn-header, .btn-ruleta, .btn-goat, .btn-login { height: 32px; padding: 0 8px; font-size: 0.6rem; border-radius: 14px; }
-            .header-right { gap: 3px; flex-wrap: nowrap; }
-            .user-balance { height: 32px; padding: 0 6px; font-size: 0.6rem; gap: 3px; }
-            .user-balance .level-badge { font-size: 0.5rem; padding: 1px 4px; }
-            .user-balance .xp-bar-mobile { width: 30px; }
-            .logo { font-size: 1rem; line-height: 32px; }
+
+            .header-right {
+                flex: 0 0 100%;
+                order: 2;
+                display: flex;
+                flex-wrap: nowrap;
+                justify-content: space-around;
+                align-items: center;
+                gap: 2px;
+                padding: 2px 0;
+            }
+            .btn-header, .btn-ruleta, .btn-goat, .btn-login {
+                height: 30px;
+                padding: 0 6px;
+                font-size: 0.6rem;
+                border-radius: 14px;
+            }
+            .btn-ruleta, .btn-goat { padding: 0 8px; }
+
+            .user-balance {
+                flex: 0 0 100%;
+                order: 3;
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-between;
+                align-items: center;
+                height: auto;
+                padding: 6px 10px;
+                background: var(--bg-subtle);
+                border-radius: 8px;
+                border: 1px solid var(--border-color);
+                margin-top: 2px;
+                gap: 2px;
+            }
+            .user-balance .balance-amount {
+                order: 1;
+                flex: 0 0 auto;
+                font-size: 0.8rem;
+            }
+            .user-balance .level-badge {
+                order: 2;
+                flex: 1 1 auto;
+                justify-content: center;
+                font-size: 0.7rem;
+                padding: 2px 4px;
+                background: transparent;
+            }
+            .user-balance .xp-bar-mobile {
+                order: 3;
+                flex: 0 0 100%;
+                width: 100%;
+                height: 5px;
+                margin-top: 2px;
+            }
+            .user-balance .xp-fill-mobile { height: 100%; }
 
             /* Menú móvil */
             .primary-nav { padding: 4px 2%; gap: 2px; flex-wrap: nowrap; }
@@ -282,7 +435,7 @@
         }
         /* Fix overflow horizontal */
         html, body { max-width: 100%; overflow-x: hidden; }
-        .header-row { max-width: 100%; flex-wrap: wrap; }
+        .header-row { max-width: 100%; }
         .header-right { max-width: 100%; flex-wrap: wrap; justify-content: flex-end; }
         .container { max-width: 100%; overflow-x: hidden; }
         .card-image img, .main-image-detail img { max-width: 100%; height: auto; }
@@ -388,10 +541,12 @@
 
 <header>
     <div class="header-row">
-        <div class="logo" onclick="mostrarCatalogo()">aBROzon<span>.subastas</span></div>
-        <div class="search-bar">
-            <span class="search-icon" onclick="buscarEnCatalogo(document.getElementById('searchInput').value)">🔍</span>
-            <input type="text" id="searchInput" placeholder="Buscar..." oninput="buscarEnCatalogo(this.value)">
+        <div class="header-top">
+            <div class="logo" onclick="mostrarCatalogo()">aBROzon<span>.subastas</span></div>
+            <div class="search-bar">
+                <span class="search-icon" onclick="buscarEnCatalogo(document.getElementById('searchInput').value)">🔍</span>
+                <input type="text" id="searchInput" placeholder="Buscar..." oninput="buscarEnCatalogo(this.value)">
+            </div>
         </div>
         <div class="header-right">
             <div class="notif-wrapper">
@@ -407,11 +562,6 @@
                     <div class="dropdown-item" id="goatItemRecargar" onclick="verAnuncio('goat')" style="display:none;">⚡ Recargar</div>
                     <div class="dropdown-item" id="goatItemDesactivar" onclick="activarGoat()" style="display:none;color:#ef4444;">Desactivar</div>
                 </div>
-            </div>
-            <div class="user-balance" id="boxBalance" style="display:none;">
-                <span style="font-weight:bold; color:var(--accent-green);">💰 <span id="userBalance">0 €</span></span>
-                <span class="level-badge">⭐ Nv.<span id="userLevel">1</span> <span id="userTitle">Lurker</span></span>
-                <div class="xp-bar-mobile"><div class="xp-fill-mobile" id="xpFill" style="width:0%;"></div></div>
             </div>
             <button class="btn-login" id="btnLoginHeader" onclick="abrirModalAuth('login')" title="Iniciar sesión o registrarse">🔑</button>
             <div class="user-menu-wrapper" id="userMenuWrapper" style="display:none;">
@@ -431,6 +581,11 @@
                     <div class="dropdown-item" onclick="cerrarSesion()" style="color:#ef4444;">🚪 Salir</div>
                 </div>
             </div>
+        </div>
+        <div class="user-balance" id="boxBalance" style="display:none;">
+            <span class="balance-amount" style="font-weight:bold; color:var(--accent-green);">💰 <span id="userBalance">0 €</span></span>
+            <span class="level-badge">⭐ Nv.<span id="userLevel">1</span> <span id="userTitle">Lurker</span></span>
+            <div class="xp-bar-mobile"><div class="xp-fill-mobile" id="xpFill" style="width:0%;"></div></div>
         </div>
     </div>
 </header>
@@ -1236,7 +1391,7 @@ function filtrarCategoria(cat) {
 function mostrarFinalizadas() { 
     mostrandoFinalizadas = true; 
     document.querySelectorAll('.primary-nav .nav-tab').forEach(t => t.classList.remove('active')); 
-    document.getElementById('tabTodas').classList.add('active'); // No tenemos tab específica, usamos Catálogo
+    document.getElementById('tabTodas').classList.add('active');
     ocultarTodasVistas(); 
     document.getElementById('viewCatalog').classList.add('active'); 
     document.getElementById('searchInput').value = ''; 
@@ -1614,7 +1769,7 @@ async function mostrarLogros() {
     ocultarTodasVistas(); 
     document.getElementById('viewLogros').classList.add('active'); 
     document.querySelectorAll('.primary-nav .nav-tab').forEach(t => t.classList.remove('active')); 
-    document.getElementById('tabTodas').classList.remove('active'); // no tenemos tab específica
+    document.getElementById('tabTodas').classList.remove('active');
     await cargarLogros(); 
 }
 
