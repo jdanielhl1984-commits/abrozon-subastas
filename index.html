@@ -1256,11 +1256,10 @@ async function cargarCategorias() {
 }
 
 function renderizarCategoryChips() {
-    const box = document.getElementById('categoryChips'); if (!box) return;
-    if (mostrandoFinalizadas || categoriaActiva === 'Mercado') { box.style.display = 'none'; return; }
-    box.style.display = 'flex';
-    const chips = [{ name: 'Todas', icon: '🗂️' }, { name: 'Novedades', icon: '🆕' }, ...categorias];
-    box.innerHTML = chips.map(c => `<span class="chip ${categoriaActiva === c.name ? 'active' : ''}" onclick="filtrarCategoria('${c.name}')">${c.icon} ${c.name}</span>`).join('');
+    const box = document.getElementById('categoryChips'); 
+    if (!box) return;
+    // Ocultar los chips - usamos el megamenú en su lugar
+    box.style.display = 'none';
 }
 
 function actualizarSelectorCategoriasAdmin() { 
