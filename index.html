@@ -814,12 +814,33 @@ async function checkStreakAndReward() {
         if (data && data.reward_amount > 0) {
             currentUser.saldo = data.new_balance;
             const dias = data.streak_count;
-            let msg = `📅 Racha de ${dias} días: +${data.reward_amount.toLocaleString('es-ES')} €.`;
-            if (dias === 7) {
-                msg = '🎉 ¡Racha completa de 7 días! Bote de +1000 €.';
+            const tipo = '📅 Racha';
+            const mensaje = dias === 7 
+                ? '🎉 ¡Racha completa de 7 días! Bote de +1000 €.' 
+                : `Racha de ${dias} días: +${data.reward_amount.toLocaleString('es-ES')} €.`;
+
+            // Guardar directamente en localStorage sin depender de nada
+            const notif = { 
+                id: Date.now() + Math.random(), 
+                tipo: tipo, 
+                mensaje: mensaje, 
+                leida: false, 
+                fecha: new Date().toISOString() 
+            };
+            notificaciones.unshift(notif);
+            if (notificaciones.length > 50) notificaciones.pop();
+            localStorage.setItem('abrozon_notificaciones', JSON.stringify(notificaciones));
+            actualizarContadorNotificaciones();
+
+            // Mostrar toast
+            mostrarToast(mensaje);
+
+            // Refrescar campanita si está abierta
+            const panel = document.getElementById('notifPanel');
+            if (panel && panel.style.display === 'block') {
+                renderizarNotificaciones();
             }
-            agregarNotificacion('📅 Racha', msg);
-            mostrarToast(msg);
+
             actualizarInterfazUsuario();
             if (data.streak_count >= 7) tryUnlockAchievement('joya');
         }
