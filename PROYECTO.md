@@ -8,8 +8,6 @@
 * **Backend:** Supabase (PostgreSQL, Auth, Realtime, Storage)
 * **Despliegue:** GitHub Pages (con archivo `.nojekyll` para evitar errores de Jekyll)
 
----
-
 ## 📁 Estructura del proyecto
 
 * `index.html` → Toda la aplicación (frontend + lógica)
@@ -17,7 +15,6 @@
 * `manifest.json`, `service-worker.js` → PWA
 * `icon-192.png`, `icon-512.png` → Iconos de la PWA (un símbolo "A")
 * `.nojekyll` → Archivo vacío para que GitHub Pages no use Jekyll
-* `PROYECTO.md` → Documentación del proyecto (este archivo)
 
 ---
 
@@ -25,316 +22,464 @@
 
 ### Tablas principales
 
-* `profiles` → Usuarios (saldo, XP, nivel, racha, fechas de botín/racha)
-* `auctions` → Subastas activas/finalizadas
-* `bids` → Historial de pujas (incluye pujas de invitados)
-* `user_achievements` → Logros desbloqueados
-* `favorites` → Subastas favoritas de cada usuario
-* `daily_*` → Misiones diarias (4 tablas)
-* `categories` → Categorías dinámicas desde admin
-* `user_items` → Inventario de objetos de cada usuario
-* `objetos_automaticos` → Catálogo para generación automática (242 objetos) 🆕
+* `profiles` (usuarios con saldo, XP, nivel, racha, fechas de botín/racha, etc.)
+* `auctions` (subastas activas/finalizadas)
+* `bids` (historial de pujas, incluye pujas de invitados con `is_guest` y `user_id` NULL)
+* `user_achievements` (logros desbloqueados)
+* `favorites` (subastas favoritas de cada usuario)
+* `daily_bid_counts`, `daily_custom_bids`, `daily_ad_views_mission`, `daily_category_bids` (misiones diarias)
+* `categories` (categorías dinámicas desde admin)
+* `user_items` (inventario de objetos de cada usuario)
+* `objetos_automaticos` (catálogo para generación automática de subastas)
 
----
+### Funciones RPC (backend)
 
-### Funciones RPC principales
+**Subastas y pujas:**
+- `place_bid` → Realiza una puja con bloqueo atómico (solo usuarios registrados).
+- `place_guest_bid` → Realiza una puja como invitado (sin autenticación).
+- `migrate_guest_bids` → Migra pujas de invitado a una cuenta real al registrarse.
+- `check_and_close_auction` → Cierra subastas expiradas y genera certificados.
+- `create_auction` → Crea una subasta (desde admin).
+- `generar_subasta_automatica` → Genera subastas automáticas cada hora.
 
-| Función | Descripción |
-|---------|-------------|
-| `place_bid` | Puja con bloqueo atómico |
-| `place_guest_bid` | Puja como invitado (sin autenticación) |
-| `migrate_guest_bids` | Migra pujas de invitado a cuenta real |
-| `check_and_close_auction` | Cierra subastas y **solo reliquida rarezas Rara o superior** 🆕 |
-| `generar_subasta_automatica` | Genera subasta cada hora (usa categoría y rareza del objeto) 🆕 |
-| `create_auction` | Crear subasta desde admin |
-| `add_ad_reward` | Recompensa por ver anuncios |
-| `add_mission_reward` | Recompensa por completar misiones |
-| `add_xp` | Suma XP y da recompensa al subir nivel |
-| `reclamar_bonus_diario` | Bono de 1.000€ al completar misiones |
-| `check_streak_and_reward` | Racha de inicio de sesión (devuelve JSON) 🆕 |
-| `reclamar_botin_diario` | Ruleta diaria (50€-1000€, devuelve JSON) 🆕 |
-| `vender_en_mercado` | Publicar objeto en mercado C2C |
-| `comprar_directo` | Compra directa con 30% comisión |
-| `cancelar_venta_mercado` | Cancela venta (no devuelve fianza) |
-| `desguazar_objeto` | Recicla objetos (20% del precio) |
-| `admin_*` | Funciones de administración (protegidas con `is_admin`) |
-| `unlock_achievement` | Desbloquea logros |
-| `toggle_goat` | Activa/desactiva modo GOAT |
-| `get_daily_missions` | Obtiene progreso de misiones diarias |
-| `get_hall_of_fame` | Rankings del Hall of Fame |
-| `username_disponible` | Verifica si el alias está libre |
-| `actualizar_mi_alias` | Cambia el alias del usuario |
+**Economía y recompensas:**
+- `add_ad_reward` → Da recompensa por ver anuncios (500€ normal, 1000€ GOAT).
+- `add_mission_reward` → Da recompensa al completar misiones.
+- `add_xp` → Suma XP, con recompensa por subir de nivel.
+- `reclamar_bonus_diario` → Reclama el bono de 1.000€ al completar misiones.
+- `check_streak_and_reward` → Controla la racha de inicio de sesión. Devuelve JSON.
+- `reclamar_botin_diario` → Ruleta diaria con premios de 50€ a 1000€. Devuelve JSON.
 
-### Triggers automáticos
+**Inventario y mercado:**
+- `vender_en_mercado` → Publica un objeto en el mercado C2C.
+- `comprar_directo` → Compra directa con 30% de comisión.
+- `cancelar_venta_mercado` → Cancela una venta (no devuelve fianza).
+- `desguazar_objeto` → Recicla objetos a cambio de monedas (20% del precio).
 
-| Trigger | Descripción |
-|---------|-------------|
-| `handle_new_user()` | Crea automáticamente la fila en `profiles` al registrarse 🆕 |
-| `on_auth_user_created` | Ejecuta `handle_new_user()` tras cada registro 🆕 |
+**Administración (protegidas con `is_admin`):**
+- `admin_buscar_usuario`, `admin_set_saldo`, `admin_toggle_ban`
+- `admin_delete_auction`, `admin_forzar_cierre_y_adjudicar`
+- `admin_listar_usuarios`, `admin_add_category`, `admin_delete_category`
+
+**Utilidades y gamificación:**
+- `unlock_achievement` → Desbloquea logros.
+- `check_all_achievements` → Verifica y desbloquea logros retroactivos.
+- `toggle_goat` → Activa/desactiva el modo GOAT.
+- `get_daily_missions` → Obtiene el progreso de misiones diarias.
+- `get_hall_of_fame` → Devuelve los rankings del Hall of Fame.
+- `username_disponible`, `actualizar_mi_alias` → Gestión de perfiles.
+
+**Funciones y triggers automáticos:**
+- `handle_new_user()` → Crea automáticamente la fila en `profiles` al registrarse.
+- Trigger `on_auth_user_created` → Ejecuta `handle_new_user()` tras cada registro.
 
 ---
 
 ## 🔒 Seguridad
 
-* **RLS activo** en todas las tablas
-* **Funciones RPC** con `SECURITY DEFINER`
-* **Prevención de Race Conditions** (`FOR UPDATE` en `place_bid`)
-* **RPCs admin** protegidas con verificación `is_admin`
-* **Pujas de invitado** con `user_id NULL`
-* **Creación automática de perfil** evita errores 406 🆕
+* **Row Level Security (RLS):** Activo en todas las tablas.
+  * `profiles`: `(auth.uid() = id)` — Cada usuario solo ve su propia fila.
+  * `auctions` y `bids`: Lectura pública (catálogo visible).
+  * `favorites`: Solo el propio usuario puede ver/crear/eliminar sus favoritos.
+* **Funciones RPC:** Usan `SECURITY DEFINER` para ejecutar lógica financiera en el servidor.
+* **Prevención de Race Conditions:** `place_bid` usa `FOR UPDATE` para evitar duplicados.
+* **RPCs de administrador protegidas:** Todas las funciones `admin_*` verifican `is_admin = true`.
+* **Pujas de invitado:** `place_guest_bid` permite `user_id` NULL y usa `p_guest_name`.
+* **Creación automática de perfil:** Trigger `on_auth_user_created` + política RLS de INSERT.
 
 ---
 
 ## ✨ Funcionalidades implementadas
 
 ### 🔐 Autenticación y usuarios
-- ✅ Registro/login **solo con alias y contraseña** (email interno automático)
-- ✅ Sin verificación de email durante la beta
-- ✅ Creación automática del perfil mediante trigger 🆕
-- ✅ Modo Invitado (1.000€ y 3 pujas)
-- ✅ Registro diferido (solo al pujar o agotar pujas)
-- ✅ Migración de datos de invitado a cuenta real
-- ✅ Cambio de alias y contraseña
-- ✅ Zona de baja de cuenta
+- ✅ Registro/login **solo con alias y contraseña** (email interno `alias@abrozon.beta`)
+- ✅ Sin verificación de email durante la beta (`Confirm email` desactivado)
+- ✅ Creación automática del perfil mediante trigger `handle_new_user`
+- ✅ Modo Invitado: saldo temporal de **1.000 €** y hasta 3 pujas
+- ✅ Registro diferido
+- ✅ Migración de datos del invitado al registrarse
+- ✅ Cambio de alias y contraseña desde perfil
+- ✅ Zona de baja de cuenta (contacto por email)
 
 ### 🏛️ Subastas y catálogo
-- ✅ Subastas en tiempo real con temporizadores
+- ✅ Subastas en tiempo real
 - ✅ Cierre automático al visitar el catálogo
-- ✅ Sistema de rarezas completo (6 niveles)
+- ✅ Sistema de rarezas (6 niveles)
 - ✅ Último pujador visible
-- ✅ Filtro "Novedades" (últimas 24h)
-- ✅ Barra de ordenación (fecha, duración, rareza, precio)
+- ✅ Filtro "Novedades"
+- ✅ Barra de ordenación
 - ✅ Buscador sin acentos
 - ✅ Pestaña "Finalizadas"
-- ✅ Certificados automáticos con código único
-- ✅ **Reliquidación selectiva:** solo Rara, Épica, Legendaria, Mítica 🆕
+- ✅ Certificados automáticos
 
-### ❤️ Favoritos
-- ✅ Botón de corazón en cada tarjeta
+### ❤️ Favoritos (Watchlist)
+- ✅ Botón de corazón en tarjetas
 - ✅ Solo visible para usuarios registrados
 - ✅ Pestaña "Mis Favoritos"
 - ✅ Actualización dinámica
+- ✅ Corrección de errores 406 con `.maybeSingle()`
 
 ### 💬 Historial de Pujas (Live Feed)
 - ✅ Reubicado junto al botón de puja
-- ✅ Scroll interno (250px)
+- ✅ Scroll interno y auto-scroll
 - ✅ Animación de entrada
-- ✅ Auto-scroll al final
-- ✅ Mensajes GOAT en burbuja destacada
+- ✅ Mensajes GOAT con burbuja
 - ✅ Límite de 80 caracteres
 - ✅ Pujas de invitado visibles
 
 ### 🎮 Gamificación y progreso
-- ✅ Sistema de XP y niveles (Lurker → Final Boss/Admin)
+- ✅ Sistema de XP y niveles
 - ✅ Recompensa por subir de nivel
 - ✅ 30 logros/insignias
 - ✅ Verificación retroactiva de logros
-- ✅ Racha de inicio de sesión (100€ → 1000€) con notificación 🆕
-- ✅ Misiones diarias (4 misiones + bono 1.000€)
-- ✅ Botín Diario (Ruleta) con contador visual y notificación 🆕
-- ✅ Modo GOAT (activación, recargas premium, comentarios)
+- ✅ Racha diaria (Streak Bonus de 7 días) con notificación
+- ✅ Misiones diarias (4 + bono)
+- ✅ Botín Diario (Ruleta) con contador y notificación
+- ✅ Modo GOAT
 
 ### 🛒 Mercado C2C e inventario
-- ✅ Inventario de usuarios (vitrina)
-- ✅ Publicar objetos en mercado (con fianzas del 10%)
-- ✅ Compra directa con 30% comisión
-- ✅ Cancelar venta (no devuelve fianza)
-- ✅ Reciclaje/Desguace (20% del precio con mín/máx)
+- ✅ Vitrina de objetos
+- ✅ Publicar en mercado
+- ✅ Compra directa
+- ✅ Cancelar venta
+- ✅ Reciclaje/Desguace
 - ✅ Confirmación antes de reciclar
-- ✅ Actualización automática de la vitrina
+- ✅ Actualización automática
 - ✅ Efectos visuales según rareza
 
 ### 🏆 Rankings y comunidad
-- ✅ Hall of Fame (6 rankings con podios)
-- ✅ Corrección ranking "Broker" (NaN €)
-- ✅ Pestaña "Mis pujas" (última puja por subasta)
-- ✅ Pestaña "Superadas" 🆕
-- ✅ Paginación en Mis Pujas (10 por página) 🆕
-- ✅ Botones de compartir en X y copiar enlace
-- ✅ Sistema de notificaciones con campanita persistente 🆕
+- ✅ Hall of Fame (6 rankings)
+- ✅ Corrección ranking "Broker"
+- ✅ Pestaña "Mis pujas"
+- ✅ **Pestaña "Superadas"**
+- ✅ **Paginación en Mis Pujas**
+- ✅ Botones de compartir
+- ✅ Sistema de notificaciones persistente
 
 ### 🎨 Interfaz y experiencia
 - ✅ Modo oscuro/claro
 - ✅ PWA instalable
 - ✅ Página de Ayuda/Tutorial/FAQ
-- ✅ Banner de Beta Abierta
+- ✅ Banner de **Beta Abierta**
 - ✅ Toasts en lugar de `alert()`
-- ✅ Feedback visual (spinners y botones deshabilitados)
-- ✅ Evitar spam de toasts (1 cada 30s)
+- ✅ Feedback visual
+- ✅ Evitar spam de toasts
 - ✅ Corrección doble símbolo €
 - ✅ Scrollbars personalizados
 - ✅ Tooltips en botones
-- ✅ Header compacto (38px, responsive)
-- ✅ Fix overflow horizontal en móvil
-- ✅ **Nuevo menú estilo Amazon:** Megamenú con categorías agrupadas 🆕
-- ✅ **Chips de categorías ocultos:** Más limpio y ordenado 🆕
+- ✅ Header compacto rediseñado
+- ✅ Fix overflow horizontal móvil
+- ✅ Consola sin errores
 
 ### 🛠️ Administración
-- ✅ Panel admin completo
-- ✅ Crear/eliminar subastas (1 min → 30 días)
-- ✅ Gestionar usuarios (buscar, fijar saldo, banear)
-- ✅ Ver lista completa de usuarios
-- ✅ Añadir/eliminar categorías dinámicas
-- ✅ Adjudicar subastas al admin
+- ✅ Panel completo
+- ✅ Corrección error al eliminar categorías
 
 ### 🤖 Automatización
-- ✅ Generación automática cada hora (`pg_cron`)
-- ✅ Contador de próxima subasta sincronizado
-- ✅ Reliquidación selectiva (solo Rara o superior) 🆕
-- ✅ Metadata flexible (JSONB)
-- ✅ **242 objetos** en `objetos_automaticos` (12 categorías) 🆕
-- ✅ **Función de generación mejorada** (usa categoría y rareza) 🆕
-- ✅ **Cron job funcionando** 🆕
+- ✅ Generación automática de subastas
+- ✅ Contador de próxima subasta
+- ✅ Reliquidación selectiva
+- ✅ Metadata flexible
+- ✅ Categoría "Velada de Boxeo"
+- ✅ Lógica de rarezas corregida
+- ✅ Tabla `objetos_automaticos` con 242 objetos
 
 ### 📜 Legal y compliance
-- ✅ Textos legales completos (LSSI-CE/RGPD)
-- ✅ Titular: Daniel Hernandez (Granollers)
-- ✅ Google Analytics (ID `G-C30L0HE0L7`)
+- ✅ Textos legales completos
+- ✅ Titular persona física
+- ✅ Google Analytics
 
 ---
 
-## 🚧 Roadmap
+## 🚧 Roadmap actualizado
 
 ### ✅ Fase 1: MVP (COMPLETADA)
-### ✅ Fase 2: Pulido UX/UI (COMPLETADA)
+
+Autenticación, subastas, pujas, mercado básico y panel admin.
+
+**Incluye:**
+- Registro/login con email
+- Creación de subastas manuales
+- Pujas básicas
+- Panel de administración inicial
+- Mercado C2C básico
+- Vitrina de objetos
+- Certificados automáticos
+- Sistema de rarezas
+
+### ✅ Fase 2: Pulido UX/UI y Engagement Temprano (COMPLETADA)
+
+1. ✅ Modal de registro oportuno
+2. ✅ Contador de próxima subasta
+3. ✅ Marcos y chips de rareza en detalle
+4. ✅ Corrección visual objetos Poco Comunes (verdes)
+5. ✅ Bono diario por completar todas las misiones (1.000 €)
+6. ✅ Pestaña "📋 Mis pujas"
+7. ✅ Botón de compartir en redes
+8. ✅ Barra de ordenación en catálogo
+9. ✅ Racha de inicio de sesión (Streak Bonus de 7 días)
+10. ✅ Recompensa por subir de nivel
+11. ✅ Reciclaje / Desguace de objetos
+12. ✅ Sistema de recompensas por anuncios voluntarios (simulados)
+13. ✅ Controles Anti-Pay-to-Win básicos
+14. ✅ Botín Diario (Ruleta)
+15. ✅ Sistema de notificaciones
+
 ### ✅ Fase 2.5: Correcciones Beta (COMPLETADA)
 
-**Últimas correcciones aplicadas:**
-1. ✅ Ruleta diaria con notificaciones
-2. ✅ Racha diaria con notificaciones
-3. ✅ Reliquidación solo para rarezas Rara o superior
-4. ✅ Corrección error columna `ended_at`
-5. ✅ Catálogo de 242 objetos
-6. ✅ Menú estilo Amazon con megamenú
-7. ✅ Ocultación de chips de categorías
-8. ✅ Trigger de creación automática de perfil
-9. ✅ Políticas RLS corregidas
+1. ✅ Modo Invitado y Registro Diferido (Lazy Registration)
+2. ✅ Buscador sin acentos
+3. ✅ Corrección doble símbolo €
+4. ✅ Historial de pujas reubicado (Live Feed)
+5. ✅ Límite de 80 caracteres en mensajes GOAT
+6. ✅ Sistema de Favoritos (Watchlist)
+7. ✅ Scrollbars personalizados
+8. ✅ Tooltips en botones de cabecera
+9. ✅ Confirmación para reciclar objetos
+10. ✅ Pujas de invitado visibles en historial
+11. ✅ Migración de pujas al registrarse
+12. ✅ Corrección errores 406 en favoritos
+13. ✅ Cron job configurado con pg_cron
+14. ✅ Lógica de rarezas corregida
+15. ✅ Saldo de invitado aumentado a 1.000 €
+16. ✅ Corrección ranking "Broker" en HoF (NaN €)
+17. ✅ Ruleta con contador visual de tiempo restante
+18. ✅ Header compacto rediseñado
+19. ✅ Corrección error al eliminar categorías (SQL duplicado)
+20. ✅ Eliminadas categorías vacías (oldmemes, streamers)
+21. ✅ Registro solo con alias y contraseña (sin email real)
+22. ✅ Trigger automático de perfil al registrarse
+23. ✅ Notificaciones persistentes en campanita
+24. ✅ Pestaña "Superadas" en Mis Pujas
+25. ✅ Paginación en Mis Pujas
+26. ✅ Fix overflow horizontal móvil
+27. ✅ Megamenú estilo Amazon
+28. ✅ Chips de categorías ocultos
+29. ✅ Reliquidación selectiva
 
 ---
 
 ### ⬜ Fase 3: Gamificación y Retención (PENDIENTE)
 
-1. **Ajuste de economía** ⬜
-2. **Sistema de referidos** ⬜
-3. **Personalización de avatar** ⬜
-4. **Personalización de perfil** ⬜
-5. **Beneficios por antigüedad** ⬜
-6. **Vitrina Espectacular** ⬜
-7. **Notificaciones push/email** ⬜
+1. **Ajuste de la economía (control de inflación)** ⬜ Pendiente
+2. **Sistema de referidos** ⬜ Pendiente
+3. **Personalización de avatar** ⬜ Pendiente
+4. **Personalización de perfil** ⬜ Pendiente
+5. **Beneficios por antigüedad** ⬜ Pendiente
+6. **Vitrina Espectacular y Compartible** ⬜ Pendiente
+7. **Notificaciones push/email** ⬜ Pendiente
 
-### 💡 Nuevas ideas para Fase 3
+### 💡 Nuevas ideas priorizadas para Fase 3
 
-| Idea | Descripción | Estado |
-|------|-------------|--------|
-| 🎰 Ruleta de Objetos | Loot Box paródica | ⬜ Pendiente |
-| 📦 Colecciones de Rarezas | Sets para completar | ⬜ Pendiente |
-| ⚡ Subastas Relámpago | 5 minutos de duración | ⬜ Pendiente |
-| 🎯 Pujas de Último Segundo | Extensión de 30s al pujar | ⬜ Pendiente |
-| 👻 Modo Fantasma | Ocultar último pujador | ⬜ Pendiente |
-| 🌍 Retos Diarios | Metas comunitarias | ⬜ Pendiente |
-| 🖼️ Títulos y Marcos | Cosméticos de perfil | ⬜ Pendiente |
-| 🍀 Modo Duende | Precio secreto reducido | ⬜ Pendiente |
+#### 🎰 Ruleta de Objetos (Loot Box Paródica)
+- Gastar monedas por objetos aleatorios
+- 1 giro gratis diario + giros extra
+- Modo Dorado con mejores probabilidades
+- Sumidero de monedas para controlar inflación
+
+#### 📦 Colecciones de Rarezas (Sets)
+- Agrupar objetos por nombre base
+- Recompensa al completar todas las rarezas
+- Insignias de coleccionista
+
+#### ⚡ Subastas Relámpago
+- 5 minutos de duración
+- Generan urgencia y FOMO
+
+#### 🎯 Pujas de Último Segundo
+- Extensión de 30s al pujar al final
+- Evita el sniping
+
+#### 👻 Modo Fantasma
+- Ocultar último pujador
+- Añade misterio
+
+#### 🌍 Retos Diarios de Comunidad
+- Objetivos colectivos con recompensa
+- Fomenta actividad
+
+#### 🖼️ Títulos y Marcos de Perfil
+- Cosméticos desbloqueables
+- Personalización
+
+#### 🍀 Modo Duende
+- Precio secreto reducido una vez al día
 
 ---
 
-### ⬜ Fases 4-8 (Pendientes)
+### ⬜ Fase 4: Monetización (PENDIENTE)
 
-- **Fase 4:** Monetización (Stripe, anuncios reales)
-- **Fase 5:** Comunidad, Eventos, PVE
-- **Fase 6:** Expansión Técnica (API, Widgets)
-- **Fase 7:** Análisis de Audiencia y Publicidad
-- **Fase 8:** Equipamiento de Avatar y Stats
+1. **Integración de pagos con Stripe** ⬜ Pendiente
+2. **Anuncios reales (Google AdSense)** ⬜ Pendiente
+3. **Límite diario de compra de monedas** ⬜ Pendiente
+4. **Subastas restringidas para novatos** ⬜ Pendiente
+5. **Subastas inversas** ⬜ Pendiente
+6. **Pases de temporada** ⬜ Pendiente
+
+---
+
+### ⬜ Fase 5: Comunidad, Eventos, PVE y Equipamiento (PENDIENTE)
+
+1. **Eventos y desafíos temporales** ⬜ Pendiente
+2. **Votaciones comunitarias** ⬜ Pendiente
+3. **Sorteos comunitarios** ⬜ Pendiente
+4. **Donaciones comunitarias** ⬜ Pendiente
+5. **Sección FAQ participativo** ⬜ Pendiente
+6. **Arena PVE "Subasta contra Bots"** ⬜ Pendiente
+7. **Zona Raid PVE** ⬜ Pendiente
+8. **Colección Temática "Jägger Lore"** ⬜ Pendiente
+9. **Foro / Tablón de anuncios comunitario** ⬜ Pendiente
+10. **Sistema de trueque entre usuarios** ⬜ Pendiente
+
+---
+
+### ⬜ Fase 6: Expansión Técnica y API (PENDIENTE)
+
+1. **API REST de datos públicos** ⬜ Pendiente
+2. **Firmas dinámicas y Widgets** ⬜ Pendiente
+3. **Integraciones con terceros** ⬜ Pendiente
+4. **Estrategia SEO y Posicionamiento** ⬜ Pendiente
+
+---
+
+### ⬜ Fase 7: Análisis de Audiencia y Publicidad (PENDIENTE)
+
+1. **Perfilado demográfico voluntario** ⬜ Pendiente
+2. **Media Kit de Anunciantes** ⬜ Pendiente
+3. **Misiones de patrocinadores y afiliación** ⬜ Pendiente
+4. **Protección de datos** ⬜ Pendiente
+
+---
+
+### ⬜ Fase 8: Equipamiento de Avatar y Stats (PENDIENTE)
+
+1. **Sistema de inventario y equipamiento** ⬜ Pendiente
+2. **Catálogo de objetos paródicos** ⬜ Pendiente
+3. **Escalado de Stats** ⬜ Pendiente
+4. **Manipulación de Bots** ⬜ Pendiente
+5. **Economía y Cashbacks** ⬜ Pendiente
+6. **Suerte y Progresión** ⬜ Pendiente
+7. **Efectos Sociales y Cosméticos** ⬜ Pendiente
+8. **Interfaz de Inventario estilo ARPG/Diablo** ⬜ Pendiente
 
 ---
 
 ## 💰 Modelo de monetización (planificado)
 
-* **F2P (Gratis):** Anuncios limitados para moneda virtual
-* **Modo GOAT (3.99€/mes):** Sin límites de anuncios, comentarios, insignia
-* **Tienda de monedas:** Compra de saldo virtual con Stripe
-* **Media Kit:** Informes agregados para patrocinios
+* **F2P (Gratis):** Usuarios ven anuncios limitados para conseguir moneda virtual.
+* **Modo GOAT (Suscripción 3.99 €/mes):** Sin límites de anuncios, comentarios en pujas, insignia exclusiva.
+* **Tienda de monedas:** Compra directa de saldo virtual con Stripe.
+* **Media Kit de Anunciantes:** Informes agregados de audiencia para patrocinios.
 
 ---
 
-## 📢 Redes Sociales y Estrategia
+## 📢 Redes Sociales y Estrategia de Lanzamiento
 
-* **X:** [@aBROzonsubastas](https://x.com/aBROzonsubastas)
-* **Beta Abierta:** Cualquiera puede entrar 🆕
-* **Micro-streamers:** Invitar para medir retención
-* **Contenido viral:** Clips de subastas absurdas
-* **Estrategia:** 1 vídeo/tweet al día durante 2 semanas
+* **X (Twitter):** [@aBROzonsubastas](https://x.com/aBROzonsubastas) — Perfil oficial creado.
+* **Beta Abierta:** Cualquiera puede entrar y probar sin invitación.
+* **Beta con Micro-streamers:** Invitar a streamers pequeños para medir retención.
+* **Contenido viral:** Crear clips de subastas absurdas para TikTok/X.
+* **Estrategia de confianza:** Publicar vídeos mostrando la web antes de pedir clics.
+* **Ideas de distribución orgánica:**
+  - Publicar clips en TikTok/Reels/Shorts.
+  - Compartir en comunidades de streamers (Discord, Reddit, Telegram).
+  - Invitar a micro-streamers (50-500 viewers).
+  - Crear polémica sana con objetos absurdos.
+  - Ser constante: 1 vídeo o tweet al día durante 2 semanas.
 
 ---
 
 ## 🌐 Dominio
 
-* **Dominio:** `abrozon.com` (GitHub Pages + HTTPS)
-* **SSL:** Certificado gestionado por GitHub
+* **Dominio:** `abrozon.com` — Comprado y conectado a GitHub Pages.
+* **HTTPS:** Activado (certificado SSL gestionado por GitHub).
 
 ---
 
-## 📊 Distribución de objetos (`objetos_automaticos`)
+## 📊 Resultados de la Beta Privada (14/08/2026)
 
-| Categoría | Común | Poco común | Rara | Épica | Legendaria | Mítica | TOTAL |
-|-----------|-------|------------|------|-------|------------|--------|-------|
-| Cultura Pop y Gastronomía | 9 | 6 | 2 | 2 | 1 | 0 | 20 |
-| Eventos Especiales | 8 | 0 | 2 | 3 | 0 | 0 | 13 |
-| Famosos y Televisión | 10 | 6 | 5 | 3 | 1 | 0 | 25 |
-| Fútbol | 10 | 6 | 4 | 4 | 1 | 0 | 25 |
-| General | 6 | 4 | 4 | 4 | 2 | 1 | 21 |
-| Memes Autóctonos Españoles | 9 | 6 | 5 | 0 | 0 | 0 | 20 |
-| Memes de Internet | 18 | 0 | 5 | 1 | 1 | 0 | 25 |
-| Memes Latinoamericanos | 5 | 4 | 4 | 0 | 2 | 0 | 15 |
-| Objetos Random y Cultura | 7 | 3 | 5 | 2 | 2 | 1 | 20 |
-| Política Española | 12 | 6 | 5 | 1 | 1 | 0 | 25 |
-| Política Latinoamericana | 9 | 5 | 7 | 1 | 3 | 0 | 25 |
-| Velada de Boxeo | 2 | 0 | 4 | 2 | 0 | 0 | 8 |
-| **TOTAL** | **105** | **46** | **52** | **23** | **14** | **2** | **242** |
+### Métricas clave
+- **Usuarios invitados:** 10 personas
+- **Registros completados:** 1 persona (10% conversión)
+- **Detección de fricción:** El registro obligatorio al pujar frenaba al 90% de los visitantes
+- **Detección de miedo al enlace:** Algunos usuarios no clicaban por temor a virus
+
+### Problemas detectados y soluciones aplicadas
+| Problema | Solución | Estado |
+|----------|----------|--------|
+| Registro obligatorio para pujar | Modo Invitado con saldo temporal y registro diferido | ✅ Implementado |
+| Doble símbolo € en el saldo | Eliminado del HTML, solo lo gestiona JS | ✅ Corregido |
+| Buscador sensible a acentos | Función `normalizarTexto()` | ✅ Implementado |
+| Historial de pujas invisible | Reubicado junto al botón de puja, con animaciones | ✅ Implementado |
+| Mensajes GOAT sin límite | Límite de 80 caracteres con contador | ✅ Implementado |
+| Sin seguimiento de subastas | Sistema de Favoritos con Watchlist | ✅ Implementado |
+| Errores 406 en consola | Cambio de `.single()` a `.maybeSingle()` | ✅ Corregido |
+| Pujas de invitado no visibles | RPC `place_guest_bid` + historial actualizado | ✅ Corregido |
+| Saldo de invitado insuficiente | Aumentado a 1.000 € | ✅ Corregido |
+| Error al eliminar categorías | Función SQL duplicada eliminada | ✅ Corregido |
+| Error 406 al crear perfil | Trigger `handle_new_user` + política RLS de INSERT | ✅ Corregido |
+| Ruleta sin notificación clara | RPC devuelve JSON y guarda notificación en campanita | ✅ Corregido |
+| Racha diaria invisible | `check_streak_and_reward` devuelve JSON y notifica | ✅ Corregido |
+| Sin avisos externos | Pendiente para Fase 3 (notificaciones push/email) | ⬜ Pendiente |
+
+### Feedback de betatesters
+- **David:** "Mezcla el € con el $ para que sea fake pero realista."
+- **David:** "Que el buscador no tenga presente los acentos siempre es cómodo."
+- **Usuario anónimo:** La gente no se registra en webs desconocidas, pero sí prueba sin fricción.
+- **Usuario anónimo:** Miedo a hacer clic en enlaces desconocidos por posible virus.
 
 ---
 
 ## ⚠️ Notas para la IA
 
-* **Soy un programador novato.** Explicaciones paso a paso, sin tecnicismos innecesarios.
+* **Soy un programador novato.** Necesito explicaciones paso a paso, sin tecnicismos innecesarios.
 * El código principal está en un único archivo `index.html`.
-* Para cambios pequeños: indicar texto exacto a buscar y reemplazo.
-* Para cambios grandes: preguntar antes de pasar archivo completo.
+* Para cambios pequeños, indicar texto exacto a buscar y reemplazo.
+* Para cambios grandes, preguntar antes de pasar archivo completo.
 * No acortar el código al pasarlo completo.
 * La web se despliega en GitHub Pages. Errores comunes: caché, `.nojekyll`, sintaxis.
 * El sistema de favoritos requiere la tabla `favorites` en Supabase.
-* Las pujas de invitado requieren RPCs `place_guest_bid` y `migrate_guest_bids`.
-* La generación automática requiere `pg_cron` activo y tabla `objetos_automaticos`.
-* El registro sin email requiere el trigger `handle_new_user` y política RLS de INSERT.
-* Las RPCs de ruleta y racha deben devolver JSON.
-* Las notificaciones se guardan en `localStorage` (`abrozon_notificaciones`).
-* **El menú es un megamenú estilo Amazon** con categorías agrupadas. 🆕
-* **La reliquidación SOLO funciona para Rara, Épica, Legendaria y Mítica.** 🆕
-* **Hay 242 objetos en `objetos_automaticos`.** 🆕
+* Las pujas de invitado requieren las RPCs `place_guest_bid` y `migrate_guest_bids`.
+* La generación automática requiere `pg_cron` activo y la tabla `objetos_automaticos` con datos.
+* El registro sin email requiere el trigger `handle_new_user` y política RLS de INSERT en `profiles`.
+* Las RPCs de ruleta y racha deben devolver JSON para que el frontend las procese bien.
+* Las notificaciones se guardan en `localStorage` con la clave `abrozon_notificaciones`.
+* Las categorías vacías no deben mostrarse en el chip de categorías del catálogo.
 
 ---
 
-## 🎯 Resumen de mejoras aplicadas (sesión 17/08/2026)
+## 🗄️ SQL para Supabase (última versión)
 
-| Mejora | Descripción | Estado |
-|--------|-------------|--------|
-| Ruleta diaria | RPC con JSON + notificaciones | ✅ |
-| Racha diaria | RPC con JSON + notificaciones | ✅ |
-| Reliquidación selectiva | Solo Rara, Épica, Legendaria, Mítica | ✅ |
-| Corrección `ended_at` | Eliminada referencia a columna inexistente | ✅ |
-| Catálogo de objetos | 242 objetos en `objetos_automaticos` | ✅ |
-| Menú estilo Amazon | Megamenú con categorías agrupadas | ✅ |
-| Ocultación de chips | Categorías solo en megamenú | ✅ |
-| Función generadora | Usa categoría y rareza del objeto | ✅ |
-| Trigger de perfil | Creación automática al registrarse | ✅ |
-| Políticas RLS | Insert permitido para creación de perfil | ✅ |
+```sql
+-- Tabla de favoritos
+CREATE TABLE IF NOT EXISTS public.favorites (
+    id BIGSERIAL PRIMARY KEY,
+    user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+    auction_id UUID NOT NULL REFERENCES auctions(id) ON DELETE CASCADE,
+    created_at TIMESTAMPTZ DEFAULT now(),
+    UNIQUE(user_id, auction_id)
+);
 
----
+ALTER TABLE public.favorites ENABLE ROW LEVEL SECURITY;
 
-**Última actualización:** 17 de agosto de 2026
-Pujas de invitados
+CREATE POLICY "Users can view own favorites" ON public.favorites
+FOR SELECT USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can insert own favorites" ON public.favorites
+FOR INSERT WITH CHECK (auth.uid() = user_id);
+
+CREATE POLICY "Users can delete own favorites" ON public.favorites
+FOR DELETE USING (auth.uid() = user_id);
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON public.favorites TO authenticated;
+GRANT SELECT ON public.favorites TO anon;
+GRANT USAGE, SELECT ON SEQUENCE public.favorites_id_seq TO authenticated;
+
+-- Permitir pujas de invitados
 ALTER TABLE public.bids ADD COLUMN IF NOT EXISTS is_guest BOOLEAN DEFAULT false;
 ALTER TABLE public.bids ALTER COLUMN user_id DROP NOT NULL;
 
+-- Función para pujas de invitado
 CREATE OR REPLACE FUNCTION public.place_guest_bid(
     p_auction_id UUID,
     p_amount NUMERIC,
@@ -376,7 +521,8 @@ END;
 $$;
 
 GRANT EXECUTE ON FUNCTION public.place_guest_bid(UUID, NUMERIC, TEXT) TO anon, authenticated;
-Migración de pujas de invitado
+
+-- Función para migrar pujas de invitado
 CREATE OR REPLACE FUNCTION public.migrate_guest_bids(
     p_guest_name TEXT,
     p_user_id UUID,
@@ -396,7 +542,43 @@ END;
 $$;
 
 GRANT EXECUTE ON FUNCTION public.migrate_guest_bids(TEXT, UUID, TEXT) TO authenticated;
-Trigger de creación de perfil
+
+-- Habilitar pg_cron
+CREATE EXTENSION IF NOT EXISTS pg_cron;
+
+-- Crear cron job para generación automática
+SELECT cron.schedule(
+    'generar-subasta-hourly',
+    '0 * * * *',
+    $$SELECT generar_subasta_automatica();$$
+);
+
+-- Corregir función de eliminar categoría (evitar duplicados)
+DROP FUNCTION IF EXISTS public.admin_delete_category(bigint);
+DROP FUNCTION IF EXISTS public.admin_delete_category(integer);
+
+CREATE OR REPLACE FUNCTION public.admin_delete_category(
+    p_id BIGINT
+)
+RETURNS void
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM profiles 
+        WHERE id = auth.uid() AND is_admin = true
+    ) THEN
+        RAISE EXCEPTION 'No tienes permisos de administrador';
+    END IF;
+
+    DELETE FROM categories WHERE id = p_id;
+END;
+$$;
+
+GRANT EXECUTE ON FUNCTION public.admin_delete_category(BIGINT) TO authenticated;
+
+-- Trigger para crear perfil automáticamente
 CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS TRIGGER
 LANGUAGE plpgsql
@@ -424,7 +606,7 @@ CREATE TRIGGER on_auth_user_created
 AFTER INSERT ON auth.users
 FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
 
--- Política RLS para permitir inserción del perfil
+-- Política RLS para inserción de perfil
 DROP POLICY IF EXISTS "Usuarios pueden insertar su propio perfil" ON public.profiles;
 CREATE POLICY "Usuarios pueden insertar su propio perfil"
 ON public.profiles
@@ -435,215 +617,3 @@ WITH CHECK (auth.uid() = id);
 ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS last_daily_loot DATE;
 ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS last_login_date DATE;
 ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS streak_count INT DEFAULT 0;
-Habilitar pg_cron
-CREATE EXTENSION IF NOT EXISTS pg_cron;
-
-SELECT cron.schedule(
-    'generar-subasta-hourly',
-    '0 * * * *',
-    $$SELECT generar_subasta_automatica();$$
-);
-Función de reliquidación mejorada (SOLO RARA+)
-DROP FUNCTION IF EXISTS public.check_and_close_auction(UUID) CASCADE;
-
-CREATE OR REPLACE FUNCTION public.check_and_close_auction(
-    p_auction_id UUID
-)
-RETURNS void
-LANGUAGE plpgsql
-SECURITY DEFINER
-AS $function$
-DECLARE
-    v record;
-    v_new_price integer;
-    v_descuento_aplicado integer;
-    v_duracion_horas integer;
-    v_winner_name text;
-    v_cert text;
-    v_user_id UUID;
-    v_reliquidar boolean;
-BEGIN
-    SELECT * INTO v FROM public.auctions WHERE id = p_auction_id FOR UPDATE;
-    IF NOT FOUND THEN RETURN; END IF;
-    IF v.status = 'closed' THEN RETURN; END IF;
-    IF v.ends_at > now() THEN RETURN; END IF;
-
-    IF EXISTS (SELECT 1 FROM public.bids WHERE auction_id = p_auction_id) THEN
-        -- Tiene pujas → se adjudica
-        SELECT user_name, user_id INTO v_winner_name, v_user_id
-        FROM public.bids
-        WHERE auction_id = p_auction_id
-        ORDER BY amount DESC
-        LIMIT 1;
-
-        v_cert := 'ABRO-' || upper(substring(md5(random()::text || clock_timestamp()::text) from 1 for 8));
-
-        UPDATE public.auctions
-        SET status = 'closed',
-            winner = v_winner_name,
-            certificado_codigo = v_cert
-        WHERE id = p_auction_id;
-
-        IF v_user_id IS NOT NULL THEN
-            INSERT INTO public.user_items (user_id, auction_id, en_venta)
-            VALUES (v_user_id, p_auction_id, false);
-        END IF;
-
-    ELSE
-        -- Sin pujas → SOLO reliquidar si es Rara o superior
-        v_reliquidar := v.rareza IN ('Rara', 'Épica', 'Legendaria', 'Mítica');
-
-        IF v_reliquidar THEN
-            v_new_price := floor(v.current_price * 0.90);
-            IF v_new_price < 1 THEN v_new_price := 1; END IF;
-            
-            v_descuento_aplicado := COALESCE((v.metadata->>'descuentos_aplicados')::integer, 0) + 1;
-
-            CASE v.rareza
-                WHEN 'Mítica' THEN v_duracion_horas := 336;
-                WHEN 'Legendaria' THEN v_duracion_horas := 168;
-                WHEN 'Épica' THEN v_duracion_horas := 72;
-                ELSE v_duracion_horas := 24;
-            END CASE;
-
-            UPDATE public.auctions 
-            SET status = 'closed', 
-                winner = NULL
-            WHERE id = p_auction_id;
-
-            INSERT INTO public.auctions (
-                title, description, current_price, starting_price, ends_at,
-                category, image_url, status, stock_maximo, rareza, metadata
-            ) VALUES (
-                '🔥 RELIQUIDACIÓN: ' || v.title,
-                v.description,
-                v_new_price,
-                v_new_price,
-                now() + (v_duracion_horas || ' hours')::interval,
-                v.category,
-                v.image_url,
-                'active',
-                1,
-                v.rareza,
-                jsonb_build_object(
-                    'descuentos_aplicados', v_descuento_aplicado,
-                    'precio_original', COALESCE(v.metadata->>'precio_original', v.current_price::text)
-                )
-            );
-        ELSE
-            -- Común o Poco común → se elimina
-            UPDATE public.auctions 
-            SET status = 'closed', 
-                winner = NULL
-            WHERE id = p_auction_id;
-        END IF;
-    END IF;
-END;
-$function$;
-Función de generación automática (usa categorías y rarezas)
-DROP FUNCTION IF EXISTS public.generar_subasta_automatica() CASCADE;
-
-CREATE OR REPLACE FUNCTION public.generar_subasta_automatica()
-RETURNS uuid
-LANGUAGE plpgsql
-SECURITY DEFINER
-AS $function$
-DECLARE
-    v_objeto RECORD;
-    v_auction_id UUID;
-    v_rareza TEXT;
-    v_precio_base NUMERIC;
-    v_duracion INTERVAL;
-    v_categoria TEXT;
-BEGIN
-    SELECT * INTO v_objeto
-    FROM objetos_automaticos
-    ORDER BY RANDOM()
-    LIMIT 1;
-    
-    IF v_objeto.id IS NULL THEN
-        RAISE EXCEPTION 'No hay objetos en la tabla objetos_automaticos';
-    END IF;
-
-    v_rareza := v_objeto.rareza_minima;
-    
-    CASE v_rareza
-        WHEN 'Común' THEN
-            v_precio_base := 1 + (RANDOM() * 999)::INT;
-            v_duracion := INTERVAL '1 day';
-        WHEN 'Poco común' THEN
-            v_precio_base := 500 + (RANDOM() * 1500)::INT;
-            v_duracion := INTERVAL '1 day';
-        WHEN 'Rara' THEN
-            v_precio_base := 1001 + (RANDOM() * 3999)::INT;
-            v_duracion := INTERVAL '1 day';
-        WHEN 'Épica' THEN
-            v_precio_base := 5001 + (RANDOM() * 4999)::INT;
-            v_duracion := INTERVAL '3 days';
-        WHEN 'Legendaria' THEN
-            v_precio_base := 10001 + (RANDOM() * 989999)::INT;
-            v_duracion := INTERVAL '7 days';
-        WHEN 'Mítica' THEN
-            v_precio_base := 1000001 + (RANDOM() * 8999999)::INT;
-            v_duracion := INTERVAL '30 days';
-        ELSE
-            v_precio_base := 100 + (RANDOM() * 900)::INT;
-            v_duracion := INTERVAL '1 day';
-    END CASE;
-
-    v_categoria := COALESCE(v_objeto.categoria, 'General');
-
-    INSERT INTO auctions (
-        title,
-        description,
-        starting_price,
-        current_price,
-        image_url,
-        category,
-        rareza,
-        status,
-        ends_at,
-        created_at,
-        stock_maximo
-    ) VALUES (
-        v_objeto.titulo || ' [' || v_rareza || ']',
-        v_objeto.descripcion,
-        v_precio_base,
-        v_precio_base,
-        v_objeto.emoji,
-        v_categoria,
-        v_rareza,
-        'active',
-        NOW() + v_duracion,
-        NOW(),
-        0
-    )
-    RETURNING id INTO v_auction_id;
-
-    RETURN v_auction_id;
-END;
-$function$;
-Función para eliminar categorías (corregida)
-DROP FUNCTION IF EXISTS public.admin_delete_category(bigint);
-DROP FUNCTION IF EXISTS public.admin_delete_category(integer);
-
-CREATE OR REPLACE FUNCTION public.admin_delete_category(
-    p_id BIGINT
-)
-RETURNS void
-LANGUAGE plpgsql
-SECURITY DEFINER
-AS $$
-BEGIN
-    IF NOT EXISTS (
-        SELECT 1 FROM profiles 
-        WHERE id = auth.uid() AND is_admin = true
-    ) THEN
-        RAISE EXCEPTION 'No tienes permisos de administrador';
-    END IF;
-
-    DELETE FROM categories WHERE id = p_id;
-END;
-$$;
-
-GRANT EXECUTE ON FUNCTION public.admin_delete_category(BIGINT) TO authenticated;
