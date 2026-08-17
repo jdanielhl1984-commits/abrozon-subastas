@@ -31,135 +31,25 @@
         .beta-banner a { color: #fff; text-decoration: underline; font-weight: bold; }
         .disclaimer { background-color: var(--bg-subtle); color: var(--text-muted); text-align: center; padding: 8px; font-size: 0.8rem; border-bottom: 1px solid var(--border-color); }
         header { background-color: var(--bg-header); padding: 8px 4%; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 200; }
-        .header-row { display: flex; align-items: center; gap: 12px; flex-wrap: nowrap; }
+        .header-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
         .logo { font-size: 1.2rem; font-weight: 900; color: var(--accent-blue); letter-spacing: -1px; cursor: pointer; flex-shrink: 0; line-height: 38px; }
         .logo span { color: #f97316; }
-        .search-bar {
-  flex: 0 1 220px;
-  min-width: 100px;
-  height: 38px;
-  display: flex;
-  align-items: center;
-  background: var(--bg-subtle);
-  border-radius: 999px;
-  border: 1px solid var(--border-color);
-  overflow: hidden;
-  padding: 0 10px;
-  transition: border-color 0.2s, box-shadow 0.2s;
-}
-        .search-bar:focus-within {
-            border-color: var(--accent-blue);
-            box-shadow: 0 0 0 3px rgba(2,132,199,0.15);
-        }
-        .search-bar .search-icon {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            cursor: pointer;
-            flex-shrink: 0;
-            margin-right: 6px;
-        }
-        .search-bar input {
-            flex: 1;
-            background: transparent;
-            border: none;
-            padding: 0;
-            height: 100%;
-            color: var(--text-main);
-            outline: none;
-            font-size: 0.85rem;
-        }
-       .header-right {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  margin-left: auto;
-  flex-shrink: 0;
-}
-        /* Estilo unificado para todos los botones */
-        .btn-header,
-.btn-ruleta,
-.btn-goat,
-.btn-login {
-  height: 38px;
-  padding: 0 10px;
-  border-radius: 20px;
-  font-size: 0.8rem;
-  font-weight: bold;
-  border: 1px solid var(--border-color);
-  background: var(--bg-subtle);
-  color: var(--text-main);
-  cursor: pointer;
-  transition: opacity 0.2s;
-  display: inline-flex;
-  align-items: center;
-  gap: 3px;
-  white-space: nowrap;
-}
-        .btn-header:disabled,
-        .btn-ruleta:disabled,
-        .btn-goat:disabled,
-        .btn-login:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-        .btn-ruleta {
-            background: linear-gradient(135deg, #f97316, #eab308);
-            color: white;
-            border: none;
-        }
-        .btn-goat {
-            background: linear-gradient(135deg, #eab308, #ca8a04);
-            color: #0f172a;
-            border: none;
-            opacity: 0.5;
-        }
-        .btn-goat.active {
-            opacity: 1;
-            box-shadow: 0 0 10px #eab308;
-        }
-        .btn-login {
-            background: var(--accent-blue);
-            color: white;
-            border: none;
-        }
-       .user-balance {
-  height: 38px;
-  padding: 0 8px;
-  background: var(--bg-subtle);
-  border-radius: 20px;
-  border: 1px solid var(--border-color);
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 0.7rem;
-  white-space: nowrap;
-}
-        .user-balance .balance-amount {
-            color: var(--accent-green);
-            font-weight: bold;
-        }
-        .user-balance .level-badge {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            background: var(--bg-subtle);
-            padding: 2px 8px;
-            border-radius: 10px;
-            font-size: 0.7rem;
-        }
-        .user-balance .xp-bar-mobile {
-            width: 60px;
-            height: 4px;
-            background: var(--bg-subtle);
-            border-radius: 2px;
-            overflow: hidden;
-        }
-        .user-balance .xp-fill-mobile {
-            height: 100%;
-            background: linear-gradient(90deg, #f97316, #eab308);
-            border-radius: 2px;
-            transition: width 0.3s;
-        }
+        .search-bar { flex: 0 1 220px; min-width: 100px; height: 38px; display: flex; align-items: center; background: var(--bg-subtle); border-radius: 999px; border: 1px solid var(--border-color); overflow: hidden; padding: 0 10px; transition: border-color 0.2s, box-shadow 0.2s; }
+        .search-bar:focus-within { border-color: var(--accent-blue); box-shadow: 0 0 0 3px rgba(2,132,199,0.15); }
+        .search-bar .search-icon { color: var(--text-muted); font-size: 0.9rem; cursor: pointer; flex-shrink: 0; margin-right: 6px; }
+        .search-bar input { flex: 1; background: transparent; border: none; padding: 0; height: 100%; color: var(--text-main); outline: none; font-size: 0.85rem; }
+        .header-right { display: flex; align-items: center; gap: 4px; margin-left: auto; flex-shrink: 0; }
+        .btn-header, .btn-ruleta, .btn-goat, .btn-login { height: 38px; padding: 0 10px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; border: 1px solid var(--border-color); background: var(--bg-subtle); color: var(--text-main); cursor: pointer; transition: opacity 0.2s; display: inline-flex; align-items: center; gap: 3px; white-space: nowrap; }
+        .btn-header:disabled, .btn-ruleta:disabled, .btn-goat:disabled, .btn-login:disabled { opacity: 0.5; cursor: not-allowed; }
+        .btn-ruleta { background: linear-gradient(135deg, #f97316, #eab308); color: white; border: none; }
+        .btn-goat { background: linear-gradient(135deg, #eab308, #ca8a04); color: #0f172a; border: none; opacity: 0.5; }
+        .btn-goat.active { opacity: 1; box-shadow: 0 0 10px #eab308; }
+        .btn-login { background: var(--accent-blue); color: white; border: none; }
+        .user-balance { height: 38px; padding: 0 8px; background: var(--bg-subtle); border-radius: 20px; border: 1px solid var(--border-color); display: flex; align-items: center; gap: 4px; font-size: 0.7rem; white-space: nowrap; }
+        .user-balance .balance-amount { color: var(--accent-green); font-weight: bold; }
+        .user-balance .level-badge { display: flex; align-items: center; gap: 4px; background: var(--bg-subtle); padding: 2px 8px; border-radius: 10px; font-size: 0.7rem; }
+        .user-balance .xp-bar-mobile { width: 60px; height: 4px; background: var(--bg-subtle); border-radius: 2px; overflow: hidden; }
+        .user-balance .xp-fill-mobile { height: 100%; background: linear-gradient(90deg, #f97316, #eab308); border-radius: 2px; transition: width 0.3s; }
         .notif-badge { position: absolute; top: -5px; right: -5px; background: #ef4444; color: white; border-radius: 50%; padding: 2px 6px; font-size: 0.55rem; display: none; min-width: 16px; text-align: center; }
         .primary-nav { background-color: var(--bg-header); padding: 0 4%; display: flex; gap: 2px; border-bottom: 1px solid var(--border-color); overflow-x: auto; align-items: center; -webkit-overflow-scrolling: touch; }
         .nav-tab { position: relative; color: var(--text-muted); text-decoration: none; font-size: 0.75rem; font-weight: 600; padding: 10px 10px; cursor: pointer; white-space: nowrap; }
@@ -326,52 +216,16 @@
         ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
         * { scrollbar-width: thin; scrollbar-color: var(--border-color) transparent; }
         @media (max-width: 680px) {
-            .header-row {
-                gap: 6px;
-                flex-wrap: wrap;
-            }
-            .search-bar {
-                flex: 0 1 160px;
-                min-width: 80px;
-                height: 32px;
-            }
-            .search-bar input {
-                font-size: 0.7rem;
-            }
-            .search-bar .search-icon {
-                font-size: 0.75rem;
-                margin-right: 4px;
-            }
-            .btn-header,
-            .btn-ruleta,
-            .btn-goat,
-            .btn-login {
-                height: 32px;
-                padding: 0 8px;
-                font-size: 0.6rem;
-                border-radius: 14px;
-            }
-            .header-right {
-                gap: 3px;
-                flex-wrap: nowrap;
-            }
-            .user-balance {
-                height: 32px;
-                padding: 0 6px;
-                font-size: 0.6rem;
-                gap: 3px;
-            }
-            .user-balance .level-badge {
-                font-size: 0.5rem;
-                padding: 1px 4px;
-            }
-            .user-balance .xp-bar-mobile {
-                width: 30px;
-            }
-            .logo {
-                font-size: 1rem;
-                line-height: 32px;
-            }
+            .header-row { flex-wrap: wrap; }
+            .search-bar { flex: 0 1 160px; min-width: 80px; height: 32px; }
+            .search-bar input { font-size: 0.7rem; }
+            .search-bar .search-icon { font-size: 0.75rem; margin-right: 4px; }
+            .btn-header, .btn-ruleta, .btn-goat, .btn-login { height: 32px; padding: 0 8px; font-size: 0.6rem; border-radius: 14px; }
+            .header-right { gap: 3px; flex-wrap: nowrap; }
+            .user-balance { height: 32px; padding: 0 6px; font-size: 0.6rem; gap: 3px; }
+            .user-balance .level-badge { font-size: 0.5rem; padding: 1px 4px; }
+            .user-balance .xp-bar-mobile { width: 30px; }
+            .logo { font-size: 1rem; line-height: 32px; }
             .primary-nav { padding: 0 2%; gap: 1px; }
             .nav-tab { font-size: 0.65rem; padding: 8px 6px; }
             .container { padding: 0 8px; margin: 10px auto; }
@@ -389,32 +243,11 @@
             .toast-stack { left: 8px; right: 8px; max-width: none; bottom: 8px; }
         }
         /* Fix overflow horizontal móvil */
-html, body {
-    max-width: 100%;
-    overflow-x: hidden;
-}
-
-.header-row {
-    max-width: 100%;
-    flex-wrap: wrap;
-}
-
-.header-right {
-    max-width: 100%;
-    flex-wrap: wrap;
-    justify-content: flex-end;
-}
-
-.container {
-    max-width: 100%;
-    overflow-x: hidden;
-}
-
-.card-image img,
-.main-image-detail img {
-    max-width: 100%;
-    height: auto;
-}
+        html, body { max-width: 100%; overflow-x: hidden; }
+        .header-row { max-width: 100%; flex-wrap: wrap; }
+        .header-right { max-width: 100%; flex-wrap: wrap; justify-content: flex-end; }
+        .container { max-width: 100%; overflow-x: hidden; }
+        .card-image img, .main-image-detail img { max-width: 100%; height: auto; }
     </style>
 </head>
 <body>
@@ -429,14 +262,13 @@ html, body {
         <div class="logo" style="text-align:center;margin-bottom:15px;">aBROzon<span>.subastas</span></div>
         <div id="formLogin" class="auth-form">
             <h2>Iniciar Sesión</h2><p id="authModalMessageLogin">Identifícate para pujar.</p>
-            <input type="email" id="loginEmail" placeholder="Tu correo"><input type="password" id="loginPassword" placeholder="Contraseña">
+            <input type="text" id="loginAlias" placeholder="Alias"><input type="password" id="loginPassword" placeholder="Contraseña">
             <button onclick="iniciarSesion()">Acceder</button>
-            <div class="auth-toggle"><span onclick="solicitarRecuperacion()">¿Olvidaste tu contraseña?</span></div>
             <div class="auth-toggle">¿No tienes cuenta? <span onclick="toggleAuthForm('register')">Regístrate gratis</span></div>
         </div>
         <div id="formRegister" class="auth-form" style="display:none;">
             <h2>Crear Perfil</h2><p id="authModalMessageRegister">¡Únete y recibe 1.000 €!</p>
-            <input type="email" id="regEmail" placeholder="Tu correo"><input type="text" id="regUsername" placeholder="Alias"><input type="password" id="regPassword" placeholder="Contraseña">
+            <input type="text" id="regUsername" placeholder="Alias"><input type="password" id="regPassword" placeholder="Contraseña">
             <button onclick="registrarUsuario()" style="background:var(--accent-green);">Crear Cuenta</button>
             <div class="auth-toggle">¿Ya tienes cuenta? <span onclick="toggleAuthForm('login')">Iniciar sesión</span></div>
         </div>
@@ -525,18 +357,10 @@ html, body {
         </div>
         <div class="header-right">
             <div class="notif-wrapper">
-                <button class="btn-header" id="btnNotif" onclick="toggleNotificaciones()" style="position:relative;" title="Notificaciones">
-                    🔔
-                    <span class="notif-badge" id="notifCount">0</span>
-                </button>
-                <div id="notifPanel">
-                    <div id="notifList" style="font-size:0.8rem; color:var(--text-muted);">No hay notificaciones.</div>
-                </div>
+                <button class="btn-header" id="btnNotif" onclick="toggleNotificaciones()" style="position:relative;" title="Notificaciones">🔔<span class="notif-badge" id="notifCount">0</span></button>
+                <div id="notifPanel"><div id="notifList" style="font-size:0.8rem; color:var(--text-muted);">No hay notificaciones.</div></div>
             </div>
-            <button class="btn-header" id="btnAd" onclick="verAnuncio('normal')" style="position:relative;" title="Ver anuncio para ganar 500 €">
-                🎬 +500
-                <span id="anunciosRestantes" style="font-size:0.5rem;opacity:0.7;display:block;font-weight:normal;">(10/10)</span>
-            </button>
+            <button class="btn-header" id="btnAd" onclick="verAnuncio('normal')" title="Ver anuncio para ganar 500 €">🎬 +500 <span id="anunciosRestantes" style="font-size:0.5rem;opacity:0.7;display:block;font-weight:normal;">(10/10)</span></button>
             <button class="btn-ruleta" id="btnRuleta" onclick="reclamarBotinDiario()" title="Botín Diario (Ruleta)">🎲 <span id="ruletaEstado">Botín</span></button>
             <div class="user-menu-wrapper" id="goatMenuWrapper" style="display:none;">
                 <button class="btn-goat" id="btnGoat" onclick="toggleGoatMenu()" title="Modo GOAT">🐐</button>
@@ -643,6 +467,7 @@ html, body {
         <div style="margin-bottom:15px; display:flex; gap:8px; flex-wrap:wrap;">
             <button class="filter-btn active" onclick="filtrarMisPujas('todas')">📋 Todas</button>
             <button class="filter-btn" onclick="filtrarMisPujas('activas')">🟢 Activas</button>
+            <button class="filter-btn" onclick="filtrarMisPujas('superadas')">🔴 Superadas</button>
             <button class="filter-btn" onclick="filtrarMisPujas('ganadas')">🏆 Ganadas</button>
             <button class="filter-btn" onclick="filtrarMisPujas('perdidas')">❌ Perdidas</button>
         </div>
@@ -653,6 +478,7 @@ html, body {
             <button class="sort-btn" onclick="ordenarMisPujas('cantidad')">💰 Por cantidad</button>
         </div>
         <div id="misPujasContainer">Cargando...</div>
+        <div id="paginacionMisPujas" style="display:flex;gap:8px;justify-content:center;margin-top:15px;"></div>
     </div>
     <div id="viewVitrina" class="view">
         <div class="profile-header">
@@ -841,6 +667,8 @@ let currentUser = null, productoSeleccionado = null, subastasLocales = [], timer
     ultimaAccionPropiaTs = 0, categorias = [], hallOfFameInterval = null,
     ordenCatalogoActual = 'fecha', toastTimeout = null, ultimoToastSuperado = 0;
 let misPujasFiltro = 'todas';
+let misPujasPagina = 1;
+const misPujasTamPagina = 10;
 
 // Datos del invitado
 let guestData = {
@@ -972,6 +800,7 @@ document.addEventListener('click', (e) => {
 async function checkStreakAndReward() {
     if (!currentUser) return;
     try {
+        marcarCambioPropio(); // Evitar falso aviso de puja superada
         const { data, error } = await db.rpc('check_streak_and_reward');
         if (error) {
             console.warn('Streak check error:', error.message);
@@ -1005,6 +834,7 @@ async function reclamarBotinDiario() {
     const btn = document.getElementById('btnRuleta');
     if (btn) { btn.disabled = true; btn.innerText = '🎰...'; }
     try {
+        marcarCambioPropio();
         const { data, error } = await db.rpc('reclamar_botin_diario');
         if (error) {
             mostrarToast('⚠️ ' + error.message);
@@ -1013,7 +843,7 @@ async function reclamarBotinDiario() {
         if (data && data.recompensa > 0) {
             currentUser.saldo += data.recompensa;
             actualizarInterfazUsuario();
-            mostrarToast(`🎉 ¡Has ganado ${data.recompensa.toLocaleString('es-ES')} €! Vuelve mañana.`);
+            mostrarToast(`¡Qué suerte! Has recibido ${data.recompensa.toLocaleString('es-ES')} € de la ruleta diaria.`);
             agregarNotificacion('🎲 Botín', `Has ganado ${data.recompensa.toLocaleString('es-ES')} € en la ruleta diaria.`);
             await actualizarEstadoRuleta();
         } else {
@@ -1100,7 +930,8 @@ async function cargarPerfil(userId) {
                 actualizarInterfazUsuario();
                 if (saldoCambioPropio || (Date.now() - ultimaAccionPropiaTs < 5000)) return;
                 const diferencia = payload.new.saldo - saldoAnt;
-                if (diferencia > 0) {
+                // Mostrar aviso solo si es probable que sea por puja superada: saldo aumentó y hay una subasta en pantalla
+                if (diferencia > 0 && productoSeleccionado && productoSeleccionado.status !== 'closed' && productoSeleccionado.last_bidder !== currentUser.username) {
                     const ahora = Date.now();
                     if (ahora - ultimoToastSuperado > 30000) {
                         mostrarToast(`💰 ¡Te han superado una puja! Se te han devuelto ${diferencia.toLocaleString('es-ES')} €.`);
@@ -2039,13 +1870,17 @@ async function mostrarMisPujas() {
     document.querySelectorAll('.primary-nav .nav-tab').forEach(t => t.classList.remove('active'));
     document.getElementById('tabMisPujas').classList.add('active');
     document.getElementById('viewMisPujas').classList.add('active');
+    misPujasPagina = 1;
     await cargarMisPujas();
 }
 
 async function cargarMisPujas() {
     const container = document.getElementById('misPujasContainer');
     container.innerHTML = 'Cargando...';
-    const { data: bids, error } = await db.from('bids').select('*, auctions(*)').eq('user_id', currentUser.id).order('created_at', { ascending: false });
+    const { data: bids, error } = await db.from('bids')
+        .select('*, auctions(*)')
+        .eq('user_id', currentUser.id)
+        .order('created_at', { ascending: false });
     if (error) { container.innerHTML = `<p>Error: ${error.message}</p>`; return; }
     const latestBids = {};
     (bids || []).forEach(b => {
@@ -2068,36 +1903,75 @@ function ordenarMisPujas(criterio) {
     else if (criterio === 'cantidad') botones[3].classList.add('active');
     let data = [...misPujasData];
     switch (criterio) {
-        case 'fecha': data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)); break;
-        case 'duracion': data.sort((a, b) => { const aEnd = a.auctions ? new Date(a.auctions.ends_at) : new Date(0); const bEnd = b.auctions ? new Date(b.auctions.ends_at) : new Date(0); return aEnd - bEnd; }); break;
-        case 'rareza': const rarezaOrder = ['Común','Poco común','Rara','Épica','Legendaria','Mítica']; data.sort((a, b) => { const aR = a.auctions?.rareza || 'Común'; const bR = b.auctions?.rareza || 'Común'; return rarezaOrder.indexOf(aR) - rarezaOrder.indexOf(bR); }); break;
-        case 'cantidad': data.sort((a, b) => b.amount - a.amount); break;
+        case 'fecha':
+            data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+            break;
+        case 'duracion':
+            data.sort((a, b) => {
+                const aEnd = a.auctions ? new Date(a.auctions.ends_at) : new Date(0);
+                const bEnd = b.auctions ? new Date(b.auctions.ends_at) : new Date(0);
+                return aEnd - bEnd;
+            });
+            break;
+        case 'rareza':
+            const rarezaOrder = ['Común','Poco común','Rara','Épica','Legendaria','Mítica'];
+            data.sort((a, b) => {
+                const aR = a.auctions?.rareza || 'Común';
+                const bR = b.auctions?.rareza || 'Común';
+                return rarezaOrder.indexOf(aR) - rarezaOrder.indexOf(bR);
+            });
+            break;
+        case 'cantidad':
+            data.sort((a, b) => b.amount - a.amount);
+            break;
     }
     renderizarMisPujas(data);
 }
 
 function filtrarMisPujas(filtro) {
     misPujasFiltro = filtro;
+    misPujasPagina = 1;
     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
     const botones = document.querySelectorAll('.filter-btn');
-    const index = ['todas', 'activas', 'ganadas', 'perdidas'].indexOf(filtro);
+    const index = ['todas', 'activas', 'superadas', 'ganadas', 'perdidas'].indexOf(filtro);
     if (botones[index]) botones[index].classList.add('active');
     renderizarMisPujas(misPujasData);
 }
 
 function renderizarMisPujas(data) {
     const container = document.getElementById('misPujasContainer');
+    const paginacion = document.getElementById('paginacionMisPujas');
     if (!data.length) { 
         container.innerHTML = '<div style="text-align:center;padding:40px 20px;color:var(--text-muted);"><span style="font-size:3rem;display:block;margin-bottom:16px;">🔨</span><p style="font-size:1.1rem;font-weight:bold;margin-bottom:8px;">Aún no has hecho ninguna puja</p><p style="font-size:0.85rem;">Explora el catálogo y encuentra tu primera subasta.</p><button onclick="mostrarCatalogo()" style="margin-top:16px;background:var(--accent-blue);color:white;border:none;padding:10px 20px;border-radius:8px;font-weight:bold;cursor:pointer;">Ver Catálogo</button></div>'; 
+        paginacion.innerHTML = '';
         return; 
     }
+
     let datosFiltrados = data;
-    if (misPujasFiltro === 'activas') datosFiltrados = data.filter(b => b.auctions && b.auctions.status !== 'closed');
-    else if (misPujasFiltro === 'ganadas') datosFiltrados = data.filter(b => b.auctions && b.auctions.status === 'closed' && b.auctions.winner === currentUser.username);
-    else if (misPujasFiltro === 'perdidas') datosFiltrados = data.filter(b => b.auctions && b.auctions.status === 'closed' && b.auctions.winner !== currentUser.username);
-    if (!datosFiltrados.length) { container.innerHTML = '<p>No hay pujas en esta categoría.</p>'; return; }
+    if (misPujasFiltro === 'activas') {
+        datosFiltrados = data.filter(b => b.auctions && b.auctions.status !== 'closed');
+    } else if (misPujasFiltro === 'superadas') {
+        datosFiltrados = data.filter(b => b.auctions && b.auctions.status !== 'closed' && b.auctions.last_bidder !== currentUser.username);
+    } else if (misPujasFiltro === 'ganadas') {
+        datosFiltrados = data.filter(b => b.auctions && b.auctions.status === 'closed' && b.auctions.winner === currentUser.username);
+    } else if (misPujasFiltro === 'perdidas') {
+        datosFiltrados = data.filter(b => b.auctions && b.auctions.status === 'closed' && b.auctions.winner !== currentUser.username);
+    }
+
+    if (!datosFiltrados.length) {
+        container.innerHTML = '<p>No hay pujas en esta categoría.</p>';
+        paginacion.innerHTML = '';
+        return;
+    }
+
+    const totalPaginas = Math.ceil(datosFiltrados.length / misPujasTamPagina);
+    if (misPujasPagina > totalPaginas) misPujasPagina = totalPaginas;
+    const inicio = (misPujasPagina - 1) * misPujasTamPagina;
+    const fin = inicio + misPujasTamPagina;
+    const paginaDatos = datosFiltrados.slice(inicio, fin);
+
     let html = '<table class="mis-pujas-table"><tr><th>Subasta</th><th>Rareza</th><th>Tu puja</th><th>Estado</th><th>Fin</th></tr>';
-    datosFiltrados.forEach(b => {
+    paginaDatos.forEach(b => {
         const auction = b.auctions;
         if (!auction) return;
         const title = auction.title || 'Sin título';
@@ -2109,15 +1983,47 @@ function renderizarMisPujas(data) {
         const now = new Date();
         const timeLeft = isClosed ? 'Cerrada' : (endDate > now ? formatTimeLeft(endDate - now) : 'Cerrando...');
         let estado = '';
-        if (isClosed) estado = auction.winner === currentUser.username ? '🏆 Ganada' : '❌ Perdida';
-        else {
+        if (isClosed) {
+            estado = auction.winner === currentUser.username ? '🏆 Ganada' : '❌ Perdida';
+        } else {
             const isWinning = auction.current_price === b.amount && auction.last_bidder === currentUser.username;
-            estado = isWinning ? '🟢 Vas ganando' : (auction.last_bidder === currentUser.username ? '🔁 Superado por ti' : '🔴 Superado');
+            if (isWinning) {
+                estado = '🟢 Vas ganando';
+            } else {
+                estado = '🔴 Superada';
+            }
         }
-        html += `<tr onclick="abrirDetalle('${auction.id}')" style="cursor:pointer;"><td>${title}</td><td><span class="chip-rareza chip-rareza-${rarezaClase}" style="position:static;display:inline-block;">${rareza}</span></td><td>${amount}</td><td>${estado}</td><td>${timeLeft}</td></tr>`;
+        html += `<tr onclick="abrirDetalle('${auction.id}')" style="cursor:pointer;">
+            <td>${title}</td>
+            <td><span class="chip-rareza chip-rareza-${rarezaClase}" style="position:static;display:inline-block;">${rareza}</span></td>
+            <td>${amount}</td>
+            <td>${estado}</td>
+            <td>${timeLeft}</td>
+        </tr>`;
     });
     html += '</table>';
     container.innerHTML = html;
+
+    // Paginación
+    let pagHtml = '';
+    if (totalPaginas > 1) {
+        pagHtml += `<button onclick="cambiarPaginaMisPujas(${misPujasPagina - 1})" ${misPujasPagina === 1 ? 'disabled' : ''} style="background:var(--bg-subtle);border:1px solid var(--border-color);border-radius:6px;padding:5px 10px;cursor:pointer;font-weight:bold;">←</button>`;
+        for (let i = 1; i <= totalPaginas; i++) {
+            if (i === misPujasPagina) {
+                pagHtml += `<button disabled style="background:var(--accent-blue);color:white;border:none;border-radius:6px;padding:5px 10px;font-weight:bold;">${i}</button>`;
+            } else {
+                pagHtml += `<button onclick="cambiarPaginaMisPujas(${i})" style="background:var(--bg-subtle);border:1px solid var(--border-color);border-radius:6px;padding:5px 10px;cursor:pointer;font-weight:bold;">${i}</button>`;
+            }
+        }
+        pagHtml += `<button onclick="cambiarPaginaMisPujas(${misPujasPagina + 1})" ${misPujasPagina === totalPaginas ? 'disabled' : ''} style="background:var(--bg-subtle);border:1px solid var(--border-color);border-radius:6px;padding:5px 10px;cursor:pointer;font-weight:bold;">→</button>`;
+    }
+    paginacion.innerHTML = pagHtml;
+}
+
+function cambiarPaginaMisPujas(pagina) {
+    if (pagina < 1) return;
+    misPujasPagina = pagina;
+    renderizarMisPujas(misPujasData);
 }
 
 function formatTimeLeft(ms) {
@@ -2137,8 +2043,13 @@ function mostrarCatalogo() { mostrandoFinalizadas = false; categoriaActiva = 'To
 
 function abrirModalAuth(mode = 'register', mensaje = '') { 
     toggleAuthForm(mode); 
-    if (mensaje) { document.getElementById('authModalMessageLogin').innerText = mensaje; document.getElementById('authModalMessageRegister').innerText = mensaje; }
-    else { document.getElementById('authModalMessageLogin').innerText = 'Identifícate para pujar.'; document.getElementById('authModalMessageRegister').innerText = '¡Únete y recibe 1.000 €!'; }
+    if (mensaje) {
+        document.getElementById('authModalMessageLogin').innerText = mensaje;
+        document.getElementById('authModalMessageRegister').innerText = mensaje;
+    } else {
+        document.getElementById('authModalMessageLogin').innerText = 'Identifícate para pujar.';
+        document.getElementById('authModalMessageRegister').innerText = '¡Únete y recibe 1.000 €!';
+    }
     document.getElementById('authModal').style.display = 'flex'; 
 }
 
@@ -2183,34 +2094,63 @@ async function adminDeleteCategoria(id) { if (!confirm("¿Eliminar categoría?")
 function renderizarListaAdminCategorias() { const box = document.getElementById('adminCatList'); if (!box) return; box.innerHTML = categorias.map(c => `<div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0;font-size:0.85rem;"><span>${c.icon} ${c.name}</span><button onclick="adminDeleteCategoria(${c.id})" style="background:#ef4444;color:white;border:none;padding:2px 8px;border-radius:4px;font-size:0.7rem;">Eliminar</button></div>`).join(''); }
 
 // ===== AUTENTICACIÓN =====
-function toggleAuthForm(mode) { document.getElementById('formLogin').style.display = mode==='login'?'block':'none'; document.getElementById('formRegister').style.display = mode==='register'?'block':'none'; }
+function toggleAuthForm(mode) { 
+    document.getElementById('formLogin').style.display = mode==='login'?'block':'none'; 
+    document.getElementById('formRegister').style.display = mode==='register'?'block':'none'; 
+}
 
 async function registrarUsuario() { 
-    const email = document.getElementById('regEmail').value.trim(), alias = document.getElementById('regUsername').value.trim().startsWith('@')? document.getElementById('regUsername').value.trim() : '@'+document.getElementById('regUsername').value.trim(), pass = document.getElementById('regPassword').value.trim(); 
-    if (!email||!alias||!pass) return mostrarToast("⚠️ Completa todos los campos."); 
+    const alias = document.getElementById('regUsername').value.trim().startsWith('@') 
+        ? document.getElementById('regUsername').value.trim() 
+        : '@' + document.getElementById('regUsername').value.trim();
+    const pass = document.getElementById('regPassword').value.trim();
+    const email = alias.replace('@', '') + '@abrozon.beta';
+
+    if (!alias || !pass) return mostrarToast("⚠️ Completa alias y contraseña.");
+    if (pass.length < 6) return mostrarToast("⚠️ Mínimo 6 caracteres.");
+
     const { data: libre } = await db.rpc('username_disponible',{p_username:alias}); 
     if (!libre) return mostrarToast("⚠️ Alias en uso."); 
+
     const { data, error } = await db.auth.signUp({ email, password: pass, options: { data: { username: alias } } }); 
     if (error) return mostrarToast('⚠️ ' + error.message); 
     if (!data.session) { mostrarToast("📧 Confirma tu correo."); cerrarModalAuth(); return; } 
+
     await cargarPerfil(data.user.id); 
+
     const guest = JSON.parse(localStorage.getItem('abrozon_guest') || 'null');
-    if (guest && guest.balance > 0) { const { data: updatedProfile, error: errSaldo } = await db.from('profiles').update({ saldo: currentUser.saldo + guest.balance }).eq('id', currentUser.id).select().single(); if (!errSaldo && updatedProfile) { currentUser.saldo = updatedProfile.saldo; localStorage.removeItem('abrozon_guest'); guestData = { id: null, balance: 1000, bidsCount: 0 }; mostrarToast('¡Saldo de invitado transferido! +' + guest.balance.toLocaleString('es-ES') + ' € extra.'); } }
+    if (guest && guest.balance > 0) { 
+        const { data: updatedProfile, error: errSaldo } = await db.from('profiles').update({ saldo: currentUser.saldo + guest.balance }).eq('id', currentUser.id).select().single(); 
+        if (!errSaldo && updatedProfile) { currentUser.saldo = updatedProfile.saldo; localStorage.removeItem('abrozon_guest'); guestData = { id: null, balance: 1000, bidsCount: 0 }; mostrarToast('¡Saldo de invitado transferido! +' + guest.balance.toLocaleString('es-ES') + ' € extra.'); } 
+    }
     const guestMigrar = JSON.parse(localStorage.getItem('abrozon_guest') || 'null');
     if (guestMigrar && guestMigrar.id) { await db.rpc('migrate_guest_bids', { p_guest_name: guestMigrar.id, p_user_id: currentUser.id, p_username: currentUser.username }); }
+
     cerrarModalAuth(); actualizarInterfazUsuario(); mostrarToast("¡Bienvenido! 1.000 €."); 
 }
 
 async function iniciarSesion() { 
-    const email = document.getElementById('loginEmail').value.trim(), pass = document.getElementById('loginPassword').value.trim(); 
-    if (!email||!pass) return mostrarToast("⚠️ Completa campos."); 
+    const alias = document.getElementById('loginAlias').value.trim().startsWith('@') 
+        ? document.getElementById('loginAlias').value.trim() 
+        : '@' + document.getElementById('loginAlias').value.trim();
+    const pass = document.getElementById('loginPassword').value.trim();
+    const email = alias.replace('@', '') + '@abrozon.beta';
+
+    if (!alias || !pass) return mostrarToast("⚠️ Completa alias y contraseña.");
+
     const { data, error } = await db.auth.signInWithPassword({ email, password: pass }); 
     if (error) return mostrarToast('⚠️ ' + error.message); 
+
     await cargarPerfil(data.user.id); 
+
     const guest = JSON.parse(localStorage.getItem('abrozon_guest') || 'null');
-    if (guest && guest.balance > 0) { const { data: updatedProfile, error: errSaldo } = await db.from('profiles').update({ saldo: currentUser.saldo + guest.balance }).eq('id', currentUser.id).select().single(); if (!errSaldo && updatedProfile) { currentUser.saldo = updatedProfile.saldo; localStorage.removeItem('abrozon_guest'); guestData = { id: null, balance: 1000, bidsCount: 0 }; mostrarToast('¡Saldo de invitado transferido! +' + guest.balance.toLocaleString('es-ES') + ' € extra.'); } }
+    if (guest && guest.balance > 0) { 
+        const { data: updatedProfile, error: errSaldo } = await db.from('profiles').update({ saldo: currentUser.saldo + guest.balance }).eq('id', currentUser.id).select().single(); 
+        if (!errSaldo && updatedProfile) { currentUser.saldo = updatedProfile.saldo; localStorage.removeItem('abrozon_guest'); guestData = { id: null, balance: 1000, bidsCount: 0 }; mostrarToast('¡Saldo de invitado transferido! +' + guest.balance.toLocaleString('es-ES') + ' € extra.'); } 
+    }
     const guestMigrar = JSON.parse(localStorage.getItem('abrozon_guest') || 'null');
     if (guestMigrar && guestMigrar.id) { await db.rpc('migrate_guest_bids', { p_guest_name: guestMigrar.id, p_user_id: currentUser.id, p_username: currentUser.username }); }
+
     cerrarModalAuth(); actualizarInterfazUsuario(); actualizarEstadoRuleta(); await checkStreakAndReward(); 
 }
 
