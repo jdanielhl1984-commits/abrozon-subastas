@@ -811,38 +811,25 @@ async function checkStreakAndReward() {
             console.warn('Streak check error:', error.message);
             return;
         }
-        if (data && data.reward_amount > 0) {
-            currentUser.saldo = data.new_balance;
-            const dias = data.streak_count;
-            const tipo = '📅 Racha';
-            const mensaje = dias === 7 
-                ? '🎉 ¡Racha completa de 7 días! Bote de +1000 €.' 
-                : `Racha de ${dias} días: +${data.reward_amount.toLocaleString('es-ES')} €.`;
-
-            // Guardar directamente en localStorage sin depender de nada
-            const notif = { 
-                id: Date.now() + Math.random(), 
-                tipo: tipo, 
-                mensaje: mensaje, 
-                leida: false, 
-                fecha: new Date().toISOString() 
-            };
-            notificaciones.unshift(notif);
-            if (notificaciones.length > 50) notificaciones.pop();
-            localStorage.setItem('abrozon_notificaciones', JSON.stringify(notificaciones));
-            actualizarContadorNotificaciones();
-
-            // Mostrar toast
-            mostrarToast(mensaje);
-
-            // Refrescar campanita si está abierta
-            const panel = document.getElementById('notifPanel');
-            if (panel && panel.style.display === 'block') {
-                renderizarNotificaciones();
+        if (data && data.reward_amount !== undefined) {
+            const recompensa = data.reward_amount;
+            if (recompensa > 0) {
+                currentUser.saldo = data.new_balance;
+                const dias = data.streak_count;
+                const mensaje = dias === 7 
+                    ? '🎉 ¡Racha completa de 7 días! Bote de +1000 €.' 
+                    : `Racha de ${dias} días: +${recompensa.toLocaleString('es-ES')} €.`;
+                mostrarToast(mensaje);
+                agregarNotificacion('📅 Racha', mensaje);
+                actualizarInterfazUsuario();
+                if (dias >= 7) tryUnlockAchievement('joya');
+            } else {
+                // Ya accedió hoy, no hay recompensa
+                const mensaje = '✅ Ya has registrado tu acceso diario.';
+                console.log(mensaje);
             }
-
-            actualizarInterfazUsuario();
-            if (data.streak_count >= 7) tryUnlockAchievement('joya');
+        } else {
+            console.warn('Respuesta inesperada de check_streak_and_reward:', data);
         }
     } catch (e) {
         console.error('Error en streak:', e);
@@ -866,15 +853,25 @@ async function reclamarBotinDiario() {
             mostrarToast('⚠️ ' + error.message);
             return;
         }
-        if (data && data.recompensa > 0) {
-            currentUser.saldo += data.recompensa;
-            actualizarInterfazUsuario();
-            mostrarToast(`🎲 Ruleta: +${data.recompensa.toLocaleString('es-ES')} €`);
-            agregarNotificacion('🎲 Botín', `Ruleta: +${data.recompensa.toLocaleString('es-ES')} €`);
+        // La RPC devuelve un objeto con recompensa y mensaje
+        if (data && data.recompensa !== undefined) {
+            const recompensa = data.recompensa;
+            if (recompensa > 0) {
+                currentUser.saldo += recompensa;
+                actualizarInterfazUsuario();
+                const msg = `🎲 Ruleta: +${recompensa.toLocaleString('es-ES')} €`;
+                mostrarToast(msg);
+                agregarNotificacion('🎲 Botín', msg);
+            } else {
+                const msg = '⚠️ Ya has reclamado el botín hoy. Vuelve mañana.';
+                mostrarToast(msg);
+                // También añadimos notificación informativa
+                agregarNotificacion('🎲 Botín', 'Ya reclamaste el botín hoy.');
+            }
             await actualizarEstadoRuleta();
         } else {
-            mostrarToast('⚠️ Ya has reclamado hoy. Vuelve mañana.');
-            await actualizarEstadoRuleta();
+            mostrarToast('⚠️ Respuesta inesperada de la ruleta.');
+            console.warn('Respuesta de reclamar_botin_diario:', data);
         }
     } catch (e) {
         mostrarToast('⚠️ Error al reclamar el botín.');
