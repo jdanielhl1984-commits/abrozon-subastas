@@ -22,7 +22,7 @@
 
 ### Tablas principales
 
-* `profiles` (usuarios con saldo, XP, nivel, racha, etc.)
+* `profiles` (usuarios con saldo, XP, nivel, racha, fechas de botín/racha, etc.)
 * `auctions` (subastas activas/finalizadas)
 * `bids` (historial de pujas, incluye pujas de invitados con `is_guest` y `user_id` NULL)
 * `user_achievements` (logros desbloqueados)
@@ -47,8 +47,8 @@
 - `add_mission_reward` → Da recompensa al completar misiones.
 - `add_xp` → Suma XP, con recompensa por subir de nivel.
 - `reclamar_bonus_diario` → Reclama el bono de 1.000€ al completar misiones.
-- `check_streak_and_reward` → Controla la racha de inicio de sesión.
-- `reclamar_botin_diario` → Ruleta diaria con premios de 50€ a 1000€.
+- `check_streak_and_reward` → Controla la racha de inicio de sesión. Devuelve JSON con `reward_amount`, `streak_count` y `new_balance`. 🆕
+- `reclamar_botin_diario` → Ruleta diaria con premios de 50€ a 1000€. Devuelve JSON con `recompensa` y `mensaje`. 🆕
 
 **Inventario y mercado:**
 - `vender_en_mercado` → Publica un objeto en el mercado C2C.
@@ -69,6 +69,10 @@
 - `get_hall_of_fame` → Devuelve los rankings del Hall of Fame.
 - `username_disponible`, `actualizar_mi_alias` → Gestión de perfiles.
 
+**Funciones y triggers automáticos:**
+- `handle_new_user()` → Crea automáticamente la fila en `profiles` cuando un usuario se registra en `auth.users`. 🆕
+- Trigger `on_auth_user_created` → Ejecuta `handle_new_user()` tras cada registro. 🆕
+
 ---
 
 ## 🔒 Seguridad
@@ -81,13 +85,16 @@
 * **Prevención de Race Conditions:** `place_bid` usa `FOR UPDATE` para evitar duplicados.
 * **RPCs de administrador protegidas:** Todas las funciones `admin_*` verifican `is_admin = true` antes de ejecutarse.
 * **Pujas de invitado:** `place_guest_bid` permite `user_id` NULL y usa `p_guest_name` para identificar al invitado.
+* **Creación automática de perfil:** El trigger `on_auth_user_created` garantiza que siempre exista una fila en `profiles` al registrarse, evitando errores 406. 🆕
 
 ---
 
 ## ✨ Funcionalidades implementadas
 
 ### 🔐 Autenticación y usuarios
-- ✅ Registro/login con email (Supabase Auth + recuperación de contraseña)
+- ✅ Registro/login **solo con alias y contraseña** (email interno automático `alias@abrozon.beta`) 🆕
+- ✅ Sin verificación de email durante la beta (`Confirm email` desactivado) 🆕
+- ✅ Creación automática del perfil mediante trigger `handle_new_user` 🆕
 - ✅ Modo Invitado (sin registro): saldo temporal de **1.000 €** y hasta 3 pujas
 - ✅ Registro diferido: el modal solo aparece al agotar pujas o intentar acciones restringidas
 - ✅ Migración de datos: saldo y pujas del invitado se transfieren al crear la cuenta
@@ -128,9 +135,9 @@
 - ✅ Recompensa por subir de nivel (monedas extra al alcanzar niveles clave)
 - ✅ 30 logros/insignias desbloqueables
 - ✅ Verificación retroactiva de logros
-- ✅ Racha de inicio de sesión (Streak Bonus de 7 días: 100€ → 1000€)
+- ✅ Racha de inicio de sesión (Streak Bonus de 7 días: 100€ → 1000€) con notificación en campanita 🆕
 - ✅ Misiones diarias (4 misiones + bono de 1.000€ al completarlas todas)
-- ✅ Botín Diario (Ruleta) con contador visual de tiempo restante
+- ✅ Botín Diario (Ruleta) con contador visual de tiempo restante y notificación en campanita 🆕
 - ✅ Modo GOAT (activación, recargas premium de 1000€, comentarios en pujas)
 
 ### 🛒 Mercado C2C e inventario
@@ -147,22 +154,24 @@
 - ✅ Hall of Fame renovado (6 rankings con podios)
 - ✅ Corrección del ranking "Broker" (antes mostraba NaN €)
 - ✅ Pestaña "Mis pujas" (solo muestra la última puja por subasta)
-- ✅ Filtros por estado en "Mis pujas"
+- ✅ **Nueva pestaña "Superadas"** en Mis Pujas 🆕
+- ✅ **Paginación en Mis Pujas** (10 por página) 🆕
 - ✅ Botones de compartir en X y copiar enlace
-- ✅ Sistema de notificaciones
+- ✅ Sistema de notificaciones con campanita persistente (localStorage) 🆕
 
 ### 🎨 Interfaz y experiencia
 - ✅ Modo oscuro/claro
 - ✅ PWA instalable (manifest.json + service-worker)
 - ✅ Página de Ayuda/Tutorial/FAQ
-- ✅ Banner de beta privada con enlace a formulario de feedback
+- ✅ Banner de **Beta Abierta** con enlace a formulario de feedback 🆕
 - ✅ Reemplazo de `alert()` por toasts
 - ✅ Feedback visual (spinners y botones deshabilitados)
 - ✅ Evitar spam de toasts (1 cada 30 segundos)
 - ✅ Corrección doble símbolo €
 - ✅ Scrollbars personalizados
 - ✅ Tooltips en botones de cabecera
-- ✅ **Header compacto rediseñado**: todos los botones unificados a 38px, buscador integrado, mejor responsive móvil
+- ✅ Header compacto rediseñado (38px, responsive móvil)
+- ✅ **Fix overflow horizontal en móvil** 🆕
 - ✅ Consola sin errores
 
 ### 🛠️ Administración
@@ -172,7 +181,7 @@
   - Ver lista completa de usuarios
   - Añadir/eliminar categorías dinámicas
   - Adjudicar subastas al admin
-- ✅ **Corrección de error al eliminar categorías** (función SQL duplicada eliminada)
+- ✅ Corrección de error al eliminar categorías (función SQL duplicada eliminada)
 
 ### 🤖 Automatización
 - ✅ Generación automática de subastas (cron job cada 1 hora con `pg_cron`)
@@ -233,6 +242,12 @@
 18. ✅ Header compacto rediseñado
 19. ✅ Corrección error al eliminar categorías (SQL duplicado)
 20. ✅ Eliminadas categorías vacías (oldmemes, streamers)
+21. ✅ Registro solo con alias y contraseña (sin email real) 🆕
+22. ✅ Trigger automático de perfil al registrarse 🆕
+23. ✅ Notificaciones persistentes en campanita 🆕
+24. ✅ Pestaña "Superadas" en Mis Pujas 🆕
+25. ✅ Paginación en Mis Pujas 🆕
+26. ✅ Fix overflow horizontal móvil 🆕
 
 ---
 
@@ -264,8 +279,7 @@
   - Completista (1 colección completa)
   - Obsesivo (5 colecciones completas)
   - Enfermo (10 colecciones completas)
-- **Balance:** La recompensa no debe romper la economía.
-- **Sinergia con mercado C2C:** Los usuarios podrán comprar rarezas faltantes.
+- **Sinergia con mercado C2C:** Compra de rarezas faltantes.
 
 #### ⚡ Subastas Relámpago
 - Subastas que duran **5 minutos**.
@@ -364,7 +378,7 @@
 ## 📢 Redes Sociales y Estrategia de Lanzamiento
 
 * **X (Twitter):** [@aBROzonsubastas](https://x.com/aBROzonsubastas) — Perfil oficial creado.
-* **Beta Privada (5-10 usuarios):** Probar con amigos para encontrar bugs.
+* **Beta Abierta:** Cualquiera puede entrar y probar sin invitación. 🆕
 * **Beta con Micro-streamers:** Invitar a streamers pequeños para medir retención.
 * **Contenido viral:** Crear clips de subastas absurdas para TikTok/X.
 * **Estrategia de confianza:** Publicar vídeos mostrando la web antes de pedir clics.
@@ -405,6 +419,9 @@
 | Pujas de invitado no visibles | RPC `place_guest_bid` + historial actualizado | ✅ Corregido |
 | Saldo de invitado insuficiente | Aumentado a 1.000 € | ✅ Corregido |
 | Error al eliminar categorías | Función SQL duplicada eliminada | ✅ Corregido |
+| Error 406 al crear perfil | Trigger `handle_new_user` + política RLS de INSERT | ✅ Corregido 🆕 |
+| Ruleta sin notificación clara | RPC devuelve JSON y guarda notificación en campanita | ✅ Corregido 🆕 |
+| Racha diaria invisible | `check_streak_and_reward` devuelve JSON y notifica | ✅ Corregido 🆕 |
 | Sin avisos externos | Pendiente para Fase 3 (notificaciones push/email) | ⬜ Pendiente |
 
 ### Feedback de betatesters
@@ -426,6 +443,9 @@
 * El sistema de favoritos requiere la tabla `favorites` en Supabase.
 * Las pujas de invitado requieren las RPCs `place_guest_bid` y `migrate_guest_bids`.
 * La generación automática requiere `pg_cron` activo y la tabla `objetos_automaticos` con datos.
+* El registro sin email requiere el trigger `handle_new_user` y política RLS de INSERT en `profiles`.
+* Las RPCs de ruleta y racha deben devolver JSON para que el frontend las procese bien.
+* Las notificaciones se guardan en `localStorage` con la clave `abrozon_notificaciones`.
 * Las categorías vacías no deben mostrarse en el chip de categorías del catálogo.
 
 ---
@@ -559,3 +579,43 @@ END;
 $$;
 
 GRANT EXECUTE ON FUNCTION public.admin_delete_category(BIGINT) TO authenticated;
+
+-- Trigger para crear perfil automáticamente al registrarse
+CREATE OR REPLACE FUNCTION public.handle_new_user()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+BEGIN
+    INSERT INTO public.profiles (id, username, saldo, es_goat, is_admin, xp, level)
+    VALUES (
+        NEW.id,
+        COALESCE(NEW.raw_user_meta_data->>'username', 'Invitado_' || substr(NEW.id::text, 1, 8)),
+        1000,
+        false,
+        false,
+        0,
+        1
+    )
+    ON CONFLICT (id) DO NOTHING;
+    RETURN NEW;
+END;
+$$;
+
+DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
+CREATE TRIGGER on_auth_user_created
+AFTER INSERT ON auth.users
+FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
+
+-- Política RLS para permitir inserción del perfil
+DROP POLICY IF EXISTS "Usuarios pueden insertar su propio perfil" ON public.profiles;
+CREATE POLICY "Usuarios pueden insertar su propio perfil"
+ON public.profiles
+FOR INSERT
+WITH CHECK (auth.uid() = id);
+
+-- Asegurar columnas para racha y ruleta
+ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS last_daily_loot DATE;
+ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS last_login_date DATE;
+ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS streak_count INT DEFAULT 0;
