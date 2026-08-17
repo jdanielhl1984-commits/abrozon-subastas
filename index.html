@@ -944,9 +944,31 @@ window.onload = async () => {
 
 // ===== CARGA DE PERFIL =====
 async function cargarPerfil(userId) {
-    const { data, error } = await db.from('profiles').select('*').eq('id', userId).single();
-    if (error || !data) { currentUser = null; return; }
-    currentUser = { id: data.id, username: data.username, saldo: data.saldo, esGoat: data.es_goat, isAdmin: data.is_admin, xp: data.xp || 0, level: data.level || 1 };
+    // Intentar cargar perfil
+    let { data, error } = await db.from('profiles').select('*').eq('id', userId).maybeSingle();
+
+    // Si no existe, reintentar una vez
+    if (error || !data) {
+        await new Promise(resolve => setTimeout(resolve, 500));
+        const retry = await db.from('profiles').select('*').eq('id', userId).maybeSingle();
+        if (retry.error || !retry.data) {
+            currentUser = null;
+            return;
+        }
+        data = retry.data;
+    }
+
+    currentUser = { 
+        id: data.id, 
+        username: data.username, 
+        saldo: data.saldo, 
+        esGoat: data.es_goat, 
+        isAdmin: data.is_admin, 
+        xp: data.xp || 0, 
+        level: data.level || 1 
+    };
+
+    // Suscripción a cambios
     if (profileChannelUserId !== userId) {
         if (profileChannel) await db.removeChannel(profileChannel);
         profileChannelUserId = userId;
@@ -954,8 +976,11 @@ async function cargarPerfil(userId) {
             .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'profiles', filter: `id=eq.${userId}` }, (payload) => {
                 if (!currentUser) return;
                 const saldoAnt = currentUser.saldo;
-                currentUser.saldo = payload.new.saldo; currentUser.esGoat = payload.new.es_goat; currentUser.isAdmin = payload.new.is_admin;
-                currentUser.xp = payload.new.xp || 0; currentUser.level = payload.new.level || 1;
+                currentUser.saldo = payload.new.saldo;
+                currentUser.esGoat = payload.new.es_goat;
+                currentUser.isAdmin = payload.new.is_admin;
+                currentUser.xp = payload.new.xp || 0;
+                currentUser.level = payload.new.level || 1;
                 actualizarInterfazUsuario();
                 if (saldoCambioPropio || (Date.now() - ultimaAccionPropiaTs < 5000)) return;
                 const diferencia = payload.new.saldo - saldoAnt;
