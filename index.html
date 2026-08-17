@@ -748,11 +748,17 @@ function initGuest() {
 
 // ===== NOTIFICACIONES FUNCIONES =====
 function agregarNotificacion(tipo, mensaje, link = null) {
-    const notif = { id: Date.now(), tipo, mensaje, link, leida: false, fecha: new Date().toISOString() };
+    const notif = { id: Date.now() + Math.random(), tipo, mensaje, link, leida: false, fecha: new Date().toISOString() };
     notificaciones.unshift(notif);
     if (notificaciones.length > 50) notificaciones.pop();
     localStorage.setItem('abrozon_notificaciones', JSON.stringify(notificaciones));
     actualizarContadorNotificaciones();
+
+    // Si la campanita está abierta, refrescar la lista al instante
+    const panel = document.getElementById('notifPanel');
+    if (panel && panel.style.display === 'block') {
+        renderizarNotificaciones();
+    }
 }
 
 function actualizarContadorNotificaciones() {
