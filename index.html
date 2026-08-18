@@ -30,59 +30,59 @@
         .beta-banner { background: linear-gradient(90deg, #f97316, #ef4444); color: white; text-align: center; padding: 8px 12px; font-size: 0.9rem; font-weight: bold; border-bottom: 2px solid #eab308; }
         .beta-banner a { color: #fff; text-decoration: underline; font-weight: bold; }
         .disclaimer { background-color: var(--bg-subtle); color: var(--text-muted); text-align: center; padding: 8px; font-size: 0.8rem; border-bottom: 1px solid var(--border-color); }
-        header { background-color: var(--bg-header); padding: 8px 4%; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 200; }
+        header { background-color: var(--bg-header); padding: 6px 4%; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 200; }
         .header-row {
             display: flex;
             flex-wrap: nowrap;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
         }
         .header-top {
             flex: 1 1 auto;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
             min-width: 0;
         }
         .logo {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             font-weight: 900;
             color: var(--accent-blue);
             letter-spacing: -1px;
             cursor: pointer;
             flex-shrink: 0;
-            line-height: 38px;
+            line-height: 34px;
         }
         .logo span { color: #f97316; }
         .search-bar {
             flex: 1 1 auto;
-            min-width: 60px;
-            height: 38px;
+            min-width: 50px;
+            height: 34px;
             display: flex;
             align-items: center;
             background: var(--bg-subtle);
             border-radius: 999px;
             border: 1px solid var(--border-color);
             overflow: hidden;
-            padding: 0 10px;
+            padding: 0 8px;
             transition: border-color 0.2s, box-shadow 0.2s;
         }
         .search-bar:focus-within { border-color: var(--accent-blue); box-shadow: 0 0 0 3px rgba(2,132,199,0.15); }
-        .search-bar .search-icon { color: var(--text-muted); font-size: 0.9rem; cursor: pointer; flex-shrink: 0; margin-right: 6px; }
-        .search-bar input { flex: 1; background: transparent; border: none; padding: 0; height: 100%; color: var(--text-main); outline: none; font-size: 0.85rem; min-width: 40px; }
+        .search-bar .search-icon { color: var(--text-muted); font-size: 0.8rem; cursor: pointer; flex-shrink: 0; margin-right: 4px; }
+        .search-bar input { flex: 1; background: transparent; border: none; padding: 0; height: 100%; color: var(--text-main); outline: none; font-size: 0.8rem; min-width: 30px; }
 
         .header-right {
             flex: 0 0 auto;
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: 3px;
             flex-shrink: 0;
         }
         .btn-header, .btn-ruleta, .btn-goat, .btn-login {
-            height: 38px;
-            padding: 0 10px;
-            border-radius: 20px;
-            font-size: 0.8rem;
+            height: 34px;
+            padding: 0 8px;
+            border-radius: 999px;
+            font-size: 0.7rem;
             font-weight: bold;
             border: 1px solid var(--border-color);
             background: var(--bg-subtle);
@@ -100,43 +100,95 @@
         .btn-goat.active { opacity: 1; box-shadow: 0 0 10px #eab308; }
         .btn-login { background: var(--accent-blue); color: white; border: none; }
 
-        .user-balance {
-            flex: 0 0 auto;
+        .notif-badge { position: absolute; top: -4px; right: -4px; background: #ef4444; color: white; border-radius: 50%; padding: 1px 5px; font-size: 0.5rem; display: none; min-width: 14px; text-align: center; }
+
+        /* ===== SALDO GRANDE Y XP SECUNDARIA ===== */
+        .user-stats {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--bg-subtle);
+            border-radius: 999px;
+            border: 1px solid var(--border-color);
+            padding: 2px 14px 2px 16px;
+            height: 34px;
+        }
+        .user-saldo {
+            font-size: 1.1rem;
+            font-weight: 900;
+            color: var(--accent-green);
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+        .user-saldo small {
+            font-size: 0.7rem;
+            font-weight: normal;
+            color: var(--text-muted);
+        }
+        .user-xp-mini {
             display: flex;
             align-items: center;
             gap: 6px;
-            height: 38px;
-            padding: 0 8px;
-            background: var(--bg-subtle);
-            border-radius: 20px;
-            border: 1px solid var(--border-color);
+            font-size: 0.65rem;
+            color: var(--text-muted);
             white-space: nowrap;
         }
-        .user-balance .balance-amount { color: var(--accent-green); font-weight: bold; font-size: 0.7rem; }
-        .user-balance .level-badge {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            background: var(--bg-subtle);
-            padding: 2px 8px;
-            border-radius: 10px;
-            font-size: 0.7rem;
+        .user-xp-mini .level-num {
+            font-weight: bold;
+            color: var(--text-main);
+            font-size: 0.75rem;
         }
-        .user-balance .xp-bar-mobile {
-            width: 60px;
+        .user-xp-mini .xp-mini-bar {
+            width: 50px;
             height: 4px;
-            background: var(--bg-subtle);
+            background: var(--bg-body);
             border-radius: 2px;
             overflow: hidden;
         }
-        .user-balance .xp-fill-mobile {
+        .user-xp-mini .xp-mini-fill {
             height: 100%;
             background: linear-gradient(90deg, #f97316, #eab308);
             border-radius: 2px;
             transition: width 0.3s;
         }
+        .user-title-mini {
+            font-size: 0.6rem;
+            color: var(--text-muted);
+            white-space: nowrap;
+            max-width: 60px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
 
-        .notif-badge { position: absolute; top: -5px; right: -5px; background: #ef4444; color: white; border-radius: 50%; padding: 2px 6px; font-size: 0.55rem; display: none; min-width: 16px; text-align: center; }
+        /* ===== DROPDOWN GOAT ===== */
+        .user-menu-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+        .user-dropdown {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            min-width: 150px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            z-index: 1000;
+            padding: 4px 0;
+        }
+        .user-dropdown .dropdown-item {
+            padding: 8px 14px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            color: var(--text-main);
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        .user-dropdown .dropdown-item:hover {
+            background: var(--bg-subtle);
+        }
 
         .primary-nav {
             background-color: var(--bg-header);
@@ -153,9 +205,9 @@
             position: relative;
             color: var(--text-muted);
             text-decoration: none;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             font-weight: 600;
-            padding: 10px 12px;
+            padding: 8px 12px;
             cursor: pointer;
             white-space: nowrap;
             flex-shrink: 0;
@@ -217,7 +269,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 16px 20px;
+            padding: 14px 18px;
             border-bottom: 1px solid var(--border-color);
             background: var(--bg-header);
             position: sticky;
@@ -225,14 +277,14 @@
             z-index: 10;
         }
         #categoriasDropdownHeader h3 {
-            font-size: 1rem;
+            font-size: 0.95rem;
             color: var(--text-main);
             margin: 0;
         }
         #categoriasDropdownClose {
             background: none;
             border: none;
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             color: var(--text-muted);
             cursor: pointer;
             padding: 0 5px;
@@ -246,7 +298,7 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            padding: 12px 20px;
+            padding: 10px 18px;
             cursor: pointer;
             font-size: 0.85rem;
             color: var(--text-main);
@@ -323,7 +375,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 16px 20px;
+            padding: 14px 18px;
             border-bottom: 1px solid var(--border-color);
             background: var(--bg-header);
             position: sticky;
@@ -331,14 +383,14 @@
             z-index: 10;
         }
         #perfilDropdownHeader h3 {
-            font-size: 1rem;
+            font-size: 0.95rem;
             color: var(--text-main);
             margin: 0;
         }
         #perfilDropdownClose {
             background: none;
             border: none;
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             color: var(--text-muted);
             cursor: pointer;
             padding: 0 5px;
@@ -352,7 +404,7 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            padding: 12px 20px;
+            padding: 10px 18px;
             cursor: pointer;
             font-size: 0.85rem;
             color: var(--text-main);
@@ -379,17 +431,17 @@
         .chip:hover { color: var(--text-main); }
         .chip.active { background: var(--accent-blue); color: white; border-color: var(--accent-blue); }
 
-        .container { max-width: 1200px; margin: 16px auto; padding: 0 12px; }
-        .hero-banner { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 16px; margin-bottom: 20px; box-shadow: var(--shadow-card); }
-        .hero-text h2 { font-size: 1.2rem; color: var(--accent-blue); margin-bottom: 4px; }
-        .hero-text p { color: var(--text-muted); font-size: 0.85rem; }
-        .badge-trend { background: #f97316; color: white; font-size: 0.6rem; font-weight: bold; padding: 2px 6px; border-radius: 6px; text-transform: uppercase; }
-        .grid-title { font-size: 1.1rem; margin-bottom: 16px; color: var(--text-main); display: flex; align-items: center; gap: 8px; }
-        .sort-bar { display: flex; gap: 6px; margin-bottom: 16px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
-        .sort-chip { flex-shrink: 0; padding: 4px 10px; border-radius: 999px; background: var(--bg-subtle); border: 1px solid var(--border-color); color: var(--text-muted); font-size: 0.7rem; font-weight: 600; cursor: pointer; white-space: nowrap; }
+        .container { max-width: 1200px; margin: 12px auto; padding: 0 12px; }
+        .hero-banner { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 14px; margin-bottom: 16px; box-shadow: var(--shadow-card); }
+        .hero-text h2 { font-size: 1.1rem; color: var(--accent-blue); margin-bottom: 4px; }
+        .hero-text p { color: var(--text-muted); font-size: 0.8rem; }
+        .badge-trend { background: #f97316; color: white; font-size: 0.55rem; font-weight: bold; padding: 2px 6px; border-radius: 6px; text-transform: uppercase; }
+        .grid-title { font-size: 1rem; margin-bottom: 12px; color: var(--text-main); display: flex; align-items: center; gap: 8px; }
+        .sort-bar { display: flex; gap: 6px; margin-bottom: 12px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        .sort-chip { flex-shrink: 0; padding: 4px 10px; border-radius: 999px; background: var(--bg-subtle); border: 1px solid var(--border-color); color: var(--text-muted); font-size: 0.65rem; font-weight: 600; cursor: pointer; white-space: nowrap; }
         .sort-chip:hover { color: var(--text-main); }
         .sort-chip.active { background: var(--accent-green); color: white; border-color: var(--accent-green); }
-        .auction-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
+        .auction-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; }
         .auction-card { background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border-color); overflow: hidden; cursor: pointer; box-shadow: var(--shadow-card); position: relative; transition: transform 0.15s, border-color 0.15s; }
         .auction-card:hover { transform: translateY(-3px); border-color: var(--accent-blue); }
         .auction-card.rareza-comun, .product-card-detail.rareza-comun { border: 2px solid #94a3b8; }
@@ -405,44 +457,44 @@
         .chip-rareza-epica { background: #8b5cf6; }
         .chip-rareza-legendaria { background: #f97316; }
         .chip-rareza-mitica { background: #ef4444; }
-        .card-image { width: 100%; height: 140px; background-color: var(--bg-subtle); display: flex; align-items: center; justify-content: center; font-size: 3.5rem; position: relative; border-bottom: 1px solid var(--border-color); overflow: hidden; }
-        .badge-closed { position: absolute; top: 6px; left: 6px; background: #ef4444; color: white; font-size: 0.55rem; font-weight: bold; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; }
-        .card-timer { position: absolute; top: 6px; right: 6px; background: rgba(239,68,68,0.15); color: #ef4444; font-size: 0.6rem; font-weight: bold; padding: 2px 6px; border-radius: 4px; font-family: monospace; }
-        .fav-btn { position: absolute; top: 6px; left: 6px; background: rgba(255,255,255,0.9); border: none; border-radius: 50%; width: 24px; height: 24px; cursor: pointer; font-size: 0.8rem; display: flex; align-items: center; justify-content: center; z-index: 10; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
-        .card-content { padding: 10px; }
-        .card-category { font-size: 0.6rem; color: var(--accent-blue); text-transform: uppercase; font-weight: bold; margin-bottom: 2px; }
-        .card-title { font-size: 0.8rem; font-weight: bold; color: var(--text-main); margin-bottom: 8px; line-height: 1.3; height: 32px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
-        .card-footer { display: flex; justify-content: space-between; align-items: flex-end; border-top: 1px dashed var(--border-color); padding-top: 6px; }
-        .bid-label-sm { font-size: 0.6rem; color: var(--text-muted); }
-        .bid-amount-sm { font-size: 0.95rem; font-weight: 900; color: var(--accent-green); }
+        .card-image { width: 100%; height: 130px; background-color: var(--bg-subtle); display: flex; align-items: center; justify-content: center; font-size: 3rem; position: relative; border-bottom: 1px solid var(--border-color); overflow: hidden; }
+        .badge-closed { position: absolute; top: 6px; left: 6px; background: #ef4444; color: white; font-size: 0.5rem; font-weight: bold; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; }
+        .card-timer { position: absolute; top: 6px; right: 6px; background: rgba(239,68,68,0.15); color: #ef4444; font-size: 0.55rem; font-weight: bold; padding: 2px 6px; border-radius: 4px; font-family: monospace; }
+        .fav-btn { position: absolute; top: 6px; left: 6px; background: rgba(255,255,255,0.9); border: none; border-radius: 50%; width: 22px; height: 22px; cursor: pointer; font-size: 0.7rem; display: flex; align-items: center; justify-content: center; z-index: 10; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
+        .card-content { padding: 8px 10px; }
+        .card-category { font-size: 0.55rem; color: var(--accent-blue); text-transform: uppercase; font-weight: bold; margin-bottom: 2px; }
+        .card-title { font-size: 0.75rem; font-weight: bold; color: var(--text-main); margin-bottom: 6px; line-height: 1.3; height: 30px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+        .card-footer { display: flex; justify-content: space-between; align-items: flex-end; border-top: 1px dashed var(--border-color); padding-top: 5px; }
+        .bid-label-sm { font-size: 0.55rem; color: var(--text-muted); }
+        .bid-amount-sm { font-size: 0.85rem; font-weight: 900; color: var(--accent-green); }
         .view { display: none; } .view.active { display: block; }
-        .btn-back { background: var(--bg-subtle); color: var(--text-main); border: 1px solid var(--border-color); padding: 6px 12px; border-radius: 8px; cursor: pointer; font-weight: bold; margin-bottom: 16px; font-size: 0.85rem; }
+        .btn-back { background: var(--bg-subtle); color: var(--text-main); border: 1px solid var(--border-color); padding: 6px 12px; border-radius: 8px; cursor: pointer; font-weight: bold; margin-bottom: 16px; font-size: 0.8rem; }
         .detail-layout { display: grid; grid-template-columns: 1fr 360px; gap: 20px; align-items: start; }
         .product-card-detail { background: var(--bg-card); border-radius: 12px; padding: 16px; border: 1px solid var(--border-color); box-shadow: var(--shadow-card); }
-        .main-image-detail { width: 100%; height: 200px; background-color: var(--bg-subtle); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 4rem; margin-bottom: 16px; border: 1px solid var(--border-color); overflow: hidden; }
+        .main-image-detail { width: 100%; height: 180px; background-color: var(--bg-subtle); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 3.5rem; margin-bottom: 14px; border: 1px solid var(--border-color); overflow: hidden; }
         .auction-panel-detail { background: var(--bg-card); border-radius: 12px; padding: 16px; border: 1px solid var(--border-color); height: fit-content; box-shadow: var(--shadow-card); }
-        .time-box { background: rgba(249,115,22,0.1); border: 1px solid #f97316; color: #f97316; padding: 6px 10px; border-radius: 6px; font-weight: bold; text-align: center; margin-bottom: 12px; font-size: 0.85rem; }
-        .btn-bid { width: 100%; background-color: #f97316; color: white; border: none; padding: 10px; font-size: 0.9rem; font-weight: bold; border-radius: 8px; cursor: pointer; transition: opacity 0.2s; }
+        .time-box { background: rgba(249,115,22,0.1); border: 1px solid #f97316; color: #f97316; padding: 6px 10px; border-radius: 6px; font-weight: bold; text-align: center; margin-bottom: 12px; font-size: 0.8rem; }
+        .btn-bid { width: 100%; background-color: #f97316; color: white; border: none; padding: 10px; font-size: 0.85rem; font-weight: bold; border-radius: 8px; cursor: pointer; transition: opacity 0.2s; }
         .btn-bid:hover { background-color: #ea580c; }
         .btn-bid:disabled { opacity: 0.5; cursor: not-allowed; }
-        .btn-compra-directa { width: 100%; background-color: #eab308; color: #0f172a; border: none; padding: 10px; font-size: 0.9rem; font-weight: bold; border-radius: 8px; cursor: pointer; margin-bottom: 8px; display: none; transition: opacity 0.2s; }
+        .btn-compra-directa { width: 100%; background-color: #eab308; color: #0f172a; border: none; padding: 10px; font-size: 0.85rem; font-weight: bold; border-radius: 8px; cursor: pointer; margin-bottom: 8px; display: none; transition: opacity 0.2s; }
         .btn-compra-directa:hover { background-color: #ca8a04; }
         .btn-compra-directa:disabled { opacity: 0.5; cursor: not-allowed; }
-        .btn-share { display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; padding: 8px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 0.8rem; margin-bottom: 6px; border: none; }
+        .btn-share { display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; padding: 8px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 0.75rem; margin-bottom: 6px; border: none; }
         .btn-share-x { background: #1DA1F2; color: white; }
         .btn-share-x:hover { background: #0d8bd9; }
         .btn-share-copy { background: var(--bg-subtle); color: var(--text-main); border: 1px solid var(--border-color); }
         .btn-share-copy:hover { background: var(--border-color); }
-        .history-item { font-size: 0.8rem; padding: 8px 0; border-bottom: 1px dashed var(--border-color); line-height: 1.3; animation: slideIn 0.3s ease; }
+        .history-item { font-size: 0.75rem; padding: 6px 0; border-bottom: 1px dashed var(--border-color); line-height: 1.3; animation: slideIn 0.3s ease; }
         @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .profile-header { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 16px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; box-shadow: var(--shadow-card); }
-        .user-info h2 { font-size: 1.2rem; color: var(--text-main); }
-        .user-badge { display: inline-block; background: rgba(56,189,248,0.15); color: var(--accent-blue); padding: 2px 8px; border-radius: 8px; font-size: 0.7rem; font-weight: bold; margin-top: 2px; }
+        .profile-header { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 14px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; box-shadow: var(--shadow-card); }
+        .user-info h2 { font-size: 1.1rem; color: var(--text-main); }
+        .user-badge { display: inline-block; background: rgba(56,189,248,0.15); color: var(--accent-blue); padding: 2px 8px; border-radius: 8px; font-size: 0.65rem; font-weight: bold; margin-top: 2px; }
         .xp-bar { width: 100%; height: 6px; background: var(--bg-subtle); border-radius: 4px; overflow: hidden; margin-top: 6px; }
         .xp-fill { height: 100%; background: linear-gradient(90deg, #f97316, #eab308); border-radius: 4px; transition: width 0.3s ease; }
-        .vitrina-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
-        .certificate-card { background: var(--bg-card); border-radius: 12px; padding: 16px; box-shadow: var(--shadow-card); text-align: center; position: relative; transition: all 0.3s ease; }
-        .certificate-card h3 { color: var(--accent-blue); font-size: 1rem; margin-bottom: 4px; }
+        .vitrina-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
+        .certificate-card { background: var(--bg-card); border-radius: 12px; padding: 14px; box-shadow: var(--shadow-card); text-align: center; position: relative; transition: all 0.3s ease; }
+        .certificate-card h3 { color: var(--accent-blue); font-size: 0.95rem; margin-bottom: 4px; }
         .certificate-card.vitrina-comun { border: 2px solid #94a3b8; }
         .certificate-card.vitrina-poco-comun { border: 2px solid #22c55e; box-shadow: 0 0 15px rgba(34,197,94,0.2); }
         .certificate-card.vitrina-rara { border: 2px solid #3b82f6; box-shadow: 0 0 20px rgba(59,130,246,0.3); }
@@ -454,82 +506,83 @@
         @keyframes pulse-mitica { 0% { box-shadow: 0 0 40px rgba(239,68,68,0.5); transform: scale(1); } 50% { box-shadow: 0 0 80px rgba(239,68,68,0.9); transform: scale(1.02); } 100% { box-shadow: 0 0 40px rgba(239,68,68,0.5); transform: scale(1); } }
         .auth-modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15,23,42,0.8); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; z-index: 999; }
         .auth-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 24px; width: 100%; max-width: 360px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); position: relative; }
-        .auth-card h2 { font-size: 1.3rem; color: var(--text-main); margin-bottom: 6px; text-align: center; }
-        .auth-card p { font-size: 0.8rem; color: var(--text-muted); text-align: center; margin-bottom: 16px; }
-        .auth-form input, .auth-form textarea { width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-subtle); color: var(--text-main); outline: none; font-size: 0.85rem; }
-        .auth-form button { width: 100%; padding: 10px; border-radius: 6px; border: none; background: var(--accent-blue); color: white; font-weight: bold; font-size: 0.9rem; cursor: pointer; }
-        .auth-toggle { text-align: center; font-size: 0.75rem; color: var(--text-muted); margin-top: 12px; }
+        .auth-card h2 { font-size: 1.2rem; color: var(--text-main); margin-bottom: 6px; text-align: center; }
+        .auth-card p { font-size: 0.75rem; color: var(--text-muted); text-align: center; margin-bottom: 14px; }
+        .auth-form input, .auth-form textarea { width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-subtle); color: var(--text-main); outline: none; font-size: 0.8rem; }
+        .auth-form button { width: 100%; padding: 10px; border-radius: 6px; border: none; background: var(--accent-blue); color: white; font-weight: bold; font-size: 0.85rem; cursor: pointer; }
+        .auth-toggle { text-align: center; font-size: 0.7rem; color: var(--text-muted); margin-top: 10px; }
         .auth-toggle span { color: var(--accent-blue); font-weight: bold; cursor: pointer; text-decoration: underline; }
-        .btn-close-modal { position: absolute; top: 8px; right: 12px; background: transparent; border: none; font-size: 1.1rem; color: var(--text-muted); cursor: pointer; }
+        .btn-close-modal { position: absolute; top: 8px; right: 12px; background: transparent; border: none; font-size: 1rem; color: var(--text-muted); cursor: pointer; }
         .toast-stack { position: fixed; bottom: 16px; right: 16px; display: flex; flex-direction: column-reverse; gap: 8px; z-index: 1000; max-width: 280px; }
-        .toast-abrozon { background: var(--bg-card); border: 1px solid var(--accent-blue); color: var(--text-main); padding: 12px 16px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.25); font-size: 0.85rem; font-weight: bold; animation: toastIn 0.3s ease; transition: opacity 0.3s ease, transform 0.3s ease; }
+        .toast-abrozon { background: var(--bg-card); border: 1px solid var(--accent-blue); color: var(--text-main); padding: 10px 14px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.25); font-size: 0.8rem; font-weight: bold; animation: toastIn 0.3s ease; transition: opacity 0.3s ease, transform 0.3s ease; }
         .toast-abrozon.toast-out { opacity: 0; transform: translateY(10px); }
         @keyframes toastIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .mission-card { background: var(--bg-card); border-radius: 10px; padding: 14px; border: 1px solid var(--border-color); margin-bottom: 10px; }
-        .mission-title { font-weight: bold; margin-bottom: 4px; }
-        .mission-desc { font-size: 0.75rem; color: var(--text-muted); margin-bottom: 6px; }
+        .mission-card { background: var(--bg-card); border-radius: 10px; padding: 12px; border: 1px solid var(--border-color); margin-bottom: 8px; }
+        .mission-title { font-weight: bold; margin-bottom: 4px; font-size: 0.85rem; }
+        .mission-desc { font-size: 0.7rem; color: var(--text-muted); margin-bottom: 6px; }
         .progress-bar { width: 100%; height: 6px; background: var(--bg-subtle); border-radius: 3px; overflow: hidden; }
         .progress-fill { height: 100%; background: var(--accent-green); border-radius: 3px; }
         .mission-completed { color: var(--accent-green); font-weight: bold; }
-        .hof-section { margin-bottom: 30px; }
-        .hof-podium { display: flex; justify-content: center; align-items: flex-end; gap: 12px; margin: 16px 0; }
-        .podium-spot { text-align: center; padding: 12px; background: var(--bg-card); border-radius: 10px; box-shadow: var(--shadow-card); min-width: 80px; }
+        .hof-section { margin-bottom: 24px; }
+        .hof-podium { display: flex; justify-content: center; align-items: flex-end; gap: 12px; margin: 14px 0; }
+        .podium-spot { text-align: center; padding: 10px; background: var(--bg-card); border-radius: 10px; box-shadow: var(--shadow-card); min-width: 70px; }
         .podium-spot.gold { border: 2px solid #eab308; order: 2; transform: scale(1.05); }
         .podium-spot.silver { border: 2px solid #94a3b8; order: 1; }
         .podium-spot.bronze { border: 2px solid #cd853f; order: 3; }
-        .hof-list { display: flex; flex-direction: column; gap: 6px; }
-        .hof-row { display: flex; justify-content: space-between; background: var(--bg-card); padding: 8px 12px; border-radius: 6px; border: 1px solid var(--border-color); font-size: 0.85rem; }
-        .achievement-grid { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0; }
-        .achievement-badge { background: var(--bg-subtle); border-radius: 6px; padding: 6px 10px; text-align: center; font-size: 0.75rem; border: 1px solid var(--border-color); display: flex; align-items: center; gap: 4px; }
+        .hof-list { display: flex; flex-direction: column; gap: 4px; }
+        .hof-row { display: flex; justify-content: space-between; background: var(--bg-card); padding: 6px 10px; border-radius: 6px; border: 1px solid var(--border-color); font-size: 0.8rem; }
+        .achievement-grid { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0; }
+        .achievement-badge { background: var(--bg-subtle); border-radius: 6px; padding: 4px 8px; text-align: center; font-size: 0.7rem; border: 1px solid var(--border-color); display: flex; align-items: center; gap: 4px; }
         .achievement-badge.locked { opacity: 0.5; filter: grayscale(1); }
-        .achievement-list { display: flex; flex-direction: column; gap: 8px; }
-        .achievement-row { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 10px; background: var(--bg-card); border: 1px solid var(--border-color); transition: all 0.2s; }
+        .achievement-list { display: flex; flex-direction: column; gap: 6px; }
+        .achievement-row { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 10px; background: var(--bg-card); border: 1px solid var(--border-color); transition: all 0.2s; }
         .achievement-row.locked { opacity: 0.5; filter: grayscale(1); }
         .achievement-row.unlocked { background: linear-gradient(135deg, #fef9c3, #fef3c7); border-color: #eab308; box-shadow: 0 0 8px rgba(234,179,8,0.2); }
-        .achievement-icon { font-size: 1.6rem; width: 40px; text-align: center; flex-shrink: 0; }
+        .achievement-icon { font-size: 1.4rem; width: 36px; text-align: center; flex-shrink: 0; }
         .achievement-info { flex: 1; }
-        .achievement-name { font-weight: bold; font-size: 0.85rem; }
-        .achievement-desc { font-size: 0.7rem; color: var(--text-muted); }
-        .achievement-status { font-size: 0.75rem; font-weight: bold; }
+        .achievement-name { font-weight: bold; font-size: 0.8rem; }
+        .achievement-desc { font-size: 0.65rem; color: var(--text-muted); }
+        .achievement-status { font-size: 0.7rem; font-weight: bold; }
         .notif-wrapper { position: relative; display: inline-block; }
-        #notifPanel { display: none; position: absolute; top: 100%; right: 0; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; min-width: 260px; max-height: 300px; overflow-y: auto; padding: 8px; z-index: 1000; box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
+        #notifPanel { display: none; position: absolute; top: 100%; right: 0; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; min-width: 240px; max-height: 280px; overflow-y: auto; padding: 8px; z-index: 1000; box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
         #notifPanel::-webkit-scrollbar { width: 4px; }
         #notifPanel::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 2px; }
-        .notif-item { padding: 6px 10px; border-bottom: 1px solid var(--border-color); cursor: pointer; transition: background 0.2s; font-size: 0.8rem; }
+        .notif-item { padding: 6px 10px; border-bottom: 1px solid var(--border-color); cursor: pointer; transition: background 0.2s; font-size: 0.75rem; }
         .notif-item:hover { background: var(--bg-subtle); }
         .notif-item.unread { border-left: 3px solid var(--accent-blue); }
-        .notif-item .notif-tipo { font-weight: bold; font-size: 0.8rem; }
-        .notif-item .notif-mensaje { font-size: 0.8rem; color: var(--text-muted); }
-        .notif-item .notif-fecha { font-size: 0.65rem; color: var(--text-muted); margin-top: 2px; }
-        .filter-btn { background: var(--bg-subtle); border: 1px solid var(--border-color); padding: 4px 10px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 0.7rem; color: var(--text-muted); transition: all 0.2s; }
+        .notif-item .notif-tipo { font-weight: bold; font-size: 0.75rem; }
+        .notif-item .notif-mensaje { font-size: 0.75rem; color: var(--text-muted); }
+        .notif-item .notif-fecha { font-size: 0.6rem; color: var(--text-muted); margin-top: 2px; }
+        .filter-btn { background: var(--bg-subtle); border: 1px solid var(--border-color); padding: 4px 10px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 0.65rem; color: var(--text-muted); transition: all 0.2s; }
         .filter-btn.active { background: var(--accent-blue); color: white; border-color: var(--accent-blue); }
         .filter-btn:hover { color: var(--text-main); }
-        .mis-pujas-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
-        .mis-pujas-table th { text-align: left; padding: 6px 8px; background: var(--bg-subtle); font-size: 0.7rem; color: var(--text-muted); border-bottom: 1px solid var(--border-color); }
-        .mis-pujas-table td { padding: 6px 8px; border-bottom: 1px solid var(--border-color); font-size: 0.75rem; }
+        .mis-pujas-table { width: 100%; border-collapse: collapse; font-size: 0.75rem; }
+        .mis-pujas-table th { text-align: left; padding: 5px 8px; background: var(--bg-subtle); font-size: 0.65rem; color: var(--text-muted); border-bottom: 1px solid var(--border-color); }
+        .mis-pujas-table td { padding: 5px 8px; border-bottom: 1px solid var(--border-color); font-size: 0.7rem; }
         .mis-pujas-table tr:hover { background: var(--bg-subtle); }
-        .sort-btn { background: none; border: none; color: var(--accent-blue); cursor: pointer; font-weight: bold; font-size: 0.7rem; margin-left: 4px; }
+        .sort-btn { background: none; border: none; color: var(--accent-blue); cursor: pointer; font-weight: bold; font-size: 0.65rem; margin-left: 4px; }
         .sort-btn.active { text-decoration: underline; }
-        .ayuda-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
-        .ayuda-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 10px; padding: 16px; box-shadow: var(--shadow-card); }
-        .ayuda-card h3 { margin-bottom: 8px; color: var(--accent-blue); font-size: 1rem; }
-        .ayuda-card ul { padding-left: 16px; color: var(--text-muted); line-height: 1.6; font-size: 0.85rem; }
-        .tabla-rareza { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 0.8rem; }
-        .tabla-rareza th, .tabla-rareza td { padding: 6px 8px; border: 1px solid var(--border-color); text-align: left; }
+        .ayuda-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 14px; }
+        .ayuda-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 10px; padding: 14px; box-shadow: var(--shadow-card); }
+        .ayuda-card h3 { margin-bottom: 6px; color: var(--accent-blue); font-size: 0.9rem; }
+        .ayuda-card ul { padding-left: 14px; color: var(--text-muted); line-height: 1.6; font-size: 0.8rem; }
+        .tabla-rareza { width: 100%; border-collapse: collapse; margin-top: 6px; font-size: 0.75rem; }
+        .tabla-rareza th, .tabla-rareza td { padding: 5px 8px; border: 1px solid var(--border-color); text-align: left; }
         .tabla-rareza th { background: var(--bg-subtle); }
-        .faq-item { border-bottom: 1px dashed var(--border-color); padding: 10px 0; }
+        .faq-item { border-bottom: 1px dashed var(--border-color); padding: 8px 0; }
         .faq-item:last-child { border-bottom: none; }
-        .faq-pregunta { font-weight: bold; color: var(--text-main); font-size: 0.85rem; }
-        .faq-respuesta { color: var(--text-muted); margin-top: 4px; font-size: 0.8rem; }
-        #adCountdown { font-size: 3rem; font-weight: 900; color: var(--accent-blue); }
-        .spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: #fff; animation: spin 1s ease-in-out infinite; vertical-align: middle; margin-right: 6px; }
+        .faq-pregunta { font-weight: bold; color: var(--text-main); font-size: 0.8rem; }
+        .faq-respuesta { color: var(--text-muted); margin-top: 4px; font-size: 0.75rem; }
+        #adCountdown { font-size: 2.5rem; font-weight: 900; color: var(--accent-blue); }
+        .spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: #fff; animation: spin 1s ease-in-out infinite; vertical-align: middle; margin-right: 6px; }
         @keyframes spin { to { transform: rotate(360deg); } }
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 3px; }
         ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
         * { scrollbar-width: thin; scrollbar-color: var(--border-color) transparent; }
 
+        /* ===== RESPONSIVE ===== */
         @media (max-width: 680px) {
             .header-row {
                 flex-wrap: wrap;
@@ -538,19 +591,18 @@
             .header-top {
                 flex: 0 0 100%;
                 order: 1;
-                gap: 6px;
+                gap: 4px;
             }
             .logo {
-                font-size: 1rem;
-                line-height: 32px;
+                font-size: 0.9rem;
+                line-height: 28px;
             }
             .search-bar {
-                height: 32px;
-                flex: 1 1 auto;
-                min-width: 60px;
+                height: 28px;
+                min-width: 50px;
             }
-            .search-bar input { font-size: 0.7rem; }
-            .search-bar .search-icon { font-size: 0.75rem; margin-right: 4px; }
+            .search-bar input { font-size: 0.65rem; }
+            .search-bar .search-icon { font-size: 0.65rem; margin-right: 4px; }
 
             .header-right {
                 flex: 0 0 100%;
@@ -563,69 +615,61 @@
                 padding: 2px 0;
             }
             .btn-header, .btn-ruleta, .btn-goat, .btn-login {
-                height: 30px;
+                height: 28px;
                 padding: 0 6px;
-                font-size: 0.6rem;
-                border-radius: 14px;
+                font-size: 0.55rem;
+                border-radius: 999px;
             }
-            .btn-ruleta, .btn-goat { padding: 0 8px; }
+            .btn-ruleta, .btn-goat { padding: 0 6px; }
 
-            .user-balance {
+            .user-stats {
                 flex: 0 0 100%;
                 order: 3;
-                display: flex;
-                flex-wrap: wrap;
-                justify-content: space-between;
-                align-items: center;
                 height: auto;
-                padding: 6px 10px;
-                background: var(--bg-subtle);
+                padding: 4px 12px;
                 border-radius: 8px;
+                background: var(--bg-subtle);
                 border: 1px solid var(--border-color);
                 margin-top: 2px;
-                gap: 2px;
-            }
-            .user-balance .balance-amount {
-                order: 1;
-                flex: 0 0 auto;
-                font-size: 0.8rem;
-            }
-            .user-balance .level-badge {
-                order: 2;
-                flex: 1 1 auto;
+                gap: 6px;
+                flex-wrap: wrap;
                 justify-content: center;
-                font-size: 0.7rem;
-                padding: 2px 4px;
-                background: transparent;
             }
-            .user-balance .xp-bar-mobile {
-                order: 3;
-                flex: 0 0 100%;
-                width: 100%;
-                height: 5px;
-                margin-top: 2px;
+            .user-saldo {
+                font-size: 0.95rem;
+                font-weight: 900;
             }
-            .user-balance .xp-fill-mobile { height: 100%; }
+            .user-xp-mini {
+                font-size: 0.55rem;
+                gap: 4px;
+            }
+            .user-xp-mini .xp-mini-bar {
+                width: 35px;
+            }
+            .user-title-mini {
+                max-width: 40px;
+                font-size: 0.5rem;
+            }
 
-            .primary-nav { padding: 4px 2%; gap: 2px; flex-wrap: nowrap; }
-            .nav-tab { font-size: 0.6rem; padding: 8px 6px; }
+            .primary-nav { padding: 3px 2%; gap: 0px; flex-wrap: nowrap; }
+            .nav-tab { font-size: 0.55rem; padding: 6px 8px; }
 
             #categoriasDropdown, #perfilDropdown {
                 width: 85vw;
                 max-width: 320px;
             }
 
-            .container { padding: 0 8px; margin: 10px auto; }
-            .auction-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
+            .container { padding: 0 8px; margin: 8px auto; }
+            .auction-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
             .detail-layout { grid-template-columns: 1fr; }
-            .vitrina-grid { grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); }
+            .vitrina-grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
             .ayuda-grid { grid-template-columns: 1fr; }
             .hof-podium { flex-direction: column; align-items: center; }
             .podium-spot.gold, .podium-spot.silver, .podium-spot.bronze { order: 0; transform: none; }
-            .achievement-row { flex-direction: column; align-items: flex-start; gap: 6px; }
-            .achievement-icon { font-size: 1.4rem; width: auto; }
-            .mis-pujas-table { font-size: 0.65rem; }
-            #notifPanel { position: fixed !important; top: 50px; right: 8px; left: 8px; width: auto !important; min-width: unset !important; max-height: 50vh; z-index: 9999; }
+            .achievement-row { flex-direction: column; align-items: flex-start; gap: 4px; }
+            .achievement-icon { font-size: 1.2rem; width: auto; }
+            .mis-pujas-table { font-size: 0.6rem; }
+            #notifPanel { position: fixed !important; top: 45px; right: 8px; left: 8px; width: auto !important; min-width: unset !important; max-height: 50vh; z-index: 9999; }
             #btnNotif { position: relative; z-index: 100; }
             .toast-stack { left: 8px; right: 8px; max-width: none; bottom: 8px; }
         }
@@ -726,9 +770,9 @@
 <div id="adModal" class="auth-modal-overlay" style="display:none;">
     <div class="auth-card" style="max-width:380px; text-align:center;">
         <h2 style="color:var(--accent-blue);">📺 Anuncio en progreso</h2>
-        <p style="font-size:1.2rem; margin:15px 0;" id="adMessage">Viendo anuncio...</p>
+        <p style="font-size:1.1rem; margin:12px 0;" id="adMessage">Viendo anuncio...</p>
         <div id="adCountdown">3</div>
-        <p style="color:var(--text-muted); font-size:0.8rem; margin-top:10px;">(Simulación beta)</p>
+        <p style="color:var(--text-muted); font-size:0.75rem; margin-top:8px;">(Simulación beta)</p>
     </div>
 </div>
 
@@ -746,25 +790,29 @@
         <div class="header-right">
             <div class="notif-wrapper">
                 <button class="btn-header" id="btnNotif" onclick="toggleNotificaciones()" style="position:relative;" title="Notificaciones">🔔<span class="notif-badge" id="notifCount">0</span></button>
-                <div id="notifPanel"><div id="notifList" style="font-size:0.8rem; color:var(--text-muted);">No hay notificaciones.</div></div>
+                <div id="notifPanel"><div id="notifList" style="font-size:0.75rem; color:var(--text-muted);">No hay notificaciones.</div></div>
             </div>
-            <button class="btn-header" id="btnAd" onclick="verAnuncio('normal')" title="Ver anuncio para ganar 500 €">🎬 +500 <span id="anunciosRestantes" style="font-size:0.5rem;opacity:0.7;display:block;font-weight:normal;">(10/10)</span></button>
+            <button class="btn-header" id="btnAd" onclick="verAnuncio('normal')" title="Ver anuncio para ganar 500 €">🎬 +500 <span id="anunciosRestantes" style="font-size:0.45rem;opacity:0.7;display:block;font-weight:normal;">(10/10)</span></button>
             <button class="btn-ruleta" id="btnRuleta" onclick="reclamarBotinDiario()" title="Botín Diario (Ruleta)">🎲 <span id="ruletaEstado">Botín</span></button>
             <div class="user-menu-wrapper" id="goatMenuWrapper" style="display:none;">
                 <button class="btn-goat" id="btnGoat" onclick="toggleGoatMenu()" title="Modo GOAT">🐐</button>
                 <div class="user-dropdown" id="goatDropdown">
-                    <div class="dropdown-item" id="goatItemActivar" onclick="activarGoat()">🐐 Activar</div>
-                    <div class="dropdown-item" id="goatItemRecargar" onclick="verAnuncio('goat')" style="display:none;">⚡ Recargar</div>
-                    <div class="dropdown-item" id="goatItemDesactivar" onclick="activarGoat()" style="display:none;color:#ef4444;">Desactivar</div>
+                    <div class="dropdown-item" id="goatItemActivar" onclick="activarGoat()">🐐 Activar GOAT</div>
+                    <div class="dropdown-item" id="goatItemRecargar" onclick="verAnuncio('goat')" style="display:none;">⚡ Recargar (GOAT)</div>
+                    <div class="dropdown-item" id="goatItemDesactivar" onclick="activarGoat()" style="display:none;color:#ef4444;">🚫 Desactivar GOAT</div>
                 </div>
             </div>
             <button class="btn-login" id="btnLoginHeader" onclick="abrirModalAuth('login')" title="Iniciar sesión o registrarse">🔑</button>
             <button class="btn-header" id="btnPerfilMenu" onclick="togglePerfilMenu()" title="Mi cuenta" style="display:none;">👤</button>
         </div>
-        <div class="user-balance" id="boxBalance" style="display:none;">
-            <span class="balance-amount" style="font-weight:bold; color:var(--accent-green);">💰 <span id="userBalance">0 €</span></span>
-            <span class="level-badge">⭐ Nv.<span id="userLevel">1</span> <span id="userTitle">Lurker</span></span>
-            <div class="xp-bar-mobile"><div class="xp-fill-mobile" id="xpFill" style="width:0%;"></div></div>
+        <!-- SALDO GRANDE + XP + TÍTULO -->
+        <div class="user-stats" id="boxBalance" style="display:none;">
+            <span class="user-saldo" id="userBalance">0 €</span>
+            <span class="user-xp-mini">
+                ⭐ Nv.<span class="level-num" id="userLevel">1</span>
+                <span class="xp-mini-bar"><span class="xp-mini-fill" id="xpFill" style="width:0%;"></span></span>
+                <span class="user-title-mini" id="userTitle">Lurker</span>
+            </span>
         </div>
     </div>
 </header>
@@ -830,37 +878,37 @@
                 <div class="main-image-detail" id="detailImage">📦</div>
                 <div id="detailGallery" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:15px;"></div>
                 <span class="card-category" id="detailCategory">Categoría</span>
-                <h1 id="detailTitle" style="margin:8px 0;font-size:1.4rem;">Título</h1>
+                <h1 id="detailTitle" style="margin:6px 0;font-size:1.3rem;">Título</h1>
                 <div id="detailRarezaChip" style="display:none;"></div>
-                <p id="detailDescription" style="color:var(--text-muted);line-height:1.6;">Descripción...</p>
-                <div id="mercadoInfoBox" style="display:none;margin-top:14px;padding:12px;background:rgba(234,179,8,0.1);border:1px solid #eab308;border-radius:8px;font-size:0.85rem;color:var(--text-main);"></div>
+                <p id="detailDescription" style="color:var(--text-muted);line-height:1.6;font-size:0.9rem;">Descripción...</p>
+                <div id="mercadoInfoBox" style="display:none;margin-top:12px;padding:10px;background:rgba(234,179,8,0.1);border:1px solid #eab308;border-radius:8px;font-size:0.8rem;color:var(--text-main);"></div>
             </div>
             <div class="auction-panel-detail">
                 <div class="time-box" id="detailTime">⏳ Cierra en: Calculando...</div>
-                <div style="margin-bottom:15px;">
-                    <div style="font-size:0.8rem;color:var(--text-muted);">Última puja</div>
-                    <div style="font-size:2.1rem;font-weight:900;" id="detailBid">0 €</div>
-                    <button id="btnFavorito" onclick="toggleFavoritoDetalle()" style="background:var(--bg-subtle);border:1px solid var(--border-color);border-radius:6px;padding:4px 10px;margin-top:8px;cursor:pointer;font-size:0.75rem;">🤍 Añadir a favoritos</button>
+                <div style="margin-bottom:12px;">
+                    <div style="font-size:0.75rem;color:var(--text-muted);">Última puja</div>
+                    <div style="font-size:1.8rem;font-weight:900;" id="detailBid">0 €</div>
+                    <button id="btnFavorito" onclick="toggleFavoritoDetalle()" style="background:var(--bg-subtle);border:1px solid var(--border-color);border-radius:6px;padding:4px 10px;margin-top:6px;cursor:pointer;font-size:0.7rem;">🤍 Añadir a favoritos</button>
                 </div>
                 <div id="biddingControlsContainer">
-                    <div id="goatCommentContainer" style="display:none;margin-bottom:12px;">
-                        <input type="text" id="goatCommentInput" placeholder="💬 Mensaje épico GOAT..." maxlength="80" style="width:100%;padding:10px;border-radius:8px;border:1px solid #eab308;background:var(--bg-subtle);color:var(--text-main);font-weight:bold;outline:none;font-size:0.85rem;">
-                        <small style="display:block;text-align:right;color:var(--text-muted);font-size:0.65rem;"><span id="charCount">0</span>/80</small>
+                    <div id="goatCommentContainer" style="display:none;margin-bottom:10px;">
+                        <input type="text" id="goatCommentInput" placeholder="💬 Mensaje épico GOAT..." maxlength="80" style="width:100%;padding:8px;border-radius:8px;border:1px solid #eab308;background:var(--bg-subtle);color:var(--text-main);font-weight:bold;outline:none;font-size:0.8rem;">
+                        <small style="display:block;text-align:right;color:var(--text-muted);font-size:0.6rem;"><span id="charCount">0</span>/80</small>
                     </div>
                     <button id="btnCompraDirecta" class="btn-compra-directa" onclick="comprarDirecto()">💎 COMPRA DIRECTA (30% comisión)</button>
-                    <button id="btnCancelarVenta" onclick="cancelarVentaMercado()" style="display:none;width:100%;background:#ef4444;color:white;border:none;padding:10px;border-radius:8px;font-weight:bold;cursor:pointer;margin-bottom:10px;">🚫 Cancelar venta (pierdes la fianza)</button>
+                    <button id="btnCancelarVenta" onclick="cancelarVentaMercado()" style="display:none;width:100%;background:#ef4444;color:white;border:none;padding:8px;border-radius:8px;font-weight:bold;cursor:pointer;margin-bottom:8px;">🚫 Cancelar venta (pierdes la fianza)</button>
                     <button class="btn-bid" id="btnMinBid" onclick="hacerPujaMínima()">¡PUJAR MÍNIMO (+50 €)!</button>
-                    <div style="display:flex;gap:8px;margin-top:10px;">
-                        <input type="number" id="customBidInput" placeholder="Cantidad exacta €" style="flex:1;padding:10px;border-radius:8px;border:1px solid var(--border-color);background:var(--bg-subtle);color:var(--text-main);font-weight:bold;outline:none;">
-                        <button id="btnCustomBid" onclick="hacerPujaPersonalizada()" style="background:var(--accent-blue);color:white;border:none;padding:10px 14px;border-radius:8px;font-weight:bold;cursor:pointer;">Pujar</button>
+                    <div style="display:flex;gap:8px;margin-top:8px;">
+                        <input type="number" id="customBidInput" placeholder="Cantidad exacta €" style="flex:1;padding:8px;border-radius:8px;border:1px solid var(--border-color);background:var(--bg-subtle);color:var(--text-main);font-weight:bold;outline:none;font-size:0.8rem;">
+                        <button id="btnCustomBid" onclick="hacerPujaPersonalizada()" style="background:var(--accent-blue);color:white;border:none;padding:8px 12px;border-radius:8px;font-weight:bold;cursor:pointer;">Pujar</button>
                     </div>
                 </div>
-                <div style="margin-top:20px;border-top:1px solid var(--border-color);padding-top:15px;">
-                    <h3 style="font-size:0.8rem;color:var(--text-muted);margin-bottom:10px;">💬 Pujas en vivo</h3>
-                    <div id="historyList" style="max-height:250px;overflow-y:auto;"></div>
+                <div style="margin-top:16px;border-top:1px solid var(--border-color);padding-top:12px;">
+                    <h3 style="font-size:0.75rem;color:var(--text-muted);margin-bottom:8px;">💬 Pujas en vivo</h3>
+                    <div id="historyList" style="max-height:220px;overflow-y:auto;"></div>
                 </div>
-                <div style="margin-top:20px;border-top:1px solid var(--border-color);padding-top:15px;">
-                    <h3 style="font-size:0.8rem;color:var(--text-muted);margin-bottom:10px;">📤 Compartir esta subasta</h3>
+                <div style="margin-top:16px;border-top:1px solid var(--border-color);padding-top:12px;">
+                    <h3 style="font-size:0.75rem;color:var(--text-muted);margin-bottom:8px;">📤 Compartir esta subasta</h3>
                     <button class="btn-share btn-share-x" onclick="compartirEnX()">𝕏 Compartir en X</button>
                     <button class="btn-share btn-share-copy" onclick="copiarEnlace()">🔗 Copiar enlace</button>
                 </div>
@@ -869,22 +917,22 @@
     </div>
     <div id="viewMisPujas" class="view">
         <button class="btn-back" onclick="mostrarCatalogo()">← Volver al Catálogo</button>
-        <h2 style="margin-bottom:20px;">📋 Mis Pujas</h2>
-        <div style="margin-bottom:15px; display:flex; gap:8px; flex-wrap:wrap;">
+        <h2 style="margin-bottom:16px;font-size:1.1rem;">📋 Mis Pujas</h2>
+        <div style="margin-bottom:12px; display:flex; gap:6px; flex-wrap:wrap;">
             <button class="filter-btn active" onclick="filtrarMisPujas('todas')">📋 Todas</button>
             <button class="filter-btn" onclick="filtrarMisPujas('activas')">🟢 Activas</button>
             <button class="filter-btn" onclick="filtrarMisPujas('superadas')">🔴 Superadas</button>
             <button class="filter-btn" onclick="filtrarMisPujas('ganadas')">🏆 Ganadas</button>
             <button class="filter-btn" onclick="filtrarMisPujas('perdidas')">❌ Perdidas</button>
         </div>
-        <div style="margin-bottom:15px;">
+        <div style="margin-bottom:12px;">
             <button class="sort-btn active" onclick="ordenarMisPujas('fecha')">📅 Más recientes</button>
             <button class="sort-btn" onclick="ordenarMisPujas('duracion')">⏳ Por finalización</button>
             <button class="sort-btn" onclick="ordenarMisPujas('rareza')">🏷️ Por rareza</button>
             <button class="sort-btn" onclick="ordenarMisPujas('cantidad')">💰 Por cantidad</button>
         </div>
         <div id="misPujasContainer">Cargando...</div>
-        <div id="paginacionMisPujas" style="display:flex;gap:8px;justify-content:center;margin-top:15px;"></div>
+        <div id="paginacionMisPujas" style="display:flex;gap:6px;justify-content:center;margin-top:12px;"></div>
     </div>
     <div id="viewVitrina" class="view">
         <div class="profile-header">
@@ -904,55 +952,55 @@
                 <span class="user-badge" id="perfilEmail">correo@ejemplo.com</span>
             </div>
         </div>
-        <div class="product-card-detail" style="margin-bottom:20px;">
-            <h2 style="font-size:1.1rem;">📊 Progreso</h2>
+        <div class="product-card-detail" style="margin-bottom:16px;">
+            <h2 style="font-size:1rem;">📊 Progreso</h2>
             <p>Nivel <strong id="perfilNivel">1</strong> · <span id="perfilTitulo">Lurker</span></p>
             <div class="xp-bar"><div class="xp-fill" id="perfilXpFill" style="width:0%"></div></div>
-            <p style="font-size:0.8rem; color:var(--text-muted);">XP: <span id="perfilXp">0</span></p>
+            <p style="font-size:0.75rem; color:var(--text-muted);">XP: <span id="perfilXp">0</span></p>
         </div>
-        <div class="product-card-detail" style="margin-bottom:20px;">
-            <h2 style="font-size:1.1rem; margin-bottom:12px;">🏅 Insignias</h2>
+        <div class="product-card-detail" style="margin-bottom:16px;">
+            <h2 style="font-size:1rem; margin-bottom:10px;">🏅 Insignias</h2>
             <div id="achievementsContainer" class="achievement-grid">Cargando...</div>
         </div>
-        <div class="product-card-detail" style="margin-bottom:20px;">
-            <h2 style="font-size:1.1rem;">✏️ Cambiar alias</h2>
+        <div class="product-card-detail" style="margin-bottom:16px;">
+            <h2 style="font-size:1rem;">✏️ Cambiar alias</h2>
             <div class="auth-form"><input type="text" id="perfilNuevoAlias" placeholder="Nuevo alias"><button onclick="guardarNuevoAlias()">Guardar</button></div>
         </div>
-        <div class="product-card-detail" style="margin-bottom:20px;">
-            <h2 style="font-size:1.1rem;">🔒 Cambiar contraseña</h2>
+        <div class="product-card-detail" style="margin-bottom:16px;">
+            <h2 style="font-size:1rem;">🔒 Cambiar contraseña</h2>
             <div class="auth-form"><input type="password" id="perfilNuevaPassword" placeholder="Nueva contraseña"><button onclick="guardarNuevaPasswordPerfil()">Guardar</button></div>
         </div>
         <div class="product-card-detail">
-            <h2 style="font-size:1.1rem;color:#ef4444;">⚠️ Zona de baja</h2>
-            <p style="color:var(--text-muted);">Contacta para eliminar tu cuenta.</p>
-            <button onclick="solicitarBajaCuenta()" style="background:#ef4444;color:white;border:none;padding:10px;border-radius:8px;font-weight:bold;cursor:pointer;width:100%;">Solicitar baja</button>
+            <h2 style="font-size:1rem;color:#ef4444;">⚠️ Zona de baja</h2>
+            <p style="color:var(--text-muted);font-size:0.8rem;">Contacta para eliminar tu cuenta.</p>
+            <button onclick="solicitarBajaCuenta()" style="background:#ef4444;color:white;border:none;padding:8px;border-radius:8px;font-weight:bold;cursor:pointer;width:100%;">Solicitar baja</button>
         </div>
     </div>
     <div id="viewFavoritos" class="view">
         <button class="btn-back" onclick="mostrarCatalogo()">← Volver al Catálogo</button>
-        <h2 style="margin-bottom:20px;">❤️ Mis Favoritos</h2>
+        <h2 style="margin-bottom:16px;font-size:1.1rem;">❤️ Mis Favoritos</h2>
         <div id="favoritosContainer">Cargando...</div>
     </div>
     <div id="viewMisiones" class="view">
         <button class="btn-back" onclick="mostrarCatalogo()">← Volver al Catálogo</button>
-        <h2 style="margin-bottom:20px;">🎯 Misiones</h2>
+        <h2 style="margin-bottom:16px;font-size:1.1rem;">🎯 Misiones</h2>
         <div id="misionesContainer"></div>
     </div>
     <div id="viewLogros" class="view">
         <button class="btn-back" onclick="mostrarCatalogo()">← Volver al Catálogo</button>
-        <h2 style="margin-bottom:20px;">🏅 Todos los Logros</h2>
+        <h2 style="margin-bottom:16px;font-size:1.1rem;">🏅 Todos los Logros</h2>
         <div id="logrosContainer" class="achievement-list">Cargando...</div>
     </div>
     <div id="viewHallOfFame" class="view">
         <button class="btn-back" onclick="mostrarCatalogo()">← Volver al Catálogo</button>
-        <h2 style="margin-bottom:20px;">🌟 Hall of Fame</h2>
+        <h2 style="margin-bottom:16px;font-size:1.1rem;">🌟 Hall of Fame</h2>
         <div id="hofContainer">Cargando rankings...</div>
     </div>
     <div id="viewLegal" class="view">
         <button class="btn-back" onclick="mostrarCatalogo()">← Volver al Catálogo</button>
-        <div class="product-card-detail" style="margin-bottom:20px;">
-            <h2 style="color:var(--accent-blue);">Aviso Legal</h2>
-            <p style="color:var(--text-muted);line-height:1.7;font-size:0.9rem;">
+        <div class="product-card-detail" style="margin-bottom:16px;">
+            <h2 style="color:var(--accent-blue);font-size:1rem;">Aviso Legal</h2>
+            <p style="color:var(--text-muted);line-height:1.7;font-size:0.85rem;">
                 <strong>1. Datos identificativos</strong><br>
                 En cumplimiento del artículo 10 de la Ley 34/2002, de 11 de julio, de Servicios de la Sociedad de la Información y Comercio Electrónico (LSSI-CE), se exponen a continuación los datos identificativos del titular de la web:<br><br>
                 <strong>Titular:</strong> Daniel Hernandez<br>
@@ -966,9 +1014,9 @@
                 <strong>Disponibilidad:</strong> aBROzon.subastas se esfuerza por mantener el servicio disponible de forma continua, pero no garantiza la disponibilidad 24/7. No nos hacemos responsables de pérdidas de datos, saldos ficticios o interrupciones del servicio causadas por fallos de los proveedores externos (Supabase, GitHub Pages) o por mantenimiento técnico.
             </p>
         </div>
-        <div class="product-card-detail" style="margin-bottom:20px;">
-            <h2 style="color:var(--accent-blue);">Política de Privacidad</h2>
-            <p style="color:var(--text-muted);line-height:1.7;font-size:0.9rem;">
+        <div class="product-card-detail" style="margin-bottom:16px;">
+            <h2 style="color:var(--accent-blue);font-size:1rem;">Política de Privacidad</h2>
+            <p style="color:var(--text-muted);line-height:1.7;font-size:0.85rem;">
                 <strong>1. Responsable del tratamiento</strong><br>
                 Daniel Hernandez — abrozonsubastas@gmail.com<br><br>
                 <strong>2. Datos que recogemos y finalidad</strong><br>
@@ -986,8 +1034,8 @@
             </p>
         </div>
         <div class="product-card-detail">
-            <h2 style="color:var(--accent-blue);">Política de Cookies</h2>
-            <p style="color:var(--text-muted);line-height:1.7;font-size:0.9rem;">
+            <h2 style="color:var(--accent-blue);font-size:1rem;">Política de Cookies</h2>
+            <p style="color:var(--text-muted);line-height:1.7;font-size:0.85rem;">
                 Esta web utiliza únicamente cookies técnicas y de sesión, necesarias para el funcionamiento de la plataforma.<br><br>
                 Al ser cookies técnicas imprescindibles, están exentas de la obligación de recabar el consentimiento según el artículo 22.2 de la LSSI.
             </p>
@@ -995,12 +1043,12 @@
     </div>
     <div id="viewAyuda" class="view">
         <button class="btn-back" onclick="mostrarCatalogo()">← Volver al Catálogo</button>
-        <h2 style="color:var(--accent-blue);">❓ Ayuda y Tutorial</h2>
-        <p style="color:var(--text-muted); margin-bottom:20px;">Bienvenido a aBROzon.subastas. Aquí te explicamos cómo funciona todo.</p>
+        <h2 style="color:var(--accent-blue);font-size:1.1rem;">❓ Ayuda y Tutorial</h2>
+        <p style="color:var(--text-muted); margin-bottom:16px;font-size:0.85rem;">Bienvenido a aBROzon.subastas. Aquí te explicamos cómo funciona todo.</p>
         <div class="ayuda-grid">
             <div class="ayuda-card">
                 <h3>📝 1. Regístrate</h3>
-                <p style="color:var(--text-muted);">Haz clic en <strong>🔑 Entrar</strong> y luego en <strong>Regístrate gratis</strong>. Recibirás <strong>1.000 €</strong> de saldo inicial.</p>
+                <p style="color:var(--text-muted);font-size:0.8rem;">Haz clic en <strong>🔑 Entrar</strong> y luego en <strong>Regístrate gratis</strong>. Recibirás <strong>1.000 €</strong> de saldo inicial.</p>
             </div>
             <div class="ayuda-card">
                 <h3>💰 2. Gana monedas</h3>
@@ -1029,9 +1077,9 @@
                 </ul>
             </div>
         </div>
-        <div class="product-card-detail" style="margin-top:20px;">
-            <h3 style="color:var(--accent-blue);">⭐ Tabla de Rarezas</h3>
-            <p style="color:var(--text-muted);font-size:0.9rem;margin-bottom:10px;">Cada subasta tiene una rareza que determina su color, precio inicial y duración.</p>
+        <div class="product-card-detail" style="margin-top:16px;">
+            <h3 style="color:var(--accent-blue);font-size:0.95rem;">⭐ Tabla de Rarezas</h3>
+            <p style="color:var(--text-muted);font-size:0.85rem;margin-bottom:8px;">Cada subasta tiene una rareza que determina su color, precio inicial y duración.</p>
             <table class="tabla-rareza">
                 <thead>
                     <tr><th>Rareza</th><th>Color</th><th>Precio salida</th><th>Duración</th><th>Probabilidad</th></tr>
@@ -1046,8 +1094,8 @@
                 </tbody>
             </table>
         </div>
-        <div class="product-card-detail" style="margin-top:20px;">
-            <h3 style="color:var(--accent-blue);">❓ Preguntas Frecuentes (FAQ)</h3>
+        <div class="product-card-detail" style="margin-top:16px;">
+            <h3 style="color:var(--accent-blue);font-size:0.95rem;">❓ Preguntas Frecuentes (FAQ)</h3>
             <div class="faq-item"><div class="faq-pregunta">¿El dinero es real?</div><div class="faq-respuesta">No, todo es ficticio. Es una plataforma de entretenimiento y parodia.</div></div>
             <div class="faq-item"><div class="faq-pregunta">¿Cómo recupero mi contraseña?</div><div class="faq-respuesta">En la pantalla de inicio de sesión, pulsa "¿Olvidaste tu contraseña?". Recibirás un correo.</div></div>
             <div class="faq-item"><div class="faq-pregunta">¿Qué pasa si mi subasta no recibe pujas?</div><div class="faq-respuesta">Se reliquida automáticamente con un 10% de descuento.</div></div>
@@ -1057,7 +1105,7 @@
     </div>
 </div>
 
-<footer style="text-align:center;padding:16px 12px;color:var(--text-muted);font-size:0.75rem;border-top:1px solid var(--border-color);">
+<footer style="text-align:center;padding:12px;color:var(--text-muted);font-size:0.7rem;border-top:1px solid var(--border-color);">
     <span onclick="mostrarLegal()" style="cursor:pointer;text-decoration:underline;">Aviso Legal, Privacidad y Cookies</span> · aBROzon.subastas es una web de parodia
 </footer>
 
@@ -1120,8 +1168,8 @@ const ALL_ACHIEVEMENTS = [
     { key: 'vender_1', name: 'Primer Vendedor', icon: '🛒', desc: 'Vende tu primer objeto en el mercado' }
 ];
 
-const TITLES = { 1: 'Lurker / NPC', 5: 'Regular', 15: 'Curador', 30: 'Broker / Main Character', 50: 'Whale', 100: 'Final Boss / Admin' };
-function getTitleForLevel(level) { let title = 'Lurker / NPC'; for (const [lvl, t] of Object.entries(TITLES)) { if (level >= parseInt(lvl)) title = t; } return title; }
+const TITLES = { 1: 'Lurker', 5: 'Regular', 15: 'Curador', 30: 'Broker', 50: 'Whale', 100: 'Final Boss' };
+function getTitleForLevel(level) { let title = 'Lurker'; for (const [lvl, t] of Object.entries(TITLES)) { if (level >= parseInt(lvl)) title = t; } return title; }
 
 function marcarCambioPropio() { saldoCambioPropio = true; ultimaAccionPropiaTs = Date.now(); setTimeout(() => { saldoCambioPropio = false; }, 5000); }
 
@@ -1423,10 +1471,13 @@ function updateXpUI() {
     if (!currentUser) return; const nivel = currentUser.level; const xp = currentUser.xp;
     const xpParaSiguienteNivel = Math.pow(nivel, 2) * 100; const xpNivelAnterior = Math.pow(nivel - 1, 2) * 100;
     const progreso = ((xp - xpNivelAnterior) / (xpParaSiguienteNivel - xpNivelAnterior)) * 100;
-    document.getElementById('userLevel').innerText = nivel; document.getElementById('userTitle').innerText = getTitleForLevel(nivel);
+    document.getElementById('userLevel').innerText = nivel; 
+    document.getElementById('userTitle').innerText = getTitleForLevel(nivel);
     document.getElementById('xpFill').style.width = `${Math.min(progreso, 100)}%`;
-    document.getElementById('perfilNivel').innerText = nivel; document.getElementById('perfilTitulo').innerText = getTitleForLevel(nivel);
-    document.getElementById('perfilXp').innerText = xp; document.getElementById('perfilXpFill').style.width = `${Math.min(progreso, 100)}%`;
+    document.getElementById('perfilNivel').innerText = nivel; 
+    document.getElementById('perfilTitulo').innerText = getTitleForLevel(nivel);
+    document.getElementById('perfilXp').innerText = xp; 
+    document.getElementById('perfilXpFill').style.width = `${Math.min(progreso, 100)}%`;
 }
 
 function actualizarInterfazUsuario() {
@@ -1435,7 +1486,6 @@ function actualizarInterfazUsuario() {
         document.getElementById('btnLoginHeader').style.display = 'none';
         document.getElementById('btnPerfilMenu').style.display = 'inline-flex';
         document.getElementById('goatMenuWrapper').style.display = 'block';
-        // CORREGIDO: usar el id correcto
         const adminItem = document.getElementById('dropdownAdminMenu');
         if (adminItem) {
             adminItem.style.display = currentUser.isAdmin ? 'block' : 'none';
@@ -1568,7 +1618,7 @@ async function subirFotoAdmin(e) {
     } 
     document.getElementById('adminImage').value = urls[0]; 
     fotosAdicionalesAdmin = urls.slice(1); 
-    preview.innerHTML = `✅ ${urls.length} foto(s) subida(s):<br>` + urls.map(u => `<img src="${u}" style="width:70px;height:70px;object-fit:cover;border-radius:6px;margin:4px;">`).join(''); 
+    preview.innerHTML = `✅ ${urls.length} foto(s) subida(s):<br>` + urls.map(u => `<img src="${u}" style="width:60px;height:60px;object-fit:cover;border-radius:6px;margin:4px;">`).join(''); 
 }
 
 function filtrarCategoria(cat) { 
@@ -1655,13 +1705,13 @@ function renderizarCatalogo() {
             lista.sort((a, b) => b.current_price - a.current_price);
             break;
     }
-    if (!lista.length) { grid.innerHTML = '<div>No hay subastas.</div>'; return; }
+    if (!lista.length) { grid.innerHTML = '<div style="color:var(--text-muted);text-align:center;padding:20px;">No hay subastas.</div>'; return; }
     lista.forEach(p => {
         const rarezaClase = p.rareza ? 'rareza-' + p.rareza.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-') : 'rareza-comun';
         const card = document.createElement('div'); card.className = 'auction-card ' + rarezaClase; card.onclick = () => abrirDetalle(p.id);
         const cerrada = p.status === 'closed';
-        const rarezaChip = p.rareza ? `<div class="chip-rareza chip-rareza-${p.rareza.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-')}" style="position:absolute;bottom:8px;left:8px;">${p.rareza}</div>` : '';
-        card.innerHTML = `<div class="card-image">${renderizarImagenProducto(p.image_url)}${cerrada ? '<div class="badge-closed">FINALIZADA</div>' : `<div class="card-timer" id="cardTimer-${p.id}">⏳ ...</div>`}${rarezaChip}</div><div class="card-content"><div class="card-category">${p.category||'General'}${p.seller_id ? ' (Vendedor: ' + (p.seller_username || 'Usuario') + ')' : ''}${cerrada?' · Adjudicado':''}</div><div class="card-title">${p.title}</div>${!cerrada && p.last_bidder ? `<div style="font-size:0.7rem;color:var(--text-muted);margin-bottom:6px;">👤 Último pujador: <strong>${p.last_bidder}</strong></div>` : ''}<div class="card-footer"><div><div class="bid-label-sm">${cerrada?'Precio Final':'Puja Actual'}</div><div class="bid-amount-sm">${Number(p.current_price).toLocaleString('es-ES')} €</div></div></div></div>`;
+        const rarezaChip = p.rareza ? `<div class="chip-rareza chip-rareza-${p.rareza.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-')}" style="position:absolute;bottom:6px;left:6px;">${p.rareza}</div>` : '';
+        card.innerHTML = `<div class="card-image">${renderizarImagenProducto(p.image_url)}${cerrada ? '<div class="badge-closed">FINALIZADA</div>' : `<div class="card-timer" id="cardTimer-${p.id}">⏳ ...</div>`}${rarezaChip}</div><div class="card-content"><div class="card-category">${p.category||'General'}${p.seller_id ? ' (Vendedor: ' + (p.seller_username || 'Usuario') + ')' : ''}${cerrada?' · Adjudicado':''}</div><div class="card-title">${p.title}</div>${!cerrada && p.last_bidder ? `<div style="font-size:0.6rem;color:var(--text-muted);margin-bottom:4px;">👤 Último pujador: <strong>${p.last_bidder}</strong></div>` : ''}<div class="card-footer"><div><div class="bid-label-sm">${cerrada?'Precio Final':'Puja Actual'}</div><div class="bid-amount-sm">${Number(p.current_price).toLocaleString('es-ES')} €</div></div></div></div>`;
         grid.appendChild(card);
         if (currentUser) {
             agregarBotonFavoritoTarjeta(p.id, card);
@@ -1749,7 +1799,7 @@ function actualizarVistaDetalleDatoVivo() {
     document.getElementById('detailBid').innerText = Number(productoSeleccionado.current_price).toLocaleString('es-ES') + ' €';
     const gal = document.getElementById('detailGallery');
     const fotos = [productoSeleccionado.image_url, ...(productoSeleccionado.images||[])].filter(u => u && /^https?:\/\//i.test(u));
-    gal.innerHTML = fotos.length>1 ? fotos.map(u => `<img src="${u}" onclick="cambiarFotoPrincipal(this.src)" style="width:60px;height:60px;object-fit:cover;border-radius:8px;cursor:pointer;border:2px solid var(--border-color);">`).join('') : '';
+    gal.innerHTML = fotos.length>1 ? fotos.map(u => `<img src="${u}" onclick="cambiarFotoPrincipal(this.src)" style="width:55px;height:55px;object-fit:cover;border-radius:8px;cursor:pointer;border:2px solid var(--border-color);">`).join('') : '';
     const detailContainer = document.querySelector('#viewDetail .product-card-detail');
     if (detailContainer && productoSeleccionado.rareza) {
         const claseRareza = 'rareza-' + productoSeleccionado.rareza.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-');
@@ -1841,7 +1891,7 @@ async function cargarFavoritos() {
     const { data: favs, error } = await db.from('favorites').select('auction_id').eq('user_id', currentUser.id);
     if (error) { container.innerHTML = 'Error.'; return; }
     if (!favs || !favs.length) { 
-        container.innerHTML = '<div style="text-align:center;padding:40px 20px;color:var(--text-muted);"><span style="font-size:3rem;display:block;margin-bottom:16px;">💔</span><p style="font-size:1.1rem;font-weight:bold;margin-bottom:8px;">No tienes favoritos</p><p style="font-size:0.85rem;">Marca subastas con el corazón para seguirlas.</p></div>'; 
+        container.innerHTML = '<div style="text-align:center;padding:30px 20px;color:var(--text-muted);"><span style="font-size:2.5rem;display:block;margin-bottom:12px;">💔</span><p style="font-size:1rem;font-weight:bold;margin-bottom:6px;">No tienes favoritos</p><p style="font-size:0.8rem;">Marca subastas con el corazón para seguirlas.</p></div>'; 
         return; 
     }
     const ids = favs.map(f => f.auction_id);
@@ -1904,11 +1954,11 @@ function iniciarTemporizador(fin) {
 async function cargarHistorialPujas(id) { 
     const history = document.getElementById('historyList'); 
     const { data: bids } = await db.from('bids').select('*').eq('auction_id', id).order('created_at', { ascending: false }); 
-    history.innerHTML = bids && bids.length ? '' : '<div style="font-size:0.8rem;color:var(--text-muted);">Sin pujas aún. ¡Sé el primero!</div>'; 
+    history.innerHTML = bids && bids.length ? '' : '<div style="font-size:0.75rem;color:var(--text-muted);">Sin pujas aún. ¡Sé el primero!</div>'; 
     if (bids) bids.forEach(b => { 
         const div = document.createElement('div'); 
         div.className = 'history-item'; 
-        div.innerHTML = `<div style="display:flex;justify-content:space-between;"><div><span style="color:var(--accent-blue);font-weight:bold;">${b.user_name||'Anónimo'}</span>${b.comment?`<div style="font-size:0.75rem;color:#eab308;background:rgba(234,179,8,0.1);padding:4px 8px;border-radius:6px;margin-top:2px;">"${b.comment}"</div>`:''}</div><span style="font-weight:bold;">${Number(b.amount).toLocaleString('es-ES')} €</span></div>`; 
+        div.innerHTML = `<div style="display:flex;justify-content:space-between;"><div><span style="color:var(--accent-blue);font-weight:bold;">${b.user_name||'Anónimo'}</span>${b.comment?`<div style="font-size:0.7rem;color:#eab308;background:rgba(234,179,8,0.1);padding:4px 8px;border-radius:6px;margin-top:2px;">"${b.comment}"</div>`:''}</div><span style="font-weight:bold;">${Number(b.amount).toLocaleString('es-ES')} €</span></div>`; 
         history.appendChild(div); 
     }); 
     history.scrollTop = history.scrollHeight;
@@ -2145,7 +2195,7 @@ async function verAnuncio(tipo) {
     } finally {
         accionEnCurso = false;
         btnAd.disabled = false;
-        btnAd.innerHTML = '🎬 +500 <span id="anunciosRestantes" style="font-size:0.5rem;opacity:0.7;display:block;font-weight:normal;">(0/10 hoy)</span>';
+        btnAd.innerHTML = '🎬 +500 <span id="anunciosRestantes" style="font-size:0.45rem;opacity:0.7;display:block;font-weight:normal;">(0/10 hoy)</span>';
         actualizarContadorAnuncios();
     }
 }
@@ -2247,7 +2297,7 @@ async function cargarMisiones() {
     const m = data; 
     let html = ''; 
     const todasMisionesCompletadas = m.min_bids >= 3 && m.custom_bid >= 1 && m.ad_views >= 2 && m.category_bid >= 1; 
-    html += `<div class="mission-card"><div class="mission-title">🎁 Bono Diario</div><div class="mission-desc">Completa todas las misiones diarias y reclama 1.000 €.</div>${m.bonus ? (todasMisionesCompletadas ? `<button onclick="reclamarBonusDiarioDesdeMisiones()" style="background:var(--accent-green);color:white;border:none;padding:6px 12px;border-radius:6px;cursor:pointer;font-weight:bold;">💰 Reclamar +1.000 €</button>` : `<span style="font-size:0.8rem;color:var(--text-muted);">🔒 Completa todas las misiones</span>`) : `<span class="mission-completed">✅ Reclamado hoy</span>`}</div>`; 
+    html += `<div class="mission-card"><div class="mission-title">🎁 Bono Diario</div><div class="mission-desc">Completa todas las misiones diarias y reclama 1.000 €.</div>${m.bonus ? (todasMisionesCompletadas ? `<button onclick="reclamarBonusDiarioDesdeMisiones()" style="background:var(--accent-green);color:white;border:none;padding:6px 12px;border-radius:6px;cursor:pointer;font-weight:bold;">💰 Reclamar +1.000 €</button>` : `<span style="font-size:0.75rem;color:var(--text-muted);">🔒 Completa todas las misiones</span>`) : `<span class="mission-completed">✅ Reclamado hoy</span>`}</div>`; 
     html += `<div class="mission-card"><div class="mission-title">🔫 Gatillo Fácil</div><div class="mission-desc">3 pujas mínimas. ${m.min_bids}/3</div><div class="progress-bar"><div class="progress-fill" style="width:${Math.min(m.min_bids/3*100,100)}%"></div></div>${m.min_bids>=3?'<div class="mission-completed">✅</div>':''}</div>`; 
     html += `<div class="mission-card"><div class="mission-title">💼 El Inversor</div><div class="mission-desc">1 puja personalizada. ${m.custom_bid>=1?'✅':'Pendiente'}</div>${m.custom_bid>=1?'<div class="mission-completed">✅</div>':''}</div>`; 
     html += `<div class="mission-card"><div class="mission-title">📺 Patrocinador</div><div class="mission-desc">2 anuncios. ${m.ad_views}/2</div><div class="progress-bar"><div class="progress-fill" style="width:${Math.min(m.ad_views/2*100,100)}%"></div></div>${m.ad_views>=2?'<div class="mission-completed">✅</div>':''}</div>`; 
@@ -2274,12 +2324,12 @@ async function cargarHallOfFame() {
     const { data, error } = await db.rpc('get_hall_of_fame');
     if (error) { container.innerHTML = `<p>Error: ${error.message}</p>`; return; }
     let html = '';
-    html += '<div class="hof-section"><h3>🤑 El Más Rico</h3><p style="color:var(--text-muted);font-size:0.8rem;margin-bottom:10px;">Mayor saldo actual (cifra oculta 🔒)</p>' + construirPodioYLista(data.ricos, 'oculto') + '</div>';
-    html += '<div class="hof-section"><h3>🐐 La Cabra (GOAT)</h3><p style="color:var(--text-muted);font-size:0.8rem;margin-bottom:10px;">Más subastas ganadas</p>' + construirPodioYLista(data.ganadores, 'victorias') + '</div>';
-    html += '<div class="hof-section"><h3>💰 El Más Chetado</h3><p style="color:var(--text-muted);font-size:0.8rem;margin-bottom:10px;">Más dinero gastado en pujas</p>' + construirPodioYLista(data.gastadores, 'gastado') + '</div>';
-    html += '<div class="hof-section"><h3>🏛️ El Museo</h3><p style="color:var(--text-muted);font-size:0.8rem;margin-bottom:10px;">Más objetos en su colección</p>' + construirPodioYLista(data.coleccionistas, 'certificados') + '</div>';
-    html += '<div class="hof-section"><h3>👑 El Más Old</h3><p style="color:var(--text-muted);font-size:0.8rem;margin-bottom:10px;">Cuenta más antigua</p>' + construirPodioYLista(data.antiguos, 'fecha') + '</div>';
-    html += '<div class="hof-section"><h3>🤝 El Más Broker</h3><p style="color:var(--text-muted);font-size:0.8rem;margin-bottom:10px;">Más ganancias vendiendo en el mercado</p>' + construirPodioYLista(data.brokers, 'gastado') + '</div>';
+    html += '<div class="hof-section"><h3>🤑 El Más Rico</h3><p style="color:var(--text-muted);font-size:0.75rem;margin-bottom:8px;">Mayor saldo actual (cifra oculta 🔒)</p>' + construirPodioYLista(data.ricos, 'oculto') + '</div>';
+    html += '<div class="hof-section"><h3>🐐 La Cabra (GOAT)</h3><p style="color:var(--text-muted);font-size:0.75rem;margin-bottom:8px;">Más subastas ganadas</p>' + construirPodioYLista(data.ganadores, 'victorias') + '</div>';
+    html += '<div class="hof-section"><h3>💰 El Más Chetado</h3><p style="color:var(--text-muted);font-size:0.75rem;margin-bottom:8px;">Más dinero gastado en pujas</p>' + construirPodioYLista(data.gastadores, 'gastado') + '</div>';
+    html += '<div class="hof-section"><h3>🏛️ El Museo</h3><p style="color:var(--text-muted);font-size:0.75rem;margin-bottom:8px;">Más objetos en su colección</p>' + construirPodioYLista(data.coleccionistas, 'certificados') + '</div>';
+    html += '<div class="hof-section"><h3>👑 El Más Old</h3><p style="color:var(--text-muted);font-size:0.75rem;margin-bottom:8px;">Cuenta más antigua</p>' + construirPodioYLista(data.antiguos, 'fecha') + '</div>';
+    html += '<div class="hof-section"><h3>🤝 El Más Broker</h3><p style="color:var(--text-muted);font-size:0.75rem;margin-bottom:8px;">Más ganancias vendiendo en el mercado</p>' + construirPodioYLista(data.brokers, 'gastado') + '</div>';
     container.innerHTML = html;
 }
 
@@ -2394,7 +2444,7 @@ function renderizarMisPujas(data) {
     const container = document.getElementById('misPujasContainer');
     const paginacion = document.getElementById('paginacionMisPujas');
     if (!data.length) { 
-        container.innerHTML = '<div style="text-align:center;padding:40px 20px;color:var(--text-muted);"><span style="font-size:3rem;display:block;margin-bottom:16px;">🔨</span><p style="font-size:1.1rem;font-weight:bold;margin-bottom:8px;">Aún no has hecho ninguna puja</p><p style="font-size:0.85rem;">Explora el catálogo y encuentra tu primera subasta.</p><button onclick="mostrarCatalogo()" style="margin-top:16px;background:var(--accent-blue);color:white;border:none;padding:10px 20px;border-radius:8px;font-weight:bold;cursor:pointer;">Ver Catálogo</button></div>'; 
+        container.innerHTML = '<div style="text-align:center;padding:30px 20px;color:var(--text-muted);"><span style="font-size:2.5rem;display:block;margin-bottom:12px;">🔨</span><p style="font-size:1rem;font-weight:bold;margin-bottom:6px;">Aún no has hecho ninguna puja</p><p style="font-size:0.8rem;">Explora el catálogo y encuentra tu primera subasta.</p><button onclick="mostrarCatalogo()" style="margin-top:12px;background:var(--accent-blue);color:white;border:none;padding:8px 16px;border-radius:8px;font-weight:bold;cursor:pointer;">Ver Catálogo</button></div>'; 
         paginacion.innerHTML = '';
         return; 
     }
@@ -2411,7 +2461,7 @@ function renderizarMisPujas(data) {
     }
 
     if (!datosFiltrados.length) {
-        container.innerHTML = '<p>No hay pujas en esta categoría.</p>';
+        container.innerHTML = '<p style="color:var(--text-muted);font-size:0.8rem;">No hay pujas en esta categoría.</p>';
         paginacion.innerHTML = '';
         return;
     }
@@ -2458,15 +2508,15 @@ function renderizarMisPujas(data) {
 
     let pagHtml = '';
     if (totalPaginas > 1) {
-        pagHtml += `<button onclick="cambiarPaginaMisPujas(${misPujasPagina - 1})" ${misPujasPagina === 1 ? 'disabled' : ''} style="background:var(--bg-subtle);border:1px solid var(--border-color);border-radius:6px;padding:5px 10px;cursor:pointer;font-weight:bold;">←</button>`;
+        pagHtml += `<button onclick="cambiarPaginaMisPujas(${misPujasPagina - 1})" ${misPujasPagina === 1 ? 'disabled' : ''} style="background:var(--bg-subtle);border:1px solid var(--border-color);border-radius:6px;padding:4px 10px;cursor:pointer;font-weight:bold;">←</button>`;
         for (let i = 1; i <= totalPaginas; i++) {
             if (i === misPujasPagina) {
-                pagHtml += `<button disabled style="background:var(--accent-blue);color:white;border:none;border-radius:6px;padding:5px 10px;font-weight:bold;">${i}</button>`;
+                pagHtml += `<button disabled style="background:var(--accent-blue);color:white;border:none;border-radius:6px;padding:4px 10px;font-weight:bold;">${i}</button>`;
             } else {
-                pagHtml += `<button onclick="cambiarPaginaMisPujas(${i})" style="background:var(--bg-subtle);border:1px solid var(--border-color);border-radius:6px;padding:5px 10px;cursor:pointer;font-weight:bold;">${i}</button>`;
+                pagHtml += `<button onclick="cambiarPaginaMisPujas(${i})" style="background:var(--bg-subtle);border:1px solid var(--border-color);border-radius:6px;padding:4px 10px;cursor:pointer;font-weight:bold;">${i}</button>`;
             }
         }
-        pagHtml += `<button onclick="cambiarPaginaMisPujas(${misPujasPagina + 1})" ${misPujasPagina === totalPaginas ? 'disabled' : ''} style="background:var(--bg-subtle);border:1px solid var(--border-color);border-radius:6px;padding:5px 10px;cursor:pointer;font-weight:bold;">→</button>`;
+        pagHtml += `<button onclick="cambiarPaginaMisPujas(${misPujasPagina + 1})" ${misPujasPagina === totalPaginas ? 'disabled' : ''} style="background:var(--bg-subtle);border:1px solid var(--border-color);border-radius:6px;padding:4px 10px;cursor:pointer;font-weight:bold;">→</button>`;
     }
     paginacion.innerHTML = pagHtml;
 }
@@ -2508,7 +2558,7 @@ async function adminBuscarUsuario() {
     const box = document.getElementById('adminUserResult'); 
     if (error || !data || !data.length) { box.innerHTML = '<p>No encontrado.</p>'; return; } 
     const u = data[0]; 
-    box.innerHTML = `<div style="background:var(--bg-subtle);padding:12px;border-radius:10px;font-size:0.85rem;"><div><strong>${u.username}</strong> ${u.is_admin?'🛠️':''} ${u.es_goat?'🐐':''} ${u.is_banned?'🚫':''}</div><div>Saldo: ${Number(u.saldo).toLocaleString('es-ES')} €</div><div style="display:flex;gap:6px;margin:8px 0;"><input type="number" id="adminNuevoSaldo" placeholder="Nuevo saldo" style="flex:1;padding:8px;border-radius:6px;border:1px solid var(--border-color);"><button onclick="adminActualizarSaldo('${u.username}')" style="background:var(--accent-green);color:white;border:none;padding:8px 12px;border-radius:6px;font-weight:bold;">Fijar</button></div><button onclick="adminToggleBan('${u.username}')" style="width:100%;background:${u.is_banned?'#16a34a':'#ef4444'};color:white;border:none;padding:8px;border-radius:6px;font-weight:bold;">${u.is_banned?'Quitar baneo':'Banear'}</button></div>`; 
+    box.innerHTML = `<div style="background:var(--bg-subtle);padding:10px;border-radius:10px;font-size:0.8rem;"><div><strong>${u.username}</strong> ${u.is_admin?'🛠️':''} ${u.es_goat?'🐐':''} ${u.is_banned?'🚫':''}</div><div>Saldo: ${Number(u.saldo).toLocaleString('es-ES')} €</div><div style="display:flex;gap:6px;margin:6px 0;"><input type="number" id="adminNuevoSaldo" placeholder="Nuevo saldo" style="flex:1;padding:6px;border-radius:6px;border:1px solid var(--border-color);"><button onclick="adminActualizarSaldo('${u.username}')" style="background:var(--accent-green);color:white;border:none;padding:6px 10px;border-radius:6px;font-weight:bold;">Fijar</button></div><button onclick="adminToggleBan('${u.username}')" style="width:100%;background:${u.is_banned?'#16a34a':'#ef4444'};color:white;border:none;padding:6px;border-radius:6px;font-weight:bold;">${u.is_banned?'Quitar baneo':'Banear'}</button></div>`; 
 }
 
 async function adminActualizarSaldo(alias) { const v = parseInt(document.getElementById('adminNuevoSaldo').value); if (isNaN(v)) { mostrarToast('⚠️ Saldo inválido.'); return; } await db.rpc('admin_set_saldo',{p_alias:alias,p_nuevo_saldo:v}); mostrarToast('✅ Saldo actualizado.'); adminBuscarUsuario(); }
@@ -2520,8 +2570,8 @@ function renderizarListaAdminSubastas() {
     box.innerHTML = '';
     subastasLocales.forEach(p => {
         const row = document.createElement('div');
-        row.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px dashed var(--border-color);font-size:0.85rem;';
-        row.innerHTML = `<span>[${p.category||'General'}] ${p.title} ${p.status==='closed'?'(cerrada)':''}</span><div style="display:flex; align-items:center;">${p.status === 'active' ? `<button onclick="adminForzarCierre('${p.id}')" style="background:#16a34a; color:white; border:none; padding:5px 10px; border-radius:6px; font-weight:bold; cursor:pointer; font-size:0.75rem; margin-right:4px;">✅ Adjudicar</button>` : ''}<button onclick="adminEliminarSubasta('${p.id}')" style="background:#ef4444;color:white;border:none;padding:5px 10px;border-radius:6px;font-weight:bold;cursor:pointer;font-size:0.75rem;">Eliminar</button></div>`;
+        row.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px dashed var(--border-color);font-size:0.8rem;';
+        row.innerHTML = `<span>[${p.category||'General'}] ${p.title} ${p.status==='closed'?'(cerrada)':''}</span><div style="display:flex; align-items:center;">${p.status === 'active' ? `<button onclick="adminForzarCierre('${p.id}')" style="background:#16a34a; color:white; border:none; padding:4px 8px; border-radius:6px; font-weight:bold; cursor:pointer; font-size:0.7rem; margin-right:4px;">✅ Adjudicar</button>` : ''}<button onclick="adminEliminarSubasta('${p.id}')" style="background:#ef4444;color:white;border:none;padding:4px 8px;border-radius:6px;font-weight:bold;cursor:pointer;font-size:0.7rem;">Eliminar</button></div>`;
         box.appendChild(row);
     });
 }
@@ -2530,13 +2580,13 @@ async function adminEliminarSubasta(id) { if (!confirm("¿Seguro que quieres eli
 
 async function adminForzarCierre(id) { if (!confirm("¿Forzar cierre y adjudicarte esta subasta? Se añadirá a tu inventario.")) return; const { error } = await db.rpc('admin_forzar_cierre_y_adjudicar', { p_auction_id: id }); if (error) { mostrarToast('⚠️ ' + error.message); return; } await cargarSubastas(); renderizarListaAdminSubastas(); mostrarToast('✅ Subasta adjudicada a tu usuario. Revisa tu vitrina.'); }
 
-async function adminListarUsuarios() { const box = document.getElementById('adminUserList'); box.innerHTML = 'Cargando...'; const { data, error } = await db.rpc('admin_listar_usuarios'); if (error) { box.innerHTML = `<p style="color:#ef4444;">Error: ${error.message}</p>`; return; } if (!data || data.length === 0) { box.innerHTML = '<p>No hay usuarios registrados.</p>'; return; } let html = ''; data.forEach(u => { html += `<div style="background: var(--bg-subtle); border-radius: 8px; padding: 8px 10px; margin-bottom: 6px; font-size: 0.8rem; display: flex; justify-content: space-between; align-items: center;"><span><strong>${u.username}</strong> ${u.is_admin?'🛠️':''} ${u.es_goat?'🐐':''} ${u.is_banned?'🚫':''}</span><span style="color: var(--accent-green);">${Number(u.saldo).toLocaleString('es-ES')} €</span><div><button onclick="adminActualizarSaldo('${u.username}')" style="background: var(--accent-green); color:white; border:none; padding: 4px 8px; border-radius: 4px; font-size: 0.7rem; cursor:pointer;">💰</button><button onclick="adminToggleBan('${u.username}')" style="background: ${u.is_banned ? '#16a34a' : '#ef4444'}; color:white; border:none; padding: 4px 8px; border-radius: 4px; font-size: 0.7rem; cursor:pointer;">${u.is_banned ? '✅' : '🚫'}</button></div></div>`; }); box.innerHTML = html; }
+async function adminListarUsuarios() { const box = document.getElementById('adminUserList'); box.innerHTML = 'Cargando...'; const { data, error } = await db.rpc('admin_listar_usuarios'); if (error) { box.innerHTML = `<p style="color:#ef4444;">Error: ${error.message}</p>`; return; } if (!data || data.length === 0) { box.innerHTML = '<p>No hay usuarios registrados.</p>'; return; } let html = ''; data.forEach(u => { html += `<div style="background: var(--bg-subtle); border-radius: 8px; padding: 6px 10px; margin-bottom: 4px; font-size: 0.75rem; display: flex; justify-content: space-between; align-items: center;"><span><strong>${u.username}</strong> ${u.is_admin?'🛠️':''} ${u.es_goat?'🐐':''} ${u.is_banned?'🚫':''}</span><span style="color: var(--accent-green);">${Number(u.saldo).toLocaleString('es-ES')} €</span><div><button onclick="adminActualizarSaldo('${u.username}')" style="background: var(--accent-green); color:white; border:none; padding: 3px 6px; border-radius: 4px; font-size: 0.65rem; cursor:pointer;">💰</button><button onclick="adminToggleBan('${u.username}')" style="background: ${u.is_banned ? '#16a34a' : '#ef4444'}; color:white; border:none; padding: 3px 6px; border-radius: 4px; font-size: 0.65rem; cursor:pointer;">${u.is_banned ? '✅' : '🚫'}</button></div></div>`; }); box.innerHTML = html; }
 
 async function adminAddCategoria() { const name = document.getElementById('newCatName').value.trim(); const icon = document.getElementById('newCatIcon').value.trim() || '📦'; if (!name) { mostrarToast('⚠️ Nombre requerido.'); return; } const { error } = await db.rpc('admin_add_category', { p_name: name, p_icon: icon }); if (error) { mostrarToast('⚠️ ' + error.message); return; } document.getElementById('newCatName').value = ''; document.getElementById('newCatIcon').value = ''; await cargarCategorias(); renderizarListaAdminCategorias(); actualizarSelectorCategoriasAdmin(); mostrarToast('✅ Categoría añadida.'); }
 
 async function adminDeleteCategoria(id) { if (!confirm("¿Eliminar categoría?")) return; const { error } = await db.rpc('admin_delete_category', { p_id: id }); if (error) { mostrarToast('⚠️ ' + error.message); return; } await cargarCategorias(); renderizarListaAdminCategorias(); actualizarSelectorCategoriasAdmin(); mostrarToast('🗑️ Categoría eliminada.'); }
 
-function renderizarListaAdminCategorias() { const box = document.getElementById('adminCatList'); if (!box) return; box.innerHTML = categorias.map(c => `<div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0;font-size:0.85rem;"><span>${c.icon} ${c.name}</span><button onclick="adminDeleteCategoria(${c.id})" style="background:#ef4444;color:white;border:none;padding:2px 8px;border-radius:4px;font-size:0.7rem;">Eliminar</button></div>`).join(''); }
+function renderizarListaAdminCategorias() { const box = document.getElementById('adminCatList'); if (!box) return; box.innerHTML = categorias.map(c => `<div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0;font-size:0.8rem;"><span>${c.icon} ${c.name}</span><button onclick="adminDeleteCategoria(${c.id})" style="background:#ef4444;color:white;border:none;padding:2px 6px;border-radius:4px;font-size:0.65rem;">Eliminar</button></div>`).join(''); }
 
 function toggleAuthForm(mode) { 
     document.getElementById('formLogin').style.display = mode==='login'?'block':'none'; 
@@ -2640,7 +2690,7 @@ async function cargarVitrina() {
             else if (rareza === 'Épica') valorReciclajeNum = Math.min(Math.max(valorReciclajeNum, 500), 2000);
             const valorReciclajeTexto = valorReciclajeNum.toLocaleString('es-ES') + ' €';
             const rarezaClase = 'chip-rareza-' + rareza.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-');
-            card.innerHTML = `<div style="width:100%;height:120px;display:flex;align-items:center;justify-content:center;font-size:3rem;background:var(--bg-subtle);">${renderizarImagenProducto(item.image_url)}</div><h3>${item.title}</h3><p style="font-size:0.8rem;color:var(--text-muted);">${item.description}</p><div style="color:var(--accent-green);font-weight:bold;">${Number(item.current_price).toLocaleString('es-ES')} €</div><div style="margin-top:6px;"><span class="chip-rareza ${rarezaClase}" style="position:static;display:inline-block;">${rareza}</span></div><div style="margin-top:10px;font-size:0.7rem;background:rgba(234,179,8,0.1);padding:6px;border-radius:4px;color:#eab308;font-weight:bold;">📜 CERTIFICADO OFICIAL ABROZON<br>Nº ${item.certificado_codigo || 'PENDIENTE'}<br>${fecha}</div><button onclick="event.stopPropagation(); venderItem('${item.id}')" style="margin-top:10px; background:#f97316; color:white; border:none; padding:6px 12px; border-radius:6px; font-weight:bold; cursor:pointer; width:100%;">💰 Vender en Mercado</button>${reciclable && userItemId ? `<button onclick="event.stopPropagation(); reciclarObjeto('${userItemId}')" style="margin-top:6px; background:#64748b; color:white; border:none; padding:6px 12px; border-radius:6px; font-weight:bold; cursor:pointer; width:100%; font-size:0.8rem;">♻️ Reciclar (${valorReciclajeTexto})</button>` : ''}`;
+            card.innerHTML = `<div style="width:100%;height:100px;display:flex;align-items:center;justify-content:center;font-size:2.5rem;background:var(--bg-subtle);">${renderizarImagenProducto(item.image_url)}</div><h3>${item.title}</h3><p style="font-size:0.75rem;color:var(--text-muted);">${item.description}</p><div style="color:var(--accent-green);font-weight:bold;">${Number(item.current_price).toLocaleString('es-ES')} €</div><div style="margin-top:4px;"><span class="chip-rareza ${rarezaClase}" style="position:static;display:inline-block;">${rareza}</span></div><div style="margin-top:8px;font-size:0.65rem;background:rgba(234,179,8,0.1);padding:4px;border-radius:4px;color:#eab308;font-weight:bold;">📜 CERTIFICADO OFICIAL ABROZON<br>Nº ${item.certificado_codigo || 'PENDIENTE'}<br>${fecha}</div><button onclick="event.stopPropagation(); venderItem('${item.id}')" style="margin-top:8px; background:#f97316; color:white; border:none; padding:6px 10px; border-radius:6px; font-weight:bold; cursor:pointer; width:100%;">💰 Vender en Mercado</button>${reciclable && userItemId ? `<button onclick="event.stopPropagation(); reciclarObjeto('${userItemId}')" style="margin-top:4px; background:#64748b; color:white; border:none; padding:6px 10px; border-radius:6px; font-weight:bold; cursor:pointer; width:100%; font-size:0.75rem;">♻️ Reciclar (${valorReciclajeTexto})</button>` : ''}`;
             grid.appendChild(card);
         });
     }
