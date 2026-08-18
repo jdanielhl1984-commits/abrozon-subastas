@@ -176,6 +176,114 @@
             border-radius: 2px 2px 0 0;
         }
 
+        /* ===== MENÚ DESPLEGABLE CATEGORÍAS (estilo lateral) ===== */
+        #categoriasOverlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.4);
+            z-index: 9998;
+        }
+        #categoriasOverlay.open {
+            display: block;
+        }
+
+        #categoriasDropdown {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 300px;
+            max-width: 80vw;
+            height: 100vh;
+            background: var(--bg-card);
+            border-right: 2px solid var(--border-color);
+            box-shadow: 4px 0 30px rgba(0,0,0,0.15);
+            z-index: 9999;
+            padding: 0;
+            overflow-y: auto;
+            animation: slideInLeft 0.3s ease;
+        }
+        #categoriasDropdown.open {
+            display: block;
+        }
+
+        @keyframes slideInLeft {
+            from { transform: translateX(-100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        #categoriasDropdownHeader {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border-color);
+            background: var(--bg-header);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        #categoriasDropdownHeader h3 {
+            font-size: 1rem;
+            color: var(--text-main);
+            margin: 0;
+        }
+        #categoriasDropdownClose {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 0 5px;
+            line-height: 1;
+        }
+        #categoriasDropdownClose:hover {
+            color: var(--text-main);
+        }
+
+        .categoria-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 20px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            color: var(--text-main);
+            transition: background 0.2s;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .categoria-item:last-child {
+            border-bottom: none;
+        }
+        .categoria-item:hover {
+            background: var(--bg-subtle);
+        }
+        .categoria-item .categoria-icon {
+            font-size: 1.2rem;
+            width: 28px;
+            text-align: center;
+        }
+        .categoria-item .categoria-nombre {
+            flex: 1;
+        }
+        .categoria-item .categoria-badge {
+            font-size: 0.7rem;
+            background: var(--accent-blue);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+        }
+        .categoria-item.active-cat {
+            background: rgba(2,132,199,0.08);
+            font-weight: bold;
+        }
+
+        /* ===== FIN MENÚ DESPLEGABLE ===== */
+
         .category-chips { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 6px; margin-bottom: 16px; -webkit-overflow-scrolling: touch; }
         .chip { flex-shrink: 0; padding: 6px 12px; border-radius: 999px; background: var(--bg-subtle); border: 1px solid var(--border-color); color: var(--text-muted); font-size: 0.75rem; font-weight: 600; cursor: pointer; white-space: nowrap; }
         .chip:hover { color: var(--text-main); }
@@ -419,6 +527,12 @@
             .primary-nav { padding: 4px 2%; gap: 2px; flex-wrap: nowrap; }
             .nav-tab { font-size: 0.6rem; padding: 8px 6px; }
 
+            /* Menú lateral en móvil */
+            #categoriasDropdown {
+                width: 85vw;
+                max-width: 320px;
+            }
+
             .container { padding: 0 8px; margin: 10px auto; }
             .auction-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
             .detail-layout { grid-template-columns: 1fr; }
@@ -439,30 +553,6 @@
         .header-right { max-width: 100%; flex-wrap: wrap; justify-content: flex-end; }
         .container { max-width: 100%; overflow-x: hidden; }
         .card-image img, .main-image-detail img { max-width: 100%; height: auto; }
-        /* Menú desplegable de categorías */
-#categoriasDropdown {
-    display: none;
-}
-
-#categoriasDropdown.show {
-    display: block;
-}
-
-.categoria-item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 8px 10px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 0.8rem;
-    color: var(--text-main);
-    transition: background 0.2s;
-}
-
-.categoria-item:hover {
-    background: var(--bg-subtle);
-}
     </style>
 </head>
 <body>
@@ -567,12 +657,9 @@
     <div class="header-row">
         <div class="header-top">
             <div class="logo" onclick="mostrarCatalogo()">aBROzon<span>.subastas</span></div>
-            <button class="btn-header" id="btnCategorias" onclick="toggleCategoriasMenu()" style="position:relative;">
-    ☰ Categorías
-</button>
-            <button class="btn-header" id="btnCategorias" onclick="toggleCategoriasMenu()" style="position:relative;">
-    ☰ Categorías
-</button>
+            <button class="btn-header" id="btnCategorias" onclick="toggleCategoriasMenu()" style="display:flex;align-items:center;gap:4px;">
+                ☰ Categorías
+            </button>
             <div class="search-bar">
                 <span class="search-icon" onclick="buscarEnCatalogo(document.getElementById('searchInput').value)">🔍</span>
                 <input type="text" id="searchInput" placeholder="Buscar..." oninput="buscarEnCatalogo(this.value)">
@@ -620,9 +707,16 @@
     </div>
 </header>
 
-<!-- Menú desplegable de categorías -->
-<div id="categoriasDropdown" style="display:none;position:absolute;top:100%;left:0;width:300px;max-height:400px;overflow-y:auto;background:var(--bg-card);border:1px solid var(--border-color);border-radius:8px;box-shadow:0 8px 25px rgba(0,0,0,0.15);z-index:999;padding:8px;">
-    <div id="categoriasDropdownContent" style="display:flex;flex-direction:column;gap:4px;"></div>
+<!-- Overlay (fondo oscuro) -->
+<div id="categoriasOverlay" onclick="toggleCategoriasMenu()"></div>
+
+<!-- Menú desplegable lateral de categorías -->
+<div id="categoriasDropdown">
+    <div id="categoriasDropdownHeader">
+        <h3>📂 Categorías</h3>
+        <button id="categoriasDropdownClose" onclick="toggleCategoriasMenu()">✕</button>
+    </div>
+    <div id="categoriasDropdownContent"></div>
 </div>
 
 <!-- ===== MENÚ PRINCIPAL SIMPLIFICADO ===== -->
@@ -1320,7 +1414,7 @@ async function cargarCategorias() {
 function renderizarCategoryChips() {
     const box = document.getElementById('categoryChips');
     if (!box) return;
-    // Mostrar el contenedor (estaba oculto)
+    // Mostrar el contenedor
     box.style.display = 'flex';
     box.innerHTML = '';
 
@@ -2550,14 +2644,19 @@ function toggleGoatMenu() { const d = document.getElementById('goatDropdown'); d
 function cerrarGoatMenu() { document.getElementById('goatDropdown').style.display = 'none'; }
 document.addEventListener('click', (e) => { const w = document.getElementById('userMenuWrapper'); if (w && w.style.display !== 'none' && !w.contains(e.target)) cerrarUserMenu(); const g = document.getElementById('goatMenuWrapper'); if (g && g.style.display !== 'none' && !g.contains(e.target)) cerrarGoatMenu(); const panel = document.getElementById('notifPanel'); const btn = document.getElementById('btnNotif'); if (panel && btn && panel.style.display === 'block' && !panel.contains(e.target) && !btn.contains(e.target)) { panel.style.display = 'none'; } });
 document.addEventListener('input', function(e) { if (e.target && e.target.id === 'goatCommentInput') { const count = e.target.value.length; const counter = document.getElementById('charCount'); if (counter) counter.innerText = count; } });
-// ===== MENÚ DESPLEGABLE DE CATEGORÍAS =====
+
+// ===== MENÚ DESPLEGABLE DE CATEGORÍAS (estilo lateral) =====
 function toggleCategoriasMenu() {
     const panel = document.getElementById('categoriasDropdown');
-    if (panel.style.display === 'none' || panel.style.display === '') {
-        renderizarCategoriasDropdown();
-        panel.style.display = 'block';
+    const overlay = document.getElementById('categoriasOverlay');
+    
+    if (panel.classList.contains('open')) {
+        panel.classList.remove('open');
+        overlay.classList.remove('open');
     } else {
-        panel.style.display = 'none';
+        renderizarCategoriasDropdown();
+        panel.classList.add('open');
+        overlay.classList.add('open');
     }
 }
 
@@ -2565,6 +2664,7 @@ function renderizarCategoriasDropdown() {
     const content = document.getElementById('categoriasDropdownContent');
     if (!content) return;
     
+    // Combinar "Todas" y "Novedades" con las categorías de la BD
     const categoriasConIcono = [
         { name: 'Todas', icon: '🗂️' },
         { name: 'Novedades', icon: '🆕' },
@@ -2572,23 +2672,32 @@ function renderizarCategoriasDropdown() {
     ];
     
     content.innerHTML = categoriasConIcono.map(c => `
-        <div class="categoria-item" onclick="seleccionarCategoriaDesdeDropdown('${c.name}')">
-            <span>${c.icon}</span>
-            <span>${c.name}</span>
+        <div class="categoria-item ${c.name === categoriaActiva ? 'active-cat' : ''}" onclick="seleccionarCategoriaDesdeDropdown('${c.name}')">
+            <span class="categoria-icon">${c.icon}</span>
+            <span class="categoria-nombre">${c.name}</span>
+            ${c.name === categoriaActiva ? `<span class="categoria-badge">✓</span>` : ''}
         </div>
     `).join('');
 }
 
 function seleccionarCategoriaDesdeDropdown(cat) {
     filtrarCategoria(cat);
-    document.getElementById('categoriasDropdown').style.display = 'none';
+    // Cerrar el menú
+    const panel = document.getElementById('categoriasDropdown');
+    const overlay = document.getElementById('categoriasOverlay');
+    panel.classList.remove('open');
+    overlay.classList.remove('open');
 }
 
-document.addEventListener('click', (e) => {
-    const dropdown = document.getElementById('categoriasDropdown');
-    const btn = document.getElementById('btnCategorias');
-    if (dropdown && btn && !dropdown.contains(e.target) && !btn.contains(e.target)) {
-        dropdown.style.display = 'none';
+// Cerrar menú con tecla ESC
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        const panel = document.getElementById('categoriasDropdown');
+        const overlay = document.getElementById('categoriasOverlay');
+        if (panel.classList.contains('open')) {
+            panel.classList.remove('open');
+            overlay.classList.remove('open');
+        }
     }
 });
 // ===== FIN MENÚ DESPLEGABLE =====
