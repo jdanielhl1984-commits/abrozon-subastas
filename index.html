@@ -190,7 +190,107 @@
         #categoriasOverlay.open {
             display: block;
         }
+/* ===== MENÚ LATERAL DERECHO (PERFIL) ===== */
+#perfilOverlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 9998;
+}
+#perfilOverlay.open {
+    display: block;
+}
 
+#perfilDropdown {
+    display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 300px;
+    max-width: 80vw;
+    height: 100vh;
+    background: var(--bg-card);
+    border-left: 2px solid var(--border-color);
+    box-shadow: -4px 0 30px rgba(0,0,0,0.15);
+    z-index: 9999;
+    padding: 0;
+    overflow-y: auto;
+    animation: slideInRight 0.3s ease;
+}
+#perfilDropdown.open {
+    display: block;
+}
+
+@keyframes slideInRight {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+#perfilDropdownHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border-color);
+    background: var(--bg-header);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+#perfilDropdownHeader h3 {
+    font-size: 1rem;
+    color: var(--text-main);
+    margin: 0;
+}
+#perfilDropdownClose {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 0 5px;
+    line-height: 1;
+}
+#perfilDropdownClose:hover {
+    color: var(--text-main);
+}
+
+.perfil-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 20px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    color: var(--text-main);
+    transition: background 0.2s;
+    border-bottom: 1px solid var(--border-color);
+}
+.perfil-item:last-child {
+    border-bottom: none;
+}
+.perfil-item:hover {
+    background: var(--bg-subtle);
+}
+.perfil-item .perfil-icon {
+    font-size: 1.2rem;
+    width: 28px;
+    text-align: center;
+}
+.perfil-item .perfil-nombre {
+    flex: 1;
+}
+.perfil-item .perfil-badge {
+    font-size: 0.7rem;
+    background: var(--accent-blue);
+    color: white;
+    padding: 2px 8px;
+    border-radius: 12px;
+}
         #categoriasDropdown {
             display: none;
             position: fixed;
@@ -677,24 +777,8 @@
                     <div class="dropdown-item" id="goatItemDesactivar" onclick="activarGoat()" style="display:none;color:#ef4444;">Desactivar</div>
                 </div>
             </div>
-            <button class="btn-login" id="btnLoginHeader" onclick="abrirModalAuth('login')" title="Iniciar sesión o registrarse">🔑</button>
-            <div class="user-menu-wrapper" id="userMenuWrapper" style="display:none;">
-                <button class="btn-header" onclick="toggleUserMenu()">👤 ▾</button>
-                <div class="user-dropdown" id="userDropdown">
-                    <div class="dropdown-item" onclick="mostrarPerfil()">👤 Mi Perfil</div>
-                    <div class="dropdown-item" onclick="mostrarFavoritos()">❤️ Mis Favoritos</div>
-                    <div class="dropdown-item" onclick="mostrarMisiones()">🎯 Misiones</div>
-                    <div class="dropdown-item" onclick="mostrarLogros()">🏅 Logros</div>
-                    <div class="dropdown-item" onclick="mostrarHallOfFame()">🌟 Hall of Fame</div>
-                    <div class="dropdown-item" onclick="mostrarFinalizadas()">📜 Finalizadas</div>
-                    <div class="dropdown-item" onclick="mostrarVitrina()">🏆 Vitrina</div>
-                    <div class="dropdown-item" onclick="mostrarAyuda()">❓ Ayuda</div>
-                    <div class="dropdown-item" id="dropdownTheme" onclick="toggleTema()">🌙 Modo Noche</div>
-                    <div class="dropdown-item" id="dropdownAdmin" onclick="abrirModalAdmin()" style="display:none;">🛠️ Panel Admin</div>
-                    <div class="dropdown-item" onclick="mostrarLegal()">📄 Legal</div>
-                    <div class="dropdown-item" onclick="cerrarSesion()" style="color:#ef4444;">🚪 Salir</div>
-                </div>
-            </div>
+                        <button class="btn-login" id="btnLoginHeader" onclick="abrirModalAuth('login')" title="Iniciar sesión o registrarse">🔑</button>
+            <button class="btn-header" id="btnPerfilMenu" onclick="togglePerfilMenu()" title="Mi cuenta" style="display:none;">👤</button>
         </div>
         <div class="user-balance" id="boxBalance" style="display:none;">
             <span class="balance-amount" style="font-weight:bold; color:var(--accent-green);">💰 <span id="userBalance">0 €</span></span>
@@ -715,6 +799,33 @@
     </div>
     <div id="categoriasDropdownContent"></div>
 </div>
+
+<!-- ===== MENÚ LATERAL DERECHO (PERFIL) ===== -->
+<!-- Overlay (fondo oscuro) -->
+<div id="perfilOverlay" onclick="togglePerfilMenu()"></div>
+
+<!-- Menú desplegable lateral derecho -->
+<div id="perfilDropdown">
+    <div id="perfilDropdownHeader">
+        <h3>👤 Mi Cuenta</h3>
+        <button id="perfilDropdownClose" onclick="togglePerfilMenu()">✕</button>
+    </div>
+    <div id="perfilDropdownContent">
+        <div class="perfil-item" onclick="mostrarPerfil(); togglePerfilMenu();">👤 Mi Perfil</div>
+        <div class="perfil-item" onclick="mostrarFavoritos(); togglePerfilMenu();">❤️ Mis Favoritos</div>
+        <div class="perfil-item" onclick="mostrarMisiones(); togglePerfilMenu();">🎯 Misiones</div>
+        <div class="perfil-item" onclick="mostrarLogros(); togglePerfilMenu();">🏅 Logros</div>
+        <div class="perfil-item" onclick="mostrarHallOfFame(); togglePerfilMenu();">🌟 Hall of Fame</div>
+        <div class="perfil-item" onclick="mostrarFinalizadas(); togglePerfilMenu();">📜 Finalizadas</div>
+        <div class="perfil-item" onclick="mostrarVitrina(); togglePerfilMenu();">🏆 Vitrina</div>
+        <div class="perfil-item" onclick="mostrarAyuda(); togglePerfilMenu();">❓ Ayuda</div>
+        <div class="perfil-item" id="dropdownThemeMenu" onclick="toggleTema(); togglePerfilMenu();">🌙 Modo Noche</div>
+        <div class="perfil-item" id="dropdownAdminMenu" onclick="abrirModalAdmin(); togglePerfilMenu();" style="display:none;">🛠️ Panel Admin</div>
+        <div class="perfil-item" onclick="mostrarLegal(); togglePerfilMenu();">📄 Legal</div>
+        <div class="perfil-item" onclick="cerrarSesion(); togglePerfilMenu();" style="color:#ef4444;">🚪 Salir</div>
+    </div>
+</div>
+<!-- ===== FIN MENÚ PERFIL ===== -->
 
 <!-- ===== MENÚ PRINCIPAL SIMPLIFICADO ===== -->
 <nav class="primary-nav">
@@ -1363,8 +1474,10 @@ function updateXpUI() {
 
 function actualizarInterfazUsuario() {
     if (currentUser) {
-        document.getElementById('boxBalance').style.display = 'block'; document.getElementById('btnLoginHeader').style.display = 'none';
-        document.getElementById('userMenuWrapper').style.display = 'block';
+        document.getElementById('boxBalance').style.display = 'block';
+        document.getElementById('btnLoginHeader').style.display = 'none';
+        document.getElementById('btnPerfilMenu').style.display = 'inline-flex';  // <-- MOSTRAR BOTÓN
+        document.getElementById('userMenuWrapper').style.display = 'none';  // <-- OCULTAR MENÚ ANTIGUO
         document.getElementById('goatMenuWrapper').style.display = 'block';
         document.getElementById('dropdownAdmin').style.display = currentUser.isAdmin ? 'block' : 'none';
         document.getElementById('userBalance').innerText = Number(currentUser.saldo).toLocaleString('es-ES') + ' €';
@@ -1389,6 +1502,7 @@ function actualizarInterfazUsuario() {
     } else {
         document.getElementById('boxBalance').style.display = 'block';
         document.getElementById('btnLoginHeader').style.display = 'block';
+        document.getElementById('btnPerfilMenu').style.display = 'none';  // <-- OCULTAR BOTÓN
         document.getElementById('userMenuWrapper').style.display = 'none';
         document.getElementById('goatMenuWrapper').style.display = 'none';
         if (guestData.id) {
@@ -1398,6 +1512,7 @@ function actualizarInterfazUsuario() {
             document.getElementById('xpFill').style.width = '0%';
         }
     }
+}
 }
 
 // ===== CATEGORÍAS =====
@@ -2699,6 +2814,67 @@ document.addEventListener('keydown', function(e) {
     }
 });
 // ===== FIN MENÚ DESPLEGABLE =====
+    // ===== MENÚ LATERAL DERECHO (PERFIL) =====
+function togglePerfilMenu() {
+    const panel = document.getElementById('perfilDropdown');
+    const overlay = document.getElementById('perfilOverlay');
+    
+    if (panel.classList.contains('open')) {
+        panel.classList.remove('open');
+        overlay.classList.remove('open');
+    } else {
+        actualizarPerfilMenu();
+        panel.classList.add('open');
+        overlay.classList.add('open');
+    }
+}
+
+function actualizarPerfilMenu() {
+    // Mostrar/ocultar Panel Admin
+    const adminItem = document.getElementById('dropdownAdminMenu');
+    if (adminItem) {
+        adminItem.style.display = currentUser && currentUser.isAdmin ? 'block' : 'none';
+    }
+    
+    // Actualizar texto del modo noche
+    const themeItem = document.getElementById('dropdownThemeMenu');
+    if (themeItem) {
+        themeItem.innerText = document.body.classList.contains('dark-mode') ? '☀️ Modo Día' : '🌙 Modo Noche';
+    }
+}
+
+// Cerrar menú de perfil con tecla ESC (también cierra el de categorías)
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        // Cerrar menú de categorías
+        const catPanel = document.getElementById('categoriasDropdown');
+        const catOverlay = document.getElementById('categoriasOverlay');
+        if (catPanel && catPanel.classList.contains('open')) {
+            catPanel.classList.remove('open');
+            catOverlay.classList.remove('open');
+        }
+        
+        // Cerrar menú de perfil
+        const perfilPanel = document.getElementById('perfilDropdown');
+        const perfilOverlay = document.getElementById('perfilOverlay');
+        if (perfilPanel && perfilPanel.classList.contains('open')) {
+            perfilPanel.classList.remove('open');
+            perfilOverlay.classList.remove('open');
+        }
+    }
+});
+
+// Cerrar menú de perfil al hacer clic fuera
+document.addEventListener('click', function(e) {
+    const panel = document.getElementById('perfilDropdown');
+    const overlay = document.getElementById('perfilOverlay');
+    const btn = document.getElementById('btnPerfilMenu');
+    if (panel && overlay && btn && !panel.contains(e.target) && !btn.contains(e.target)) {
+        panel.classList.remove('open');
+        overlay.classList.remove('open');
+    }
+});
+// ===== FIN MENÚ PERFIL =====
 </script>
 </body>
 </html>
