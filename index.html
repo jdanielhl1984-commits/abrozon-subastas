@@ -2688,6 +2688,7 @@ function cerrarGoatMenu() { document.getElementById('goatDropdown').style.displa
 document.addEventListener('click', (e) => { 
     const g = document.getElementById('goatMenuWrapper'); 
     if (g && g.style.display !== 'none' && !g.contains(e.target)) cerrarGoatMenu(); 
+    
     const panel = document.getElementById('notifPanel'); 
     const btn = document.getElementById('btnNotif'); 
     if (panel && btn && panel.style.display === 'block' && !panel.contains(e.target) && !btn.contains(e.target)) { 
