@@ -657,9 +657,6 @@
     <div class="header-row">
         <div class="header-top">
             <div class="logo" onclick="mostrarCatalogo()">aBROzon<span>.subastas</span></div>
-            <button class="btn-header" id="btnCategorias" onclick="toggleCategoriasMenu()" style="display:flex;align-items:center;gap:4px;">
-                ☰ Categorías
-            </button>
             <div class="search-bar">
                 <span class="search-icon" onclick="buscarEnCatalogo(document.getElementById('searchInput').value)">🔍</span>
                 <input type="text" id="searchInput" placeholder="Buscar..." oninput="buscarEnCatalogo(this.value)">
@@ -722,6 +719,12 @@
 <!-- ===== MENÚ PRINCIPAL SIMPLIFICADO ===== -->
 <nav class="primary-nav">
     <span class="nav-tab active" id="tabTodas" onclick="mostrarCatalogo()">🏠 Catálogo</span>
+    <nav class="primary-nav">
+    <span class="nav-tab active" id="tabTodas" onclick="mostrarCatalogo()">🏠 Catálogo</span>
+    <span class="nav-tab" id="btnCategorias" onclick="toggleCategoriasMenu()" style="display:flex;align-items:center;gap:4px;cursor:pointer;">📂 Categorías</span>
+    <span class="nav-tab" id="tabMercado" onclick="mostrarMercado()">🛒 Mercado</span>
+    <span class="nav-tab" id="tabMisPujas" onclick="mostrarMisPujas()">📋 Pujas</span>
+</nav>
     <span class="nav-tab" id="tabMercado" onclick="mostrarMercado()">🛒 Mercado</span>
     <span class="nav-tab" id="tabMisPujas" onclick="mostrarMisPujas()">📋 Pujas</span>
 </nav>
