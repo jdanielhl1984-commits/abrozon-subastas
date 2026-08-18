@@ -2684,8 +2684,24 @@ function toggleUserMenu() { const d = document.getElementById('userDropdown'); d
 function cerrarUserMenu() { document.getElementById('userDropdown').style.display = 'none'; }
 function toggleGoatMenu() { const d = document.getElementById('goatDropdown'); d.style.display = d.style.display === 'block' ? 'none' : 'block'; }
 function cerrarGoatMenu() { document.getElementById('goatDropdown').style.display = 'none'; }
-document.addEventListener('click', (e) => { const w = document.getElementById('userMenuWrapper'); if (w && w.style.display !== 'none' && !w.contains(e.target)) cerrarUserMenu(); const g = document.getElementById('goatMenuWrapper'); if (g && g.style.display !== 'none' && !g.contains(e.target)) cerrarGoatMenu(); const panel = document.getElementById('notifPanel'); const btn = document.getElementById('btnNotif'); if (panel && btn && panel.style.display === 'block' && !panel.contains(e.target) && !btn.contains(e.target)) { panel.style.display = 'none'; } });
-document.addEventListener('input', function(e) { if (e.target && e.target.id === 'goatCommentInput') { const count = e.target.value.length; const counter = document.getElementById('charCount'); if (counter) counter.innerText = count; } });
+
+document.addEventListener('click', (e) => { 
+    const g = document.getElementById('goatMenuWrapper'); 
+    if (g && g.style.display !== 'none' && !g.contains(e.target)) cerrarGoatMenu(); 
+    const panel = document.getElementById('notifPanel'); 
+    const btn = document.getElementById('btnNotif'); 
+    if (panel && btn && panel.style.display === 'block' && !panel.contains(e.target) && !btn.contains(e.target)) { 
+        panel.style.display = 'none'; 
+    } 
+});
+
+document.addEventListener('input', function(e) { 
+    if (e.target && e.target.id === 'goatCommentInput') { 
+        const count = e.target.value.length; 
+        const counter = document.getElementById('charCount'); 
+        if (counter) counter.innerText = count; 
+    } 
+});
 
 // ===== MENÚ CATEGORÍAS (LATERAL IZQUIERDO) =====
 function toggleCategoriasMenu() {
