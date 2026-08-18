@@ -439,6 +439,30 @@
         .header-right { max-width: 100%; flex-wrap: wrap; justify-content: flex-end; }
         .container { max-width: 100%; overflow-x: hidden; }
         .card-image img, .main-image-detail img { max-width: 100%; height: auto; }
+        /* Menú desplegable de categorías */
+#categoriasDropdown {
+    display: none;
+}
+
+#categoriasDropdown.show {
+    display: block;
+}
+
+.categoria-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    color: var(--text-main);
+    transition: background 0.2s;
+}
+
+.categoria-item:hover {
+    background: var(--bg-subtle);
+}
     </style>
 </head>
 <body>
@@ -543,6 +567,12 @@
     <div class="header-row">
         <div class="header-top">
             <div class="logo" onclick="mostrarCatalogo()">aBROzon<span>.subastas</span></div>
+            <button class="btn-header" id="btnCategorias" onclick="toggleCategoriasMenu()" style="position:relative;">
+    ☰ Categorías
+</button>
+            <button class="btn-header" id="btnCategorias" onclick="toggleCategoriasMenu()" style="position:relative;">
+    ☰ Categorías
+</button>
             <div class="search-bar">
                 <span class="search-icon" onclick="buscarEnCatalogo(document.getElementById('searchInput').value)">🔍</span>
                 <input type="text" id="searchInput" placeholder="Buscar..." oninput="buscarEnCatalogo(this.value)">
@@ -589,6 +619,11 @@
         </div>
     </div>
 </header>
+
+<!-- Menú desplegable de categorías -->
+<div id="categoriasDropdown" style="display:none;position:absolute;top:100%;left:0;width:300px;max-height:400px;overflow-y:auto;background:var(--bg-card);border:1px solid var(--border-color);border-radius:8px;box-shadow:0 8px 25px rgba(0,0,0,0.15);z-index:999;padding:8px;">
+    <div id="categoriasDropdownContent" style="display:flex;flex-direction:column;gap:4px;"></div>
+</div>
 
 <!-- ===== MENÚ PRINCIPAL SIMPLIFICADO ===== -->
 <nav class="primary-nav">
@@ -2515,6 +2550,48 @@ function toggleGoatMenu() { const d = document.getElementById('goatDropdown'); d
 function cerrarGoatMenu() { document.getElementById('goatDropdown').style.display = 'none'; }
 document.addEventListener('click', (e) => { const w = document.getElementById('userMenuWrapper'); if (w && w.style.display !== 'none' && !w.contains(e.target)) cerrarUserMenu(); const g = document.getElementById('goatMenuWrapper'); if (g && g.style.display !== 'none' && !g.contains(e.target)) cerrarGoatMenu(); const panel = document.getElementById('notifPanel'); const btn = document.getElementById('btnNotif'); if (panel && btn && panel.style.display === 'block' && !panel.contains(e.target) && !btn.contains(e.target)) { panel.style.display = 'none'; } });
 document.addEventListener('input', function(e) { if (e.target && e.target.id === 'goatCommentInput') { const count = e.target.value.length; const counter = document.getElementById('charCount'); if (counter) counter.innerText = count; } });
+// ===== MENÚ DESPLEGABLE DE CATEGORÍAS =====
+function toggleCategoriasMenu() {
+    const panel = document.getElementById('categoriasDropdown');
+    if (panel.style.display === 'none' || panel.style.display === '') {
+        renderizarCategoriasDropdown();
+        panel.style.display = 'block';
+    } else {
+        panel.style.display = 'none';
+    }
+}
+
+function renderizarCategoriasDropdown() {
+    const content = document.getElementById('categoriasDropdownContent');
+    if (!content) return;
+    
+    const categoriasConIcono = [
+        { name: 'Todas', icon: '🗂️' },
+        { name: 'Novedades', icon: '🆕' },
+        ...categorias
+    ];
+    
+    content.innerHTML = categoriasConIcono.map(c => `
+        <div class="categoria-item" onclick="seleccionarCategoriaDesdeDropdown('${c.name}')">
+            <span>${c.icon}</span>
+            <span>${c.name}</span>
+        </div>
+    `).join('');
+}
+
+function seleccionarCategoriaDesdeDropdown(cat) {
+    filtrarCategoria(cat);
+    document.getElementById('categoriasDropdown').style.display = 'none';
+}
+
+document.addEventListener('click', (e) => {
+    const dropdown = document.getElementById('categoriasDropdown');
+    const btn = document.getElementById('btnCategorias');
+    if (dropdown && btn && !dropdown.contains(e.target) && !btn.contains(e.target)) {
+        dropdown.style.display = 'none';
+    }
+});
+// ===== FIN MENÚ DESPLEGABLE =====
 </script>
 </body>
 </html>
