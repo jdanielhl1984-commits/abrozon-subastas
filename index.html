@@ -1435,7 +1435,7 @@ function actualizarInterfazUsuario() {
         document.getElementById('btnLoginHeader').style.display = 'none';
         document.getElementById('btnPerfilMenu').style.display = 'inline-flex';
         document.getElementById('goatMenuWrapper').style.display = 'block';
-        document.getElementById('dropdownAdmin').style.display = currentUser.isAdmin ? 'block' : 'none';
+        const adminItem = document.getElementById('dropdownAdminMenu'); if (adminItem) {     adminItem.style.display = currentUser && currentUser.isAdmin ? 'block' : 'none'; }
         document.getElementById('userBalance').innerText = Number(currentUser.saldo).toLocaleString('es-ES') + ' €';
         document.getElementById('profileUserName').innerText = `👑 ${currentUser.username}`;
         updateXpUI();
