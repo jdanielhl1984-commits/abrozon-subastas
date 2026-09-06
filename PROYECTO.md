@@ -169,6 +169,7 @@
 - ✅ Tooltips en botones
 - ✅ Header compacto rediseñado
 - ✅ Fix overflow horizontal móvil
+- ✅ **Menú desplegable de categorías estilo Amazon** 🆕
 - ✅ Consola sin errores
 
 ### 🛠️ Administración
@@ -176,13 +177,20 @@
 - ✅ Corrección error al eliminar categorías
 
 ### 🤖 Automatización
-- ✅ Generación automática de subastas
-- ✅ Contador de próxima subasta
-- ✅ Reliquidación selectiva
+- ✅ Generación automática de subastas (cron job cada hora)
+- ✅ Contador de próxima subasta sincronizado
+- ✅ **Reliquidación solo para Épicas, Legendarias y Míticas** 🆕
+- ✅ **Reliquidación limitada a 1 vez por subasta** 🆕
 - ✅ Metadata flexible
-- ✅ Categoría "Velada de Boxeo"
 - ✅ Lógica de rarezas corregida
-- ✅ Tabla `objetos_automaticos` con 242 objetos
+- ✅ Tabla `objetos_automaticos` con +340 objetos absurdos 🆕
+
+### 📚 Nuevas categorías de humor 🆕
+- ✅ **Generación Alfa** (45 objetos basados en jerga actual)
+- ✅ **Boomers** (25 objetos satíricos de la generación nostálgica)
+- ✅ **Millennials** (25 objetos del sufrimiento generacional)
+- ✅ Política, Fútbol, Streamers, Famosos, Memes, Internacional, Random, Estrella
+- ✅ Categorías latinas eliminadas
 
 ### 📜 Legal y compliance
 - ✅ Textos legales completos
@@ -253,9 +261,10 @@ Autenticación, subastas, pujas, mercado básico y panel admin.
 24. ✅ Pestaña "Superadas" en Mis Pujas
 25. ✅ Paginación en Mis Pujas
 26. ✅ Fix overflow horizontal móvil
-27. ✅ Megamenú estilo Amazon
-28. ✅ Chips de categorías ocultos
-29. ✅ Reliquidación selectiva
+27. ✅ **Menú desplegable de categorías estilo Amazon** 🆕
+28. ✅ **Reliquidación limitada a 1 vez** 🆕
+29. ✅ **Nuevas categorías: Generación Alfa, Boomers, Millennials** 🆕
+30. ✅ **Catálogo de +340 objetos absurdos** 🆕
 
 ---
 
@@ -420,6 +429,7 @@ Autenticación, subastas, pujas, mercado básico y panel admin.
 | Error 406 al crear perfil | Trigger `handle_new_user` + política RLS de INSERT | ✅ Corregido |
 | Ruleta sin notificación clara | RPC devuelve JSON y guarda notificación en campanita | ✅ Corregido |
 | Racha diaria invisible | `check_streak_and_reward` devuelve JSON y notifica | ✅ Corregido |
+| Reliquidación infinita | Limitada a 1 vez y solo rarezas altas | ✅ Corregido 🆕 |
 | Sin avisos externos | Pendiente para Fase 3 (notificaciones push/email) | ⬜ Pendiente |
 
 ### Feedback de betatesters
@@ -445,6 +455,7 @@ Autenticación, subastas, pujas, mercado básico y panel admin.
 * Las RPCs de ruleta y racha deben devolver JSON para que el frontend las procese bien.
 * Las notificaciones se guardan en `localStorage` con la clave `abrozon_notificaciones`.
 * Las categorías vacías no deben mostrarse en el chip de categorías del catálogo.
+* La reliquidación solo debe aplicarse a Épicas, Legendarias y Míticas, y solo 1 vez.
 
 ---
 
@@ -617,3 +628,98 @@ WITH CHECK (auth.uid() = id);
 ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS last_daily_loot DATE;
 ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS last_login_date DATE;
 ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS streak_count INT DEFAULT 0;
+
+-- Función de cierre y reliquidación limitada a 1 vez
+CREATE OR REPLACE FUNCTION public.check_and_close_auction(p_auction_id uuid)
+RETURNS void
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+DECLARE
+    v record;
+    v_new_price integer;
+    v_descuento_aplicado integer;
+    v_duracion_horas integer;
+    v_winner_name text;
+    v_cert text;
+    v_user_id UUID;
+    v_reliquidar boolean;
+    v_ya_reliquidada boolean;
+BEGIN
+    SELECT * INTO v FROM public.auctions WHERE id = p_auction_id FOR UPDATE;
+    IF NOT FOUND THEN RETURN; END IF;
+    IF v.status = 'closed' THEN RETURN; END IF;
+    IF v.ends_at > now() THEN RETURN; END IF;
+
+    v_ya_reliquidada := (v.metadata->>'descuentos_aplicados')::integer > 0;
+
+    IF EXISTS (SELECT 1 FROM public.bids WHERE auction_id = p_auction_id) THEN
+        SELECT user_name, user_id INTO v_winner_name, v_user_id
+        FROM public.bids
+        WHERE auction_id = p_auction_id
+        ORDER BY amount DESC
+        LIMIT 1;
+
+        v_cert := 'ABRO-' || upper(substring(md5(random()::text || clock_timestamp()::text) from 1 for 8));
+
+        UPDATE public.auctions
+        SET status = 'closed',
+            winner = v_winner_name,
+            certificado_codigo = v_cert
+        WHERE id = p_auction_id;
+
+        IF v_user_id IS NOT NULL THEN
+            INSERT INTO public.user_items (user_id, auction_id, en_venta)
+            VALUES (v_user_id, p_auction_id, false);
+        END IF;
+
+    ELSE
+        v_reliquidar := v.rareza IN ('Épica', 'Legendaria', 'Mítica') AND NOT v_ya_reliquidada;
+
+        IF v_reliquidar THEN
+            v_new_price := floor(v.current_price * 0.90);
+            IF v_new_price < 1 THEN v_new_price := 1; END IF;
+            
+            v_descuento_aplicado := 1;
+
+            CASE v.rareza
+                WHEN 'Mítica' THEN v_duracion_horas := 336;
+                WHEN 'Legendaria' THEN v_duracion_horas := 168;
+                WHEN 'Épica' THEN v_duracion_horas := 72;
+                ELSE v_duracion_horas := 24;
+            END CASE;
+
+            UPDATE public.auctions 
+            SET status = 'closed', 
+                winner = NULL
+            WHERE id = p_auction_id;
+
+            INSERT INTO public.auctions (
+                title, description, current_price, starting_price, ends_at,
+                category, image_url, status, stock_maximo, rareza, metadata
+            ) VALUES (
+                '🔥 RELIQUIDACIÓN: ' || v.title,
+                v.description,
+                v_new_price,
+                v_new_price,
+                now() + (v_duracion_horas || ' hours')::interval,
+                v.category,
+                v.image_url,
+                'active',
+                1,
+                v.rareza,
+                jsonb_build_object(
+                    'descuentos_aplicados', v_descuento_aplicado,
+                    'precio_original', COALESCE(v.metadata->>'precio_original', v.current_price::text)
+                )
+            );
+
+        ELSE
+            UPDATE public.auctions 
+            SET status = 'closed', 
+                winner = NULL
+            WHERE id = p_auction_id;
+        END IF;
+    END IF;
+END;
+$$;
