@@ -3,34 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-C30L0HE0L7"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date()); gtag('config', 'G-C30L0HE0L7');
-    </script>
-    <title>aBROzon.subastas | Subastas de Arte & Coleccionismo</title>
-    <meta name="description" content="Subastas paródicas de objetos absurdos y virales.">
-    <meta property="og:title" content="aBROzon.subastas — Subastas Paródicas">
-    <meta property="og:description" content="Puja por objetos absurdos y virales (100% de broma)">
-    <meta property="og:image" content="[URL DE UNA IMAGEN PARA COMPARTIR]">
+    <title>aBROzon.subastas | Subastas absurdas con dinero de mentira</title>
+    <meta name="description" content="Puja por los objetos más absurdos de internet con moneda ficticia. Logros, misiones, ruleta y mercado entre usuarios. 100% parodia, 0% dinero real.">
+    <link rel="canonical" href="https://abrozon.com/">
+    <meta name="robots" content="index, follow">
+
+    <meta property="og:site_name" content="aBROzon.subastas">
+    <meta property="og:title" content="aBROzon.subastas - Puja por lo más absurdo de internet">
+    <meta property="og:description" content="Subastas paródicas con moneda ficticia. 340+ objetos, 6 rarezas y una ruleta diaria. Todo de broma.">
+    <meta property="og:image" content="https://abrozon.com/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="aBROzon.subastas, subastas paródicas con moneda ficticia">
     <meta property="og:url" content="https://abrozon.com/">
     <meta property="og:type" content="website">
+    <meta property="og:locale" content="es_ES">
+
     <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="aBROzon.subastas - Puja por lo más absurdo de internet">
+    <meta name="twitter:description" content="Subastas paródicas con moneda ficticia. Todo de broma.">
+    <meta name="twitter:image" content="https://abrozon.com/og-image.png">
+
     <link rel="manifest" href="manifest.json">
     <link rel="icon" href="icon-192.png">
     <link rel="apple-touch-icon" href="icon-192.png">
     <meta name="theme-color" content="#f97316">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "aBROzon.subastas",
+      "url": "https://abrozon.com/",
+      "description": "Plataforma de subastas paródicas con moneda ficticia sin valor real.",
+      "inLanguage": "es-ES"
+    }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Archivo+Black&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        :root { --bg-body: #f8fafc; --bg-card: #ffffff; --bg-header: #ffffff; --bg-subtle: #f1f5f9; --text-main: #0f172a; --text-muted: #64748b; --border-color: #e2e8f0; --accent-blue: #0284c7; --accent-green: #16a34a; --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05); }
-        body.dark-mode { --bg-body: #0f172a; --bg-card: #1e293b; --bg-header: #0f172a; --bg-subtle: #1e293b; --text-main: #f8fafc; --text-muted: #94a3b8; --border-color: #334155; --accent-blue: #38bdf8; --accent-green: #4ade80; --shadow-card: none; }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; transition: background-color 0.2s, color 0.2s, border-color 0.2s; }
+        /* ─── Paleta aBROzon · el acento es la rareza, no un color fijo ─── */
+        :root {
+            --bg-body: #12101a; --bg-card: #1c1926; --bg-header: #16131f; --bg-subtle: #252131;
+            --text-main: #f2f0f7; --text-muted: #9d95b3; --border-color: #332e42;
+            --accent-blue: #4a9eff; --accent-green: #3ecf7e;
+            --shadow-card: 0 4px 18px -8px rgba(0,0,0,.65);
+            --coin: #f5c542;
+            --r-comun: #8b93a8; --r-poco: #3ecf7e; --r-rara: #4a9eff;
+            --r-epica: #a45cff; --r-legend: #ff8b1f; --r-mitica: #ff3d5a;
+            --font-body: 'Archivo', system-ui, 'Segoe UI', sans-serif;
+            --font-display: 'Archivo Black', 'Archivo', system-ui, sans-serif;
+            color-scheme: dark;
+        }
+        body.light-mode {
+            --bg-body: #f4f2f7; --bg-card: #ffffff; --bg-header: #ffffff; --bg-subtle: #ebe8f0;
+            --text-main: #1a1626; --text-muted: #665f7a; --border-color: #ddd8e6;
+            --accent-blue: #2b6fd6; --accent-green: #14884a;
+            --shadow-card: 0 4px 6px -1px rgba(20,10,40,.06), 0 2px 4px -2px rgba(20,10,40,.06);
+            --r-comun: #6b7285; --r-poco: #14884a; --r-rara: #2b6fd6;
+            --r-epica: #7c3aed; --r-legend: #d96a0a; --r-mitica: #d61f3c;
+            color-scheme: light;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: var(--font-body); transition: background-color 0.2s, color 0.2s, border-color 0.2s; }
+        h1, h2, h3, .logo, .grid-title { font-family: var(--font-display); letter-spacing: -0.025em; }
+        @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
         body { background-color: var(--bg-body); color: var(--text-main); min-height: 100vh; }
         .beta-banner { background: linear-gradient(90deg, #f97316, #ef4444); color: white; text-align: center; padding: 8px 12px; font-size: 0.9rem; font-weight: bold; border-bottom: 2px solid #eab308; }
         .beta-banner a { color: #fff; text-decoration: underline; font-weight: bold; }
         .disclaimer { background-color: var(--bg-subtle); color: var(--text-muted); text-align: center; padding: 8px; font-size: 0.8rem; border-bottom: 1px solid var(--border-color); }
-        header { background-color: var(--bg-header); padding: 6px 4%; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 200; }
+        header { background-color: var(--bg-header); padding: 8px 4%; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 200; }
+        @supports (backdrop-filter: blur(1px)) {
+            header { background-color: color-mix(in srgb, var(--bg-header) 80%, transparent); backdrop-filter: blur(14px) saturate(160%); }
+        }
         .header-row {
             display: flex;
             flex-wrap: nowrap;
@@ -45,15 +91,15 @@
             min-width: 0;
         }
         .logo {
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             font-weight: 900;
-            color: var(--accent-blue);
-            letter-spacing: -1px;
+            color: var(--text-main);
+            letter-spacing: -.04em;
             cursor: pointer;
             flex-shrink: 0;
             line-height: 34px;
         }
-        .logo span { color: #f97316; }
+        .logo span { color: var(--r-legend); }
         .search-bar {
             flex: 1 1 auto;
             min-width: 50px;
@@ -71,34 +117,67 @@
         .search-bar .search-icon { color: var(--text-muted); font-size: 0.8rem; cursor: pointer; flex-shrink: 0; margin-right: 4px; }
         .search-bar input { flex: 1; background: transparent; border: none; padding: 0; height: 100%; color: var(--text-main); outline: none; font-size: 0.8rem; min-width: 30px; }
 
-        .header-right {
-            flex: 0 0 auto;
-            display: flex;
-            align-items: center;
-            gap: 3px;
-            flex-shrink: 0;
-        }
-        .btn-header, .btn-ruleta, .btn-goat, .btn-login {
-            height: 34px;
-            padding: 0 8px;
-            border-radius: 999px;
-            font-size: 0.7rem;
-            font-weight: bold;
-            border: 1px solid var(--border-color);
-            background: var(--bg-subtle);
-            color: var(--text-main);
-            cursor: pointer;
-            transition: opacity 0.2s;
-            display: inline-flex;
-            align-items: center;
-            gap: 3px;
-            white-space: nowrap;
-        }
-        .btn-header:disabled, .btn-ruleta:disabled, .btn-goat:disabled, .btn-login:disabled { opacity: 0.5; cursor: not-allowed; }
-        .btn-ruleta { background: linear-gradient(135deg, #f97316, #eab308); color: white; border: none; }
-        .btn-goat { background: linear-gradient(135deg, #eab308, #ca8a04); color: #0f172a; border: none; opacity: 0.5; }
-        .btn-goat.active { opacity: 1; box-shadow: 0 0 10px #eab308; }
-        .btn-login { background: var(--accent-blue); color: white; border: none; }
+        .header-right { flex: 0 0 auto; display: flex; align-items: center; gap: 7px; flex-shrink: 0; }
+
+        /* Un solo estilo de botón de icono: todos iguales, el ojo los agrupa */
+        .hbtn { height: 36px; min-width: 36px; padding: 0 9px; border-radius: 10px; font-size: .85rem;
+                border: 1px solid var(--border-color); background: var(--bg-subtle); color: var(--text-main);
+                cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 4px;
+                position: relative; transition: background .15s, border-color .15s; }
+        .hbtn:hover { background: var(--bg-card); border-color: var(--accent-blue); }
+        .hbtn:disabled { opacity: .5; cursor: not-allowed; }
+
+        .chev { width: 0; height: 0; border-left: 4px solid transparent; border-right: 4px solid transparent;
+                border-top: 5px solid var(--text-muted); flex-shrink: 0; transition: transform .2s; }
+        [aria-expanded="true"] .chev, .rw-row.abierto .chev { transform: rotate(180deg); }
+
+        .notif-badge, .rw-badge { position: absolute; top: -5px; right: -5px; background: #ef4444; color: #fff;
+                border-radius: 999px; padding: 1px 5px; font-size: .55rem; font-weight: bold; display: none;
+                border: 2px solid var(--bg-header); line-height: 1.3; }
+        .rw-badge.on { display: block; background: var(--r-legend); color: #1a1206; }
+
+        /* ── Panel de recompensas ── */
+        .rw-wrap { position: relative; }
+        .rw-panel { display: none; position: absolute; top: calc(100% + 8px); right: 0; z-index: 300;
+                width: 258px; background: var(--bg-card); border: 1px solid var(--border-color);
+                border-radius: 14px; padding: 8px; box-shadow: 0 16px 44px -12px rgba(0,0,0,.75); }
+        .rw-panel.open { display: block; }
+        .rw-title { font-size: .62rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: .1em; padding: 6px 8px 8px; }
+        .rw-row { display: flex; align-items: center; gap: 11px; width: 100%; padding: 9px 8px; border: none;
+                  background: transparent; color: var(--text-main); border-radius: 9px; cursor: pointer; text-align: left; font: inherit; }
+        .rw-row:hover:not(:disabled) { background: var(--bg-subtle); }
+        .rw-row:disabled { opacity: .45; cursor: not-allowed; }
+        .rw-ico { font-size: 1.25rem; flex-shrink: 0; }
+        .rw-txt { display: flex; flex-direction: column; gap: 1px; flex: 1; min-width: 0; }
+        .rw-txt b { font-size: .78rem; font-weight: 700; }
+        .rw-txt small { font-size: .65rem; color: var(--text-muted); font-weight: 400; }
+        .rw-row[data-disponible="1"] .rw-txt small { color: var(--r-poco); font-weight: 600; }
+        .rw-row[data-disponible="1"]::after { content: ''; width: 8px; height: 8px; border-radius: 50%;
+                background: var(--r-poco); box-shadow: 0 0 8px var(--r-poco); flex-shrink: 0; margin-left: auto; }
+        .rw-sep { height: 1px; background: var(--border-color); margin: 6px 8px; }
+        .rw-sub { padding: 8px 8px 8px 42px; font-size: .73rem; border-radius: 8px; cursor: pointer; color: var(--text-muted); }
+        .rw-sub:hover { background: var(--bg-subtle); color: var(--text-main); }
+        #goatDropdown { display: none; }
+        #goatDropdown.open { display: block; }
+        #btnGoat.active .rw-ico { filter: drop-shadow(0 0 7px var(--coin)); }
+        #btnGoat.active .rw-txt b { color: var(--coin); }
+
+        /* ── Ficha de perfil ── */
+        .perfil-chip { height: 36px; display: inline-flex; align-items: center; gap: 8px; padding: 0 9px 0 5px;
+                       background: var(--bg-subtle); border: 1px solid var(--border-color); border-radius: 10px;
+                       cursor: pointer; color: var(--text-main); font: inherit; transition: border-color .15s; }
+        .perfil-chip:hover { border-color: var(--accent-blue); }
+        .pf-av { width: 26px; height: 26px; border-radius: 8px; background: var(--bg-card);
+                 display: grid; place-items: center; font-size: .85rem; flex-shrink: 0; }
+        .pf-meta { display: flex; flex-direction: column; align-items: flex-start; gap: 3px; }
+        .pf-meta b { font-size: .68rem; font-weight: 700; line-height: 1; white-space: nowrap; }
+        .pf-title { font-size: .62rem; color: var(--text-muted); max-width: 74px; overflow: hidden;
+                    text-overflow: ellipsis; white-space: nowrap; }
+        .xp-mini-bar { width: 46px; height: 4px; background: var(--bg-body); border-radius: 2px; overflow: hidden; display: block; }
+        .xp-mini-fill { height: 100%; display: block; background: linear-gradient(90deg, var(--r-legend), var(--coin)); border-radius: 2px; transition: width .3s; }
+
+        .btn-login { height: 36px; padding: 0 13px; border-radius: 10px; font-size: .76rem; font-weight: 700;
+                     background: var(--accent-blue); color: #08111f; border: none; cursor: pointer; white-space: nowrap; }
 
         .notif-badge { position: absolute; top: -4px; right: -4px; background: #ef4444; color: white; border-radius: 50%; padding: 1px 5px; font-size: 0.5rem; display: none; min-width: 14px; text-align: center; }
 
@@ -107,18 +186,24 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            background: var(--bg-subtle);
-            border-radius: 999px;
-            border: 1px solid var(--border-color);
-            padding: 2px 14px 2px 16px;
+            background: linear-gradient(160deg, #2e2718, #221d12);
+            border-radius: 10px;
+            border: 1px solid #5c4a1e;
+            padding: 2px 13px;
             height: 34px;
+        }
+        .user-stats::before {
+            content: ''; width: 15px; height: 15px; border-radius: 50%; flex-shrink: 0;
+            background: radial-gradient(circle at 32% 28%, #ffe89b, var(--coin) 55%, #a8791a);
+            box-shadow: 0 0 9px rgba(245,197,66,.45);
         }
         .user-saldo {
             font-size: 1.1rem;
             font-weight: 900;
-            color: var(--accent-green);
-            letter-spacing: 0.5px;
+            color: var(--coin);
+            letter-spacing: -.02em;
             white-space: nowrap;
+            font-variant-numeric: tabular-nums;
         }
         .user-saldo small {
             font-size: 0.7rem;
@@ -432,41 +517,125 @@
         .chip.active { background: var(--accent-blue); color: white; border-color: var(--accent-blue); }
 
         .container { max-width: 1200px; margin: 12px auto; padding: 0 12px; }
-        .hero-banner { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 14px; margin-bottom: 16px; box-shadow: var(--shadow-card); }
-        .hero-text h2 { font-size: 1.1rem; color: var(--accent-blue); margin-bottom: 4px; }
-        .hero-text p { color: var(--text-muted); font-size: 0.8rem; }
-        .badge-trend { background: #f97316; color: white; font-size: 0.55rem; font-weight: bold; padding: 2px 6px; border-radius: 6px; text-transform: uppercase; }
-        .grid-title { font-size: 1rem; margin-bottom: 12px; color: var(--text-main); display: flex; align-items: center; gap: 8px; }
-        .sort-bar { display: flex; gap: 6px; margin-bottom: 12px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        /* ═══════ HERO ═══════ */
+        .hero-banner { display: grid; grid-template-columns: 1fr auto; gap: 26px; align-items: end; margin-bottom: 26px; padding: 32px 0 22px; }
+        .hero-text h2 { font-family: var(--font-display); font-size: clamp(1.7rem, 5.6vw, 3rem); line-height: .95; letter-spacing: -.035em; color: var(--text-main); max-width: 12ch; margin: 12px 0 0; }
+        .hero-text p { color: var(--text-muted); font-size: .9rem; line-height: 1.55; max-width: 46ch; margin-top: 12px; }
+        .badge-trend { display: inline-block; background: rgba(255,139,31,.16); color: var(--r-legend); border: 1px solid rgba(255,139,31,.45); font-size: .55rem; font-weight: bold; padding: 4px 10px; border-radius: 5px; text-transform: uppercase; letter-spacing: .1em; }
+
+        .drop-box { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 16px 20px; text-align: right; min-width: 196px; box-shadow: var(--shadow-card); }
+        .drop-k { font-size: .68rem; color: var(--text-muted); letter-spacing: .06em; text-transform: uppercase; margin-bottom: 6px; }
+        .drop-t { font-family: var(--font-display); font-size: 2.5rem; line-height: 1; font-variant-numeric: tabular-nums; letter-spacing: -.03em;
+                  background: linear-gradient(180deg, var(--text-main), var(--r-epica)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        .drop-s { font-size: .68rem; color: var(--text-muted); margin-top: 8px; }
+        @media (max-width: 640px) {
+            .hero-banner { grid-template-columns: 1fr; align-items: start; gap: 18px; padding: 22px 0 16px; }
+            .drop-box { text-align: left; width: 100%; }
+        }
+        .grid-title { font-size: 1.05rem; margin-bottom: 12px; color: var(--text-main); display: flex; align-items: center; gap: 8px; }
+        .sort-bar { display: flex; gap: 6px; margin-bottom: 12px; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+        .sort-bar::-webkit-scrollbar { display: none; }
+        .category-chips::-webkit-scrollbar { display: none; }
+        .category-chips { scrollbar-width: none; }
         .sort-chip { flex-shrink: 0; padding: 4px 10px; border-radius: 999px; background: var(--bg-subtle); border: 1px solid var(--border-color); color: var(--text-muted); font-size: 0.65rem; font-weight: 600; cursor: pointer; white-space: nowrap; }
         .sort-chip:hover { color: var(--text-main); }
         .sort-chip.active { background: var(--accent-green); color: white; border-color: var(--accent-green); }
+        /* ═══════ TARJETAS · sistema de rareza ═══════ */
+        /* ═══════ ESQUELETOS DE CARGA ═══════ */
+        .sk-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 14px; overflow: hidden; }
+        .sk-art { height: 152px; border-bottom: 1px solid var(--border-color); }
+        .sk-body { padding: 12px 13px 13px; }
+        .sk-line { height: 9px; border-radius: 5px; margin-bottom: 9px; background: var(--bg-subtle); }
+        .sk-shine { position: relative; overflow: hidden; }
+        .sk-shine::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, transparent, rgba(255,255,255,.07), transparent); transform: translateX(-100%); animation: skSweep 1.4s infinite; }
+        @keyframes skSweep { to { transform: translateX(100%); } }
+
+        /* ═══════ CARRUSEL "TERMINA PRONTO" ═══════ */
+        .rail-sec { margin-bottom: 26px; }
+        .rail-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 12px; }
+        .rail-head h3 { font-family: var(--font-display); font-size: 1.05rem; letter-spacing: -.02em; }
+        .rail-head span { font-size: .72rem; color: var(--text-muted); }
+        .rail { display: flex; gap: 14px; overflow-x: auto; padding: 4px 12px 16px; margin: 0 -12px; scroll-snap-type: x mandatory; scroll-padding-left: 12px; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+        .rail::-webkit-scrollbar { display: none; }
+        .rail > * { scroll-snap-align: start; flex: 0 0 230px; }
+
+        /* ═══════ REVELADO AL ENTRAR EN PANTALLA ═══════ */
+        @supports (animation-timeline: view()) {
+            @media (prefers-reduced-motion: no-preference) {
+                .auction-grid > .auction-card { animation: revelarTarjeta linear both; animation-timeline: view(); animation-range: entry 0% entry 42%; }
+            }
+        }
+        @keyframes revelarTarjeta { from { opacity: 0; transform: translateY(26px) scale(.97); } to { opacity: 1; transform: none; } }
+
+        /* ═══════ TRANSICIÓN TARJETA → FICHA ═══════ */
+        @media (prefers-reduced-motion: no-preference) {
+            ::view-transition-old(objetoActivo), ::view-transition-new(objetoActivo) {
+                animation-duration: .42s; animation-timing-function: cubic-bezier(.2,.9,.3,1);
+            }
+        }
+
         .auction-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; }
-        .auction-card { background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border-color); overflow: hidden; cursor: pointer; box-shadow: var(--shadow-card); position: relative; transition: transform 0.15s, border-color 0.15s; }
-        .auction-card:hover { transform: translateY(-3px); border-color: var(--accent-blue); }
-        .auction-card.rareza-comun, .product-card-detail.rareza-comun { border: 2px solid #94a3b8; }
-        .auction-card.rareza-poco-comun, .product-card-detail.rareza-poco-comun { border: 2px solid #22c55e; }
-        .auction-card.rareza-rara, .product-card-detail.rareza-rara { border: 2px solid #3b82f6; }
-        .auction-card.rareza-epica, .product-card-detail.rareza-epica { border: 2px solid #8b5cf6; }
-        .auction-card.rareza-legendaria, .product-card-detail.rareza-legendaria { border: 2px solid #f97316; box-shadow: 0 0 8px rgba(249,115,22,0.3); }
-        .auction-card.rareza-mitica, .product-card-detail.rareza-mitica { border: 2px solid #ef4444; box-shadow: 0 0 12px rgba(239,68,68,0.4); }
-        .chip-rareza { display: inline-block; font-size: 0.5rem; font-weight: bold; padding: 2px 6px; border-radius: 6px; text-transform: uppercase; color: white; margin-bottom: 4px; }
-        .chip-rareza-comun { background: #94a3b8; }
-        .chip-rareza-poco-comun { background: #22c55e; }
-        .chip-rareza-rara { background: #3b82f6; }
-        .chip-rareza-epica { background: #8b5cf6; }
-        .chip-rareza-legendaria { background: #f97316; }
-        .chip-rareza-mitica { background: #ef4444; }
-        .card-image { width: 100%; height: 130px; background-color: var(--bg-subtle); display: flex; align-items: center; justify-content: center; font-size: 3rem; position: relative; border-bottom: 1px solid var(--border-color); overflow: hidden; }
-        .badge-closed { position: absolute; top: 6px; left: 6px; background: #ef4444; color: white; font-size: 0.5rem; font-weight: bold; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; }
-        .card-timer { position: absolute; top: 6px; right: 6px; background: rgba(239,68,68,0.15); color: #ef4444; font-size: 0.55rem; font-weight: bold; padding: 2px 6px; border-radius: 4px; font-family: monospace; }
-        .fav-btn { position: absolute; top: 6px; left: 6px; background: rgba(255,255,255,0.9); border: none; border-radius: 50%; width: 22px; height: 22px; cursor: pointer; font-size: 0.7rem; display: flex; align-items: center; justify-content: center; z-index: 10; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
-        .card-content { padding: 8px 10px; }
-        .card-category { font-size: 0.55rem; color: var(--accent-blue); text-transform: uppercase; font-weight: bold; margin-bottom: 2px; }
-        .card-title { font-size: 0.75rem; font-weight: bold; color: var(--text-main); margin-bottom: 6px; line-height: 1.3; height: 30px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
-        .card-footer { display: flex; justify-content: space-between; align-items: flex-end; border-top: 1px dashed var(--border-color); padding-top: 5px; }
+        .auction-card { background: var(--bg-card); border-radius: 14px; border: 1px solid var(--border-color); overflow: hidden; cursor: pointer; box-shadow: var(--shadow-card); position: relative; transition: transform .18s cubic-bezier(.2,.9,.3,1), box-shadow .18s; }
+        .auction-card:hover { transform: translateY(-4px); }
+        .auction-card:focus-visible { outline: 2px solid var(--accent-blue); outline-offset: 3px; }
+
+        /* Cada rareza cambia borde y brillo: la escala de valor se lee de un vistazo */
+        .auction-card.rareza-comun,       .product-card-detail.rareza-comun       { border: 1px solid var(--r-comun); }
+        .auction-card.rareza-poco-comun,  .product-card-detail.rareza-poco-comun  { border: 1px solid var(--r-poco); }
+        .auction-card.rareza-rara,        .product-card-detail.rareza-rara        { border: 1px solid var(--r-rara); box-shadow: 0 0 0 1px rgba(74,158,255,.15); }
+        .auction-card.rareza-epica,       .product-card-detail.rareza-epica       { border: 1px solid var(--r-epica); box-shadow: 0 6px 26px -12px rgba(164,92,255,.75); }
+        .auction-card.rareza-legendaria,  .product-card-detail.rareza-legendaria  { border: 1px solid var(--r-legend); box-shadow: 0 8px 32px -12px rgba(255,139,31,.8); }
+        .auction-card.rareza-mitica,      .product-card-detail.rareza-mitica      { border: 2px solid var(--r-mitica); box-shadow: 0 10px 40px -12px rgba(255,61,90,.9); }
+
+        /* ── Fondo del objeto generado por rareza ── */
+        .card-image { width: 100%; height: 152px; background-color: var(--bg-subtle); display: flex; align-items: center; justify-content: center; font-size: 3rem; position: relative; border-bottom: 1px solid var(--border-color); overflow: hidden; }
+        .card-image > span { position: relative; z-index: 2; line-height: 1; filter: drop-shadow(0 6px 14px rgba(0,0,0,.6)); transition: transform .3s cubic-bezier(.2,.9,.3,1); }
+        .auction-card:hover .card-image > span { transform: scale(1.09) rotate(-3deg); }
+
+        .rareza-comun      .card-image { background: radial-gradient(circle at 50% 115%, #3b3a47, #1f1d2a 70%); }
+        .rareza-poco-comun .card-image { background: radial-gradient(circle at 50% 115%, #1e4a35, #1a2b26 70%); }
+        .rareza-rara       .card-image { background: radial-gradient(circle at 50% 115%, #1d3c66, #181f33 70%); }
+        .rareza-epica      .card-image { background: radial-gradient(circle at 50% 115%, #432466, #221933 70%); }
+        .rareza-legendaria .card-image { background: radial-gradient(circle at 50% 115%, #6b3a10, #2b1d13 70%); }
+        .rareza-mitica     .card-image { background: radial-gradient(circle at 50% 115%, #6b1526, #2c1119 70%); }
+
+        /* Rayos girando: solo legendaria y mitica */
+        .rareza-legendaria .card-image::after, .rareza-mitica .card-image::after {
+            content: ''; position: absolute; inset: -40%; z-index: 1; opacity: .35;
+            background: repeating-conic-gradient(from 0deg at 50% 60%, rgba(255,255,255,.16) 0deg 7deg, transparent 7deg 20deg);
+            animation: rayosRareza 26s linear infinite;
+        }
+        @keyframes rayosRareza { to { transform: rotate(360deg); } }
+
+        /* Reflejo metalico al pasar por encima: epica y superiores */
+        .rareza-epica .card-image::before, .rareza-legendaria .card-image::before, .rareza-mitica .card-image::before {
+            content: ''; position: absolute; inset: 0; z-index: 3; pointer-events: none;
+            background: linear-gradient(105deg, transparent 38%, rgba(255,255,255,.22) 48%, transparent 58%);
+            transform: translateX(-120%);
+        }
+        .auction-card:hover .card-image::before { transition: transform .75s ease; transform: translateX(120%); }
+
+        /* ── Chips de rareza ── */
+        .chip-rareza { display: inline-block; font-size: 0.55rem; font-weight: bold; padding: 3px 8px; border-radius: 5px; text-transform: uppercase; letter-spacing: .07em; margin-bottom: 4px; z-index: 4; backdrop-filter: blur(4px); }
+        .chip-rareza-comun      { background: rgba(139,147,168,.2); color: var(--r-comun);  border: 1px solid rgba(139,147,168,.4); }
+        .chip-rareza-poco-comun { background: rgba(62,207,126,.16); color: var(--r-poco);   border: 1px solid rgba(62,207,126,.45); }
+        .chip-rareza-rara       { background: rgba(74,158,255,.16); color: var(--r-rara);   border: 1px solid rgba(74,158,255,.45); }
+        .chip-rareza-epica      { background: rgba(164,92,255,.18); color: #c99bff;         border: 1px solid rgba(164,92,255,.5); }
+        .chip-rareza-legendaria { background: rgba(255,139,31,.18); color: #ffb469;         border: 1px solid rgba(255,139,31,.55); }
+        .chip-rareza-mitica     { background: rgba(255,61,90,.2);   color: #ff8496;         border: 1px solid rgba(255,61,90,.6); }
+
+        /* ── Insignias sobre la imagen ── */
+        .badge-closed { position: absolute; top: 8px; left: 8px; z-index: 4; background: rgba(10,8,16,.75); backdrop-filter: blur(4px); color: #ff8496; font-size: 0.55rem; font-weight: bold; padding: 3px 8px; border-radius: 5px; text-transform: uppercase; letter-spacing: .07em; border: 1px solid rgba(255,61,90,.5); }
+        .card-timer { position: absolute; top: 8px; right: 8px; z-index: 4; background: rgba(10,8,16,.72); backdrop-filter: blur(4px); color: var(--text-muted); font-size: 0.6rem; font-weight: bold; padding: 3px 8px; border-radius: 5px; font-variant-numeric: tabular-nums; border: 1px solid rgba(255,255,255,.08); }
+        .card-timer.urgente { color: #ff6b7f; border-color: rgba(255,61,90,.5); background: rgba(70,10,20,.78); animation: latidoUrgente 1s steps(2,end) infinite; }
+        @keyframes latidoUrgente { 50% { opacity: .45; } }
+        .fav-btn { position: absolute; bottom: 8px; right: 8px; background: rgba(10,8,16,.72); backdrop-filter: blur(4px); border: 1px solid rgba(255,255,255,.12) !important; border: none; border-radius: 50%; width: 22px; height: 22px; cursor: pointer; font-size: 0.7rem; display: flex; align-items: center; justify-content: center; z-index: 10; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
+        .card-content { padding: 12px 13px 13px; }
+        .card-category { font-size: 0.55rem; color: var(--text-muted); letter-spacing: .07em; text-transform: uppercase; font-weight: bold; margin-bottom: 2px; }
+        .card-title { font-size: 0.78rem; font-weight: bold; color: var(--text-main); margin-bottom: 11px; line-height: 1.32; height: 32px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+        .card-footer { display: flex; justify-content: space-between; align-items: flex-end; border-top: 1px solid var(--border-color); padding-top: 10px; }
         .bid-label-sm { font-size: 0.55rem; color: var(--text-muted); }
-        .bid-amount-sm { font-size: 0.85rem; font-weight: 900; color: var(--accent-green); }
+        .bid-amount-sm { font-size: 0.95rem; font-weight: 900; color: var(--coin); font-variant-numeric: tabular-nums; letter-spacing: -.02em; }
         .view { display: none; } .view.active { display: block; }
         .btn-back { background: var(--bg-subtle); color: var(--text-main); border: 1px solid var(--border-color); padding: 6px 12px; border-radius: 8px; cursor: pointer; font-weight: bold; margin-bottom: 16px; font-size: 0.8rem; }
         .detail-layout { display: grid; grid-template-columns: 1fr 360px; gap: 20px; align-items: start; }
@@ -505,6 +674,32 @@
         @keyframes pulse-legendaria { 0% { box-shadow: 0 0 30px rgba(249,115,22,0.4); } 50% { box-shadow: 0 0 60px rgba(249,115,22,0.8); } 100% { box-shadow: 0 0 30px rgba(249,115,22,0.4); } }
         @keyframes pulse-mitica { 0% { box-shadow: 0 0 40px rgba(239,68,68,0.5); transform: scale(1); } 50% { box-shadow: 0 0 80px rgba(239,68,68,0.9); transform: scale(1.02); } 100% { box-shadow: 0 0 40px rgba(239,68,68,0.5); transform: scale(1); } }
         .auth-modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15,23,42,0.8); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; z-index: 999; }
+        /* ═══════ RULETA ═══════ */
+        .rl-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 20px; padding: 24px 22px; width: 100%; max-width: 350px; text-align: center; box-shadow: 0 20px 60px -15px rgba(0,0,0,.8); }
+        .rl-card h2 { font-family: var(--font-display); font-size: 1.3rem; margin-bottom: 4px; }
+        .rl-card > p { font-size: .76rem; color: var(--text-muted); margin-bottom: 18px; }
+        .rl-stage { position: relative; width: 250px; height: 250px; margin: 0 auto 18px; }
+        .rl-wheel { width: 100%; height: 100%; transform: rotate(0deg); }
+        .rl-wheel.girando { transition: transform 4.6s cubic-bezier(.15,.9,.2,1); }
+        .rl-pin { position: absolute; top: -6px; left: 50%; transform: translateX(-50%); z-index: 3;
+                  width: 0; height: 0; border-left: 12px solid transparent; border-right: 12px solid transparent;
+                  border-top: 22px solid var(--coin); filter: drop-shadow(0 3px 6px rgba(0,0,0,.6)); }
+        .rl-hub { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); z-index: 2;
+                  width: 48px; height: 48px; border-radius: 50%; background: var(--bg-card);
+                  border: 3px solid var(--coin); display: grid; place-items: center; font-size: 1.3rem;
+                  box-shadow: 0 0 18px rgba(245,197,66,.4); }
+        .rl-premio { font-family: var(--font-display); font-size: 2rem; color: var(--coin);
+                     min-height: 2.4rem; letter-spacing: -.03em; margin-bottom: 14px; }
+        .rl-premio.aparece { animation: rlPop .5s cubic-bezier(.2,1.4,.4,1); }
+        @keyframes rlPop { 0% { transform: scale(.4); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+        .rl-btn { width: 100%; padding: 13px; border-radius: 12px; border: none; cursor: pointer;
+                  font-family: var(--font-display); font-size: .95rem; color: #150d04;
+                  background: linear-gradient(165deg, var(--r-legend), #d96a0a); }
+        .rl-btn:disabled { opacity: .5; cursor: not-allowed; }
+        .rl-cerrar { width: 100%; padding: 11px; margin-top: 8px; border-radius: 12px; cursor: pointer;
+                     background: var(--bg-subtle); color: var(--text-main); border: 1px solid var(--border-color); font-weight: 600; font-size: .82rem; }
+        .rl-nota { font-size: .62rem; color: var(--text-muted); margin-top: 12px; line-height: 1.5; }
+
         .auth-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 24px; width: 100%; max-width: 360px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); position: relative; }
         .auth-card h2 { font-size: 1.2rem; color: var(--text-main); margin-bottom: 6px; text-align: center; }
         .auth-card p { font-size: 0.75rem; color: var(--text-muted); text-align: center; margin-bottom: 14px; }
@@ -614,13 +809,12 @@
                 gap: 2px;
                 padding: 2px 0;
             }
-            .btn-header, .btn-ruleta, .btn-goat, .btn-login {
-                height: 28px;
-                padding: 0 6px;
-                font-size: 0.55rem;
-                border-radius: 999px;
-            }
-            .btn-ruleta, .btn-goat { padding: 0 6px; }
+            .hbtn { height: 32px; min-width: 32px; padding: 0 7px; font-size: .8rem; border-radius: 9px; }
+            .btn-login { height: 32px; padding: 0 10px; font-size: .68rem; border-radius: 9px; }
+            .perfil-chip { height: 32px; padding: 0 7px 0 4px; gap: 6px; }
+            .pf-av { width: 24px; height: 24px; border-radius: 7px; }
+            .pf-title { display: none; }
+            .rw-panel { width: min(280px, calc(100vw - 24px)); }
 
             .user-stats {
                 flex: 0 0 100%;
@@ -705,6 +899,22 @@
     </div>
 </div>
 
+<div id="ruletaModal" class="auth-modal-overlay" style="display:none;">
+    <div class="rl-card">
+        <h2>Botín diario</h2>
+        <p>Una tirada gratis cada día. El premio lo decide el servidor.</p>
+        <div class="rl-stage">
+            <div class="rl-pin"></div>
+            <svg class="rl-wheel" id="rlWheel" viewBox="0 0 200 200" aria-hidden="true"></svg>
+            <div class="rl-hub">🎲</div>
+        </div>
+        <div class="rl-premio" id="rlPremio"></div>
+        <button class="rl-btn" id="rlGirar" onclick="girarRuleta()">Girar</button>
+        <button class="rl-cerrar" onclick="cerrarRuletaModal()">Cerrar</button>
+        <p class="rl-nota">Moneda ficticia sin valor real. No se puede comprar ni mejorar con dinero.</p>
+    </div>
+</div>
+
 <div id="recoveryModal" class="auth-modal-overlay" style="display:none;">
     <div class="auth-card"><h2>Crear nueva contraseña</h2><div class="auth-form"><input type="password" id="newPasswordInput" placeholder="Nueva contraseña"><button onclick="guardarNuevaPassword()">Guardar</button></div></div>
 </div>
@@ -780,39 +990,71 @@
 
 <header>
     <div class="header-row">
-        <div class="header-top">
-            <div class="logo" onclick="mostrarCatalogo()">aBROzon<span>.subastas</span></div>
-            <div class="search-bar">
-                <span class="search-icon" onclick="buscarEnCatalogo(document.getElementById('searchInput').value)">🔍</span>
-                <input type="text" id="searchInput" placeholder="Buscar..." oninput="buscarEnCatalogo(this.value)">
-            </div>
+        <div class="logo" onclick="mostrarCatalogo()" role="button" tabindex="0" aria-label="Ir al catálogo">aBROzon<span>.subastas</span></div>
+
+        <div class="search-bar">
+            <span class="search-icon" onclick="buscarEnCatalogo(document.getElementById('searchInput').value)" aria-hidden="true">🔍</span>
+            <input type="text" id="searchInput" placeholder="Buscar objetos..." aria-label="Buscar objetos" oninput="buscarEnCatalogo(this.value)">
         </div>
+
         <div class="header-right">
+
             <div class="notif-wrapper">
-                <button class="btn-header" id="btnNotif" onclick="toggleNotificaciones()" style="position:relative;" title="Notificaciones">🔔<span class="notif-badge" id="notifCount">0</span></button>
+                <button class="hbtn" id="btnNotif" onclick="toggleNotificaciones()" aria-label="Notificaciones" title="Notificaciones">🔔<span class="notif-badge" id="notifCount">0</span></button>
                 <div id="notifPanel"><div id="notifList" style="font-size:0.75rem; color:var(--text-muted);">No hay notificaciones.</div></div>
             </div>
-            <button class="btn-header" id="btnAd" onclick="verAnuncio('normal')" title="Ver anuncio para ganar 500 €">🎬 +500 <span id="anunciosRestantes" style="font-size:0.45rem;opacity:0.7;display:block;font-weight:normal;">(10/10)</span></button>
-            <button class="btn-ruleta" id="btnRuleta" onclick="reclamarBotinDiario()" title="Botín Diario (Ruleta)">🎲 <span id="ruletaEstado">Botín</span></button>
-            <div class="user-menu-wrapper" id="goatMenuWrapper" style="display:none;">
-                <button class="btn-goat" id="btnGoat" onclick="toggleGoatMenu()" title="Modo GOAT">🐐</button>
-                <div class="user-dropdown" id="goatDropdown">
-                    <div class="dropdown-item" id="goatItemActivar" onclick="activarGoat()">🐐 Activar GOAT</div>
-                    <div class="dropdown-item" id="goatItemRecargar" onclick="verAnuncio('goat')" style="display:none;">⚡ Recargar (GOAT)</div>
-                    <div class="dropdown-item" id="goatItemDesactivar" onclick="activarGoat()" style="display:none;color:#ef4444;">🚫 Desactivar GOAT</div>
+
+            <!-- ═══ RECOMPENSAS: botín + anuncio + GOAT ═══ -->
+            <div class="rw-wrap">
+                <button class="hbtn hbtn-rw" id="btnRecompensas" onclick="toggleRecompensas()" aria-label="Recompensas" aria-expanded="false" title="Recompensas">
+                    🎁<span class="rw-badge" id="rwBadge">0</span><span class="chev" aria-hidden="true"></span>
+                </button>
+                <div class="rw-panel" id="rwPanel">
+                    <div class="rw-title">Recompensas</div>
+
+                    <button class="rw-row" id="btnRuleta" onclick="reclamarBotinDiario()" title="Botín Diario">
+                        <span class="rw-ico">🎲</span>
+                        <span class="rw-txt"><b>Botín diario</b><small id="ruletaEstado">Botín</small></span>
+                    </button>
+
+                    <button class="rw-row" id="btnAd" onclick="verAnuncio('normal')" title="Ver anuncio">
+                        <span class="rw-ico">🎬</span>
+                        <span class="rw-txt"><b>Ver anuncio +500</b><small id="anunciosRestantes">(0/10 hoy)</small></span>
+                    </button>
+
+                    <div id="goatMenuWrapper" style="display:none;">
+                        <div class="rw-sep"></div>
+                        <button class="rw-row" id="btnGoat" onclick="toggleGoatMenu()" title="Modo GOAT">
+                            <span class="rw-ico">🐐</span>
+                            <span class="rw-txt"><b>Modo GOAT</b><small>Ventajas de suscriptor</small></span>
+                            <span class="chev" aria-hidden="true"></span>
+                        </button>
+                        <div id="goatDropdown">
+                            <div class="rw-sub" id="goatItemActivar" onclick="activarGoat()">🐐 Activar GOAT</div>
+                            <div class="rw-sub" id="goatItemRecargar" onclick="verAnuncio('goat')" style="display:none;">⚡ Recargar (GOAT)</div>
+                            <div class="rw-sub" id="goatItemDesactivar" onclick="activarGoat()" style="display:none;color:#ff6b7f;">🚫 Desactivar GOAT</div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <button class="btn-login" id="btnLoginHeader" onclick="abrirModalAuth('login')" title="Iniciar sesión o registrarse">🔑</button>
-            <button class="btn-header" id="btnPerfilMenu" onclick="togglePerfilMenu()" title="Mi cuenta" style="display:none;">👤</button>
-        </div>
-        <!-- SALDO GRANDE + XP + TÍTULO -->
-        <div class="user-stats" id="boxBalance" style="display:none;">
-            <span class="user-saldo" id="userBalance">0 €</span>
-            <span class="user-xp-mini">
-                ⭐ Nv.<span class="level-num" id="userLevel">1</span>
-                <span class="xp-mini-bar"><span class="xp-mini-fill" id="xpFill" style="width:0%;"></span></span>
-                <span class="user-title-mini" id="userTitle">Lurker</span>
-            </span>
+
+            <div class="user-stats" id="boxBalance" style="display:none;">
+                <span class="user-saldo" id="userBalance">0 €</span>
+            </div>
+
+            <button class="btn-login" id="btnLoginHeader" onclick="abrirModalAuth('login')" title="Iniciar sesión o registrarse">🔑 Entrar</button>
+
+            <!-- ═══ FICHA DE PERFIL: el chevron indica que se despliega ═══ -->
+            <button class="perfil-chip" id="btnPerfilMenu" onclick="togglePerfilMenu()" aria-label="Mi cuenta" aria-expanded="false" title="Mi cuenta" style="display:none;">
+                <span class="pf-av">👤</span>
+                <span class="pf-meta">
+                    <b>Nv. <span id="userLevel">1</span></b>
+                    <span class="xp-mini-bar"><span class="xp-mini-fill" id="xpFill" style="width:0%;"></span></span>
+                </span>
+                <span class="pf-title" id="userTitle">Lurker</span>
+                <span class="chev" aria-hidden="true"></span>
+            </button>
+
         </div>
     </div>
 </header>
@@ -845,7 +1087,7 @@
         <div class="perfil-item" onclick="mostrarAyuda(); togglePerfilMenu();">❓ Ayuda</div>
         <div class="perfil-item" id="dropdownThemeMenu" onclick="toggleTema(); togglePerfilMenu();">🌙 Modo Noche</div>
         <div class="perfil-item" id="dropdownAdminMenu" onclick="abrirModalAdmin(); togglePerfilMenu();" style="display:none;">🛠️ Panel Admin</div>
-        <div class="perfil-item" onclick="mostrarLegal(); togglePerfilMenu();">📄 Legal</div>
+        <div class="perfil-item" onclick="window.location.href='/legal/aviso-legal.html';">📄 Legal</div>
         <div class="perfil-item" onclick="cerrarSesion(); togglePerfilMenu();" style="color:#ef4444;">🚪 Salir</div>
     </div>
 </div>
@@ -860,7 +1102,18 @@
 <div class="container">
     <div id="viewCatalog" class="view active">
         <div class="category-chips" id="categoryChips"></div>
-        <div class="hero-banner"><div class="hero-text"><span class="badge-trend">Plataforma Dinámica</span><h2>Especial Creadores & Polémicas</h2><p>Pujas sincronizadas en directo. <span id="contadorProximaSubasta" style="font-weight:bold;color:#f97316;"></span></p></div></div>
+        <div class="hero-banner">
+            <div class="hero-text">
+                <span class="badge-trend">Plataforma dinámica</span>
+                <h2>Puja por lo más absurdo de internet</h2>
+                <p>Objetos imposibles, seis rarezas y una tanda nueva cada hora en punto. Todo con dinero de mentira.</p>
+            </div>
+            <div class="drop-box">
+                <div class="drop-k">Próxima tanda en</div>
+                <div class="drop-t" id="heroDrop">--:--</div>
+                <div class="drop-s">Se generan objetos nuevos</div>
+            </div>
+        </div>
         <div class="grid-title">🔥 Subastas Activas</div>
         <div class="sort-bar" id="sortBarCatalog">
             <span class="sort-chip active" onclick="ordenarCatalogo('fecha')">📅 Más recientes</span>
@@ -869,7 +1122,11 @@
             <span class="sort-chip" onclick="ordenarCatalogo('precio-asc')">💰 Precio ↑</span>
             <span class="sort-chip" onclick="ordenarCatalogo('precio-desc')">💰 Precio ↓</span>
         </div>
-        <div class="auction-grid" id="catalogGrid">Cargando...</div>
+        <div class="rail-sec" id="railSec" style="display:none;">
+            <div class="rail-head"><h3>Termina pronto</h3><span>desliza para ver más</span></div>
+            <div class="rail" id="railTermina"></div>
+        </div>
+        <div class="auction-grid" id="catalogGrid"></div>
     </div>
     <div id="viewDetail" class="view">
         <button class="btn-back" onclick="mostrarCatalogo()">← Volver al Catálogo</button>
@@ -1105,8 +1362,12 @@
     </div>
 </div>
 
-<footer style="text-align:center;padding:12px;color:var(--text-muted);font-size:0.7rem;border-top:1px solid var(--border-color);">
-    <span onclick="mostrarLegal()" style="cursor:pointer;text-decoration:underline;">Aviso Legal, Privacidad y Cookies</span> · aBROzon.subastas es una web de parodia
+<footer style="text-align:center;padding:16px 12px;color:var(--text-muted);font-size:0.72rem;border-top:1px solid var(--border-color);line-height:1.9;">
+    <a href="/legal/aviso-legal.html" style="color:var(--text-muted);">Aviso Legal</a> ·
+    <a href="/legal/privacidad.html" style="color:var(--text-muted);">Privacidad</a> ·
+    <a href="/legal/cookies.html" style="color:var(--text-muted);">Cookies</a>
+    <br>
+    aBROzon.subastas es una web de parodia. La moneda es ficticia y no tiene valor real.
 </footer>
 
 <script>
@@ -1284,15 +1545,91 @@ async function checkStreakAndReward() {
     }
 }
 
+// Los valores son solo el dibujo. El premio real lo devuelve el RPC del servidor,
+// nunca el navegador: si lo decidiera el cliente, cualquiera podría trucarlo.
+const RULETA_TRAMOS = [250, 500, 1000, 1500, 2000, 3000, 5000, 10000];
+const RULETA_COLORES = ['--r-comun','--r-poco','--r-rara','--r-epica','--r-legend','--r-rara','--r-poco','--r-mitica'];
+let rlGiroActual = 0;
+
+// Gira hasta el tramo mas cercano al premio que ha devuelto el servidor.
+function animarRueda(premio) {
+    return new Promise(resolve => {
+        const w = document.getElementById('rlWheel');
+        if (!w) return resolve();
+        let idx = 0, mejor = Infinity;
+        RULETA_TRAMOS.forEach((v, i) => {
+            const d = Math.abs(v - premio);
+            if (d < mejor) { mejor = d; idx = i; }
+        });
+        const paso = 360 / RULETA_TRAMOS.length;
+        rlGiroActual += 360 * 5 + (360 - (rlGiroActual % 360)) - idx * paso;
+        w.classList.add('girando');
+        w.style.transform = 'rotate(' + rlGiroActual + 'deg)';
+        const fin = () => {
+            w.removeEventListener('transitionend', fin);
+            const p = document.getElementById('rlPremio');
+            p.innerText = '+' + premio.toLocaleString('es-ES') + ' €';
+            p.classList.add('aparece');
+            const g = document.getElementById('rlGirar');
+            g.disabled = true; g.innerText = 'Ya girada hoy';
+            setTimeout(resolve, 350);
+        };
+        w.addEventListener('transitionend', fin);
+        setTimeout(() => { if (w.classList.contains('girando')) fin(); }, 5200);
+    });
+}
+
+function pintarRuleta() {
+    const svg = document.getElementById('rlWheel');
+    if (!svg || svg.children.length) return;
+    const n = RULETA_TRAMOS.length, paso = 360 / n, cs = getComputedStyle(document.body);
+    let out = '';
+    for (let i = 0; i < n; i++) {
+        const a0 = (i * paso - 90 - paso / 2) * Math.PI / 180;
+        const a1 = ((i + 1) * paso - 90 - paso / 2) * Math.PI / 180;
+        const x0 = 100 + 96 * Math.cos(a0), y0 = 100 + 96 * Math.sin(a0);
+        const x1 = 100 + 96 * Math.cos(a1), y1 = 100 + 96 * Math.sin(a1);
+        const col = cs.getPropertyValue(RULETA_COLORES[i]).trim() || '#888';
+        out += `<path d="M100,100 L${x0},${y0} A96,96 0 0,1 ${x1},${y1} Z" fill="${col}" fill-opacity=".82" stroke="#12101a" stroke-width="1.5"/>`;
+        const am = (i * paso - 90) * Math.PI / 180;
+        const tx = 100 + 66 * Math.cos(am), ty = 100 + 66 * Math.sin(am);
+        out += `<text x="${tx}" y="${ty}" fill="#fff" font-size="12" font-weight="700" text-anchor="middle" dominant-baseline="middle" transform="rotate(${i * paso} ${tx} ${ty})">${RULETA_TRAMOS[i] >= 1000 ? (RULETA_TRAMOS[i]/1000) + 'K' : RULETA_TRAMOS[i]}</text>`;
+    }
+    out += '<circle cx="100" cy="100" r="97" fill="none" stroke="var(--coin)" stroke-width="3"/>';
+    svg.innerHTML = out;
+}
+
+function abrirRuletaModal() {
+    pintarRuleta();
+    document.getElementById('rlPremio').innerText = '';
+    document.getElementById('rlPremio').classList.remove('aparece');
+    document.getElementById('ruletaModal').style.display = 'flex';
+    const fila = document.getElementById('btnRuleta');
+    const yaReclamado = fila && fila.dataset.disponible === '0';
+    const g = document.getElementById('rlGirar');
+    g.disabled = !!yaReclamado;
+    g.innerText = yaReclamado ? 'Ya girada hoy' : 'Girar';
+}
+
+function cerrarRuletaModal() { document.getElementById('ruletaModal').style.display = 'none'; }
+
 async function reclamarBotinDiario() {
     if (!currentUser) {
         abrirModalAuth('register', '¡Crea tu cuenta para reclamar el Botín Diario! Recibe 1.000 € de regalo.');
         return;
     }
+    document.getElementById('rwPanel').classList.remove('open');
+    abrirRuletaModal();
+}
+
+async function girarRuleta() {
     if (accionEnCurso) return;
     accionEnCurso = true;
     const btn = document.getElementById('btnRuleta');
-    if (btn) { btn.disabled = true; btn.innerText = '🎰...'; }
+    const spanRul = document.getElementById('ruletaEstado');
+    if (spanRul) spanRul.innerText = '🎰 Girando...';
+    const gir = document.getElementById('rlGirar');
+    if (gir) { gir.disabled = true; gir.innerText = 'Girando...'; }
     try {
         marcarCambioPropio();
         const { data, error } = await db.rpc('reclamar_botin_diario');
@@ -1303,6 +1640,7 @@ async function reclamarBotinDiario() {
         if (data && data.recompensa !== undefined) {
             const recompensa = data.recompensa;
             if (recompensa > 0) {
+                await animarRueda(recompensa);
                 currentUser.saldo += recompensa;
                 actualizarInterfazUsuario();
                 const msg = `🎲 Ruleta: +${recompensa.toLocaleString('es-ES')} €`;
@@ -1447,6 +1785,19 @@ function actualizarContadorProximaSubasta() {
     if (el) el.innerText = '⏳ Próxima subasta en: ' + texto;
 }
 
+// Cuenta atras del hero: el cron genera a la hora en punto.
+function actualizarHeroDrop() {
+    const el = document.getElementById('heroDrop');
+    if (!el) return;
+    const n = new Date();
+    const restan = 3600 - (n.getMinutes() * 60 + n.getSeconds());
+    const mm = String(Math.floor(restan / 60)).padStart(2, '0');
+    const ss = String(restan % 60).padStart(2, '0');
+    el.textContent = mm + ':' + ss;
+}
+actualizarHeroDrop();
+setInterval(actualizarHeroDrop, 1000);
+
 function mostrarToast(msg) { 
     let stack = document.getElementById('toastStack'); 
     if (!stack) { 
@@ -1565,6 +1916,7 @@ function actualizarSelectorCategoriasAdmin() {
 }
 
 async function cargarSubastas() { 
+    pintarEsqueletos(8);
     let { data: auctions } = await db.from('auctions').select('*').order('ends_at', { ascending: true }); 
     subastasLocales = auctions || []; 
     let cierres = false; 
@@ -1579,6 +1931,59 @@ async function cargarSubastas() {
         subastasLocales = a2 || []; 
     } 
     renderizarCatalogo(); 
+}
+
+function claseRareza(r) {
+    return r ? 'rareza-' + r.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-') : 'rareza-comun';
+}
+
+// Crea una tarjeta. Se usa tanto en la rejilla como en el carrusel.
+function crearTarjetaSubasta(p) {
+    const card = document.createElement('div');
+    card.className = 'auction-card ' + claseRareza(p.rareza);
+    card.dataset.id = p.id;
+    card.onclick = () => abrirDetalle(p.id);
+    const cerrada = p.status === 'closed';
+    const chip = p.rareza ? `<div class="chip-rareza chip-rareza-${claseRareza(p.rareza).replace('rareza-','')}" style="position:absolute;bottom:8px;left:8px;">${p.rareza}</div>` : '';
+    const marca = cerrada
+        ? '<div class="badge-closed">FINALIZADA</div>'
+        : `<div class="card-timer" data-timer="${p.id}">⏳ ...</div>`;
+    card.innerHTML = `<div class="card-image">${renderizarImagenProducto(p.image_url)}${marca}${chip}</div>` +
+        `<div class="card-content"><div class="card-category">${p.category || ''}</div>` +
+        `<div class="card-title">${p.title || ''}</div>` +
+        `<div class="card-footer"><div><div class="bid-label-sm">Puja actual</div>` +
+        `<div class="bid-amount-sm">${(p.current_price || 0).toLocaleString('es-ES')} €</div></div></div></div>`;
+    return card;
+}
+
+// Carrusel: las 6 subastas activas que antes terminan.
+function renderizarCarrusel(lista) {
+    const sec = document.getElementById('railSec'), rail = document.getElementById('railTermina');
+    if (!sec || !rail) return;
+    const proximas = lista.filter(p => p.status !== 'closed')
+                          .slice()
+                          .sort((a, b) => new Date(a.ends_at) - new Date(b.ends_at))
+                          .slice(0, 6);
+    if (proximas.length < 3) { sec.style.display = 'none'; rail.innerHTML = ''; return; }
+    sec.style.display = 'block';
+    rail.innerHTML = '';
+    proximas.forEach(p => rail.appendChild(crearTarjetaSubasta(p)));
+}
+
+// Esqueletos mientras Supabase responde.
+function pintarEsqueletos(n) {
+    const grid = document.getElementById('catalogGrid');
+    if (!grid || grid.children.length) return;
+    let html = '';
+    for (let i = 0; i < n; i++) {
+        html += '<div class="sk-card"><div class="sk-art sk-shine"></div><div class="sk-body">' +
+                '<div class="sk-line sk-shine" style="width:40%"></div>' +
+                '<div class="sk-line sk-shine" style="width:92%"></div>' +
+                '<div class="sk-line sk-shine" style="width:64%"></div>' +
+                '<div class="sk-line sk-shine" style="width:48%;height:15px;margin-top:14px"></div>' +
+                '</div></div>';
+    }
+    grid.innerHTML = html;
 }
 
 function renderizarImagenProducto(v) { 
@@ -1707,16 +2112,11 @@ function renderizarCatalogo() {
     }
     if (!lista.length) { grid.innerHTML = '<div style="color:var(--text-muted);text-align:center;padding:20px;">No hay subastas.</div>'; return; }
     lista.forEach(p => {
-        const rarezaClase = p.rareza ? 'rareza-' + p.rareza.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-') : 'rareza-comun';
-        const card = document.createElement('div'); card.className = 'auction-card ' + rarezaClase; card.onclick = () => abrirDetalle(p.id);
-        const cerrada = p.status === 'closed';
-        const rarezaChip = p.rareza ? `<div class="chip-rareza chip-rareza-${p.rareza.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-')}" style="position:absolute;bottom:6px;left:6px;">${p.rareza}</div>` : '';
-        card.innerHTML = `<div class="card-image">${renderizarImagenProducto(p.image_url)}${cerrada ? '<div class="badge-closed">FINALIZADA</div>' : `<div class="card-timer" id="cardTimer-${p.id}">⏳ ...</div>`}${rarezaChip}</div><div class="card-content"><div class="card-category">${p.category||'General'}${p.seller_id ? ' (Vendedor: ' + (p.seller_username || 'Usuario') + ')' : ''}${cerrada?' · Adjudicado':''}</div><div class="card-title">${p.title}</div>${!cerrada && p.last_bidder ? `<div style="font-size:0.6rem;color:var(--text-muted);margin-bottom:4px;">👤 Último pujador: <strong>${p.last_bidder}</strong></div>` : ''}<div class="card-footer"><div><div class="bid-label-sm">${cerrada?'Precio Final':'Puja Actual'}</div><div class="bid-amount-sm">${Number(p.current_price).toLocaleString('es-ES')} €</div></div></div></div>`;
+        const card = crearTarjetaSubasta(p);
         grid.appendChild(card);
-        if (currentUser) {
-            agregarBotonFavoritoTarjeta(p.id, card);
-        }
+        if (currentUser) agregarBotonFavoritoTarjeta(p.id, card);
     });
+    renderizarCarrusel(lista);
     actualizarTemporizadoresCatalogo();
 }
 
@@ -1755,12 +2155,13 @@ async function agregarBotonFavoritoTarjeta(auctionId, cardElement) {
 function actualizarTemporizadoresCatalogo() { 
     subastasLocales.forEach(p => { 
         if (p.status === 'closed') return; 
-        const el = document.getElementById('cardTimer-'+p.id); 
-        if (!el) return; 
+        const els = document.querySelectorAll('[data-timer="'+p.id+'"]'); 
+        if (!els.length) return; 
         const diff = new Date(p.ends_at)-Date.now(); 
-        if (diff <= 0) { el.innerText = '⏳ Cerrando...'; return; } 
+        if (diff <= 0) { els.forEach(e => e.innerText = '⏳ Cerrando...'); return; } 
         const d = Math.floor(diff/86400000), h = Math.floor((diff%86400000)/3600000), m = Math.floor((diff%3600000)/60000), s = Math.floor((diff%60000)/1000); 
-        el.innerText = d>0 ? `⏳ ${d}d ${h}h` : `⏳ ${h}h ${m}m ${s}s`; 
+        const txt = d>0 ? `⏳ ${d}d ${h}h` : `⏳ ${h}h ${m}m ${s}s`; 
+        els.forEach(e => { e.innerText = txt; e.classList.toggle('urgente', diff < 300000); }); 
     }); 
 }
 
@@ -1770,8 +2171,24 @@ async function abrirDetalle(id) {
     iniciarTemporizador(productoSeleccionado.ends_at); 
     await cargarHistorialPujas(id); 
     actualizarBotonFavorito();
-    ocultarTodasVistas(); 
-    document.getElementById('viewDetail').classList.add('active'); 
+    const mostrar = () => { ocultarTodasVistas(); document.getElementById('viewDetail').classList.add('active'); };
+    transicionarAlDetalle(id, mostrar);
+}
+
+// La imagen de la tarjeta se transforma en la de la ficha.
+function transicionarAlDetalle(id, aplicar) {
+    if (!document.startViewTransition) { aplicar(); return; }
+    const origen = document.querySelector('.auction-card[data-id="' + id + '"] .card-image');
+    const destino = document.getElementById('detailImage');
+    if (origen) origen.style.viewTransitionName = 'objetoActivo';
+    if (destino) destino.style.viewTransitionName = 'objetoActivo';
+    const limpiar = () => {
+        if (origen) origen.style.viewTransitionName = '';
+        if (destino) destino.style.viewTransitionName = '';
+    };
+    try {
+        document.startViewTransition(aplicar).finished.then(limpiar, limpiar);
+    } catch (e) { aplicar(); limpiar(); }
 }
 
 function actualizarBotonFavorito() {
@@ -2195,7 +2612,7 @@ async function verAnuncio(tipo) {
     } finally {
         accionEnCurso = false;
         btnAd.disabled = false;
-        btnAd.innerHTML = '🎬 +500 <span id="anunciosRestantes" style="font-size:0.45rem;opacity:0.7;display:block;font-weight:normal;">(0/10 hoy)</span>';
+        btnAd.innerHTML = '<span class="rw-ico">🎬</span><span class="rw-txt"><b>Ver anuncio +500</b><small id="anunciosRestantes">(0/10 hoy)</small></span>';
         actualizarContadorAnuncios();
     }
 }
@@ -2254,16 +2671,17 @@ async function actualizarEstadoRuleta() {
     const btn = document.getElementById('btnRuleta');
     const span = document.getElementById('ruletaEstado');
     if (!btn || !span) return;
-    if (!currentUser) { btn.disabled = false; span.innerText = 'Regístrate'; return; }
+    if (!currentUser) { btn.dataset.disponible = '1'; btn.disabled = false; span.innerText = 'Regístrate'; return; }
     try {
         const { data, error } = await db.from('profiles').select('last_daily_loot').eq('id', currentUser.id).single();
         if (error) return;
         const hoy = new Date().toISOString().split('T')[0];
         const ultimoLoot = data.last_daily_loot ? new Date(data.last_daily_loot).toISOString().split('T')[0] : null;
         if (ultimoLoot === hoy) {
-            btn.disabled = true;
-            btn.style.opacity = '0.5';
-            btn.style.cursor = 'not-allowed';
+            btn.dataset.disponible = '0';
+            btn.disabled = false;
+            btn.style.opacity = '';
+            btn.style.cursor = 'pointer';
             const manana = new Date();
             manana.setDate(manana.getDate() + 1);
             manana.setHours(0, 0, 0, 0);
@@ -2272,10 +2690,11 @@ async function actualizarEstadoRuleta() {
             const minutos = Math.floor((diff % 3600000) / 60000);
             span.innerText = `⏳ ${horas}h ${minutos}min`;
         } else {
+            btn.dataset.disponible = '1';
             btn.disabled = false;
-            btn.style.opacity = '1';
+            btn.style.opacity = '';
             btn.style.cursor = 'pointer';
-            span.innerText = 'Reclamar';
+            span.innerText = '¡Disponible!';
         }
     } catch (e) { console.error('Error al verificar ruleta:', e); }
 }
@@ -2732,12 +3151,54 @@ async function crearNuevaSubasta() {
     cerrarModalAdmin(); document.getElementById('adminTitle').value = ''; document.getElementById('adminDesc').value = ''; document.getElementById('adminPrice').value = ''; document.getElementById('adminImage').value = ''; document.getElementById('adminImageFile').value = ''; document.getElementById('adminImagePreview').innerHTML = ''; document.getElementById('adminRareza').value = 'Común'; document.getElementById('adminStock').value = 0; document.getElementById('adminMetadata').value = ''; fotosAdicionalesAdmin = []; await cargarSubastas(); mostrarToast('✅ Subasta creada con éxito.');
 }
 
-function toggleTema() { document.body.classList.toggle('dark-mode'); document.getElementById('dropdownTheme').innerText = document.body.classList.contains('dark-mode') ? "☀️ Modo Día" : "🌙 Modo Noche"; cerrarUserMenu(); }
+function toggleTema() {
+    const claro = document.body.classList.toggle('light-mode');
+    try { localStorage.setItem('abrozon_tema', claro ? 'claro' : 'oscuro'); } catch(e){}
+    document.getElementById('dropdownTheme').innerText = claro ? "\u{1F319} Modo Noche" : "\u2600\uFE0F Modo D\u00eda";
+    cerrarUserMenu();
+}
+(function aplicarTemaGuardado(){
+    try { if (localStorage.getItem('abrozon_tema') === 'claro') document.body.classList.add('light-mode'); } catch(e){}
+})();
+
+function toggleRecompensas() {
+    const p = document.getElementById('rwPanel');
+    const b = document.getElementById('btnRecompensas');
+    const abierto = p.classList.toggle('open');
+    b.setAttribute('aria-expanded', abierto ? 'true' : 'false');
+    if (!abierto) document.getElementById('goatDropdown').classList.remove('open');
+}
+
+// Insignia: cuenta cuántas recompensas hay disponibles ahora mismo.
+function actualizarBadgeRecompensas() {
+    const badge = document.getElementById('rwBadge');
+    if (!badge) return;
+    let n = 0;
+    const ruleta = document.getElementById('btnRuleta');
+    if (ruleta && ruleta.dataset.disponible !== '0') n++;
+    const span = document.getElementById('anunciosRestantes');
+    if (span) {
+        const m = span.innerText.match(/(\d+)\s*\//);
+        if (m && parseInt(m[1], 10) > 0) n++;
+    }
+    badge.innerText = n;
+    badge.classList.toggle('on', n > 0);
+}
+setInterval(actualizarBadgeRecompensas, 1500);
+
+// Cerrar el panel al pulsar fuera
+document.addEventListener('click', (e) => {
+    const w = document.querySelector('.rw-wrap');
+    if (w && !w.contains(e.target)) {
+        document.getElementById('rwPanel').classList.remove('open');
+        document.getElementById('btnRecompensas').setAttribute('aria-expanded', 'false');
+    }
+});
 
 function toggleUserMenu() { const d = document.getElementById('userDropdown'); d.style.display = d.style.display === 'block' ? 'none' : 'block'; }
 function cerrarUserMenu() { document.getElementById('userDropdown').style.display = 'none'; }
-function toggleGoatMenu() { const d = document.getElementById('goatDropdown'); d.style.display = d.style.display === 'block' ? 'none' : 'block'; }
-function cerrarGoatMenu() { document.getElementById('goatDropdown').style.display = 'none'; }
+function toggleGoatMenu() { const d = document.getElementById('goatDropdown'); d.classList.toggle('open'); document.getElementById('btnGoat').classList.toggle('abierto', d.classList.contains('open')); }
+function cerrarGoatMenu() { const d = document.getElementById('goatDropdown'); if (d) d.classList.remove('open'); const b = document.getElementById('btnGoat'); if (b) b.classList.remove('abierto'); }
 
 document.addEventListener('click', (e) => { 
     const g = document.getElementById('goatMenuWrapper'); 
@@ -2822,7 +3283,7 @@ function actualizarPerfilMenu() {
     }
     const themeItem = document.getElementById('dropdownThemeMenu');
     if (themeItem) {
-        themeItem.innerText = document.body.classList.contains('dark-mode') ? '☀️ Modo Día' : '🌙 Modo Noche';
+        themeItem.innerText = document.body.classList.contains('light-mode') ? '\u{1F319} Modo Noche' : '\u2600\uFE0F Modo D\u00eda';
     }
 }
 
@@ -2853,5 +3314,66 @@ document.addEventListener('click', function(e) {
     }
 });
 </script>
+
+<!-- ===== BANNER DE COOKIES ===== -->
+<style>
+#cookieBanner{position:fixed;bottom:0;left:0;right:0;z-index:9999;background:var(--bg-card);border-top:2px solid var(--accent-blue);box-shadow:0 -4px 20px rgba(0,0,0,.15);padding:16px 5%;display:none;}
+#cookieBanner.visible{display:block;}
+#cookieBanner .cb-inner{max-width:900px;margin:0 auto;display:flex;gap:16px;align-items:center;flex-wrap:wrap;justify-content:space-between;}
+#cookieBanner p{font-size:.82rem;color:var(--text-main);line-height:1.5;flex:1;min-width:240px;margin:0;}
+#cookieBanner a{color:var(--accent-blue);}
+#cookieBanner .cb-btns{display:flex;gap:8px;flex-wrap:wrap;}
+#cookieBanner button{font-family:inherit;font-size:.8rem;font-weight:bold;padding:9px 20px;border-radius:20px;cursor:pointer;border:1px solid var(--border-color);}
+#cbAceptar{background:var(--accent-green);color:#fff;border-color:var(--accent-green);}
+#cbRechazar{background:var(--bg-subtle);color:var(--text-main);}
+</style>
+
+<div id="cookieBanner" role="dialog" aria-live="polite" aria-label="Aviso de cookies">
+  <div class="cb-inner">
+    <p>Usamos cookies necesarias para que la web funcione y, si nos dejas, cookies analíticas para saber cómo se usa y mejorarla. Puedes cambiar de opinión cuando quieras. <a href="/legal/cookies.html">Más información</a></p>
+    <div class="cb-btns">
+      <button id="cbRechazar" onclick="gestionarConsentimiento('rejected')">Rechazar</button>
+      <button id="cbAceptar" onclick="gestionarConsentimiento('accepted')">Aceptar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// El ID de Analytics vive aquí y solo se carga si el usuario acepta.
+var GA_ID = 'G-C30L0HE0L7';
+
+function cargarAnalytics(){
+  if (window.gaCargado) return;
+  window.gaCargado = true;
+  var s = document.createElement('script');
+  s.async = true;
+  s.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_ID;
+  document.head.appendChild(s);
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function(){ dataLayer.push(arguments); };
+  gtag('js', new Date());
+  gtag('config', GA_ID, { anonymize_ip: true });
+}
+
+function gestionarConsentimiento(valor){
+  try { localStorage.setItem('abrozon_consent', valor); } catch(e){}
+  var b = document.getElementById('cookieBanner');
+  if (b) b.classList.remove('visible');
+  if (valor === 'accepted') cargarAnalytics();
+}
+
+(function iniciarCookies(){
+  var previo = null;
+  try { previo = localStorage.getItem('abrozon_consent'); } catch(e){}
+  if (previo === 'accepted') {
+    cargarAnalytics();
+  } else if (previo !== 'rejected') {
+    var b = document.getElementById('cookieBanner');
+    if (b) b.classList.add('visible');
+  }
+})();
+</script>
+<!-- ===== FIN BANNER DE COOKIES ===== -->
+
 </body>
 </html>
