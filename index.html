@@ -1915,9 +1915,20 @@ function actualizarSelectorCategoriasAdmin() {
     select.innerHTML = categorias.map(c => `<option value="${c.name}">${c.icon} ${c.name}</option>`).join(''); 
 }
 
+// Supabase devuelve máx. 1000 filas por consulta: pedimos TODAS las abiertas + las 500 cerradas más recientes
+async function traerSubastas() {
+    const [abiertas, cerradas] = await Promise.all([
+        db.from('auctions').select('*').neq('status', 'closed').order('ends_at', { ascending: true }).limit(1000),
+        db.from('auctions').select('*').eq('status', 'closed').order('ends_at', { ascending: false }).limit(500)
+    ]);
+    if (abiertas.error) console.error('Error cargando abiertas:', abiertas.error.message);
+    if (cerradas.error) console.error('Error cargando cerradas:', cerradas.error.message);
+    return { data: [...(abiertas.data || []), ...(cerradas.data || [])] };
+}
+
 async function cargarSubastas() { 
     pintarEsqueletos(8);
-    let { data: auctions } = await db.from('auctions').select('*').order('ends_at', { ascending: true }); 
+    let { data: auctions } = await traerSubastas(); 
     subastasLocales = auctions || []; 
     let cierres = false; 
     for (let p of subastasLocales) {
@@ -1927,7 +1938,7 @@ async function cargarSubastas() {
         } 
     }
     if (cierres) { 
-        let { data: a2 } = await db.from('auctions').select('*').order('ends_at', { ascending: true }); 
+        let { data: a2 } = await traerSubastas(); 
         subastasLocales = a2 || []; 
     } 
     renderizarCatalogo(); 
