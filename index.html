@@ -1375,6 +1375,11 @@ const SUPABASE_URL = 'https://lthzzgpbwfiylgaipgix.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx0aHp6Z3Bid2ZpeWxnYWlwZ2l4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODUxNjcyMTksImV4cCI6MjEwMDc0MzIxOX0.zAJJEiQpor0xQY5fTDlLzJxd62ffps3XNnpeS06iTXg';
 const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+// 🔒 SEGURIDAD: convierte texto de usuarios en texto "inofensivo" antes de mostrarlo
+function esc(t){ return String(t ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+// 🔒 SEGURIDAD: un alias solo puede tener letras, números y _ (3-20 caracteres)
+const ALIAS_VALIDO = /^@[A-Za-z0-9_]{3,20}$/;
+
 // ===== VARIABLES =====
 let currentUser = null, productoSeleccionado = null, subastasLocales = [], timerInterval = null,
     profileChannel = null, profileChannelUserId = null, saldoCambioPropio = false, accionEnCurso = false,
@@ -1961,7 +1966,7 @@ function crearTarjetaSubasta(p) {
         : `<div class="card-timer" data-timer="${p.id}">⏳ ...</div>`;
     card.innerHTML = `<div class="card-image">${renderizarImagenProducto(p.image_url)}${marca}${chip}</div>` +
         `<div class="card-content"><div class="card-category">${p.category || ''}</div>` +
-        `<div class="card-title">${p.title || ''}</div>` +
+        `<div class="card-title">${esc(p.title || '')}</div>` +
         `<div class="card-footer"><div><div class="bid-label-sm">Puja actual</div>` +
         `<div class="bid-amount-sm">${(p.current_price || 0).toLocaleString('es-ES')} €</div></div></div></div>`;
     return card;
@@ -2246,7 +2251,7 @@ function actualizarVistaDetalleDatoVivo() {
     if (productoSeleccionado.category === 'Mercado') {
         const meta = productoSeleccionado.metadata || {};
         const fecha = meta.fecha_compra ? new Date(meta.fecha_compra).toLocaleDateString('es-ES') : 'Desconocida';
-        infoBox.innerHTML = `📜 <strong>Certificado original:</strong> Nº ${meta.certificado_codigo || 'Sin certificado'}<br>📅 <strong>Adjudicado el:</strong> ${fecha}<br>🧑 <strong>Vendedor:</strong> ${productoSeleccionado.seller_username || 'Desconocido'}`;
+        infoBox.innerHTML = `📜 <strong>Certificado original:</strong> Nº ${meta.certificado_codigo || 'Sin certificado'}<br>📅 <strong>Adjudicado el:</strong> ${fecha}<br>🧑 <strong>Vendedor:</strong> ${esc(productoSeleccionado.seller_username || 'Desconocido')}`;
         infoBox.style.display = 'block';
     } else {
         infoBox.style.display = 'none';
@@ -2332,7 +2337,7 @@ async function cargarFavoritos() {
             <div class="card-image">${renderizarImagenProducto(p.image_url)}${cerrada ? '<div class="badge-closed">FINALIZADA</div>' : ''}</div>
             <div class="card-content">
                 <div class="card-category">${p.category||'General'}</div>
-                <div class="card-title">${p.title}</div>
+                <div class="card-title">${esc(p.title)}</div>
                 <div class="card-footer"><div><div class="bid-label-sm">${cerrada?'Precio Final':'Puja Actual'}</div><div class="bid-amount-sm">${Number(p.current_price).toLocaleString('es-ES')} €</div></div></div>
             </div>
         </div>`;
@@ -2386,7 +2391,7 @@ async function cargarHistorialPujas(id) {
     if (bids) bids.forEach(b => { 
         const div = document.createElement('div'); 
         div.className = 'history-item'; 
-        div.innerHTML = `<div style="display:flex;justify-content:space-between;"><div><span style="color:var(--accent-blue);font-weight:bold;">${b.user_name||'Anónimo'}</span>${b.comment?`<div style="font-size:0.7rem;color:#eab308;background:rgba(234,179,8,0.1);padding:4px 8px;border-radius:6px;margin-top:2px;">"${b.comment}"</div>`:''}</div><span style="font-weight:bold;">${Number(b.amount).toLocaleString('es-ES')} €</span></div>`; 
+        div.innerHTML = `<div style="display:flex;justify-content:space-between;"><div><span style="color:var(--accent-blue);font-weight:bold;">${esc(b.user_name||'Anónimo')}</span>${b.comment?`<div style="font-size:0.7rem;color:#eab308;background:rgba(234,179,8,0.1);padding:4px 8px;border-radius:6px;margin-top:2px;">"${esc(b.comment)}"</div>`:''}</div><span style="font-weight:bold;">${Number(b.amount).toLocaleString('es-ES')} €</span></div>`; 
         history.appendChild(div); 
     }); 
     history.scrollTop = history.scrollHeight;
@@ -2774,7 +2779,7 @@ function construirPodioYLista(lista, tipo) {
             else if (tipo === 'fecha') val = new Date(top3[i].total).toLocaleDateString('es-ES');
             else if (tipo === 'oculto') val = '🔒';
             else val = top3[i].total;
-            html += `<div class="podium-spot ${clases[i]}"><div>${medallas[i]}</div><strong>${top3[i].username}</strong><div>${val}</div></div>`;
+            html += `<div class="podium-spot ${clases[i]}"><div>${medallas[i]}</div><strong>${esc(top3[i].username)}</strong><div>${val}</div></div>`;
         }
     });
     html += '</div>';
@@ -2786,7 +2791,7 @@ function construirPodioYLista(lista, tipo) {
             else if (tipo === 'fecha') val = new Date(lista[i].total).toLocaleDateString('es-ES');
             else if (tipo === 'oculto') val = '🔒';
             else val = lista[i].total;
-            html += `<div class="hof-row"><span>#${i+1} ${lista[i].username}</span><span>${val}</span></div>`;
+            html += `<div class="hof-row"><span>#${i+1} ${esc(lista[i].username)}</span><span>${val}</span></div>`;
         }
         html += '</div>';
     }
@@ -2988,7 +2993,7 @@ async function adminBuscarUsuario() {
     const box = document.getElementById('adminUserResult'); 
     if (error || !data || !data.length) { box.innerHTML = '<p>No encontrado.</p>'; return; } 
     const u = data[0]; 
-    box.innerHTML = `<div style="background:var(--bg-subtle);padding:10px;border-radius:10px;font-size:0.8rem;"><div><strong>${u.username}</strong> ${u.is_admin?'🛠️':''} ${u.es_goat?'🐐':''} ${u.is_banned?'🚫':''}</div><div>Saldo: ${Number(u.saldo).toLocaleString('es-ES')} €</div><div style="display:flex;gap:6px;margin:6px 0;"><input type="number" id="adminNuevoSaldo" placeholder="Nuevo saldo" style="flex:1;padding:6px;border-radius:6px;border:1px solid var(--border-color);"><button onclick="adminActualizarSaldo('${u.username}')" style="background:var(--accent-green);color:white;border:none;padding:6px 10px;border-radius:6px;font-weight:bold;">Fijar</button></div><button onclick="adminToggleBan('${u.username}')" style="width:100%;background:${u.is_banned?'#16a34a':'#ef4444'};color:white;border:none;padding:6px;border-radius:6px;font-weight:bold;">${u.is_banned?'Quitar baneo':'Banear'}</button></div>`; 
+    box.innerHTML = `<div style="background:var(--bg-subtle);padding:10px;border-radius:10px;font-size:0.8rem;"><div><strong>${esc(u.username)}</strong> ${u.is_admin?'🛠️':''} ${u.es_goat?'🐐':''} ${u.is_banned?'🚫':''}</div><div>Saldo: ${Number(u.saldo).toLocaleString('es-ES')} €</div><div style="display:flex;gap:6px;margin:6px 0;"><input type="number" id="adminNuevoSaldo" placeholder="Nuevo saldo" style="flex:1;padding:6px;border-radius:6px;border:1px solid var(--border-color);"><button onclick="adminActualizarSaldo(${esc(JSON.stringify(u.username))})" style="background:var(--accent-green);color:white;border:none;padding:6px 10px;border-radius:6px;font-weight:bold;">Fijar</button></div><button onclick="adminToggleBan(${esc(JSON.stringify(u.username))})" style="width:100%;background:${u.is_banned?'#16a34a':'#ef4444'};color:white;border:none;padding:6px;border-radius:6px;font-weight:bold;">${u.is_banned?'Quitar baneo':'Banear'}</button></div>`; 
 }
 
 async function adminActualizarSaldo(alias) { const v = parseInt(document.getElementById('adminNuevoSaldo').value); if (isNaN(v)) { mostrarToast('⚠️ Saldo inválido.'); return; } await db.rpc('admin_set_saldo',{p_alias:alias,p_nuevo_saldo:v}); mostrarToast('✅ Saldo actualizado.'); adminBuscarUsuario(); }
@@ -3001,7 +3006,7 @@ function renderizarListaAdminSubastas() {
     subastasLocales.forEach(p => {
         const row = document.createElement('div');
         row.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px dashed var(--border-color);font-size:0.8rem;';
-        row.innerHTML = `<span>[${p.category||'General'}] ${p.title} ${p.status==='closed'?'(cerrada)':''}</span><div style="display:flex; align-items:center;">${p.status === 'active' ? `<button onclick="adminForzarCierre('${p.id}')" style="background:#16a34a; color:white; border:none; padding:4px 8px; border-radius:6px; font-weight:bold; cursor:pointer; font-size:0.7rem; margin-right:4px;">✅ Adjudicar</button>` : ''}<button onclick="adminEliminarSubasta('${p.id}')" style="background:#ef4444;color:white;border:none;padding:4px 8px;border-radius:6px;font-weight:bold;cursor:pointer;font-size:0.7rem;">Eliminar</button></div>`;
+        row.innerHTML = `<span>[${esc(p.category||'General')}] ${esc(p.title)} ${p.status==='closed'?'(cerrada)':''}</span><div style="display:flex; align-items:center;">${p.status === 'active' ? `<button onclick="adminForzarCierre('${p.id}')" style="background:#16a34a; color:white; border:none; padding:4px 8px; border-radius:6px; font-weight:bold; cursor:pointer; font-size:0.7rem; margin-right:4px;">✅ Adjudicar</button>` : ''}<button onclick="adminEliminarSubasta('${p.id}')" style="background:#ef4444;color:white;border:none;padding:4px 8px;border-radius:6px;font-weight:bold;cursor:pointer;font-size:0.7rem;">Eliminar</button></div>`;
         box.appendChild(row);
     });
 }
@@ -3010,7 +3015,7 @@ async function adminEliminarSubasta(id) { if (!confirm("¿Seguro que quieres eli
 
 async function adminForzarCierre(id) { if (!confirm("¿Forzar cierre y adjudicarte esta subasta? Se añadirá a tu inventario.")) return; const { error } = await db.rpc('admin_forzar_cierre_y_adjudicar', { p_auction_id: id }); if (error) { mostrarToast('⚠️ ' + error.message); return; } await cargarSubastas(); renderizarListaAdminSubastas(); mostrarToast('✅ Subasta adjudicada a tu usuario. Revisa tu vitrina.'); }
 
-async function adminListarUsuarios() { const box = document.getElementById('adminUserList'); box.innerHTML = 'Cargando...'; const { data, error } = await db.rpc('admin_listar_usuarios'); if (error) { box.innerHTML = `<p style="color:#ef4444;">Error: ${error.message}</p>`; return; } if (!data || data.length === 0) { box.innerHTML = '<p>No hay usuarios registrados.</p>'; return; } let html = ''; data.forEach(u => { html += `<div style="background: var(--bg-subtle); border-radius: 8px; padding: 6px 10px; margin-bottom: 4px; font-size: 0.75rem; display: flex; justify-content: space-between; align-items: center;"><span><strong>${u.username}</strong> ${u.is_admin?'🛠️':''} ${u.es_goat?'🐐':''} ${u.is_banned?'🚫':''}</span><span style="color: var(--accent-green);">${Number(u.saldo).toLocaleString('es-ES')} €</span><div><button onclick="adminActualizarSaldo('${u.username}')" style="background: var(--accent-green); color:white; border:none; padding: 3px 6px; border-radius: 4px; font-size: 0.65rem; cursor:pointer;">💰</button><button onclick="adminToggleBan('${u.username}')" style="background: ${u.is_banned ? '#16a34a' : '#ef4444'}; color:white; border:none; padding: 3px 6px; border-radius: 4px; font-size: 0.65rem; cursor:pointer;">${u.is_banned ? '✅' : '🚫'}</button></div></div>`; }); box.innerHTML = html; }
+async function adminListarUsuarios() { const box = document.getElementById('adminUserList'); box.innerHTML = 'Cargando...'; const { data, error } = await db.rpc('admin_listar_usuarios'); if (error) { box.innerHTML = `<p style="color:#ef4444;">Error: ${error.message}</p>`; return; } if (!data || data.length === 0) { box.innerHTML = '<p>No hay usuarios registrados.</p>'; return; } let html = ''; data.forEach(u => { html += `<div style="background: var(--bg-subtle); border-radius: 8px; padding: 6px 10px; margin-bottom: 4px; font-size: 0.75rem; display: flex; justify-content: space-between; align-items: center;"><span><strong>${esc(u.username)}</strong> ${u.is_admin?'🛠️':''} ${u.es_goat?'🐐':''} ${u.is_banned?'🚫':''}</span><span style="color: var(--accent-green);">${Number(u.saldo).toLocaleString('es-ES')} €</span><div><button onclick="adminActualizarSaldo(${esc(JSON.stringify(u.username))})" style="background: var(--accent-green); color:white; border:none; padding: 3px 6px; border-radius: 4px; font-size: 0.65rem; cursor:pointer;">💰</button><button onclick="adminToggleBan(${esc(JSON.stringify(u.username))})" style="background: ${u.is_banned ? '#16a34a' : '#ef4444'}; color:white; border:none; padding: 3px 6px; border-radius: 4px; font-size: 0.65rem; cursor:pointer;">${u.is_banned ? '✅' : '🚫'}</button></div></div>`; }); box.innerHTML = html; }
 
 async function adminAddCategoria() { const name = document.getElementById('newCatName').value.trim(); const icon = document.getElementById('newCatIcon').value.trim() || '📦'; if (!name) { mostrarToast('⚠️ Nombre requerido.'); return; } const { error } = await db.rpc('admin_add_category', { p_name: name, p_icon: icon }); if (error) { mostrarToast('⚠️ ' + error.message); return; } document.getElementById('newCatName').value = ''; document.getElementById('newCatIcon').value = ''; await cargarCategorias(); renderizarListaAdminCategorias(); actualizarSelectorCategoriasAdmin(); mostrarToast('✅ Categoría añadida.'); }
 
@@ -3027,6 +3032,7 @@ async function registrarUsuario() {
     const alias = document.getElementById('regUsername').value.trim().startsWith('@') 
         ? document.getElementById('regUsername').value.trim() 
         : '@' + document.getElementById('regUsername').value.trim();
+    if (!ALIAS_VALIDO.test(alias)) return mostrarToast("⚠️ El alias solo puede tener letras, números y _ (3-20 caracteres).");
     const pass = document.getElementById('regPassword').value.trim();
     const email = alias.replace('@', '') + '@abrozon.beta';
 
@@ -3044,7 +3050,7 @@ async function registrarUsuario() {
 
     const guest = JSON.parse(localStorage.getItem('abrozon_guest') || 'null');
     if (guest && guest.balance > 0) { 
-        const { data: updatedProfile, error: errSaldo } = await db.from('profiles').update({ saldo: currentUser.saldo + guest.balance }).eq('id', currentUser.id).select().single(); 
+        const { data: nuevoSaldo, error: errSaldo } = await db.rpc('transferir_saldo_invitado', { p_cantidad: Math.floor(Number(guest.balance) || 0) }); const updatedProfile = errSaldo ? null : { saldo: nuevoSaldo }; 
         if (!errSaldo && updatedProfile) { currentUser.saldo = updatedProfile.saldo; localStorage.removeItem('abrozon_guest'); guestData = { id: null, balance: 1000, bidsCount: 0 }; mostrarToast('¡Saldo de invitado transferido! +' + guest.balance.toLocaleString('es-ES') + ' € extra.'); } 
     }
     const guestMigrar = JSON.parse(localStorage.getItem('abrozon_guest') || 'null');
@@ -3069,7 +3075,7 @@ async function iniciarSesion() {
 
     const guest = JSON.parse(localStorage.getItem('abrozon_guest') || 'null');
     if (guest && guest.balance > 0) { 
-        const { data: updatedProfile, error: errSaldo } = await db.from('profiles').update({ saldo: currentUser.saldo + guest.balance }).eq('id', currentUser.id).select().single(); 
+        const { data: nuevoSaldo, error: errSaldo } = await db.rpc('transferir_saldo_invitado', { p_cantidad: Math.floor(Number(guest.balance) || 0) }); const updatedProfile = errSaldo ? null : { saldo: nuevoSaldo }; 
         if (!errSaldo && updatedProfile) { currentUser.saldo = updatedProfile.saldo; localStorage.removeItem('abrozon_guest'); guestData = { id: null, balance: 1000, bidsCount: 0 }; mostrarToast('¡Saldo de invitado transferido! +' + guest.balance.toLocaleString('es-ES') + ' € extra.'); } 
     }
     const guestMigrar = JSON.parse(localStorage.getItem('abrozon_guest') || 'null');
@@ -3086,7 +3092,7 @@ async function cerrarSesion() { await db.auth.signOut(); if (profileChannel) { a
 
 function mostrarPerfil() { if(!currentUser) return abrirModalAuth('register'); ocultarTodasVistas(); actualizarFormularioPerfil(); document.getElementById('viewPerfil').classList.add('active'); cargarInsignias(); }
 async function actualizarFormularioPerfil() { if (!currentUser) return; document.getElementById('perfilNombre').innerText = `👤 ${currentUser.username}`; const { data: { user } } = await db.auth.getUser(); document.getElementById('perfilEmail').innerText = user ? user.email : ''; }
-async function guardarNuevoAlias() { let nuevo = document.getElementById('perfilNuevoAlias').value.trim(); if (!nuevo) return mostrarToast("⚠️ Escribe un alias."); if (!nuevo.startsWith('@')) nuevo = '@'+nuevo; if (nuevo === currentUser.username) return mostrarToast("⚠️ Ya tienes ese alias."); const { data: libre } = await db.rpc('username_disponible',{p_username:nuevo}); if (!libre) return mostrarToast("⚠️ Alias en uso."); const { error } = await db.rpc('actualizar_mi_alias',{p_nuevo_alias:nuevo}); if (error) return mostrarToast('⚠️ ' + error.message); currentUser.username = nuevo; actualizarInterfazUsuario(); document.getElementById('perfilNuevoAlias').value = ''; mostrarToast('✅ Alias actualizado.'); }
+async function guardarNuevoAlias() { let nuevo = document.getElementById('perfilNuevoAlias').value.trim(); if (!nuevo) return mostrarToast("⚠️ Escribe un alias."); if (!nuevo.startsWith('@')) nuevo = '@'+nuevo; if (!ALIAS_VALIDO.test(nuevo)) return mostrarToast("⚠️ El alias solo puede tener letras, números y _ (3-20 caracteres)."); if (nuevo === currentUser.username) return mostrarToast("⚠️ Ya tienes ese alias."); const { data: libre } = await db.rpc('username_disponible',{p_username:nuevo}); if (!libre) return mostrarToast("⚠️ Alias en uso."); const { error } = await db.rpc('actualizar_mi_alias',{p_nuevo_alias:nuevo}); if (error) return mostrarToast('⚠️ ' + error.message); currentUser.username = nuevo; actualizarInterfazUsuario(); document.getElementById('perfilNuevoAlias').value = ''; mostrarToast('✅ Alias actualizado.'); }
 async function guardarNuevaPasswordPerfil() { const p = document.getElementById('perfilNuevaPassword').value.trim(); if (p.length < 6) return mostrarToast("⚠️ Mínimo 6 caracteres."); const { error } = await db.auth.updateUser({ password: p }); if (error) return mostrarToast('⚠️ ' + error.message); document.getElementById('perfilNuevaPassword').value = ''; mostrarToast('✅ Contraseña actualizada.'); }
 function solicitarBajaCuenta() { mostrarToast('📧 Escribe a abrozonsubastas@gmail.com para eliminar tu cuenta.'); }
 
